@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  redis:
+    image: redislabs/redistimeseries:1.2.5
+    ports:
+      - "6379:6379"
+    # Uncomment and edit the local path in the following line to have
+    # RedisTimeSeries' data persisted to the host's filesystem.
+    volumes:
+      - ./dump.rdb:/data/dump.rdb
+
+  grafana:
+    image: grafana/grafana:master
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+      - GF_ENABLE_GZIP=true
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=redistimeseries-grafana-datasource
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/rts

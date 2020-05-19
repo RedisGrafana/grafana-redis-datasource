@@ -1,0 +1,40 @@
+{
+  "type": "datasource",
+  "name": "RedisTimeSeries",
+  "id": "redistimeseries-grafana-datasource",
+  "metrics": true,
+  "backend": true,
+  "executable": "gpx_grafana-datasource",
+  "info": {
+    "description": "foobar",
+    "author": {
+      "name": "Redis Labs",
+      "url": "https://oss.redislabs.com"
+    },
+    "keywords": [
+      "foo",
+      "bar"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/grafana/simple-datasource-backend"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/simple-datasource-backend/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaVersion": "7.x.x",
+    "plugins": []
+  }
+}

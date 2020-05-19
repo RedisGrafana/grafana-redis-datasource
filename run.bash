@@ -1,0 +1,1 @@
+docker run -it -p 3000:3000 -v "$(pwd)"/:/var/lib/grafana/plugins/rts --rm -e GF_AUTH_ANONYMOUS_ORG_ROLE=Admin -e GF_AUTH_ANONYMOUS_ENABLED=true -e GF_AUTH_BASIC_ENABLED=false -e GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=redistimeseries-grafana-datasource --name=grafana grafana/grafana:7.0.0-beta3
