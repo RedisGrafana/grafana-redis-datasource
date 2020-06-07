@@ -1,7 +1,11 @@
 import { DataQuery, DataSourceJsonData } from '@grafana/data';
 
 export interface RedisTimeSeriesQuery extends DataQuery {
-  queryText?: string;
+  keyname?: string;
+  cmd?: string;
+  aggregation?: string;
+  bucket?: string;
+  legend?: string;
 }
 
 export const defaultQuery: Partial<RedisTimeSeriesQuery> = {};
