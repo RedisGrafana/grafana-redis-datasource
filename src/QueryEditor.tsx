@@ -75,30 +75,30 @@ export class QueryEditor extends PureComponent<Props> {
           <FormField labelWidth={8} value={keyname} onChange={this.onQueryKeyChange} label="Key" tooltip="keyname" />
           <Select options={cmdTypes} menuPlacement="bottom" value={this.cmdtype} onChange={this.onCmdTypeChange} />
         </div>
-        {this.cmdtype == 'tsrange' && (
-        <div className="gf-form">
-          <InlineFormLabel width={8}>Aggregation</InlineFormLabel>
-          <Select
-            options={aggreations}
-            onChange={this.onAggregationTextChange}
-            value={selected_agg}
-            menuPlacement="bottom"
-          />
-          <FormField
-            labelWidth={8}
-            value={bucket}
-            onChange={this.onBucketTextChange}
-            label="Bucket"
-            tooltip="keyname"
-          />
-          <FormField
-            labelWidth={8}
-            value={legend}
-            onChange={this.onQueryLegendChange}
-            label="Legend"
-            tooltip="Legend override"
-          />
-        </div>
+        {this.cmdtype === 'tsrange' && (
+          <div className="gf-form">
+            <InlineFormLabel width={8}>Aggregation</InlineFormLabel>
+            <Select
+              options={aggreations}
+              onChange={this.onAggregationTextChange}
+              value={selected_agg}
+              menuPlacement="bottom"
+            />
+            <FormField
+              labelWidth={8}
+              value={bucket}
+              onChange={this.onBucketTextChange}
+              label="Bucket"
+              tooltip="keyname"
+            />
+            <FormField
+              labelWidth={8}
+              value={legend}
+              onChange={this.onQueryLegendChange}
+              label="Legend"
+              tooltip="Legend override"
+            />
+          </div>
         )}
       </div>
     );
