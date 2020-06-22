@@ -27,7 +27,7 @@ func newDatasource() datasource.ServeOpts {
 	// into `NewInstanceManger` is called when the instance is created
 	// for the first time or when a datasource configuration changed.
 	im := datasource.NewInstanceManager(newDataSourceInstance)
-	ds := &RedisTimeSeriesDatasource{
+	ds := &RedisDatasource{
 		im: im,
 	}
 
@@ -37,9 +37,9 @@ func newDatasource() datasource.ServeOpts {
 	}
 }
 
-// RedisTimeSeriesDatasource is an example datasource used to scaffold
+// RedisDatasource is an example datasource used to scaffold
 // new datasource plugins with an backend.
-type RedisTimeSeriesDatasource struct {
+type RedisDatasource struct {
 	// The instance manager can help with lifecycle management
 	// of datasource instances in plugins. It's not a requirements
 	// but a best practice that we recommend that you follow.
@@ -50,7 +50,7 @@ type RedisTimeSeriesDatasource struct {
 // req contains the queries []DataQuery (where each query contains RefID as a unique identifer).
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
 // contains Frames ([]*Frame).
-func (ds *RedisTimeSeriesDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
+func (ds *RedisDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
 	log.DefaultLogger.Info("QueryData", "request", req)
 
 	r, err := ds.getInstance(req.PluginContext)
@@ -75,13 +75,13 @@ func (ds *RedisTimeSeriesDatasource) QueryData(ctx context.Context, req *backend
 
 type QueryModel struct {
 	KeyName     string `json:"keyname"`
-	Cmd			string `json:"cmd"`
+	Cmd         string `json:"cmd"`
 	Aggregation string `json:"aggregation"`
 	Bucket      string `json:"bucket"`
-	Legend		string `json:"legend"`
+	Legend      string `json:"legend"`
 }
 
-func (ds *RedisTimeSeriesDatasource) query(ctx context.Context, query backend.DataQuery, r *radix.Pool) backend.DataResponse {
+func (ds *RedisDatasource) query(ctx context.Context, query backend.DataQuery, r *radix.Pool) backend.DataResponse {
 	// Unmarshal the json into our queryModel
 	var qm QueryModel
 
@@ -108,7 +108,7 @@ func (ds *RedisTimeSeriesDatasource) query(ctx context.Context, query backend.Da
 	}
 }
 
-func (ds *RedisTimeSeriesDatasource) query_ts_range(query backend.DataQuery, qm QueryModel, r *radix.Pool) backend.DataResponse {
+func (ds *RedisDatasource) query_ts_range(query backend.DataQuery, qm QueryModel, r *radix.Pool) backend.DataResponse {
 	var res [][]string
 	var err error
 	response := backend.DataResponse{}
@@ -159,7 +159,7 @@ func (ds *RedisTimeSeriesDatasource) query_ts_range(query backend.DataQuery, qm 
 	return response
 }
 
-func (ds *RedisTimeSeriesDatasource) query_hgetall(query backend.DataQuery, qm QueryModel, r *radix.Pool) backend.DataResponse {
+func (ds *RedisDatasource) query_hgetall(query backend.DataQuery, qm QueryModel, r *radix.Pool) backend.DataResponse {
 	var res []string
 	var err error
 	response := backend.DataResponse{}
@@ -185,7 +185,7 @@ func (ds *RedisTimeSeriesDatasource) query_hgetall(query backend.DataQuery, qm Q
 	// add rows
 	keys := []string{}
 	values := []string{}
-	for i := 0; i < len(res); i+=2 {
+	for i := 0; i < len(res); i += 2 {
 		// frame.AppendRow(res[i], res[i+1])
 		keys = append(keys, res[i])
 		values = append(values, res[i+1])
@@ -201,12 +201,11 @@ func (ds *RedisTimeSeriesDatasource) query_hgetall(query backend.DataQuery, qm Q
 	return response
 }
 
-
 // CheckHealth handles health checks sent from Grafana to the plugin.
 // The main use case for these health checks is the test button on the
 // datasource configuration page which allows users to verify that
 // a datasource is working as expected.
-func (ds *RedisTimeSeriesDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+func (ds *RedisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	var status = backend.HealthStatusUnknown
 	var message = "Data source health is yet to become known"
 
@@ -231,7 +230,7 @@ func (ds *RedisTimeSeriesDatasource) CheckHealth(ctx context.Context, req *backe
 	}, nil
 }
 
-func (ds *RedisTimeSeriesDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, error) {
+func (ds *RedisDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, error) {
 	s, err := ds.im.Get(ctx)
 	if err != nil {
 		return nil, err

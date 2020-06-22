@@ -1,0 +1,12 @@
+apiVersion: 1
+
+datasources:
+  - name: grafana-redis-datasource
+    type: grafana-redis-datasource
+    access: proxy
+    orgId: 1
+    isDefault: true
+    version: 1
+    jsonData:
+      url: redis://localhost:6379
+    editable: true

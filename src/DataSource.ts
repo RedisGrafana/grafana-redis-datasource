@@ -1,9 +1,9 @@
 import { DataSourceInstanceSettings } from '@grafana/data';
 import { DataSourceWithBackend } from '@grafana/runtime';
-import { RedisTimeSeriesDataSourceOptions, RedisTimeSeriesQuery } from './types';
+import { RedisDataSourceOptions, RedisQuery } from './types';
 
-export class DataSource extends DataSourceWithBackend<RedisTimeSeriesQuery, RedisTimeSeriesDataSourceOptions> {
-  constructor(instanceSettings: DataSourceInstanceSettings<RedisTimeSeriesDataSourceOptions>) {
+export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourceOptions> {
+  constructor(instanceSettings: DataSourceInstanceSettings<RedisDataSourceOptions>) {
     super(instanceSettings);
   }
 }

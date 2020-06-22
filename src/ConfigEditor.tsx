@@ -1,11 +1,11 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { LegacyForms } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { RedisTimeSeriesDataSourceOptions } from './types';
+import { RedisDataSourceOptions } from './types';
 
 const { FormField } = LegacyForms;
 
-interface Props extends DataSourcePluginOptionsEditorProps<RedisTimeSeriesDataSourceOptions> {}
+interface Props extends DataSourcePluginOptionsEditorProps<RedisDataSourceOptions> {}
 
 interface State {}
 

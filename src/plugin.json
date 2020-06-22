@@ -1,20 +1,17 @@
 {
   "type": "datasource",
-  "name": "RedisTimeSeries",
-  "id": "redistimeseries-grafana-datasource",
+  "name": "grafana-redis-datasource",
+  "id": "grafana-redis-datasource",
   "metrics": true,
   "backend": true,
-  "executable": "gpx_grafana-datasource",
+  "executable": "gpx_grafana-redis-datasource",
   "info": {
-    "description": "foobar",
+    "description": "Grafana Redis Datasource",
     "author": {
       "name": "Redis Labs",
       "url": "https://oss.redislabs.com"
     },
-    "keywords": [
-      "foo",
-      "bar"
-    ],
+    "keywords": ["redis", "timeseries", "backend", "plugin"],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
@@ -22,11 +19,11 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/grafana/simple-datasource-backend"
+        "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource"
       },
       {
         "name": "License",
-        "url": "https://github.com/grafana/simple-datasource-backend/blob/master/LICENSE"
+        "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE"
       }
     ],
     "screenshots": [],
