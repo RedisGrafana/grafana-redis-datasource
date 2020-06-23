@@ -73,7 +73,11 @@ func (ds *RedisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 	return response, nil
 }
 
-type QueryModel struct {
+type dataModel struct {
+	Size int `json:"size"`
+}
+
+type queryModel struct {
 	KeyName     string `json:"keyname"`
 	Cmd         string `json:"cmd"`
 	Aggregation string `json:"aggregation"`
@@ -83,7 +87,7 @@ type QueryModel struct {
 
 func (ds *RedisDatasource) query(ctx context.Context, query backend.DataQuery, r *radix.Pool) backend.DataResponse {
 	// Unmarshal the json into our queryModel
-	var qm QueryModel
+	var qm queryModel
 
 	err := json.Unmarshal(query.JSON, &qm)
 	log.DefaultLogger.Info("QueryData", "AAAAAA", query.JSON)
@@ -98,9 +102,9 @@ func (ds *RedisDatasource) query(ctx context.Context, query backend.DataQuery, r
 	}
 
 	if qm.Cmd == "tsrange" {
-		return ds.query_ts_range(query, qm, r)
+		return ds.queryTsRange(query, qm, r)
 	} else if qm.Cmd == "hgetall" {
-		return ds.query_hgetall(query, qm, r)
+		return ds.queryHgetall(query, qm, r)
 	} else {
 		response := backend.DataResponse{}
 		response.Error = fmt.Errorf("Unkown command")
@@ -108,7 +112,7 @@ func (ds *RedisDatasource) query(ctx context.Context, query backend.DataQuery, r
 	}
 }
 
-func (ds *RedisDatasource) query_ts_range(query backend.DataQuery, qm QueryModel, r *radix.Pool) backend.DataResponse {
+func (ds *RedisDatasource) queryTsRange(query backend.DataQuery, qm queryModel, r *radix.Pool) backend.DataResponse {
 	var res [][]string
 	var err error
 	response := backend.DataResponse{}
@@ -159,7 +163,7 @@ func (ds *RedisDatasource) query_ts_range(query backend.DataQuery, qm QueryModel
 	return response
 }
 
-func (ds *RedisDatasource) query_hgetall(query backend.DataQuery, qm QueryModel, r *radix.Pool) backend.DataResponse {
+func (ds *RedisDatasource) queryHgetall(query backend.DataQuery, qm queryModel, r *radix.Pool) backend.DataResponse {
 	var res []string
 	var err error
 	response := backend.DataResponse{}
@@ -239,8 +243,39 @@ func (ds *RedisDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, 
 	return s.(*instanceSettings).client, nil
 }
 
+// NewClient creates a new Client with or without authentication.
+func newClient(setting backend.DataSourceInstanceSettings) (*radix.Pool, error) {
+	var jsonData dataModel
+	var dataError = json.Unmarshal(setting.JSONData, &jsonData)
+
+	// Default Pool size
+	size := 1
+
+	if dataError != nil {
+		log.DefaultLogger.Warn("JSONData", "Error", dataError)
+	} else {
+		size = jsonData.Size
+	}
+
+	// Secured Data
+	var secureData = setting.DecryptedSecureJSONData
+	if secureData != nil && secureData["password"] != "" {
+		// Set up a connection which is authenticated and has a 10 seconds timeout on all operations
+		connFunc := func(network, addr string) (radix.Conn, error) {
+			return radix.Dial(network, addr,
+				radix.DialTimeout(10*time.Second),
+				radix.DialAuthPass(secureData["password"]),
+			)
+		}
+
+		return radix.NewPool("tcp", setting.URL, size, radix.PoolConnFunc(connFunc))
+	}
+
+	return radix.NewPool("tcp", setting.URL, size)
+}
+
 func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-	pool, err := radix.NewPool("tcp", setting.URL, 1)
+	pool, err := newClient(setting)
 	if err != nil {
 		return nil, err
 	}
