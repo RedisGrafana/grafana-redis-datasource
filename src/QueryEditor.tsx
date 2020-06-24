@@ -2,12 +2,12 @@ import React, { ChangeEvent, PureComponent } from 'react';
 import { LegacyForms, InlineFormLabel } from '@grafana/ui';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { DataSource } from './DataSource';
-import { RedisTimeSeriesDataSourceOptions, RedisTimeSeriesQuery } from './types';
+import { RedisDataSourceOptions, RedisQuery } from './types';
 import { Select } from '@grafana/ui';
 
 const { FormField } = LegacyForms;
 
-type Props = QueryEditorProps<DataSource, RedisTimeSeriesQuery, RedisTimeSeriesDataSourceOptions>;
+type Props = QueryEditorProps<DataSource, RedisQuery, RedisDataSourceOptions>;
 const aggreations: Array<SelectableValue<string>> = [
   { label: 'None', description: 'no aggregation', value: '' },
   { label: 'Max', description: 'max', value: 'max' },

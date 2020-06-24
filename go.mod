@@ -1,4 +1,4 @@
-module github.com/redistimeseries/grafana-datasource-backend
+module github.com/redistimeseries/grafana-redis-datasource
 
 go 1.14
 

@@ -1,11 +1,13 @@
 {
-  "name": "grafana-datasource-redistimeseries",
+  "name": "grafana-redis-datasource",
   "version": "1.0.0",
-  "description": "foobar",
+  "description": "Grafana Redis Datasource",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
+    "build:backend": "mage -v",
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
+    "start": "docker-compose up",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
   "author": "Redis Labs",
