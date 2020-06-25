@@ -3,23 +3,15 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/mediocregopher/radix/v3"
-	"github.com/mediocregopher/radix/v3/resp/resp2"
 )
-
-type instanceSettings struct {
-	client *radix.Pool
-}
 
 // newDatasource returns datasource.ServeOpts.
 func newDatasource() datasource.ServeOpts {
@@ -27,7 +19,7 @@ func newDatasource() datasource.ServeOpts {
 	// into `NewInstanceManger` is called when the instance is created
 	// for the first time or when a datasource configuration changed.
 	im := datasource.NewInstanceManager(newDataSourceInstance)
-	ds := &RedisDatasource{
+	ds := &redisDatasource{
 		im: im,
 	}
 
@@ -37,33 +29,24 @@ func newDatasource() datasource.ServeOpts {
 	}
 }
 
-// RedisDatasource is an example datasource used to scaffold
-// new datasource plugins with an backend.
-type RedisDatasource struct {
-	// The instance manager can help with lifecycle management
-	// of datasource instances in plugins. It's not a requirements
-	// but a best practice that we recommend that you follow.
-	im instancemgmt.InstanceManager
-}
-
 // QueryData handles multiple queries and returns multiple responses.
 // req contains the queries []DataQuery (where each query contains RefID as a unique identifer).
 // The QueryDataResponse contains a map of RefID to the response for each query, and each response
 // contains Frames ([]*Frame).
-func (ds *RedisDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
-	log.DefaultLogger.Info("QueryData", "request", req)
+func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
+	log.DefaultLogger.Debug("QueryData", "request", req)
 
-	r, err := ds.getInstance(req.PluginContext)
+	client, err := ds.getInstance(req.PluginContext)
 	if err != nil {
 		return nil, err
 	}
 
-	// create response struct
+	// Create response struct
 	response := backend.NewQueryDataResponse()
 
-	// loop over queries and execute them individually.
+	// Loop over queries and execute them individually
 	for _, q := range req.Queries {
-		res := ds.query(ctx, q, r)
+		res := ds.query(ctx, q, client)
 
 		// save the response in a hashmap
 		// based on with RefID as identifier
@@ -73,143 +56,55 @@ func (ds *RedisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 	return response, nil
 }
 
-type dataModel struct {
-	Size int `json:"size"`
-}
-
-type queryModel struct {
-	KeyName     string `json:"keyname"`
-	Cmd         string `json:"cmd"`
-	Aggregation string `json:"aggregation"`
-	Bucket      string `json:"bucket"`
-	Legend      string `json:"legend"`
-}
-
-func (ds *RedisDatasource) query(ctx context.Context, query backend.DataQuery, r *radix.Pool) backend.DataResponse {
-	// Unmarshal the json into our queryModel
+func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, client *radix.Pool) backend.DataResponse {
 	var qm queryModel
 
+	// Unmarshal the json into our queryModel
 	err := json.Unmarshal(query.JSON, &qm)
-	log.DefaultLogger.Info("QueryData", "AAAAAA", query.JSON)
-	log.DefaultLogger.Info("JSON", "keyName", qm.KeyName)
-	log.DefaultLogger.Info("JSON", "aggregation", qm.Aggregation)
-	log.DefaultLogger.Info("JSON", "bucket", qm.Bucket)
+	log.DefaultLogger.Debug("QueryData", "JSON", query.JSON)
 
+	// Error
 	if err != nil {
 		response := backend.DataResponse{}
 		response.Error = err
 		return response
 	}
 
-	if qm.Cmd == "tsrange" {
-		return ds.queryTsRange(query, qm, r)
-	} else if qm.Cmd == "hgetall" {
-		return ds.queryHgetall(query, qm, r)
-	} else {
+	// From and To
+	from := query.TimeRange.From.UnixNano() / 1000000
+	to := query.TimeRange.To.UnixNano() / 1000000
+
+	// Handle Panic from any command
+	defer func() {
+		if err := recover(); err != nil {
+			log.DefaultLogger.Error("PANIC", "occurred", err)
+		}
+	}()
+
+	// Commands
+	switch qm.Command {
+	case "tsrange":
+		return ds.queryTsRange(from, to, qm, client)
+	case "tsmrange":
+		return ds.queryTsMRange(from, to, qm, client)
+	case "hgetall":
+		return ds.queryHGetAll(qm, client)
+	case "smembers":
+		return ds.querySMembers(qm, client)
+	case "hget":
+		return ds.queryHGet(qm, client)
+	default:
 		response := backend.DataResponse{}
-		response.Error = fmt.Errorf("Unkown command")
+		response.Error = fmt.Errorf("Unknown command")
 		return response
 	}
-}
-
-func (ds *RedisDatasource) queryTsRange(query backend.DataQuery, qm queryModel, r *radix.Pool) backend.DataResponse {
-	var res [][]string
-	var err error
-	response := backend.DataResponse{}
-
-	if qm.Aggregation != "" {
-		err = r.Do(radix.FlatCmd(&res, "TS.RANGE", qm.KeyName, query.TimeRange.From.UnixNano()/1000000, query.TimeRange.To.UnixNano()/1000000, "AGGREGATION", qm.Aggregation, qm.Bucket))
-	} else {
-		err = r.Do(radix.FlatCmd(&res, "TS.RANGE", qm.KeyName, query.TimeRange.From.UnixNano()/1000000, query.TimeRange.To.UnixNano()/1000000))
-	}
-	if err != nil {
-		var redisErr resp2.Error
-		if errors.As(err, &redisErr) {
-			response.Error = redisErr.E
-		} else {
-			response.Error = err
-		}
-		return response
-	}
-
-	// create data frame response
-	frame := data.NewFrame(qm.KeyName)
-
-	// add the time dimension
-	frame.Fields = append(frame.Fields,
-		data.NewField("time", nil, []time.Time{}),
-	)
-
-	legend := qm.KeyName
-	if len(qm.Legend) > 0 {
-		legend = qm.Legend
-	}
-	// add values
-	frame.Fields = append(frame.Fields,
-		data.NewField(legend, nil, []float64{}),
-	)
-
-	// add rows
-	for _, row := range res {
-		t, _ := strconv.ParseInt(row[0], 10, 64)
-		ts := time.Unix(t/1000, 0)
-		v, _ := strconv.ParseFloat(row[1], 64)
-		frame.AppendRow(ts, v)
-	}
-
-	// add the frames to the response
-	response.Frames = append(response.Frames, frame)
-
-	return response
-}
-
-func (ds *RedisDatasource) queryHgetall(query backend.DataQuery, qm queryModel, r *radix.Pool) backend.DataResponse {
-	var res []string
-	var err error
-	response := backend.DataResponse{}
-
-	err = r.Do(radix.FlatCmd(&res, "HGETALL", qm.KeyName))
-	if err != nil {
-		var redisErr resp2.Error
-		if errors.As(err, &redisErr) {
-			response.Error = redisErr.E
-		} else {
-			response.Error = err
-		}
-		return response
-	}
-
-	// create data frame response
-	// frame := data.NewFrame(qm.KeyName)
-	// frame.Fields = append(frame.Fields,
-	// 	data.NewField("Key", nil, []string{}),
-	// 	data.NewField("Value", nil, []string{}),
-	// )
-
-	// add rows
-	keys := []string{}
-	values := []string{}
-	for i := 0; i < len(res); i += 2 {
-		// frame.AppendRow(res[i], res[i+1])
-		keys = append(keys, res[i])
-		values = append(values, res[i+1])
-	}
-
-	frame := data.NewFrame(qm.KeyName,
-		data.NewField("Key", nil, keys),
-		data.NewField("Val", nil, values))
-
-	// add the frames to the response
-	response.Frames = append(response.Frames, frame)
-
-	return response
 }
 
 // CheckHealth handles health checks sent from Grafana to the plugin.
 // The main use case for these health checks is the test button on the
 // datasource configuration page which allows users to verify that
 // a datasource is working as expected.
-func (ds *RedisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
+func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	var status = backend.HealthStatusUnknown
 	var message = "Data source health is yet to become known"
 
@@ -221,7 +116,6 @@ func (ds *RedisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 		err = r.Do(radix.Cmd(&message, "PING"))
 		if err != nil {
 			status = backend.HealthStatusError
-			// message = fmt.Sprintf("getInstance PING error: %s", err.Error())
 		} else {
 			status = backend.HealthStatusOk
 			message = "Data source working as expected"
@@ -234,7 +128,7 @@ func (ds *RedisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 	}, nil
 }
 
-func (ds *RedisDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, error) {
+func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, error) {
 	s, err := ds.im.Get(ctx)
 	if err != nil {
 		return nil, err
@@ -252,7 +146,7 @@ func newClient(setting backend.DataSourceInstanceSettings) (*radix.Pool, error) 
 	size := 1
 
 	if dataError != nil {
-		log.DefaultLogger.Warn("JSONData", "Error", dataError)
+		log.DefaultLogger.Error("JSONData", "Error", dataError)
 	} else {
 		size = jsonData.Size
 	}

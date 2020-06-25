@@ -1,51 +1,98 @@
+import { Aggregations, CommandParameters, Commands } from 'command';
 import React, { ChangeEvent, PureComponent } from 'react';
-import { LegacyForms, InlineFormLabel } from '@grafana/ui';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
+import { InlineFormLabel, LegacyForms, Select } from '@grafana/ui';
 import { DataSource } from './DataSource';
 import { RedisDataSourceOptions, RedisQuery } from './types';
-import { Select } from '@grafana/ui';
 
 const { FormField } = LegacyForms;
 
 type Props = QueryEditorProps<DataSource, RedisQuery, RedisDataSourceOptions>;
-const aggreations: Array<SelectableValue<string>> = [
-  { label: 'None', description: 'no aggregation', value: '' },
-  { label: 'Max', description: 'max', value: 'max' },
-  { label: 'Min', description: 'min', value: 'min' },
-  { label: 'Rate', description: 'rate', value: 'rate' },
-  { label: 'Count', description: 'count number of samples', value: 'count' },
-  { label: 'Range', description: 'Diff between max and min in the bucket', value: 'range' },
-];
 
-const cmdTypes: Array<SelectableValue<string>> = [
-  { label: 'TS.RANGE', description: 'range query', value: 'tsrange' },
-  { label: 'HGETALL', description: 'hashtable', value: 'hgetall' },
-];
+/**
+ * Query Editor
+ */
 export class QueryEditor extends PureComponent<Props> {
-  cmdtype?: string;
-  onQueryKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
+  /**
+   * Key change
+   *
+   * @param event Event
+   */
+  onKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
-    onChange({ ...query, keyname: event.target.value });
-    // executes the query
+    onChange({ ...query, key: event.target.value });
     onRunQuery();
   };
 
-  onQueryLegendChange = (event: ChangeEvent<HTMLInputElement>) => {
+  /**
+   * Filter change
+   *
+   * @param event Event
+   */
+  onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onChange, query, onRunQuery } = this.props;
+    onChange({ ...query, filter: event.target.value });
+    onRunQuery();
+  };
+
+  /**
+   * Field change
+   *
+   * @param event Event
+   */
+  onFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onChange, query, onRunQuery } = this.props;
+    onChange({ ...query, field: event.target.value });
+    onRunQuery();
+  };
+
+  /**
+   * Legend change
+   *
+   * @param event Event
+   */
+  onLegendChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, legend: event.target.value });
-    // executes the query
     onRunQuery();
   };
 
-  onCmdTypeChange = (val: SelectableValue<string>) => {
+  /**
+   * Value change
+   *
+   * @param event Event
+   */
+  onValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
-    onChange({ ...query, cmd: val.value });
-    // executes the query
-    this.cmdtype = val.value;
-    this.forceUpdate();
+    onChange({ ...query, value: event.target.value });
     onRunQuery();
   };
 
+  /**
+   * Command change
+   *
+   * @param val Value
+   */
+  onCommandChange = (val: SelectableValue<string>) => {
+    const { onChange, query, onRunQuery } = this.props;
+    onChange({ ...query, command: val.value });
+
+    /**
+     * Update form
+     */
+    this.forceUpdate();
+
+    /**
+     * Executes the query
+     */
+    onRunQuery();
+  };
+
+  /**
+   * Aggregation change
+   *
+   * @param val Value
+   */
   onAggregationTextChange = (val: SelectableValue<string>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, aggregation: val.value });
@@ -53,6 +100,11 @@ export class QueryEditor extends PureComponent<Props> {
     onRunQuery();
   };
 
+  /**
+   * Bucket change
+   *
+   * @param val Value
+   */
   onBucketTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, bucket: event.target.value });
@@ -60,43 +112,107 @@ export class QueryEditor extends PureComponent<Props> {
     onRunQuery();
   };
 
+  /**
+   * Render
+   */
   render() {
-    const { keyname, aggregation, bucket, legend, cmd } = this.props.query;
-    this.cmdtype = cmd;
-    let selected_agg = aggreations[0];
-    aggreations.forEach(option => {
-      if (option.value === aggregation) {
-        selected_agg = option;
-      }
-    });
+    const { key, aggregation, bucket, legend, command, field, filter, value } = this.props.query;
+
+    /**
+     * Return
+     */
     return (
       <div>
         <div className="gf-form">
-          <FormField labelWidth={8} value={keyname} onChange={this.onQueryKeyChange} label="Key" tooltip="keyname" />
-          <Select options={cmdTypes} menuPlacement="bottom" value={this.cmdtype} onChange={this.onCmdTypeChange} />
+          <InlineFormLabel width={8}>Command</InlineFormLabel>
+          <Select options={Commands} menuPlacement="bottom" value={command} onChange={this.onCommandChange} />
         </div>
-        {this.cmdtype === 'tsrange' && (
+
+        <div className="gf-form">
+          {command && CommandParameters.key.includes(command) && (
+            <FormField
+              labelWidth={8}
+              inputWidth={30}
+              value={key}
+              onChange={this.onKeyChange}
+              label="Key"
+              tooltip="Key name"
+            />
+          )}
+
+          {command && CommandParameters.filter.includes(command) && (
+            <FormField
+              labelWidth={8}
+              inputWidth={30}
+              value={filter}
+              onChange={this.onFilterChange}
+              label="Label Filter"
+              tooltip="Label Filter"
+            />
+          )}
+
+          {command && CommandParameters.field.includes(command) && (
+            <FormField
+              labelWidth={8}
+              inputWidth={30}
+              value={field}
+              onChange={this.onFieldChange}
+              label="Field"
+              tooltip="Field"
+            />
+          )}
+
+          {command && CommandParameters.legend.includes(command) && (
+            <FormField
+              labelWidth={8}
+              inputWidth={20}
+              value={legend}
+              onChange={this.onLegendChange}
+              label="Legend"
+              tooltip="Legend override"
+            />
+          )}
+
+          {command && CommandParameters.legendLabel.includes(command) && (
+            <FormField
+              labelWidth={8}
+              inputWidth={20}
+              value={legend}
+              onChange={this.onLegendChange}
+              label="Legend Label"
+              tooltip="Legend Label"
+            />
+          )}
+
+          {command && CommandParameters.valueLabel.includes(command) && (
+            <FormField
+              labelWidth={8}
+              inputWidth={20}
+              value={value}
+              onChange={this.onValueChange}
+              label="Value Label"
+              tooltip="Value Label"
+            />
+          )}
+        </div>
+
+        {command && CommandParameters.aggregation.includes(command) && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Aggregation</InlineFormLabel>
             <Select
-              options={aggreations}
+              options={Aggregations}
+              width={30}
               onChange={this.onAggregationTextChange}
-              value={selected_agg}
+              value={aggregation}
               menuPlacement="bottom"
             />
             <FormField
               labelWidth={8}
               value={bucket}
+              type="number"
               onChange={this.onBucketTextChange}
               label="Bucket"
-              tooltip="keyname"
-            />
-            <FormField
-              labelWidth={8}
-              value={legend}
-              onChange={this.onQueryLegendChange}
-              label="Legend"
-              tooltip="Legend override"
+              tooltip="Time bucket for aggregation in milliseconds"
             />
           </div>
         )}
