@@ -176,7 +176,7 @@ export class QueryEditor extends PureComponent<Props> {
           {command && CommandParameters.legendLabel.includes(command) && (
             <FormField
               labelWidth={8}
-              inputWidth={20}
+              inputWidth={10}
               value={legend}
               onChange={this.onLegendChange}
               label="Legend Label"
@@ -187,7 +187,7 @@ export class QueryEditor extends PureComponent<Props> {
           {command && CommandParameters.valueLabel.includes(command) && (
             <FormField
               labelWidth={8}
-              inputWidth={20}
+              inputWidth={10}
               value={value}
               onChange={this.onValueChange}
               label="Value Label"
