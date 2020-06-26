@@ -13,11 +13,11 @@
   "author": "Redis Labs",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@grafana/data": "next",
-    "@grafana/toolkit": "next",
-    "@grafana/runtime": "next",
-    "@grafana/ui": "next",
-    "@types/lodash": "latest"
+    "@grafana/data": "^7.0.4",
+    "@grafana/runtime": "^7.0.4",
+    "@grafana/toolkit": "^7.0.4",
+    "@grafana/ui": "^7.0.4",
+    "@types/lodash": "^4.14.157"
   },
   "engines": {
     "node": ">=12"

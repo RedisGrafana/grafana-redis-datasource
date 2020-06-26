@@ -50,6 +50,8 @@ github.com/google/go-cmp v0.3.1/go.mod h1:8QqcDgzrUqlUb/G2PQTWiueGozuR1884gddMyw
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/grafana/grafana-plugin-sdk-go v0.65.0 h1:l6cPKCFxf3AN3gd7Sprum2TuhcqsGI98Xa/1dDuin9E=
 github.com/grafana/grafana-plugin-sdk-go v0.65.0/go.mod h1:w855JyiC5PDP3naWUJP0h/vY8RlzlE4+4fodyoXph+4=
+github.com/grafana/grafana-plugin-sdk-go v0.69.0 h1:bcqQEq1g71GG2icJeVlm6l1DErDGv0Z0fL7DqKr53m8=
+github.com/grafana/grafana-plugin-sdk-go v0.69.0/go.mod h1:w855JyiC5PDP3naWUJP0h/vY8RlzlE4+4fodyoXph+4=
 github.com/grpc-ecosystem/go-grpc-middleware v1.2.0 h1:0IKlLyQ3Hs9nDaiK5cSHAGmcQEIC8l2Ts1u6x5Dfrqg=
 github.com/grpc-ecosystem/go-grpc-middleware v1.2.0/go.mod h1:mJzapYve32yjrKlk9GbyCZHuPgZsrbyIbyKhSzOpg6s=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 h1:Ovs26xHkKqVztRpIrF/92BcuyuQ/YW4NSIpoGtfXNho=
@@ -93,6 +95,8 @@ github.com/matttproud/golang_protobuf_extensions v1.0.1 h1:4hp9jkHxhMHkqkrB3Ix0j
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/mediocregopher/radix/v3 v3.5.0 h1:8QHQmNh2ne9aFxTD3z63u/bkPPiOtknHoz80oP8EA/E=
 github.com/mediocregopher/radix/v3 v3.5.0/go.mod h1:8FL3F6UQRXHXIBSPUs5h0RybMF8i4n7wVopoX3x7Bv8=
+github.com/mediocregopher/radix/v3 v3.5.1 h1:IOYgQUMA380N4khaL5eNT4v/P2LnHa8b0wnVdwZMFsY=
+github.com/mediocregopher/radix/v3 v3.5.1/go.mod h1:8FL3F6UQRXHXIBSPUs5h0RybMF8i4n7wVopoX3x7Bv8=
 github.com/mitchellh/go-testing-interface v0.0.0-20171004221916-a61a99592b77 h1:7GoSOOW2jpsfkntVKaS2rAr1TJqfcxotyaUcuxoZSzg=
 github.com/mitchellh/go-testing-interface v0.0.0-20171004221916-a61a99592b77/go.mod h1:kRemZodwjscx+RGhAo8eIhFbs2+BFgRtFPeD/KE+zxI=
 github.com/mitchellh/reflectwalk v1.0.1 h1:FVzMWA5RllMAKIdUSC8mdWo3XtwoecrH79BY70sEEpE=
