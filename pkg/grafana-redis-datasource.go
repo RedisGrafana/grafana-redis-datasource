@@ -140,32 +140,55 @@ func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, 
 // NewClient creates a new Client with or without authentication.
 func newClient(setting backend.DataSourceInstanceSettings) (*radix.Pool, error) {
 	var jsonData dataModel
+
+	// Unmarshal Configuration
 	var dataError = json.Unmarshal(setting.JSONData, &jsonData)
 
 	// Default Pool size
-	size := 1
+	poolSize := 5
+
+	// Default Connect, Read and Write Timeout
+	timeout := 10
+
+	// Default Ping Interval disabled
+	pingInterval := 0
+
+	// Default Pipeline Window disabled
+	pipelineWindow := 0
 
 	if dataError != nil {
 		log.DefaultLogger.Error("JSONData", "Error", dataError)
 	} else {
-		size = jsonData.Size
+		log.DefaultLogger.Debug("JSONData", "Values", jsonData)
+
+		// Set values
+		poolSize = jsonData.PoolSize
+		timeout = jsonData.Timeout
+		pingInterval = jsonData.PingInterval
+		pipelineWindow = jsonData.PipelineWindow
 	}
 
 	// Secured Data
 	var secureData = setting.DecryptedSecureJSONData
-	if secureData != nil && secureData["password"] != "" {
-		// Set up a connection which is authenticated and has a 10 seconds timeout on all operations
-		connFunc := func(network, addr string) (radix.Conn, error) {
-			return radix.Dial(network, addr,
-				radix.DialTimeout(10*time.Second),
-				radix.DialAuthPass(secureData["password"]),
-			)
-		}
 
-		return radix.NewPool("tcp", setting.URL, size, radix.PoolConnFunc(connFunc))
+	// Check if password specified in Secured Data
+	password := ""
+	if secureData != nil && secureData["password"] != "" {
+		password = secureData["password"]
 	}
 
-	return radix.NewPool("tcp", setting.URL, size)
+	// Set up a connection which is authenticated and has a 10 seconds timeout on all operations
+	connFunc := func(network, addr string) (radix.Conn, error) {
+		return radix.Dial(network, addr,
+			radix.DialTimeout(time.Duration(timeout)*time.Second),
+			radix.DialAuthPass(password),
+		)
+	}
+
+	// Return Pool with specified Ping Interval, Pipeline Window and Timeout
+	return radix.NewPool("tcp", setting.URL, poolSize, radix.PoolConnFunc(connFunc),
+		radix.PoolPingInterval(time.Duration(pingInterval)*time.Second/time.Duration(poolSize+1)),
+		radix.PoolPipelineWindow(time.Duration(pipelineWindow)*time.Microsecond, 0))
 }
 
 func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {

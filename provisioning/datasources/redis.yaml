@@ -9,5 +9,8 @@ datasources:
     version: 1
     url: redis://localhost:6379
     jsonData:
-      size: 1
+      poolSize: 5
+      timeout: 10
+      pingInterval: 0
+      pipelineWindow: 0
     editable: true

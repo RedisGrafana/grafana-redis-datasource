@@ -2,7 +2,10 @@ import { DataSourceInstanceSettings } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
 import { RedisDataSourceOptions, RedisQuery } from './types';
 
-export interface DataQueryFilter {
+/**
+ * Redis Data Query
+ */
+export interface RedisDataQuery {
   /**
    * Reference Id
    */
@@ -24,7 +27,15 @@ export interface DataQueryFilter {
   filter: string;
 }
 
+/**
+ * Redis Data Source
+ */
 export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourceOptions> {
+  /**
+   * Constructor
+   *
+   * @param instanceSettings Instance Settings
+   */
   constructor(instanceSettings: DataSourceInstanceSettings<RedisDataSourceOptions>) {
     super(instanceSettings);
   }
@@ -32,7 +43,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
   /**
    * Override to apply template variables
    */
-  applyTemplateVariables(query: DataQueryFilter) {
+  applyTemplateVariables(query: RedisDataQuery) {
     /**
      * Replace variables in Key
      */

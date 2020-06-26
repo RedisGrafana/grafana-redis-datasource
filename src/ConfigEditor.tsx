@@ -9,7 +9,15 @@ interface Props extends DataSourcePluginOptionsEditorProps<RedisDataSourceOption
 
 interface State {}
 
+/**
+ * Config Editor
+ */
 export class ConfigEditor extends PureComponent<Props, State> {
+  /**
+   * URL change
+   *
+   * @param event Event
+   */
   onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
     options.url = event.target.value;
@@ -19,16 +27,67 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
   };
 
-  onSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
+  /**
+   * Pool Size change
+   *
+   * @param event Event
+   */
+  onPoolSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
     const jsonData = {
       ...options.jsonData,
-      size: Number(event.target.value),
+      poolSize: Number(event.target.value),
     };
     onOptionsChange({ ...options, jsonData });
   };
 
-  // Secure field (only sent to the backend)
+  /**
+   * Timeout change
+   *
+   * @param event Event
+   */
+  onTimeoutChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onOptionsChange, options } = this.props;
+    const jsonData = {
+      ...options.jsonData,
+      timeout: Number(event.target.value),
+    };
+    onOptionsChange({ ...options, jsonData });
+  };
+
+  /**
+   * Ping interval change
+   *
+   * @param event Event
+   */
+  onPingIntervalChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onOptionsChange, options } = this.props;
+    const jsonData = {
+      ...options.jsonData,
+      pingInterval: Number(event.target.value),
+    };
+    onOptionsChange({ ...options, jsonData });
+  };
+
+  /**
+   * Pipeline window change
+   *
+   * @param event Event
+   */
+  onPipelineWindowChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onOptionsChange, options } = this.props;
+    const jsonData = {
+      ...options.jsonData,
+      pipelineWindow: Number(event.target.value),
+    };
+    onOptionsChange({ ...options, jsonData });
+  };
+
+  /**
+   * Password Secure field (only sent to the backend)
+   *
+   * @param event Event
+   */
   onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
     onOptionsChange({
@@ -39,6 +98,9 @@ export class ConfigEditor extends PureComponent<Props, State> {
     });
   };
 
+  /**
+   * Password Reset
+   */
   onResetPassword = () => {
     const { onOptionsChange, options } = this.props;
     onOptionsChange({
@@ -54,11 +116,17 @@ export class ConfigEditor extends PureComponent<Props, State> {
     });
   };
 
+  /**
+   * Render
+   */
   render() {
     const { options } = this.props;
     const { url, jsonData, secureJsonFields } = options;
     const secureJsonData = (options.secureJsonData || {}) as RedisSecureJsonData;
 
+    /**
+     * Return
+     */
     return (
       <div className="gf-form-group">
         <h3 className="page-heading">Redis</h3>
@@ -69,6 +137,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             inputWidth={20}
             onChange={this.onURLChange}
             value={url || ''}
+            tooltip="Accepts host:port address or a URI, as defined in https://www.iana.org/assignments/uri-schemes/prov/redis"
             placeholder="redis://..."
           />
         </div>
@@ -78,9 +147,44 @@ export class ConfigEditor extends PureComponent<Props, State> {
             label="Pool Size"
             labelWidth={10}
             inputWidth={10}
-            onChange={this.onSizeChange}
-            value={jsonData.size || 1}
-            placeholder="1"
+            onChange={this.onPoolSizeChange}
+            value={jsonData.poolSize || 5}
+            tooltip="Will keep open at least the given number of connections to the redis instance at the given address.
+            The recommended size of the pool depends on the number of concurrent goroutines that will use the pool and whether implicit pipelining is enabled or not."
+          />
+
+          <FormField
+            label="Ping Interval, sec"
+            labelWidth={10}
+            inputWidth={10}
+            onChange={this.onPingIntervalChange}
+            value={jsonData.pingInterval || 0}
+            tooltip="Specifies the interval in seconds at which a ping event happens.
+            A shorter interval means connections are pinged more frequently, but also means more traffic with the server.
+            If interval is zero then ping will be disabled."
+          />
+        </div>
+
+        <div className="gf-form">
+          <FormField
+            label="Timeout, sec"
+            labelWidth={10}
+            inputWidth={10}
+            onChange={this.onTimeoutChange}
+            value={jsonData.timeout || 10}
+            tooltip="Sets the duration in seconds for connect, read and write timeouts."
+          />
+        </div>
+
+        <div className="gf-form">
+          <FormField
+            label="Pipeline Window, μs"
+            labelWidth={10}
+            inputWidth={10}
+            onChange={this.onPipelineWindowChange}
+            value={jsonData.pipelineWindow || 0}
+            tooltip="Sets the duration in microseconds after which internal pipelines will be flushed.
+            If window is zero then implicit pipelining will be disabled."
           />
         </div>
 
