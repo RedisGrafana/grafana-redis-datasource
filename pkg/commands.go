@@ -67,9 +67,11 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.queryHGet(qm, client)
 	case "info":
 		return ds.queryInfo(qm, client)
+	case "clientList":
+		return ds.queryClientList(qm, client)
 	case "type", "get", "ttl", "hlen", "xlen", "llen", "scard":
 		return ds.queryKeyCommand(qm, client)
-	case "xinfostream":
+	case "xinfoStream":
 		return ds.queryXInfoStream(qm, client)
 	default:
 		response := backend.DataResponse{}
@@ -539,6 +541,66 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.
 	}
 
 	// Add the frames to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return
+	return response
+}
+
+/**
+ * CLIENT LIST [TYPE normal|master|replica|pubsub]
+ *
+ * @see https://redis.io/commands/client-list
+ */
+func (ds *redisDatasource) queryClientList(qm queryModel, client *radix.Pool) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Execute command
+	var result string
+	err := client.Do(radix.Cmd(&result, "CLIENT", "LIST"))
+
+	// Check error
+	if err != nil {
+		return ds.errorHandler(response, err)
+	}
+
+	// Split lines
+	lines := strings.Split(strings.Replace(result, "\r\n", "\n", -1), "\n")
+
+	// New Frame
+	frame := data.NewFrame(qm.Command)
+
+	// Parse lines
+	for i, line := range lines {
+		var values []interface{}
+
+		// Split line to array
+		fields := strings.Fields(line)
+
+		// Parse lines
+		for _, field := range fields {
+			// Split properties
+			value := strings.Split(field, "=")
+
+			// Add Header for first row
+			if i == 0 {
+				frame.Fields = append(frame.Fields, data.NewField(value[0], nil, []string{}))
+			}
+
+			// Skip if less than 2 elements
+			if len(value) < 2 {
+				continue
+			}
+
+			// Add Value
+			values = append(values, value[1])
+		}
+
+		// Add Row
+		frame.AppendRow(values...)
+	}
+
+	// Add the frame to the response
 	response.Frames = append(response.Frames, frame)
 
 	// Return

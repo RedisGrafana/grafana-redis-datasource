@@ -36,6 +36,11 @@ export const QueryType: Array<SelectableValue<string>> = [
 export const Commands = {
   command: [
     {
+      label: 'CLIENT LIST',
+      description: 'Returns information and statistics about the client connections server',
+      value: 'clientList',
+    },
+    {
       label: 'GET',
       description: 'Returns the value of key',
       value: 'get',
@@ -44,7 +49,7 @@ export const Commands = {
     { label: 'HGETALL', description: 'Returns all fields and values of the hash stored at key', value: 'hgetall' },
     { label: 'HKEYS', description: 'Returns all field names in the hash stored at key', value: 'hkeys' },
     { label: 'HLEN', description: 'Returns the number of fields contained in the hash stored at key', value: 'hlen' },
-    { label: 'INFO', description: 'Returns information and statistics about the server ', value: 'info' },
+    { label: 'INFO', description: 'Returns information and statistics about the server', value: 'info' },
     { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
     {
       label: 'SCARD',
@@ -65,7 +70,7 @@ export const Commands = {
     {
       label: 'XINFO STREAM',
       description: 'Returns general information about the stream stored at the specified key',
-      value: 'xinfostream',
+      value: 'xinfoStream',
     },
     {
       label: 'XLEN',
@@ -102,7 +107,7 @@ export const CommandParameters = {
     'ts.range',
     'ttl',
     'type',
-    'xinfostream',
+    'xinfoStream',
     'xlen',
   ],
   legend: ['ts.range'],

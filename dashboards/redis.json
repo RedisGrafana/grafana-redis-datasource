@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1593323284212,
+  "id": 28,
+  "iteration": 1593332505401,
   "links": [
     {
       "icon": "external link",
@@ -1443,20 +1443,45 @@
       },
       "id": 4,
       "options": {
-        "showHeader": false
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "7.0.4",
       "targets": [
         {
-          "command": "clientlist",
-          "query": "client list",
+          "command": "clientList",
+          "query": "",
           "refId": "A",
-          "type": "cli"
+          "type": "command"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
       "title": "Connections",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["id", "addr", "age", "idle", "cmd"]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "addr": "Address/port of the client",
+              "age": "Total duration, sec",
+              "cmd": "Last command played",
+              "id": "Unique 64-bit client ID",
+              "idle": "Idle time, sec"
+            }
+          }
+        }
+      ],
       "type": "table"
     }
   ],
@@ -1497,5 +1522,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 2
+  "version": 4
 }
