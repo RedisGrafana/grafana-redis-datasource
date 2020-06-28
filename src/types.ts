@@ -5,6 +5,20 @@ import { DataQuery, DataSourceJsonData } from '@grafana/data';
  */
 export interface RedisQuery extends DataQuery {
   /**
+   * Type
+   *
+   * @type {string}
+   */
+  type?: string;
+
+  /**
+   * Query command
+   *
+   * @type {string}
+   */
+  query?: string;
+
+  /**
    * Command
    *
    * @type {string}
@@ -31,14 +45,14 @@ export interface RedisQuery extends DataQuery {
    * @see https://oss.redislabs.com/redistimeseries/commands/#filtering
    * @type {string}
    */
-  filter: string;
+  filter?: string;
 
   /**
    * Value label
    *
    * @type {string}
    */
-  value: string;
+  value?: string;
 
   /**
    * Aggregation
@@ -61,10 +75,17 @@ export interface RedisQuery extends DataQuery {
    * @type {string}
    */
   legend?: string;
+
+  /**
+   * Info Section
+   *
+   * @type {string}
+   */
+  section?: string;
 }
 
 /**
- * These are options configured for each DataSource instance
+ * Options configured for each DataSource instance
  */
 export interface RedisDataSourceOptions extends DataSourceJsonData {
   /**

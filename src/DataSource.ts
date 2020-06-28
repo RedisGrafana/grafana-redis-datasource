@@ -1,31 +1,7 @@
-import { DataSourceInstanceSettings } from '@grafana/data';
+import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
+import { DataFrame, DataQueryRequest, DataSourceInstanceSettings, MetricFindValue } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
 import { RedisDataSourceOptions, RedisQuery } from './types';
-
-/**
- * Redis Data Query
- */
-export interface RedisDataQuery {
-  /**
-   * Reference Id
-   */
-  refId: string;
-
-  /**
-   * Redis key
-   *
-   * @type {string}
-   */
-  key: string;
-
-  /**
-   * Redis TimeSeries filter
-   *
-   * @see https://oss.redislabs.com/redistimeseries/commands/#filtering
-   * @type {string}
-   */
-  filter: string;
-}
 
 /**
  * Redis Data Source
@@ -41,26 +17,48 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
   }
 
   /**
+   * Variable query action
+   */
+  async metricFindQuery?(query: string, options?: any): Promise<MetricFindValue[]> {
+    /**
+     * If query or datasource not specified
+     */
+    if (!query || !options.variable.datasource) {
+      return Promise.resolve([]);
+    }
+
+    /**
+     * Run Query
+     */
+    return this.query({
+      targets: [{ datasource: options.variable.datasource, query: query }],
+    } as DataQueryRequest<RedisQuery>)
+      .pipe(
+        switchMap$(response => response.data),
+        switchMap$((data: DataFrame) => data.fields),
+        map$(field =>
+          field.values.toArray().map(value => {
+            return { text: value };
+          })
+        )
+      )
+      .toPromise();
+  }
+
+  /**
    * Override to apply template variables
    */
-  applyTemplateVariables(query: RedisDataQuery) {
-    /**
-     * Replace variables in Key
-     */
-    if (query.key) {
-      query.key = getTemplateSrv().replace(query.key);
-    }
+  applyTemplateVariables(query: RedisQuery) {
+    const templateSrv = getTemplateSrv();
 
     /**
-     * Replace veriables in filter
+     * Replace variables
      */
-    if (query.filter) {
-      query.filter = getTemplateSrv().replace(query.filter);
-    }
-
-    /**
-     * Return
-     */
-    return query;
+    return {
+      ...query,
+      key: query.key ? templateSrv.replace(query.key) : '',
+      query: query.query ? templateSrv.replace(query.query) : '',
+      filter: query.filter ? templateSrv.replace(query.filter) : '',
+    };
   }
 }

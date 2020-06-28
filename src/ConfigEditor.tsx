@@ -3,10 +3,19 @@ import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { LegacyForms } from '@grafana/ui';
 import { RedisDataSourceOptions, RedisSecureJsonData } from './types';
 
+/**
+ * Form Field
+ */
 const { SecretFormField, FormField } = LegacyForms;
 
+/**
+ * Editor Property
+ */
 interface Props extends DataSourcePluginOptionsEditorProps<RedisDataSourceOptions> {}
 
+/**
+ * State
+ */
 interface State {}
 
 /**
@@ -21,9 +30,11 @@ export class ConfigEditor extends PureComponent<Props, State> {
   onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
     options.url = event.target.value;
+
     const jsonData = {
       ...options.jsonData,
     };
+
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -34,10 +45,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPoolSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = {
-      ...options.jsonData,
-      poolSize: Number(event.target.value),
-    };
+    const jsonData = { ...options.jsonData, poolSize: Number(event.target.value) };
+
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -48,10 +57,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onTimeoutChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = {
-      ...options.jsonData,
-      timeout: Number(event.target.value),
-    };
+    const jsonData = { ...options.jsonData, timeout: Number(event.target.value) };
+
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -62,10 +69,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPingIntervalChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = {
-      ...options.jsonData,
-      pingInterval: Number(event.target.value),
-    };
+    const jsonData = { ...options.jsonData, pingInterval: Number(event.target.value) };
+
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -76,10 +81,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPipelineWindowChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = {
-      ...options.jsonData,
-      pipelineWindow: Number(event.target.value),
-    };
+    const jsonData = { ...options.jsonData, pipelineWindow: Number(event.target.value) };
+
     onOptionsChange({ ...options, jsonData });
   };
 
@@ -90,12 +93,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    onOptionsChange({
-      ...options,
-      secureJsonData: {
-        password: event.target.value,
-      },
-    });
+    onOptionsChange({ ...options, secureJsonData: { password: event.target.value } });
   };
 
   /**
@@ -105,19 +103,13 @@ export class ConfigEditor extends PureComponent<Props, State> {
     const { onOptionsChange, options } = this.props;
     onOptionsChange({
       ...options,
-      secureJsonFields: {
-        ...options.secureJsonFields,
-        password: false,
-      },
-      secureJsonData: {
-        ...options.secureJsonData,
-        password: '',
-      },
+      secureJsonFields: { ...options.secureJsonFields, password: false },
+      secureJsonData: { ...options.secureJsonData, password: '' },
     });
   };
 
   /**
-   * Render
+   * Render Editor
    */
   render() {
     const { options } = this.props;
@@ -150,7 +142,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
             onChange={this.onPoolSizeChange}
             value={jsonData.poolSize || 5}
             tooltip="Will keep open at least the given number of connections to the redis instance at the given address.
-            The recommended size of the pool depends on the number of concurrent goroutines that will use the pool and whether implicit pipelining is enabled or not."
+            The recommended size of the pool depends on the number of concurrent goroutines that will use the pool and
+            whether implicit pipelining is enabled or not."
           />
 
           <FormField
