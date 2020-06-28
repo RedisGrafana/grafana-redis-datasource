@@ -24,3 +24,5 @@ services:
     volumes:
       - ./dist:/var/lib/grafana/plugins/grafana-redis-datasource
       - ./provisioning:/etc/grafana/provisioning
+      - ./dashboards:/var/lib/grafana/dashboards
+      - ./data:/var/lib/grafana
