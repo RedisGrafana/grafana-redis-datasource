@@ -1,5 +1,5 @@
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
-import { Button, InlineFormLabel, LegacyForms, Select } from '@grafana/ui';
+import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana/ui';
 import { Aggregations, CommandParameters, Commands, QueryType, QueryTypeValue, InfoSections } from 'command';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSource } from './DataSource';
@@ -34,7 +34,7 @@ export class QueryEditor extends PureComponent<Props> {
    *
    * @param event Event
    */
-  onQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+  onQueryChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { onChange, query } = this.props;
     onChange({ ...query, query: event.target.value });
   };
@@ -155,14 +155,8 @@ export class QueryEditor extends PureComponent<Props> {
 
         {type === QueryTypeValue.CLI && (
           <div className="gf-form">
-            <FormField
-              labelWidth={8}
-              inputWidth={30}
-              value={query}
-              onChange={this.onQueryChange}
-              label="Command"
-              tooltip="Free text Command"
-            />
+            <InlineFormLabel width={8}>Command</InlineFormLabel>
+            <TextArea value={query} onChange={this.onQueryChange} />
           </div>
         )}
 
