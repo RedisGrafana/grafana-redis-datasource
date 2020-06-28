@@ -13,29 +13,32 @@ import (
 	"github.com/mediocregopher/radix/v3"
 )
 
-// newDatasource returns datasource.ServeOpts.
+/**
+ * The function is called when the instance is created for the first time or when a datasource configuration changed.
+ */
 func newDatasource() datasource.ServeOpts {
-	// creates a instance manager for your plugin. The function passed
-	// into `NewInstanceManger` is called when the instance is created
-	// for the first time or when a datasource configuration changed.
 	im := datasource.NewInstanceManager(newDataSourceInstance)
+
 	ds := &redisDatasource{
 		im: im,
 	}
 
+	// Returns datasource.ServeOpts
 	return datasource.ServeOpts{
 		QueryDataHandler:   ds,
 		CheckHealthHandler: ds,
 	}
 }
 
-// QueryData handles multiple queries and returns multiple responses.
-// req contains the queries []DataQuery (where each query contains RefID as a unique identifer).
-// The QueryDataResponse contains a map of RefID to the response for each query, and each response
-// contains Frames ([]*Frame).
+/**
+ * QueryData handles multiple queries and returns multiple responses.
+ * req contains the queries []DataQuery (where each query contains RefID as a unique identifer).
+ * The QueryDataResponse contains a map of RefID to the response for each query, and each response contains Frames ([]*Frame).
+ */
 func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryDataRequest) (*backend.QueryDataResponse, error) {
 	log.DefaultLogger.Debug("QueryData", "request", req)
 
+	// Get Instance
 	client, err := ds.getInstance(req.PluginContext)
 	if err != nil {
 		return nil, err
@@ -48,72 +51,32 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 	for _, q := range req.Queries {
 		res := ds.query(ctx, q, client)
 
-		// save the response in a hashmap
-		// based on with RefID as identifier
+		// save the response in a hashmap based on with RefID as identifier
 		response.Responses[q.RefID] = res
 	}
 
 	return response, nil
 }
 
-func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, client *radix.Pool) backend.DataResponse {
-	var qm queryModel
-
-	// Unmarshal the json into our queryModel
-	err := json.Unmarshal(query.JSON, &qm)
-	log.DefaultLogger.Debug("QueryData", "JSON", query.JSON)
-
-	// Error
-	if err != nil {
-		response := backend.DataResponse{}
-		response.Error = err
-		return response
-	}
-
-	// From and To
-	from := query.TimeRange.From.UnixNano() / 1000000
-	to := query.TimeRange.To.UnixNano() / 1000000
-
-	// Handle Panic from any command
-	defer func() {
-		if err := recover(); err != nil {
-			log.DefaultLogger.Error("PANIC", "occurred", err)
-		}
-	}()
-
-	// Commands
-	switch qm.Command {
-	case "tsrange":
-		return ds.queryTsRange(from, to, qm, client)
-	case "tsmrange":
-		return ds.queryTsMRange(from, to, qm, client)
-	case "hgetall":
-		return ds.queryHGetAll(qm, client)
-	case "smembers":
-		return ds.querySMembers(qm, client)
-	case "hget":
-		return ds.queryHGet(qm, client)
-	default:
-		response := backend.DataResponse{}
-		response.Error = fmt.Errorf("Unknown command")
-		return response
-	}
-}
-
-// CheckHealth handles health checks sent from Grafana to the plugin.
-// The main use case for these health checks is the test button on the
-// datasource configuration page which allows users to verify that
-// a datasource is working as expected.
+/**
+ * CheckHealth handles health checks sent from Grafana to the plugin
+ *
+ * @see https://redis.io/commands/ping
+ */
 func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	var status = backend.HealthStatusUnknown
 	var message = "Data source health is yet to become known"
 
-	r, err := ds.getInstance(req.PluginContext)
+	// Get Instance
+	client, err := ds.getInstance(req.PluginContext)
+
 	if err != nil {
 		status = backend.HealthStatusError
 		message = fmt.Sprintf("getInstance error: %s", err.Error())
 	} else {
-		err = r.Do(radix.Cmd(&message, "PING"))
+		err = client.Do(radix.Cmd(&message, "PING"))
+
+		// Check errors
 		if err != nil {
 			status = backend.HealthStatusError
 		} else {
@@ -122,23 +85,33 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 		}
 	}
 
+	// Return Health result
 	return &backend.CheckHealthResult{
 		Status:  status,
 		Message: message,
 	}, nil
 }
 
+/**
+ * Return Instance
+ */
 func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, error) {
 	s, err := ds.im.Get(ctx)
+
 	if err != nil {
 		return nil, err
 	}
 
+	// Return client
 	return s.(*instanceSettings).client, nil
 }
 
-// NewClient creates a new Client with or without authentication.
-func newClient(setting backend.DataSourceInstanceSettings) (*radix.Pool, error) {
+/**
+ * New Datasource Instance
+ *
+ * @see https://github.com/mediocregopher/radix
+ */
+func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
 	var jsonData dataModel
 
 	// Unmarshal Configuration
@@ -185,24 +158,23 @@ func newClient(setting backend.DataSourceInstanceSettings) (*radix.Pool, error) 
 		)
 	}
 
-	// Return Pool with specified Ping Interval, Pipeline Window and Timeout
-	return radix.NewPool("tcp", setting.URL, poolSize, radix.PoolConnFunc(connFunc),
+	// Pool with specified Ping Interval, Pipeline Window and Timeout
+	pool, err := radix.NewPool("tcp", setting.URL, poolSize, radix.PoolConnFunc(connFunc),
 		radix.PoolPingInterval(time.Duration(pingInterval)*time.Second/time.Duration(poolSize+1)),
 		radix.PoolPipelineWindow(time.Duration(pipelineWindow)*time.Microsecond, 0))
-}
 
-func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
-	pool, err := newClient(setting)
 	if err != nil {
 		return nil, err
 	}
+
 	return &instanceSettings{
 		client: pool,
 	}, nil
 }
 
+/**
+ * Called before creating a new instance to close Redis connection pool
+ */
 func (s *instanceSettings) Dispose() {
-	// Called before creating a a new instance to allow plugin authors
-	// to cleanup.
-	// s.Client.Close()
+	s.client.Close()
 }
