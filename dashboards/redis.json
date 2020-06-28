@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1593315240939,
+  "id": 7,
+  "iteration": 1593323284212,
   "links": [
     {
       "icon": "external link",
@@ -284,7 +284,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "$redis",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1469,8 +1469,8 @@
       {
         "current": {
           "selected": false,
-          "text": "grafana-redis-datasource",
-          "value": "grafana-redis-datasource"
+          "text": "",
+          "value": ""
         },
         "hide": 0,
         "includeAll": false,
@@ -1495,7 +1495,7 @@
     "refresh_intervals": ["10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
   },
   "timezone": "",
-  "title": "Redis-Datasource",
+  "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 21
+  "version": 2
 }
