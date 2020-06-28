@@ -104,7 +104,7 @@ export class QueryEditor extends PureComponent<Props> {
    */
   onTypeChange = (val: SelectableValue<string>) => {
     const { onChange, query } = this.props;
-    onChange({ ...query, type: val.value, query: val.value === QueryTypeValue.COMMAND ? '' : query.query });
+    onChange({ ...query, type: val.value, query: val.value !== QueryTypeValue.CLI ? '' : query.query });
   };
 
   /**

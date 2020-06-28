@@ -39,13 +39,18 @@ export const Commands: Array<SelectableValue<string>> = [
   { label: 'HLEN', description: 'Returns the number of fields contained in the hash stored at key', value: 'hlen' },
   { label: 'INFO', description: 'Returns information and statistics about the server ', value: 'info' },
   { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
+  {
+    label: 'SCARD',
+    description: 'Returns the set cardinality (number of elements) of the set stored at key',
+    value: 'scard',
+  },
   { label: 'SMEMBERS', description: 'Returns all the members of the set value stored at key', value: 'smembers' },
   {
     label: 'TS.MRANGE',
     description: 'Query a timestamp range across multiple time-series by filters',
-    value: 'tsmrange',
+    value: 'ts.mrange',
   },
-  { label: 'TS.RANGE', description: 'Query a range', value: 'tsrange' },
+  { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
   {
     label: 'TTL',
     description: 'Returns the string representation of the type of the value stored at key',
@@ -72,14 +77,28 @@ export const Commands: Array<SelectableValue<string>> = [
  * Input for Commands
  */
 export const CommandParameters = {
-  aggregation: ['tsrange', 'tsmrange'],
+  aggregation: ['ts.range', 'ts.mrange'],
   field: ['hget'],
-  filter: ['tsmrange'],
-  key: ['tsrange', 'hgetall', 'hget', 'smembers', 'type', 'ttl', 'get', 'xinfostream', 'hlen', 'xlen', 'hkeys', 'llen'],
-  legend: ['tsrange'],
-  legendLabel: ['tsmrange'],
+  filter: ['ts.mrange'],
+  key: [
+    'get',
+    'hget',
+    'hgetall',
+    'hkeys',
+    'hlen',
+    'llen',
+    'scard',
+    'smembers',
+    'ts.range',
+    'ttl',
+    'type',
+    'xinfostream',
+    'xlen',
+  ],
+  legend: ['ts.range'],
+  legendLabel: ['ts.mrange'],
   section: ['info'],
-  valueLabel: ['tsmrange'],
+  valueLabel: ['ts.mrange'],
 };
 
 /**

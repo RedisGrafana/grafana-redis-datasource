@@ -55,9 +55,9 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 	 * Commands switch
 	 */
 	switch qm.Command {
-	case "tsrange":
+	case "ts.range":
 		return ds.queryTsRange(from, to, qm, client)
-	case "tsmrange":
+	case "ts.mrange":
 		return ds.queryTsMRange(from, to, qm, client)
 	case "hgetall":
 		return ds.queryHGetAll(qm, client)
@@ -67,7 +67,7 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.queryHGet(qm, client)
 	case "info":
 		return ds.queryInfo(qm, client)
-	case "type", "get", "ttl", "hlen", "xlen", "llen":
+	case "type", "get", "ttl", "hlen", "xlen", "llen", "scard":
 		return ds.queryKeyCommand(qm, client)
 	case "xinfostream":
 		return ds.queryXInfoStream(qm, client)
@@ -224,9 +224,9 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
 
 	// Execute command
 	if qm.Aggregation != "" {
-		err = client.Do(radix.FlatCmd(&result, "TS.RANGE", qm.Key, from, to, "AGGREGATION", qm.Aggregation, qm.Bucket))
+		err = client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, from, to, "AGGREGATION", qm.Aggregation, qm.Bucket))
 	} else {
-		err = client.Do(radix.FlatCmd(&result, "TS.RANGE", qm.Key, from, to))
+		err = client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, from, to))
 	}
 
 	// Check error
@@ -276,9 +276,9 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 
 	// Execute command
 	if qm.Aggregation != "" {
-		err = client.Do(radix.FlatCmd(&result, "TS.MRANGE", strconv.FormatInt(from, 10), to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter))
+		err = client.Do(radix.FlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter))
 	} else {
-		err = client.Do(radix.FlatCmd(&result, "TS.MRANGE", strconv.FormatInt(from, 10), to, "WITHLABELS", "FILTER", filter))
+		err = client.Do(radix.FlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "WITHLABELS", "FILTER", filter))
 	}
 
 	// Check error
