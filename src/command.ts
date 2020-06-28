@@ -5,6 +5,7 @@ import { SelectableValue } from '@grafana/data';
  */
 export enum QueryTypeValue {
   COMMAND = 'command',
+  TIMESERIES = 'timeSeries',
   CLI = 'cli',
 }
 
@@ -13,12 +14,17 @@ export enum QueryTypeValue {
  */
 export const QueryType: Array<SelectableValue<string>> = [
   {
-    label: 'Predefined command',
-    description: 'Most popular commands with interface helpers',
+    label: 'Redis commands',
+    description: 'Hashes, Sets, Lists, Strings, Streams, etc.',
     value: QueryTypeValue.COMMAND,
   },
   {
-    label: 'Free text command',
+    label: 'RedisTimeSeries commands',
+    description: 'Redis Module adding a Time Series data structure to Redis',
+    value: QueryTypeValue.TIMESERIES,
+  },
+  {
+    label: 'Command-line interface (CLI)',
     description: 'Be mindful, not all commands are supported',
     value: QueryTypeValue.CLI,
   },
@@ -27,51 +33,55 @@ export const QueryType: Array<SelectableValue<string>> = [
 /**
  * Commands
  */
-export const Commands: Array<SelectableValue<string>> = [
-  {
-    label: 'GET',
-    description: 'Returns the value of key',
-    value: 'get',
-  },
-  { label: 'HGET', description: 'Returns the value associated with field in the hash stored at key', value: 'hget' },
-  { label: 'HGETALL', description: 'Returns all fields and values of the hash stored at key', value: 'hgetall' },
-  { label: 'HKEYS', description: 'Returns all field names in the hash stored at key', value: 'hkeys' },
-  { label: 'HLEN', description: 'Returns the number of fields contained in the hash stored at key', value: 'hlen' },
-  { label: 'INFO', description: 'Returns information and statistics about the server ', value: 'info' },
-  { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
-  {
-    label: 'SCARD',
-    description: 'Returns the set cardinality (number of elements) of the set stored at key',
-    value: 'scard',
-  },
-  { label: 'SMEMBERS', description: 'Returns all the members of the set value stored at key', value: 'smembers' },
-  {
-    label: 'TS.MRANGE',
-    description: 'Query a timestamp range across multiple time-series by filters',
-    value: 'ts.mrange',
-  },
-  { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
-  {
-    label: 'TTL',
-    description: 'Returns the string representation of the type of the value stored at key',
-    value: 'ttl',
-  },
-  {
-    label: 'TYPE',
-    description: 'Returns the string representation of the type of the value stored at key',
-    value: 'type',
-  },
-  {
-    label: 'XINFO STREAM',
-    description: 'Returns general information about the stream stored at the specified key',
-    value: 'xinfostream',
-  },
-  {
-    label: 'XLEN',
-    description: 'Returns the number of entries inside a stream',
-    value: 'xlen',
-  },
-];
+export const Commands = {
+  command: [
+    {
+      label: 'GET',
+      description: 'Returns the value of key',
+      value: 'get',
+    },
+    { label: 'HGET', description: 'Returns the value associated with field in the hash stored at key', value: 'hget' },
+    { label: 'HGETALL', description: 'Returns all fields and values of the hash stored at key', value: 'hgetall' },
+    { label: 'HKEYS', description: 'Returns all field names in the hash stored at key', value: 'hkeys' },
+    { label: 'HLEN', description: 'Returns the number of fields contained in the hash stored at key', value: 'hlen' },
+    { label: 'INFO', description: 'Returns information and statistics about the server ', value: 'info' },
+    { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
+    {
+      label: 'SCARD',
+      description: 'Returns the set cardinality (number of elements) of the set stored at key',
+      value: 'scard',
+    },
+    { label: 'SMEMBERS', description: 'Returns all the members of the set value stored at key', value: 'smembers' },
+    {
+      label: 'TTL',
+      description: 'Returns the string representation of the type of the value stored at key',
+      value: 'ttl',
+    },
+    {
+      label: 'TYPE',
+      description: 'Returns the string representation of the type of the value stored at key',
+      value: 'type',
+    },
+    {
+      label: 'XINFO STREAM',
+      description: 'Returns general information about the stream stored at the specified key',
+      value: 'xinfostream',
+    },
+    {
+      label: 'XLEN',
+      description: 'Returns the number of entries inside a stream',
+      value: 'xlen',
+    },
+  ],
+  timeSeries: [
+    {
+      label: 'TS.MRANGE',
+      description: 'Query a timestamp range across multiple time-series by filters',
+      value: 'ts.mrange',
+    },
+    { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
+  ],
+};
 
 /**
  * Input for Commands

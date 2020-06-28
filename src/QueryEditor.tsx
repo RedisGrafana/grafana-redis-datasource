@@ -160,14 +160,14 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {type === QueryTypeValue.COMMAND && (
+        {type !== QueryTypeValue.CLI && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Command</InlineFormLabel>
-            <Select options={Commands} menuPlacement="bottom" value={command} onChange={this.onCommandChange} />
+            <Select options={Commands[type]} menuPlacement="bottom" value={command} onChange={this.onCommandChange} />
           </div>
         )}
 
-        {type === QueryTypeValue.COMMAND && command && (
+        {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
             {CommandParameters.key.includes(command) && (
               <FormField
@@ -249,7 +249,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {type === QueryTypeValue.COMMAND && command && CommandParameters.aggregation.includes(command) && (
+        {type === QueryTypeValue.TIMESERIES && command && CommandParameters.aggregation.includes(command) && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Aggregation</InlineFormLabel>
             <Select
