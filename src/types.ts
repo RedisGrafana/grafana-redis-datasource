@@ -72,7 +72,28 @@ export interface RedisDataSourceOptions extends DataSourceJsonData {
    *
    * @type {number}
    */
-  size: number;
+  poolSize: number;
+
+  /**
+   * Timeout
+   *
+   * @type {number}
+   */
+  timeout: number;
+
+  /**
+   * Pool Ping Interval
+   *
+   * @type {number}
+   */
+  pingInterval: number;
+
+  /**
+   * Pool Pipeline Window
+   *
+   * @type {number}
+   */
+  pipelineWindow: number;
 }
 
 /**

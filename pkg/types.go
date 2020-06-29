@@ -18,7 +18,10 @@ type redisDatasource struct {
 
 // Data Model
 type dataModel struct {
-	Size int `json:"size"`
+	PoolSize       int `json:"poolSize"`
+	Timeout        int `json:"timeout"`
+	PingInterval   int `json:"pingInterval"`
+	PipelineWindow int `json:"pipelineWindow"`
 }
 
 // Query Model
