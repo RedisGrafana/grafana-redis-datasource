@@ -19,7 +19,22 @@ export interface RedisQuery extends DataQuery {
   query?: string;
 
   /**
-   * Command
+   * Field
+   *
+   * @type {string}
+   */
+  field?: string;
+
+  /**
+   * Redis TimeSeries filter
+   *
+   * @see https://oss.redislabs.com/redistimeseries/commands/#filtering
+   * @type {string}
+   */
+  filter: string;
+
+  /**
+   * Value label
    *
    * @type {string}
    */
