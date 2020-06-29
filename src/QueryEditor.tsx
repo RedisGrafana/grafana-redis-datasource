@@ -259,14 +259,16 @@ export class QueryEditor extends PureComponent<Props> {
               value={aggregation}
               menuPlacement="bottom"
             />
-            <FormField
-              labelWidth={8}
-              value={bucket}
-              type="number"
-              onChange={this.onBucketTextChange}
-              label="Bucket"
-              tooltip="Time bucket for aggregation in milliseconds"
-            />
+            {aggregation && (
+              <FormField
+                labelWidth={8}
+                value={bucket}
+                type="number"
+                onChange={this.onBucketTextChange}
+                label="Bucket"
+                tooltip="Time bucket for aggregation in milliseconds"
+              />
+            )}
           </div>
         )}
 

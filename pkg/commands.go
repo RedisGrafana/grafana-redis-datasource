@@ -582,7 +582,7 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.
 			}
 
 			// Add Query
-			frame.AppendRow(fields[0], callsValue, usecValue, usecPerCallValue)
+			frame.AppendRow(strings.Replace(fields[0], "cmdstat_", "", 1), callsValue, usecValue, usecPerCallValue)
 		}
 
 		// Add the frames to the response
