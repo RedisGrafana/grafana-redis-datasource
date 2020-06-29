@@ -533,6 +533,65 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.
 	// Split lines
 	lines := strings.Split(strings.Replace(result, "\r\n", "\n", -1), "\n")
 
+	// Command stats
+	if qm.Section == "commandstats" {
+		// New Frame
+		frame := data.NewFrame(qm.Command,
+			data.NewField("Command", nil, []string{}),
+			data.NewField("Calls", nil, []int64{}),
+			data.NewField("Usec", nil, []float64{}),
+			data.NewField("Usec_per_call", nil, []float64{}))
+
+		// Parse lines
+		for _, line := range lines {
+			fields := strings.Split(line, ":")
+
+			if len(fields) < 2 {
+				continue
+			}
+
+			// Stats
+			stats := strings.Split(fields[1], ",")
+
+			if len(stats) < 3 {
+				continue
+			}
+
+			// Parse Stats
+			calls := strings.Split(stats[0], "=")
+			usec := strings.Split(stats[1], "=")
+			usecPerCall := strings.Split(stats[2], "=")
+
+			var callsValue int64
+			var usecValue float64
+			var usecPerCallValue float64
+
+			// Parse Calls
+			if len(calls) == 2 {
+				callsValue, _ = strconv.ParseInt(calls[1], 10, 64)
+			}
+
+			// Parse Usec
+			if len(usec) == 2 {
+				usecValue, _ = strconv.ParseFloat(usec[1], 64)
+			}
+
+			// Parse Usec per Call
+			if len(usecPerCall) == 2 {
+				usecPerCallValue, _ = strconv.ParseFloat(usecPerCall[1], 64)
+			}
+
+			// Add Query
+			frame.AppendRow(fields[0], callsValue, usecValue, usecPerCallValue)
+		}
+
+		// Add the frames to the response
+		response.Frames = append(response.Frames, frame)
+
+		// Return
+		return response
+	}
+
 	// New Frame
 	frame := data.NewFrame(qm.Command)
 

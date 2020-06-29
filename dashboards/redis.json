@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1593390322422,
+  "iteration": 1593393085129,
   "links": [
     {
       "icon": "external link",
@@ -1318,7 +1318,8 @@
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": null
+            "align": null,
+            "displayMode": "color-text"
           },
           "mappings": [],
           "thresholds": {
@@ -1327,15 +1328,60 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Calls"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Number of calls"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration per call"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -1345,7 +1391,13 @@
       },
       "id": 41,
       "options": {
-        "showHeader": false
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Duration"
+          }
+        ]
       },
       "pluginVersion": "7.0.4",
       "scopedVars": {
@@ -1357,18 +1409,35 @@
       },
       "targets": [
         {
-          "query": "ping",
+          "command": "info",
+          "query": "",
           "refId": "A",
-          "type": "cli"
+          "section": "commandstats",
+          "type": "command"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Command Statistics",
+      "title": "Command statistics",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Calls": "Number of calls",
+              "Command": "",
+              "Usec": "Duration",
+              "Usec_per_call": "Duration per call"
+            }
+          }
+        }
+      ],
       "type": "table"
     }
   ],
-  "refresh": "5s",
+  "refresh": "10s",
   "schemaVersion": 25,
   "style": "dark",
   "tags": ["redis"],
@@ -1376,7 +1445,8 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
+          "tags": [],
           "text": "Redis",
           "value": ["Redis"]
         },
@@ -1405,5 +1475,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 70
+  "version": 79
 }
