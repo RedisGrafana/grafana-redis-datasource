@@ -69,6 +69,8 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.queryInfo(qm, client)
 	case "clientList":
 		return ds.queryClientList(qm, client)
+	case "slowlogGet":
+		return ds.querySlowlogGet(qm, client)
 	case "type", "get", "ttl", "hlen", "xlen", "llen", "scard":
 		return ds.queryKeyCommand(qm, client)
 	case "xinfoStream":
@@ -135,12 +137,12 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool)
 	switch result.(type) {
 	case int64:
 		// Format number
-		value := strconv.FormatInt(result.(int64), 10)
+		value := result.(int64)
 
 		// Add Frame
 		response.Frames = append(response.Frames,
 			data.NewFrame(qm.Key,
-				data.NewField("Value", nil, []string{value})))
+				data.NewField("Value", nil, []int64{value})))
 	case []byte:
 		value := string(result.([]byte))
 
@@ -203,8 +205,14 @@ func (ds *redisDatasource) queryKeyCommand(qm queryModel, client *radix.Pool) ba
 	}
 
 	// New Frame
-	frame := data.NewFrame(qm.Key,
-		data.NewField("Value", nil, []string{value}))
+	frame := data.NewFrame(qm.Key)
+
+	// Parse Float
+	if intValue, err := strconv.ParseInt(value, 10, 64); err == nil {
+		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []int64{intValue}))
+	} else {
+		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []string{value}))
+	}
 
 	// Add the frames to the response
 	response.Frames = append(response.Frames, frame)
@@ -537,7 +545,11 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.
 		}
 
 		// Add Field
-		frame.Fields = append(frame.Fields, data.NewField(fields[0], nil, []string{fields[1]}))
+		if floatValue, err := strconv.ParseFloat(fields[1], 64); err == nil {
+			frame.Fields = append(frame.Fields, data.NewField(fields[0], nil, []float64{floatValue}))
+		} else {
+			frame.Fields = append(frame.Fields, data.NewField(fields[0], nil, []string{fields[1]}))
+		}
 	}
 
 	// Add the frames to the response
@@ -584,7 +596,11 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client *radix.Pool) ba
 
 			// Add Header for first row
 			if i == 0 {
-				frame.Fields = append(frame.Fields, data.NewField(value[0], nil, []string{}))
+				if _, err := strconv.ParseInt(value[1], 10, 64); err == nil {
+					frame.Fields = append(frame.Fields, data.NewField(value[0], nil, []int64{}))
+				} else {
+					frame.Fields = append(frame.Fields, data.NewField(value[0], nil, []string{}))
+				}
 			}
 
 			// Skip if less than 2 elements
@@ -592,8 +608,12 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client *radix.Pool) ba
 				continue
 			}
 
-			// Add Value
-			values = append(values, value[1])
+			// Add Int64 or String value
+			if intValue, err := strconv.ParseInt(value[1], 10, 64); err == nil {
+				values = append(values, intValue)
+			} else {
+				values = append(values, value[1])
+			}
 		}
 
 		// Add Row
@@ -604,5 +624,66 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client *radix.Pool) ba
 	response.Frames = append(response.Frames, frame)
 
 	// Return
+	return response
+}
+
+/**
+ * SLOWLOG subcommand [argument]
+ *
+ * @see https://redis.io/commands/slowlog
+ */
+func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Execute command
+	var result interface{}
+	err := client.Do(radix.Cmd(&result, "SLOWLOG", "GET"))
+
+	// Check error
+	if err != nil {
+		return ds.errorHandler(response, err)
+	}
+
+	// New Frame
+	frame := data.NewFrame(qm.Command,
+		data.NewField("Id", nil, []int64{}),
+		data.NewField("Timestamp", nil, []int64{}),
+		data.NewField("Duration", nil, []int64{}),
+		data.NewField("Command", nil, []string{}))
+
+	// Parse Time-Series data
+	for _, innerArray := range result.([]interface{}) {
+		query := innerArray.([]interface{})
+		command := ""
+
+		// Merge all args
+		for _, arg := range query[3].([]interface{}) {
+
+			// Add space between command and arguments
+			if command != "" {
+				command += " "
+			}
+
+			// Combine args into single command
+			switch arg.(type) {
+			case int64:
+				command += strconv.FormatInt(arg.(int64), 10)
+			case []byte:
+				command += string(arg.([]byte))
+			case string:
+				command += arg.(string)
+			default:
+				log.DefaultLogger.Debug("Slowlog", "default", arg)
+			}
+		}
+
+		// Add Query
+		frame.AppendRow(query[0].(int64), query[1].(int64), query[2].(int64), command)
+	}
+
+	// Add the frame to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return Response
 	return response
 }

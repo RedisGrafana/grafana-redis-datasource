@@ -56,6 +56,11 @@ export const Commands = {
       description: 'Returns the set cardinality (number of elements) of the set stored at key',
       value: 'scard',
     },
+    {
+      label: 'SLOWLOG GET',
+      description: 'Returns the Redis slow queries log',
+      value: 'slowlogGet',
+    },
     { label: 'SMEMBERS', description: 'Returns all the members of the set value stored at key', value: 'smembers' },
     {
       label: 'TTL',
