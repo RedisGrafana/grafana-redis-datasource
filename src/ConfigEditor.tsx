@@ -122,6 +122,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     return (
       <div className="gf-form-group">
         <h3 className="page-heading">Redis</h3>
+
         <div className="gf-form">
           <FormField
             label="URL"
@@ -145,18 +146,10 @@ export class ConfigEditor extends PureComponent<Props, State> {
             The recommended size of the pool depends on the number of concurrent goroutines that will use the pool and
             whether implicit pipelining is enabled or not."
           />
-
-          <FormField
-            label="Ping Interval, sec"
-            labelWidth={10}
-            inputWidth={10}
-            onChange={this.onPingIntervalChange}
-            value={jsonData.pingInterval || 0}
-            tooltip="Specifies the interval in seconds at which a ping event happens.
-            A shorter interval means connections are pinged more frequently, but also means more traffic with the server.
-            If interval is zero then ping will be disabled."
-          />
         </div>
+
+        <br />
+        <h3 className="page-heading">Advanced settings</h3>
 
         <div className="gf-form">
           <FormField
@@ -166,6 +159,16 @@ export class ConfigEditor extends PureComponent<Props, State> {
             onChange={this.onTimeoutChange}
             value={jsonData.timeout || 10}
             tooltip="Sets the duration in seconds for connect, read and write timeouts."
+          />
+          <FormField
+            label="Ping Interval, sec"
+            labelWidth={10}
+            inputWidth={10}
+            onChange={this.onPingIntervalChange}
+            value={jsonData.pingInterval || 0}
+            tooltip="Specifies the interval in seconds at which a ping event happens.
+            A shorter interval means connections are pinged more frequently, but also means more traffic with the server.
+            If interval is zero then ping will be disabled."
           />
         </div>
 
@@ -183,6 +186,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <br />
         <h3 className="page-heading">Auth</h3>
+
         <div className="gf-form-inline">
           <div className="gf-form">
             <SecretFormField
