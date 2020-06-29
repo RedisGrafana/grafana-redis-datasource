@@ -5,22 +5,45 @@ import { DataQuery, DataSourceJsonData } from '@grafana/data';
  */
 export interface RedisQuery extends DataQuery {
   /**
-   * Key name
-   *
-   * @type {string}
-   */
-  keyname?: string;
-
-  /**
    * Command
    *
    * @type {string}
    */
-  cmd?: string;
+  command?: string;
+
+  /**
+   * Key name
+   *
+   * @type {string}
+   */
+  key?: string;
+
+  /**
+   * Field
+   *
+   * @type {string}
+   */
+  field?: string;
+
+  /**
+   * Redis TimeSeries filter
+   *
+   * @see https://oss.redislabs.com/redistimeseries/commands/#filtering
+   * @type {string}
+   */
+  filter: string;
+
+  /**
+   * Value label
+   *
+   * @type {string}
+   */
+  value: string;
 
   /**
    * Aggregation
    *
+   * @see https://oss.redislabs.com/redistimeseries/commands/#aggregation-compaction-downsampling
    * @type {string}
    */
   aggregation?: string;
