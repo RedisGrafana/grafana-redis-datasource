@@ -4,6 +4,7 @@
   "id": "grafana-redis-datasource",
   "metrics": true,
   "backend": true,
+  "alerting": true,
   "executable": "gpx_grafana-redis-datasource",
   "info": {
     "description": "Grafana Redis Datasource",

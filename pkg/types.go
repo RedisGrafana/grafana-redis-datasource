@@ -5,18 +5,23 @@ import (
 	"github.com/mediocregopher/radix/v3"
 )
 
+/**
+ * Instance Settings
+ */
 type instanceSettings struct {
 	client *radix.Pool
 }
 
+/**
+ * 	The instance manager can help with lifecycle management of datasource instances in plugins.
+ */
 type redisDatasource struct {
-	// The instance manager can help with lifecycle management
-	// of datasource instances in plugins. It's not a requirements
-	// but a best practice that we recommend that you follow.
 	im instancemgmt.InstanceManager
 }
 
-// Data Model
+/**
+ * Configuration Data Model
+ */
 type dataModel struct {
 	PoolSize       int `json:"poolSize"`
 	Timeout        int `json:"timeout"`
@@ -24,8 +29,12 @@ type dataModel struct {
 	PipelineWindow int `json:"pipelineWindow"`
 }
 
-// Query Model
+/*
+ * Query Model
+ */
 type queryModel struct {
+	Type        string `json:"type"`
+	Query       string `json:"query"`
 	Key         string `json:"key"`
 	Field       string `json:"field"`
 	Filter      string `json:"filter"`
@@ -34,4 +43,5 @@ type queryModel struct {
 	Bucket      string `json:"bucket"`
 	Legend      string `json:"legend"`
 	Value       string `json:"value"`
+	Section     string `json:"section"`
 }

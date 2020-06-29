@@ -1,9 +1,12 @@
 import { DataSourcePlugin } from '@grafana/data';
-import { DataSource } from './DataSource';
 import { ConfigEditor } from './ConfigEditor';
+import { DataSource } from './DataSource';
 import { QueryEditor } from './QueryEditor';
-import { RedisQuery, RedisDataSourceOptions } from './types';
+import { RedisDataSourceOptions, RedisQuery } from './types';
 
+/**
+ * Data Source plugin
+ */
 export const plugin = new DataSourcePlugin<DataSource, RedisQuery, RedisDataSourceOptions>(DataSource)
   .setConfigEditor(ConfigEditor)
   .setQueryEditor(QueryEditor);
