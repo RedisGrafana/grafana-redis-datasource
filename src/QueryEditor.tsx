@@ -104,7 +104,11 @@ export class QueryEditor extends PureComponent<Props> {
    */
   onTypeChange = (val: SelectableValue<string>) => {
     const { onChange, query } = this.props;
-    onChange({ ...query, type: val.value, query: val.value !== QueryTypeValue.CLI ? '' : query.query });
+    onChange({
+      ...query,
+      type: val.value as QueryTypeValue,
+      query: val.value !== QueryTypeValue.CLI ? '' : query.query,
+    });
   };
 
   /**
@@ -160,7 +164,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {type !== QueryTypeValue.CLI && (
+        {type && type !== QueryTypeValue.CLI && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Command</InlineFormLabel>
             <Select options={Commands[type]} menuPlacement="bottom" value={command} onChange={this.onCommandChange} />

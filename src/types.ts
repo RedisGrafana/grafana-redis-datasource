@@ -1,3 +1,4 @@
+import { QueryTypeValue } from 'command';
 import { DataQuery, DataSourceJsonData } from '@grafana/data';
 
 /**
@@ -9,7 +10,7 @@ export interface RedisQuery extends DataQuery {
    *
    * @type {string}
    */
-  type?: string;
+  type: QueryTypeValue;
 
   /**
    * Query command
@@ -31,10 +32,10 @@ export interface RedisQuery extends DataQuery {
    * @see https://oss.redislabs.com/redistimeseries/commands/#filtering
    * @type {string}
    */
-  filter: string;
+  filter?: string;
 
   /**
-   * Value label
+   * Command
    *
    * @type {string}
    */
@@ -46,21 +47,6 @@ export interface RedisQuery extends DataQuery {
    * @type {string}
    */
   key?: string;
-
-  /**
-   * Field
-   *
-   * @type {string}
-   */
-  field?: string;
-
-  /**
-   * Redis TimeSeries filter
-   *
-   * @see https://oss.redislabs.com/redistimeseries/commands/#filtering
-   * @type {string}
-   */
-  filter?: string;
 
   /**
    * Value label
