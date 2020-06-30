@@ -1,16 +1,19 @@
-# Grafana Redis datasource
+# Grafana Redis Datasource
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-red)](https://www.grafana.com)
-[![Radix](https://img.shields.io/badge/Radix-integrated-blue)](https://github.com/mediocregopher/radix)
+[![Radix](https://img.shields.io/badge/Radix-powered-blue)](https://github.com/mediocregopher/radix)
 [![RedisTimeSeries](https://img.shields.io/badge/RedisTimeSeries-inspired-yellowgreen)](https://oss.redislabs.com/redistimeseries/)
+[![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-orange)](https://redislabs.com/redis-enterprise/)
 
 ## Description
 
 Redis datasource for Grafana 7.0 allows to query data directly from Redis database using [Radix](https://github.com/mediocregopher/radix) client.
 
-To demonstrate it's functionality we included Redis monitoring dashboard:
+### Redis Monitoring dashboard
 
-![Dashboard](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/redis-dashboard.gif)
+To demonstrate datasource functionality we included Redis monitoring dashboard.
+
+![Dashboard](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/redis-dashboard.png)
 
 ## Build
 
@@ -38,7 +41,7 @@ npm run build
 go get -u github.com/grafana/grafana-plugin-sdk-go
 ```
 
-#### Build backend plugin binaries for Linux, Windows and Mac OS
+#### Build backend plugin binaries for Linux, Windows and MacOS
 
 ```bash
 npm run build:backend
@@ -46,7 +49,7 @@ npm run build:backend
 
 ## Run
 
-Project consists `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0
+Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0
 
 ### Update port for Grafana in `docker-compose.yml`
 
@@ -55,15 +58,15 @@ Project consists `docker-compose.yml` to start Redis with RedisTimeSeries module
       - '3100:3000'
 ```
 
-### Update datasource `url` in `provisioning/datasources/redis.yaml`
+### Update datasource url in `provisioning/datasources/redis.yaml`
 
-If Redis running on localhost
+If Redis is running and listening on localhost and default port no changes are required
 
 ```
     url: redis://localhost:6379
 ```
 
-If Redis running in Docker on Mac OS
+If Redis is running as Docker container on MacOS, please update host to `host.docker.internal`
 
 ```
     url: redis://host.docker.internal:6379
@@ -79,17 +82,17 @@ npm run start
 
 ### Configure Datasource
 
-![Datasource](https://github.com/mikhailredis/grafana-redistimeseries-plugin/blob/master/images/datasource.png)
+![Datasource](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/datasource.png)
 
 ## Supported Commands
 
-Datasource supports many Redis commands using custom components and provide unified interface to query any commands.
+Datasource supports many Redis commands using custom components and provide unified interface to query any command.
 
 ![Query](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/query.png)
 
 ## Template variables
 
-Template variables can query any commands and use other variables:
+Template variables can query any command and use other variables as parameters.
 
 ![Variables](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/variables.png)
 
