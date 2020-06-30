@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1593405168614,
+  "id": 1,
+  "iteration": 1593487436739,
   "links": [
     {
       "icon": "external link",
@@ -58,14 +58,22 @@
           "custom": {
             "align": null
           },
-          "decimals": 2,
+          "decimals": 0,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
                 "value": null
+              },
+              {
+                "color": "dark-yellow",
+                "value": 22000
+              },
+              {
+                "color": "dark-red",
+                "value": 25000
               }
             ]
           },
@@ -81,7 +89,7 @@
       },
       "id": 24,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -130,94 +138,24 @@
           "custom": {
             "align": null
           },
+          "decimals": 1,
           "mappings": [],
+          "max": 11000,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
                 "value": null
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 3,
-        "y": 1
-      },
-      "id": 27,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["mean"],
-          "fields": "/.*/",
-          "values": true
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
-      },
-      "pluginVersion": "7.0.4",
-      "scopedVars": {
-        "redis": {
-          "selected": true,
-          "text": "Redis",
-          "value": "Redis"
-        }
-      },
-      "targets": [
-        {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "cpu",
-          "type": "command"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Used CPU",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": ["used_cpu_user", "used_cpu_sys"]
-            }
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {},
-            "indexByName": {},
-            "renameByName": {
-              "used_cpu_sys": "System",
-              "used_cpu_user": "User"
-            }
-          }
-        }
-      ],
-      "type": "gauge"
-    },
-    {
-      "datasource": "$redis",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": null
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
+              },
               {
-                "color": "green",
-                "value": null
+                "color": "dark-yellow",
+                "value": 8000
+              },
+              {
+                "color": "dark-red",
+                "value": 10000
               }
             ]
           },
@@ -227,8 +165,8 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 6,
-        "x": 9,
+        "w": 8,
+        "x": 3,
         "y": 1
       },
       "id": 25,
@@ -297,7 +235,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
                 "value": null
               }
             ]
@@ -369,8 +307,8 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 9,
-        "x": 15,
+        "w": 10,
+        "x": 11,
         "y": 1
       },
       "id": 8,
@@ -440,6 +378,78 @@
       "datasource": "$redis",
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "align": null
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 21,
+        "y": 1
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        }
+      },
+      "pluginVersion": "7.0.4",
+      "scopedVars": {
+        "redis": {
+          "selected": true,
+          "text": "Redis",
+          "value": "Redis"
+        }
+      },
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "server",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Uptime",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["uptime_in_seconds"]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {
           "custom": {},
           "decimals": 0,
           "mappings": [],
@@ -447,7 +457,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
                 "value": null
               }
             ]
@@ -464,7 +474,7 @@
       },
       "id": 22,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -513,13 +523,83 @@
           "custom": {
             "align": null
           },
-          "decimals": 0,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 21,
+        "y": 4
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        }
+      },
+      "pluginVersion": "7.0.4",
+      "scopedVars": {
+        "redis": {
+          "selected": true,
+          "text": "Redis",
+          "value": "Redis"
+        }
+      },
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "server",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Version",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["redis_version"]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
                 "value": null
               }
             ]
@@ -536,7 +616,7 @@
       },
       "id": 2,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -579,7 +659,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
                 "value": null
               }
             ]
@@ -590,7 +670,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
+        "w": 8,
         "x": 3,
         "y": 7
       },
@@ -661,7 +741,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
                 "value": null
               }
             ]
@@ -672,8 +752,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
-        "x": 9,
+        "w": 10,
+        "x": 11,
         "y": 7
       },
       "id": 38,
@@ -742,7 +822,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-green",
                 "value": null
               }
             ]
@@ -754,7 +834,7 @@
       "gridPos": {
         "h": 3,
         "w": 3,
-        "x": 15,
+        "x": 21,
         "y": 7
       },
       "id": 34,
@@ -795,147 +875,6 @@
           "options": {
             "include": {
               "names": ["maxmemory_policy"]
-            }
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": "$redis",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": null
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 18,
-        "y": 7
-      },
-      "id": 19,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["mean"],
-          "fields": "/.*/",
-          "values": true
-        }
-      },
-      "pluginVersion": "7.0.4",
-      "scopedVars": {
-        "redis": {
-          "selected": true,
-          "text": "Redis",
-          "value": "Redis"
-        }
-      },
-      "targets": [
-        {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "server",
-          "type": "command"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Uptime",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": ["uptime_in_seconds"]
-            }
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": "$redis",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": null
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 3,
-        "x": 21,
-        "y": 7
-      },
-      "id": 6,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["mean"],
-          "fields": "/.*/",
-          "values": true
-        }
-      },
-      "pluginVersion": "7.0.4",
-      "scopedVars": {
-        "redis": {
-          "selected": true,
-          "text": "Redis",
-          "value": "Redis"
-        }
-      },
-      "targets": [
-        {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "server",
-          "type": "command"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Version",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": ["redis_version"]
             }
           }
         }
@@ -992,11 +931,15 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 120
+                "value": 99
               },
               {
                 "id": "unit",
                 "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 1
               }
             ]
           },
@@ -1008,7 +951,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 154
+                "value": 127
               }
             ]
           },
@@ -1020,26 +963,35 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 109
+                "value": 95
               },
               {
                 "id": "unit",
                 "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 0
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 12,
-        "w": 7,
+        "h": 15,
+        "w": 6,
         "x": 0,
         "y": 11
       },
       "id": 4,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Idle time"
+          }
+        ]
       },
       "pluginVersion": "7.0.4",
       "scopedVars": {
@@ -1080,6 +1032,165 @@
               "cmd": "Last command",
               "id": "Id",
               "idle": "Idle time"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "displayMode": "color-text"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Calls"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Number of calls"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "custom.width",
+                "value": 127
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total Duration"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "custom.width",
+                "value": 127
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration per call"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "µs"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Command"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 115
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 7,
+        "x": 6,
+        "y": 11
+      },
+      "id": 41,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total Duration"
+          }
+        ]
+      },
+      "pluginVersion": "7.0.4",
+      "scopedVars": {
+        "redis": {
+          "selected": true,
+          "text": "Redis",
+          "value": "Redis"
+        }
+      },
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "commandstats",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Command statistics",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Calls": "Number of calls",
+              "Command": "",
+              "Usec": "Total Duration",
+              "Usec_per_call": "Duration per call"
             }
           }
         }
@@ -1155,7 +1266,7 @@
               },
               {
                 "id": "unit",
-                "value": "ms"
+                "value": "µs"
               }
             ]
           },
@@ -1174,9 +1285,9 @@
         ]
       },
       "gridPos": {
-        "h": 12,
-        "w": 8,
-        "x": 7,
+        "h": 15,
+        "w": 11,
+        "x": 13,
         "y": 11
       },
       "id": 11,
@@ -1242,129 +1353,6 @@
         }
       ],
       "type": "table"
-    },
-    {
-      "datasource": "$redis",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": null,
-            "displayMode": "color-text"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Calls"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "short"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Number of calls"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "short"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Duration"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "µs"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Duration per call"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "µs"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 9,
-        "x": 15,
-        "y": 11
-      },
-      "id": 41,
-      "options": {
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Duration"
-          }
-        ]
-      },
-      "pluginVersion": "7.0.4",
-      "scopedVars": {
-        "redis": {
-          "selected": true,
-          "text": "Redis",
-          "value": "Redis"
-        }
-      },
-      "targets": [
-        {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "commandstats",
-          "type": "command"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Command statistics",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {},
-            "indexByName": {},
-            "renameByName": {
-              "Calls": "Number of calls",
-              "Command": "",
-              "Usec": "Duration",
-              "Usec_per_call": "Duration per call"
-            }
-          }
-        }
-      ],
-      "type": "table"
     }
   ],
   "refresh": "5s",
@@ -1404,5 +1392,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 108
+  "version": 13
 }

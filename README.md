@@ -1,61 +1,98 @@
-# Grafana Data Source Backend Plugin Template
+# Grafana Redis datasource
 
-[![CircleCI](https://circleci.com/gh/grafana/simple-datasource-backend/tree/master.svg?style=svg)](https://circleci.com/gh/grafana/simple-datasource-backend/tree/master)
+[![Grafana 7](https://img.shields.io/badge/Grafana-7-red)](https://www.grafana.com)
+[![Radix](https://img.shields.io/badge/Radix-integrated-blue)](https://github.com/mediocregopher/radix)
+[![RedisTimeSeries](https://img.shields.io/badge/RedisTimeSeries-inspired-yellowgreen)](https://oss.redislabs.com/redistimeseries/)
 
-This template is a starting point for building Grafana Data Source Backend Plugins
+## Description
 
-## What is Grafana Data Source Backend Plugin?
+Redis datasource for Grafana 7.0 allows to query data directly from Redis database using [Radix](https://github.com/mediocregopher/radix) client.
 
-Grafana supports a wide range of data sources, including Prometheus, MySQL, and even Datadog. There’s a good chance you can already visualize metrics from the systems you have set up. In some cases, though, you already have an in-house metrics solution that you’d like to add to your Grafana dashboards. Grafana Data Source Plugins enables integrating such solutions with Grafana.
+To demonstrate it's functionality we included Redis monitoring dashboard:
 
-For more information about backend plugins, refer to the documentation on [Backend plugins](https://grafana.com/docs/grafana/latest/developers/plugins/backend/).
+![Dashboard](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/redis-dashboard.gif)
 
-## Getting started
+## Build
 
-A data source backend plugin consists of both frontend and backend components.
+Redis datasource consists of both frontend and backend components.
 
-### Frontend
+### React Frontend
 
-1. Install dependencies
-```BASH
+#### Install dependencies
+
+```bash
 yarn install
 ```
 
-2. Build plugin in development mode or run in watch mode
-```BASH
-yarn dev
-```
-or
-```BASH
-yarn watch
-```
-3. Build plugin in production mode
-```BASH
-yarn build
+#### Build frontend
+
+```bash
+npm run build
 ```
 
-### Backend
+### Golang Backend
 
-1. Update [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/) dependency to the latest minor version:
+#### Update [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/) dependency
 
 ```bash
 go get -u github.com/grafana/grafana-plugin-sdk-go
 ```
 
-2. Build backend plugin binaries for Linux, Windows and Darwin:
-```BASH
-mage -v
+#### Build backend plugin binaries for Linux, Windows and Mac OS
+
+```bash
+npm run build:backend
 ```
 
-3. List all available Mage targets for additional commands:
-```BASH
-mage -l
+## Run
+
+Project consists `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0
+
+### Update port for Grafana in `docker-compose.yml`
+
 ```
+    ports:
+      - '3100:3000'
+```
+
+### Update datasource `url` in `provisioning/datasources/redis.yaml`
+
+If Redis running on localhost
+
+```
+    url: redis://localhost:6379
+```
+
+If Redis running in Docker on Mac OS
+
+```
+    url: redis://host.docker.internal:6379
+```
+
+### Start using `docker-compose`
+
+```bash
+npm run start
+```
+
+### Open Grafana in your browser [http://localhost:3000](http://localhost:3000)
+
+### Configure Datasource
+
+![Datasource](https://github.com/mikhailredis/grafana-redistimeseries-plugin/blob/master/images/datasource.png)
+
+## Supported Commands
+
+Datasource supports many Redis commands using custom components and provide unified interface to query any commands.
+
+![Query](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/query.png)
+
+## Template variables
+
+Template variables can query any commands and use other variables:
+
+![Variables](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/variables.png)
 
 ## Learn more
 
-- [Build a data source backend plugin tutorial](https://grafana.com/tutorials/build-a-data-source-backend-plugin)
-- [Grafana documentation](https://grafana.com/docs/)
-- [Grafana Tutorials](https://grafana.com/tutorials/) - Grafana Tutorials are step-by-step guides that help you make the most of Grafana
-- [Grafana UI Library](https://developers.grafana.com/ui) - UI components to help you build interfaces using Grafana Design System
-- [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/)
+- [Redis TimeSeries](https://oss.redislabs.com/redistimeseries/)
