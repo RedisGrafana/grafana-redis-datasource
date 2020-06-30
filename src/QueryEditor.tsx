@@ -107,7 +107,8 @@ export class QueryEditor extends PureComponent<Props> {
     onChange({
       ...query,
       type: val.value as QueryTypeValue,
-      query: val.value !== QueryTypeValue.CLI ? '' : query.query,
+      query: '',
+      command: '',
     });
   };
 
@@ -154,22 +155,22 @@ export class QueryEditor extends PureComponent<Props> {
       <div>
         <div className="gf-form">
           <InlineFormLabel width={8}>Type</InlineFormLabel>
-          <Select options={QueryType} menuPlacement="bottom" value={type} onChange={this.onTypeChange} />
+          <Select width={40} options={QueryType} menuPlacement="bottom" value={type} onChange={this.onTypeChange} />
+          <span>&nbsp;</span>
+
+          {type === QueryTypeValue.CLI && (
+            <>
+              <InlineFormLabel width={8}>Command</InlineFormLabel>
+              <TextArea value={query} className="gf-form-input" onChange={this.onQueryChange} />
+            </>
+          )}
+          {type && type !== QueryTypeValue.CLI && (
+            <>
+              <InlineFormLabel width={8}>Command</InlineFormLabel>
+              <Select options={Commands[type]} menuPlacement="bottom" value={command} onChange={this.onCommandChange} />
+            </>
+          )}
         </div>
-
-        {type === QueryTypeValue.CLI && (
-          <div className="gf-form">
-            <InlineFormLabel width={8}>Command</InlineFormLabel>
-            <TextArea value={query} onChange={this.onQueryChange} />
-          </div>
-        )}
-
-        {type && type !== QueryTypeValue.CLI && (
-          <div className="gf-form">
-            <InlineFormLabel width={8}>Command</InlineFormLabel>
-            <Select options={Commands[type]} menuPlacement="bottom" value={command} onChange={this.onCommandChange} />
-          </div>
-        )}
 
         {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
