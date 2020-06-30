@@ -7,7 +7,7 @@
 
 ## Description
 
-Redis datasource for Grafana 7.0 allows to query data directly from Redis database using [Radix](https://github.com/mediocregopher/radix) client.
+Redis datasource for Grafana 7.0 allows to query data directly from Redis database using [Radix](https://github.com/mediocregopher/radix) client. No additional adapters is required.
 
 ### Redis Monitoring dashboard
 
@@ -99,3 +99,6 @@ Template variables can query any command and use other variables as parameters.
 ## Learn more
 
 - [Redis TimeSeries](https://oss.redislabs.com/redistimeseries/)
+
+## License
+Redis Source Available License Agreement, see [LICENSE](LICENSE)
