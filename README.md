@@ -101,4 +101,4 @@ Template variables can query any command and use other variables as parameters.
 - [Redis TimeSeries](https://oss.redislabs.com/redistimeseries/)
 
 ## License
-Redis Source Available License Agreement, see [LICENSE](LICENSE)
+Apache License Version 2.0, see [LICENSE](LICENSE)
