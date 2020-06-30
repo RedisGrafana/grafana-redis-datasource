@@ -51,16 +51,18 @@ npm run build:backend
 
 Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0
 
-### Update port for Grafana in `docker-compose.yml`
+### Grafana port in `docker-compose.yml`
+
+If standard port 3000 is occupied by another application update the port to bind Grafana to
 
 ```
     ports:
-      - '3100:3000'
+      - '3000:3000'
 ```
 
-### Update datasource url in `provisioning/datasources/redis.yaml`
+### Datasource url in `provisioning/datasources/redis.yaml`
 
-If Redis is running and listening on localhost and default port no changes are required
+If Redis is running and listening on localhost:6379 no changes are required
 
 ```
     url: redis://localhost:6379
@@ -78,9 +80,9 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 npm run start
 ```
 
-### Open Grafana in your browser [http://localhost:3000](http://localhost:3000)
+## Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource
 
-### Configure Datasource
+You can add as many datasources as you want to support multiple Redis databases.
 
 ![Datasource](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/datasource.png)
 
@@ -101,4 +103,5 @@ Template variables can query any command and use other variables as parameters.
 - [Redis TimeSeries](https://oss.redislabs.com/redistimeseries/)
 
 ## License
+
 Apache License Version 2.0, see [LICENSE](LICENSE)
