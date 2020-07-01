@@ -1,4 +1,3 @@
-<br/>
 <div id="title" align="center">
     <h1>Grafana Redis Datasource</h1>
 </div>
@@ -48,8 +47,7 @@ Datasource can connect to any Redis database.
 
 To learn how to build Redis Datasource and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md)
 
-### Run using `docker-compose`
-
+### Run using docker-compose
 
 Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0.
 
@@ -113,10 +111,10 @@ We love ot hear from users, developers and the whole community interested by thi
 
 ## Contributing
 
-- Fork the repository and [run the examples from source](doc/Developing.md#quick-start)
+- Fork the repository
 - Find an issue to work on and submit a pull request
-  - Pick a [good first issue](https://github.com/eclipse-theia/theia/labels/good%20first%20issue) to get you familiar with GitHub contributing process.
-- Could not find an issue? Look for bugs, typos, and missing features.
+  - Pick a [good first issue](https://github.com/RedisTimeSeries/grafana-redis-datasource/labels/good%20first%20issue)
+- Could not find an issue? Look for documentation, bugs, typos, and missing features :)
 
 
 ## Other interesting resources
