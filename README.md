@@ -27,39 +27,11 @@ To demonstrate datasource functionality we included Redis monitoring dashboard.
 
 ![Dashboard](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/redis-dashboard.png)
 
-## Build
+## Build and register plugin
 
-Redis datasource consists of both frontend and backend components.
+To learn how to build Redis Datasource and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md)
 
-### React Frontend
-
-#### Install dependencies
-
-```bash
-yarn install
-```
-
-#### Build frontend
-
-```bash
-yarn build
-```
-
-### Golang Backend
-
-#### Update [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/) dependency
-
-```bash
-go get -u github.com/grafana/grafana-plugin-sdk-go
-```
-
-#### Build backend plugin binaries for Linux, Windows and MacOS
-
-```bash
-npm run build:backend
-```
-
-## Run
+## Run using `docker-compose`
 
 Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0
 
@@ -86,13 +58,13 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
     url: redis://host.docker.internal:6379
 ```
 
-### Start using `docker-compose`
+### Start Redis and Grafana
 
 ```bash
 docker-compose up
 ```
 
-## Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource
+### Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource
 
 You can add as many datasources as you want to support multiple Redis databases.
 
