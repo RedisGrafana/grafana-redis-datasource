@@ -9,6 +9,12 @@
 
 The Grafana Redis Datasource, is a plugin that allows users to connect to Redis database and build dashboards in Grafana to easily monitor Redis data. It provides out-of-the box predefined dashboards - but the plugin allows to build entirely customized dashboards, tuned to your needs.
 
+## Redis Monitoring dashboard
+
+To demonstrate datasource functionality we included Redis monitoring dashboard.
+
+![Dashboard](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/redis-dashboard.png)
+
 ## What is Grafana?
 
 If you are not familiar with Grafana yet, it is a very popular tool used to build dashboards allowing to monitor applications, infrastructures and any kind of software components.
@@ -20,12 +26,6 @@ Only Grafana 7.0 and later with a new plugin platform supported.
 ## Does this datasource require anything special configured on the Redis databases?
 
 Datasource can connect to any Redis database.
-
-## Redis Monitoring dashboard
-
-To demonstrate datasource functionality we included Redis monitoring dashboard.
-
-![Dashboard](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/redis-dashboard.png)
 
 ## Build and register plugin
 

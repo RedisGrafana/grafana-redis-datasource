@@ -6,7 +6,7 @@
 git clone https://github.com/RedisTimeSeries/grafana-redis-datasource.git
 ```
 
-## Start Grafana
+## Install Grafana
 
 - Follow [Install on RPM-based Linux](https://grafana.com/docs/grafana/latest/installation/rpm/) to install and start Grafana
 
@@ -68,7 +68,7 @@ mage -v
 
 ## Update Grafana Configuration
 
-- Move distribution folder to Grafana's plugins
+- Move distribution to Grafana's `plugins/` folder
 
 ```bash
 mv dist/ /var/lib/grafana/plugins/grafana-redis-datasource
