@@ -105,7 +105,7 @@ Template variables can query any command and use other variables as parameters.
 
 ## Feedback
 
-We love ot hear from users, developers and the whole community interested by this plugin. Here are various ways to get in touch with us:
+We love to hear from users, developers and the whole community interested by this plugin. These are various ways to get in touch with us:
 - Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/RedisTimeSeries/grafana-redis-datasource/issues/new).
 - Star the repository to show your support.
 
