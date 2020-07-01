@@ -5,11 +5,23 @@
 [![RedisTimeSeries](https://img.shields.io/badge/RedisTimeSeries-inspired-yellowgreen)](https://oss.redislabs.com/redistimeseries/)
 [![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-orange)](https://redislabs.com/redis-enterprise/)
 
-## Description
+## What is the Grafana Redis Datasource?
 
-Redis datasource for Grafana 7.0 allows to query data directly from Redis database using [Radix](https://github.com/mediocregopher/radix) client. No additional adapters is required.
+The Grafana Redis Datasource, is a plugin that allows users to connect to Redis database and build dashboards in Grafana to easily monitor Redis data. It provides out-of-the box predefined dashboards - but the plugin allows to build entirely customized dashboards, tuned to your needs.
 
-### Redis Monitoring dashboard
+## What is Grafana?
+
+If you are not familiar with Grafana yet, it is a very popular tool used to build dashboards allowing to monitor applications, infrastructures and any kind of software components.
+
+## What Grafana version is supported?
+
+Only Grafana 7.0 and later with a new plugin platform supported.
+
+## Does this datasource require anything special configured on the Redis databases?
+
+Datasource can connect to any Redis database.
+
+## Redis Monitoring dashboard
 
 To demonstrate datasource functionality we included Redis monitoring dashboard.
 
@@ -30,7 +42,7 @@ yarn install
 #### Build frontend
 
 ```bash
-npm run build
+yarn build
 ```
 
 ### Golang Backend
@@ -77,7 +89,7 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 ### Start using `docker-compose`
 
 ```bash
-npm run start
+docker-compose up
 ```
 
 ## Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource
