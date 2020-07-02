@@ -42,6 +42,11 @@ Only Grafana 7.0 and later with a new plugin platform supported.
 
 Datasource can connect to any Redis database. No special configuration is required.
 
+### Do you need to build the datasource?
+
+Yes. We are planning to add the datasource to Grafana repository as soon as version 1.0.0 is released, then it can be installed using
+`grafana-cli` from registry. Please follow [**Build datasource**](#build-datasource).
+
 ## Getting Started
 
 ### Build datasource
