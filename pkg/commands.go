@@ -717,6 +717,7 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 
 		// Merge all args
 		for _, arg := range query[3].([]interface{}) {
+		/**
 
 			// Add space between command and arguments
 			if command != "" {
