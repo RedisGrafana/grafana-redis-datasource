@@ -715,9 +715,21 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 		query := innerArray.([]interface{})
 		command := ""
 
-		// Merge all args
-		for _, arg := range query[3].([]interface{}) {
 		/**
+		 * Redis OSS has arguments as forth element of array
+		 * Redis Enterprise has arguments as fifth
+		 */
+		argumentsID := 3
+		switch query[4].(type) {
+		case []interface{}:
+			argumentsID = 4
+		default:
+		}
+
+		/**
+		 * Merge all arguments
+		 */
+		for _, arg := range query[argumentsID].([]interface{}) {
 
 			// Add space between command and arguments
 			if command != "" {
