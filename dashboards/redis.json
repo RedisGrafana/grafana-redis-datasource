@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1593487436739,
+  "iteration": 1593750053419,
   "links": [
     {
       "icon": "external link",
@@ -99,7 +99,7 @@
           "values": true
         }
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -159,7 +159,7 @@
               }
             ]
           },
-          "unit": "Kbits"
+          "unit": "KBs"
         },
         "overrides": []
       },
@@ -180,7 +180,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -231,6 +231,7 @@
             "align": null
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -322,7 +323,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -414,7 +415,7 @@
           "values": true
         }
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -457,7 +458,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
+                "color": "dark-blue",
                 "value": null
               }
             ]
@@ -484,7 +485,7 @@
           "values": true
         }
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -554,7 +555,7 @@
           "values": true
         }
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -593,13 +594,12 @@
           "custom": {
             "align": null
           },
-          "decimals": 1,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
+                "color": "dark-blue",
                 "value": null
               }
             ]
@@ -626,7 +626,7 @@
           "values": true
         }
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -655,6 +655,7 @@
           },
           "decimals": 0,
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -685,7 +686,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -737,6 +738,7 @@
           },
           "decimals": 0,
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -767,7 +769,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -849,7 +851,7 @@
           "values": true
         }
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -888,7 +890,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 30
       },
       "id": 32,
       "panels": [],
@@ -981,7 +983,7 @@
         "h": 15,
         "w": 6,
         "x": 0,
-        "y": 11
+        "y": 31
       },
       "id": 4,
       "options": {
@@ -993,7 +995,7 @@
           }
         ]
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1148,7 +1150,7 @@
         "h": 15,
         "w": 7,
         "x": 6,
-        "y": 11
+        "y": 31
       },
       "id": 41,
       "options": {
@@ -1160,7 +1162,7 @@
           }
         ]
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1288,14 +1290,14 @@
         "h": 15,
         "w": 11,
         "x": 13,
-        "y": 11
+        "y": 31
       },
       "id": 11,
       "options": {
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.0.4",
+      "pluginVersion": "7.0.5",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1363,12 +1365,12 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "Redis",
           "value": ["Redis"]
         },
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Database",
         "multi": true,
         "name": "redis",
@@ -1392,5 +1394,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 13
+  "version": 21
 }
