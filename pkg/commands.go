@@ -149,15 +149,21 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool)
 		// Split lines
 		values := strings.Split(strings.Replace(value, "\r\n", "\n", -1), "\n")
 
+		// Parse float if only one value
+		if len(values) == 1 {
+			response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, values[0]))
+			break
+		}
+
 		// Add Frame
 		response.Frames = append(response.Frames,
 			data.NewFrame(qm.Key,
 				data.NewField("Value", nil, values)))
 	case string:
-		// Add Frame
-		response.Frames = append(response.Frames,
-			data.NewFrame(qm.Key,
-				data.NewField("Value", nil, []string{result.(string)})))
+		value := result.(string)
+
+		// Add the frames to the response
+		response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, value))
 	case []interface{}:
 		var values []string
 
@@ -166,6 +172,21 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool)
 			switch value.(type) {
 			case []byte:
 				values = append(values, string(value.([]byte)))
+			case []interface{}:
+				/**
+				 * Internal array
+				 */
+				for _, element := range value.([]interface{}) {
+					switch element.(type) {
+					case []byte:
+						values = append(values, string(element.([]byte)))
+					case string:
+						values = append(values, element.(string))
+					default:
+						response.Error = fmt.Errorf("Unsupported array return type")
+						return response
+					}
+				}
 			default:
 				response.Error = fmt.Errorf("Unsupported array return type")
 				return response
@@ -204,18 +225,8 @@ func (ds *redisDatasource) queryKeyCommand(qm queryModel, client *radix.Pool) ba
 		return ds.errorHandler(response, err)
 	}
 
-	// New Frame
-	frame := data.NewFrame(qm.Key)
-
-	// Parse Float
-	if intValue, err := strconv.ParseInt(value, 10, 64); err == nil {
-		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []int64{intValue}))
-	} else {
-		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []string{value}))
-	}
-
 	// Add the frames to the response
-	response.Frames = append(response.Frames, frame)
+	response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, value))
 
 	// Return Response
 	return response
@@ -448,6 +459,26 @@ func (ds *redisDatasource) querySMembers(qm queryModel, client *radix.Pool) back
 }
 
 /**
+ * Create frame with single value
+ *
+ * @param {string} key Key
+ * @param {string} value Value
+ */
+func (ds *redisDatasource) createFrameValue(key string, value string) *data.Frame {
+	frame := data.NewFrame(key)
+
+	// Parse Float
+	if floatValue, err := strconv.ParseFloat(value, 64); err == nil {
+		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []float64{floatValue}))
+	} else {
+		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []string{value}))
+	}
+
+	// Return
+	return frame
+}
+
+/**
  * HGET key field
  *
  * @see https://redis.io/commands/hget
@@ -464,12 +495,8 @@ func (ds *redisDatasource) queryHGet(qm queryModel, client *radix.Pool) backend.
 		return ds.errorHandler(response, err)
 	}
 
-	// New Frame
-	frame := data.NewFrame(qm.Key,
-		data.NewField("Value", nil, []string{value}))
-
 	// Add the frames to the response
-	response.Frames = append(response.Frames, frame)
+	response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, value))
 
 	// Return
 	return response
