@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -144,18 +146,42 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	// Secured Data
 	var secureData = setting.DecryptedSecureJSONData
 
-	// Check if password specified in Secured Data
-	password := ""
-	if secureData != nil && secureData["password"] != "" {
-		password = secureData["password"]
-	}
-
-	// Set up a connection which is authenticated and has a 10 seconds timeout on all operations
+	// Set up connection
 	connFunc := func(network, addr string) (radix.Conn, error) {
-		return radix.Dial(network, addr,
-			radix.DialTimeout(time.Duration(timeout)*time.Second),
-			radix.DialAuthPass(password),
-		)
+		opts := []radix.DialOpt{radix.DialTimeout(time.Duration(timeout) * time.Second)}
+
+		// Add Password
+		if secureData != nil && secureData["password"] != "" {
+			opts = append(opts, radix.DialAuthPass(secureData["password"]))
+		}
+
+		// TLS Authentication
+		if jsonData.TLSAuth {
+			// TLS Config
+			tlsConfig := &tls.Config{
+				InsecureSkipVerify: jsonData.TLSSkipVerify,
+			}
+
+			// Certification Authority
+			if secureData["tlsCACert"] != "" {
+				caPool := x509.NewCertPool()
+				ok := caPool.AppendCertsFromPEM([]byte(secureData["tlsCACert"]))
+				if ok {
+					tlsConfig.RootCAs = caPool
+				}
+			}
+
+			// Certificate and Key
+			cert, err := tls.X509KeyPair([]byte(secureData["tlsClientCert"]), []byte(secureData["tlsClientKey"]))
+			if err == nil {
+				tlsConfig.Certificates = []tls.Certificate{cert}
+			}
+
+			// Add TLS Config
+			opts = append(opts, radix.DialUseTLS(tlsConfig))
+		}
+
+		return radix.Dial(network, addr, opts...)
 	}
 
 	// Pool with specified Ping Interval, Pipeline Window and Timeout
