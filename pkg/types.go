@@ -23,10 +23,12 @@ type redisDatasource struct {
  * Configuration Data Model
  */
 type dataModel struct {
-	PoolSize       int `json:"poolSize"`
-	Timeout        int `json:"timeout"`
-	PingInterval   int `json:"pingInterval"`
-	PipelineWindow int `json:"pipelineWindow"`
+	PoolSize       int  `json:"poolSize"`
+	Timeout        int  `json:"timeout"`
+	PingInterval   int  `json:"pingInterval"`
+	PipelineWindow int  `json:"pipelineWindow"`
+	TLSAuth        bool `json:"tlsAuth"`
+	TLSSkipVerify  bool `json:"tlsSkipVerify"`
 }
 
 /*

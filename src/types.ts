@@ -116,6 +116,20 @@ export interface RedisDataSourceOptions extends DataSourceJsonData {
    * @type {number}
    */
   pipelineWindow: number;
+
+  /**
+   * TLS Authentication
+   *
+   * @type {boolean}
+   */
+  tlsAuth: boolean;
+
+  /**
+   * TLS Skip Verify
+   *
+   * @type {boolean}
+   */
+  tlsSkipVerify: boolean;
 }
 
 /**
@@ -128,4 +142,25 @@ export interface RedisSecureJsonData {
    * @type {string}
    */
   password?: string;
+
+  /**
+   * TLS Client Certificate
+   *
+   * @type {string}
+   */
+  tlsClientCert?: string;
+
+  /**
+   * TLS Client Key
+   *
+   * @type {string}
+   */
+  tlsClientKey?: string;
+
+  /**
+   * TLS Authority Certificate
+   *
+   * @type {string}
+   */
+  tlsCACert?: string;
 }

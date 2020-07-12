@@ -1,12 +1,12 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { LegacyForms } from '@grafana/ui';
+import { Button, LegacyForms, TextArea } from '@grafana/ui';
 import { RedisDataSourceOptions, RedisSecureJsonData } from './types';
 
 /**
  * Form Field
  */
-const { SecretFormField, FormField } = LegacyForms;
+const { SecretFormField, FormField, Switch } = LegacyForms;
 
 /**
  * Editor Property
@@ -29,13 +29,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    options.url = event.target.value;
-
-    const jsonData = {
-      ...options.jsonData,
-    };
-
-    onOptionsChange({ ...options, jsonData });
+    onOptionsChange({ ...options, url: event.target.value });
   };
 
   /**
@@ -45,9 +39,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPoolSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = { ...options.jsonData, poolSize: Number(event.target.value) };
-
-    onOptionsChange({ ...options, jsonData });
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, poolSize: Number(event.target.value) } });
   };
 
   /**
@@ -57,9 +49,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onTimeoutChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = { ...options.jsonData, timeout: Number(event.target.value) };
-
-    onOptionsChange({ ...options, jsonData });
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, timeout: Number(event.target.value) } });
   };
 
   /**
@@ -69,9 +59,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPingIntervalChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = { ...options.jsonData, pingInterval: Number(event.target.value) };
-
-    onOptionsChange({ ...options, jsonData });
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, pingInterval: Number(event.target.value) } });
   };
 
   /**
@@ -81,9 +69,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPipelineWindowChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    const jsonData = { ...options.jsonData, pipelineWindow: Number(event.target.value) };
-
-    onOptionsChange({ ...options, jsonData });
+    onOptionsChange({ ...options, jsonData: { ...options.jsonData, pipelineWindow: Number(event.target.value) } });
   };
 
   /**
@@ -93,7 +79,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
    */
   onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
-    onOptionsChange({ ...options, secureJsonData: { password: event.target.value } });
+    onOptionsChange({ ...options, secureJsonData: { ...options.secureJsonData, password: event.target.value } });
   };
 
   /**
@@ -109,10 +95,85 @@ export class ConfigEditor extends PureComponent<Props, State> {
   };
 
   /**
+   * TLS Client Certificate
+   *
+   * @param event Event
+   */
+  onTlsClientCertificateChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonData: { ...options.secureJsonData, tlsClientCert: event.currentTarget.value },
+    });
+  };
+
+  /**
+   * TLS Client Certificate Reset
+   */
+  onResetTlsClientCertificate = () => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, tlsClientCert: false },
+      secureJsonData: { ...options.secureJsonData, tlsClientCert: '' },
+    });
+  };
+
+  /**
+   * TLS Certification Authority
+   *
+   * @param event Event
+   */
+  onTlsCACertificateChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonData: { ...options.secureJsonData, tlsCACert: event.currentTarget.value },
+    });
+  };
+
+  /**
+   * TLS CA Certificate Reset
+   */
+  onResetTlsCACertificate = () => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, tlsCACert: false },
+      secureJsonData: { ...options.secureJsonData, tlsCACert: '' },
+    });
+  };
+
+  /**
+   * TLS Client key
+   *
+   * @param event Event
+   */
+  onTlsClientKeyChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonData: { ...options.secureJsonData, tlsClientKey: event.currentTarget.value },
+    });
+  };
+
+  /**
+   * TLS Client Key Reset
+   */
+  onResetTlsClientKey = () => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, tlsClientKey: false },
+      secureJsonData: { ...options.secureJsonData, tlsClientKey: '' },
+    });
+  };
+
+  /**
    * Render Editor
    */
   render() {
-    const { options } = this.props;
+    const { options, onOptionsChange } = this.props;
     const { url, jsonData, secureJsonFields } = options;
     const secureJsonData = (options.secureJsonData || {}) as RedisSecureJsonData;
 
@@ -132,6 +193,20 @@ export class ConfigEditor extends PureComponent<Props, State> {
             value={url || ''}
             tooltip="Accepts host:port address or a URI, as defined in https://www.iana.org/assignments/uri-schemes/prov/redis"
             placeholder="redis://..."
+          />
+        </div>
+
+        <div className="gf-form">
+          <SecretFormField
+            isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
+            value={secureJsonData.password || ''}
+            label="Password"
+            placeholder="Database password"
+            labelWidth={10}
+            inputWidth={20}
+            tooltip="When specified AUTH command will be used to authenticate with the provided password"
+            onReset={this.onResetPassword}
+            onChange={this.onPasswordChange}
           />
         </div>
 
@@ -185,22 +260,97 @@ export class ConfigEditor extends PureComponent<Props, State> {
         </div>
 
         <br />
-        <h3 className="page-heading">Auth</h3>
+        <h3 className="page-heading">TLS</h3>
 
         <div className="gf-form-inline">
-          <div className="gf-form">
-            <SecretFormField
-              isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
-              value={secureJsonData.password || ''}
-              label="Password"
-              placeholder="Database password"
-              labelWidth={10}
-              inputWidth={20}
-              onReset={this.onResetPassword}
-              onChange={this.onPasswordChange}
+          <Switch
+            label="TLS Client Authentication"
+            labelClass="width-10"
+            checked={jsonData.tlsAuth || false}
+            onChange={event => {
+              const jsonData = { ...options.jsonData, tlsAuth: event.currentTarget.checked };
+              onOptionsChange({ ...options, jsonData });
+            }}
+          />
+
+          {jsonData.tlsAuth && (
+            <Switch
+              label="Skip TLS Verify"
+              labelClass="width-10"
+              tooltip="If checked, the server's certificate will not be checked for validity."
+              checked={jsonData.tlsSkipVerify || false}
+              onChange={event => {
+                const jsonData = { ...options.jsonData, tlsSkipVerify: event.currentTarget.checked };
+                onOptionsChange({ ...options, jsonData });
+              }}
             />
-          </div>
+          )}
         </div>
+
+        {jsonData.tlsAuth && (
+          <>
+            <div className="gf-form-inline">
+              <div className="gf-form gf-form--v-stretch">
+                <label className="gf-form-label width-10">Client Certificate</label>
+              </div>
+
+              {secureJsonFields && secureJsonFields.tlsClientCert ? (
+                <Button type="reset" variant="secondary" onClick={this.onResetTlsClientCertificate}>
+                  Reset
+                </Button>
+              ) : (
+                <div className="gf-form gf-form--grow">
+                  <TextArea
+                    rows={7}
+                    className="gf-form-input gf-form-textarea"
+                    placeholder="Begins with -----BEGIN CERTIFICATE-----"
+                    onChange={this.onTlsClientCertificateChange}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="gf-form-inline">
+              <div className="gf-form gf-form--v-stretch">
+                <label className="gf-form-label width-10">Client Key</label>
+              </div>
+              <div className="gf-form gf-form--grow">
+                {secureJsonFields && secureJsonFields.tlsClientKey ? (
+                  <Button type="reset" variant="secondary" onClick={this.onResetTlsClientKey}>
+                    Reset
+                  </Button>
+                ) : (
+                  <TextArea
+                    rows={7}
+                    className="gf-form-input gf-form-textarea"
+                    placeholder="Begins with -----BEGIN PRIVATE KEY-----"
+                    onChange={this.onTlsClientKeyChange}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="gf-form-inline">
+              <div className="gf-form gf-form--v-stretch">
+                <label className="gf-form-label width-10">Certification Authority</label>
+              </div>
+              {secureJsonFields && secureJsonFields.tlsCACert ? (
+                <Button type="reset" variant="secondary" onClick={this.onResetTlsCACertificate}>
+                  Reset
+                </Button>
+              ) : (
+                <div className="gf-form gf-form--grow">
+                  <TextArea
+                    rows={7}
+                    className="gf-form-input gf-form-textarea"
+                    placeholder="Begins with -----BEGIN CERTIFICATE-----"
+                    onChange={this.onTlsCACertificateChange}
+                  />
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     );
   }
