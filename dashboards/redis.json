@@ -1375,7 +1375,7 @@
         "multi": true,
         "name": "redis",
         "options": [],
-        "query": "grafana-redis-datasource",
+        "query": "redis-datasource",
         "queryValue": "",
         "refresh": 1,
         "regex": "",
