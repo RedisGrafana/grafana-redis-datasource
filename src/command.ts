@@ -72,11 +72,13 @@ export const Commands = {
       description: 'Returns the string representation of the type of the value stored at key',
       value: 'type',
     },
-    {
-      label: 'XINFO STREAM',
-      description: 'Returns general information about the stream stored at the specified key',
-      value: 'xinfoStream',
-    },
+    /**
+     * {
+     *   label: 'XINFO STREAM',
+     *   description: 'Returns general information about the stream stored at the specified key',
+     *   value: 'xinfoStream',
+     * },
+     */
     {
       label: 'XLEN',
       description: 'Returns the number of entries inside a stream',
