@@ -51,7 +51,7 @@ Yes. We are planning to add the datasource to Grafana repository as soon as vers
 
 ### Build datasource
 
-To learn in details how to build Redis Datasource from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
+To learn step by step how to build Redis Datasource from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
 
 #### React frontend
 
