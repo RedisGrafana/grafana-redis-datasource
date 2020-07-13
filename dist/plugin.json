@@ -1,0 +1,38 @@
+{
+  "type": "datasource",
+  "name": "Redis",
+  "id": "redis-datasource",
+  "metrics": true,
+  "backend": true,
+  "alerting": true,
+  "executable": "redis-datasource",
+  "info": {
+    "description": "Grafana Redis Datasource",
+    "author": {
+      "name": "Redis Labs",
+      "url": "https://oss.redislabs.com"
+    },
+    "keywords": ["redis", "timeseries", "backend", "plugin"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "1.0.0",
+    "updated": "2020-07-13"
+  },
+  "dependencies": {
+    "grafanaVersion": "7.x.x",
+    "plugins": []
+  }
+}
