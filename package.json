@@ -1,5 +1,5 @@
 {
-  "name": "grafana-redis-datasource",
+  "name": "redis-datasource",
   "version": "1.0.0",
   "description": "Grafana Redis Datasource",
   "scripts": {

@@ -1,11 +1,11 @@
 {
   "type": "datasource",
-  "name": "grafana-redis-datasource",
-  "id": "grafana-redis-datasource",
+  "name": "Redis",
+  "id": "redis-datasource",
   "metrics": true,
   "backend": true,
   "alerting": true,
-  "executable": "gpx_grafana-redis-datasource",
+  "executable": "redis-datasource",
   "info": {
     "description": "Grafana Redis Datasource",
     "author": {

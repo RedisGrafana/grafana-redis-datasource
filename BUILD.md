@@ -71,10 +71,10 @@ mage -v
 - Move distribution to Grafana's `plugins/` folder
 
 ```bash
-mv dist/ /var/lib/grafana/plugins/grafana-redis-datasource
+mv dist/ /var/lib/grafana/plugins/redis-datasource
 ```
 
-- Add `grafana-redis-datasource` to allowed unsigned plugins
+- Add `redis-datasource` to allowed unsigned plugins
 
 ```bash
 vi /etc/grafana/grafana.ini
@@ -85,7 +85,7 @@ vi /etc/grafana/grafana.ini
 ;enable_alpha = false
 ;app_tls_skip_verify_insecure = false
 # Enter a comma-separated list of plugin identifiers to identify plugins that are allowed to be loaded even if they lack a valid signature.
-allow_loading_unsigned_plugins = grafana-redis-datasource
+allow_loading_unsigned_plugins = redis-datasource
 ```
 
 - Verify that plugin registered
@@ -96,8 +96,8 @@ tail -100 /var/log/grafana/grafana.log
 
 ```
 t=2020-07-01T06:03:38+0000 lvl=info msg="Starting plugin search" logger=plugins
-t=2020-07-01T06:03:38+0000 lvl=warn msg="Running an unsigned backend plugin" logger=plugins pluginID=grafana-redis-datasource pluginDir=/var/lib/grafana/plugins/grafana-redis-datasource
-t=2020-07-01T06:03:38+0000 lvl=info msg="Registering plugin" logger=plugins name=grafana-redis-datasource
+t=2020-07-01T06:03:38+0000 lvl=warn msg="Running an unsigned backend plugin" logger=plugins pluginID=redis-datasource pluginDir=/var/lib/grafana/plugins/redis-datasource
+t=2020-07-01T06:03:38+0000 lvl=info msg="Registering plugin" logger=plugins name=redis-datasource
 t=2020-07-01T06:03:38+0000 lvl=info msg="HTTP Server Listen" logger=http.server address=[::]:3000 protocol=http subUrl= socket=
 ```
 

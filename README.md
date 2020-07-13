@@ -1,18 +1,12 @@
-<div id="title" align="center">
-    <h1>Grafana Redis Datasource</h1>
-</div>
+# Grafana Redis Datasource
 
 ![Dashboard](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/images/redis-dashboard.png)
-
-<div id="badges" align="center">
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-red)](https://www.grafana.com)
 [![Radix](https://img.shields.io/badge/Radix-powered-blue)](https://github.com/mediocregopher/radix)
 [![RedisTimeSeries](https://img.shields.io/badge/RedisTimeSeries-inspired-yellowgreen)](https://oss.redislabs.com/redistimeseries/)
 [![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-orange)](https://redislabs.com/redis-enterprise/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RedisTimeSeries/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisTimeSeries/grafana-redis-datasource)
-
-</div>
 
 ## Summary
 
