@@ -7,9 +7,7 @@
   "alerting": true,
   "executable": "redis-datasource",
 
-  "includes": [
-    { "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" }
-  ],
+  "includes": [{ "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" }],
 
   "info": {
     "description": "Grafana Redis Datasource",
