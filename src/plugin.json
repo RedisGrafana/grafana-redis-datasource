@@ -6,6 +6,9 @@
   "backend": true,
   "alerting": true,
   "executable": "redis-datasource",
+
+  "includes": [{ "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" }],
+
   "info": {
     "description": "Grafana Redis Datasource",
     "author": {
@@ -33,6 +36,7 @@
   },
   "dependencies": {
     "grafanaVersion": "7.x.x",
+    "grafanaDependency": ">=7.0.0",
     "plugins": []
   }
 }
