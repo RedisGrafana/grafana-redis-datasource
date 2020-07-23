@@ -161,7 +161,7 @@ export class QueryEditor extends PureComponent<Props> {
           {type === QueryTypeValue.CLI && (
             <>
               <InlineFormLabel width={8}>Command</InlineFormLabel>
-              <TextArea value={query} className="gf-form-input" onChange={this.onQueryChange} />
+              <TextArea css="" value={query} className="gf-form-input" onChange={this.onQueryChange} />
             </>
           )}
           {type && type !== QueryTypeValue.CLI && (
