@@ -569,6 +569,10 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.
 			data.NewField("Usec", nil, []float64{}),
 			data.NewField("Usec_per_call", nil, []float64{}))
 
+		// Set Field Config
+		frame.Fields[2].Config = &data.FieldConfig{Unit: "µs"}
+		frame.Fields[3].Config = &data.FieldConfig{Unit: "µs"}
+
 		// Parse lines
 		for _, line := range lines {
 			fields := strings.Split(line, ":")
@@ -733,9 +737,12 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 	// New Frame
 	frame := data.NewFrame(qm.Command,
 		data.NewField("Id", nil, []int64{}),
-		data.NewField("Timestamp", nil, []int64{}),
+		data.NewField("Timestamp", nil, []time.Time{}),
 		data.NewField("Duration", nil, []int64{}),
 		data.NewField("Command", nil, []string{}))
+
+	// Set Field Config
+	frame.Fields[2].Config = &data.FieldConfig{Unit: "µs"}
 
 	// Parse Time-Series data
 	for _, innerArray := range result.([]interface{}) {
@@ -777,7 +784,7 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 		}
 
 		// Add Query
-		frame.AppendRow(query[0].(int64), query[1].(int64), query[2].(int64), command)
+		frame.AppendRow(query[0].(int64), time.Unix(query[1].(int64), 0), query[2].(int64), command)
 	}
 
 	// Add the frame to the response
