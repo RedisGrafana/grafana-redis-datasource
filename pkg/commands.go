@@ -737,10 +737,9 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 		data.NewField("Duration", nil, []int64{}),
 		data.NewField("Command", nil, []string{}))
 
-	// Duration is in millis
-	frame.Fields[2].Config = &data.FieldConfig{
-		Unit: "ms",
-	}
+	// Set Field Config
+	frame.Fields[1].Config = &data.FieldConfig{Unit: "s"}
+	frame.Fields[2].Config = &data.FieldConfig{Unit: "µs"}
 
 	// Parse Time-Series data
 	for _, innerArray := range result.([]interface{}) {
@@ -780,10 +779,9 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 				log.DefaultLogger.Debug("Slowlog", "default", arg)
 			}
 		}
-		ts := query[1].(int64)
 
 		// Add Query
-		frame.AppendRow(query[0].(int64), time.Unix(ts/1000, 0), query[2].(int64), command)
+		frame.AppendRow(query[0].(int64), time.Unix(query[1].(int64), 0), query[2].(int64), command)
 	}
 
 	// Add the frame to the response
