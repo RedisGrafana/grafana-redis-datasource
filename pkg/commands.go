@@ -742,7 +742,6 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 		data.NewField("Command", nil, []string{}))
 
 	// Set Field Config
-	frame.Fields[1].Config = &data.FieldConfig{Unit: "s"}
 	frame.Fields[2].Config = &data.FieldConfig{Unit: "µs"}
 
 	// Parse Time-Series data
