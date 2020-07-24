@@ -1155,9 +1155,6 @@
               "options": "Total Duration"
             },
             "properties": [
-                "id": "unit",
-                "value": "µs"
-              },
               {
                 "id": "custom.width",
                 "value": 127
