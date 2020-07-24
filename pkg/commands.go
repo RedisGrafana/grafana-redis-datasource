@@ -569,6 +569,10 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.
 			data.NewField("Usec", nil, []float64{}),
 			data.NewField("Usec_per_call", nil, []float64{}))
 
+		// Set Field Config
+		frame.Fields[2].Config = &data.FieldConfig{Unit: "µs"}
+		frame.Fields[3].Config = &data.FieldConfig{Unit: "µs"}
+
 		// Parse lines
 		for _, line := range lines {
 			fields := strings.Split(line, ":")

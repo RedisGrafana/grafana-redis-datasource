@@ -1155,7 +1155,6 @@
               "options": "Total Duration"
             },
             "properties": [
-              {
                 "id": "unit",
                 "value": "µs"
               },
@@ -1175,10 +1174,6 @@
               "options": "Duration per call"
             },
             "properties": [
-              {
-                "id": "unit",
-                "value": "µs"
-              },
               {
                 "id": "decimals",
                 "value": 1
@@ -1318,10 +1313,6 @@
               {
                 "id": "custom.width",
                 "value": 92
-              },
-              {
-                "id": "unit",
-                "value": "µs"
               }
             ]
           },
@@ -1412,5 +1403,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 4
+  "version": 2
 }
