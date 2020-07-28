@@ -1,6 +1,6 @@
 # Grafana Redis Datasource
 
-![Dashboard](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/images/redis-dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/redis-dashboard.png)
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-red)](https://www.grafana.com)
 [![Radix](https://img.shields.io/badge/Radix-powered-blue)](https://github.com/mediocregopher/radix)
@@ -89,7 +89,7 @@ Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and 
 
 You can add as many datasources as you want to support multiple Redis databases.
 
-![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/images/datasource.png)
+![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
 
 There are certain settings that can be configured based on your own setup:
 
@@ -123,13 +123,13 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 
 Datasource supports many Redis commands using custom components and provide unified interface to query any command.
 
-![Query](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/images/query.png)
+![Query](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/query.png)
 
 ## Template variables
 
 Template variables can query any command and use other variables as parameters.
 
-![Variables](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/images/variables.png)
+![Variables](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/variables.png)
 
 ## Feedback
 

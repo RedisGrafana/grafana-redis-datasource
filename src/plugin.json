@@ -6,9 +6,7 @@
   "backend": true,
   "alerting": true,
   "executable": "redis-datasource",
-
   "includes": [{ "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" }],
-
   "info": {
     "description": "Grafana Redis Datasource",
     "author": {
@@ -30,7 +28,24 @@
         "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE"
       }
     ],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "Dashboard",
+        "path": "img/redis-dashboard.png"
+      },
+      {
+        "name": "Datasource",
+        "path": "img/datasource.png"
+      },
+      {
+        "name": "Query",
+        "path": "img/query.png"
+      },
+      {
+        "name": "Variables",
+        "path": "img/variables.png"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
