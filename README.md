@@ -44,7 +44,7 @@ To learn step by step how to build Redis Datasource from scratch and register in
 
 ### Install using `grafana-cli`
 
-Use the `grafana-cli` tool to install Redis from the commandline:
+Use the `grafana-cli` tool to install from the commandline:
 
 ```bash
 grafana-cli plugins install redis-datasource
@@ -60,9 +60,7 @@ Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module
 docker-compose up
 ```
 
-Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource
-
-You can add as many datasources as you want to support multiple Redis databases.
+Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource. You can add as many datasources as you want to support multiple Redis databases.
 
 ![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
 
