@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.1.2
+
+- Remove developer jargon from README #30
+- Redis Datasource is Unsigned. K8S+Helm installation #29
+
 ## v1.1.1
 
 - Screenshots added to plugin.json and updated in the README
