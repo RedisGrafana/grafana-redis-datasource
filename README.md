@@ -36,46 +36,21 @@ Only Grafana 7.0 and later with a new plugin platform supported.
 
 Datasource can connect to any Redis database. No special configuration is required.
 
-### Do you need to build the datasource?
-
-Yes. We are planning to add the datasource to Grafana repository as soon as version 1.0.0 is released, then it can be installed using
-`grafana-cli` from registry. Please follow [**Build datasource**](#build-datasource).
-
-## Getting Started
-
 ### Build datasource
 
 To learn step by step how to build Redis Datasource from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
 
-#### React frontend
+## Getting Started
 
-- Install frontend dependencies
+### Install using `grafana-cli`
 
-```bash
-yarn install
-```
-
-- Build frontend
+Use the `grafana-cli` tool to install from the commandline:
 
 ```bash
-yarn build
+grafana-cli plugins install redis-datasource
 ```
 
-#### Golang backend
-
-- Install [Grafana plugin SDK for Go](https://grafana.com/docs/grafana/latest/developers/plugins/backend/grafana-plugin-sdk-for-go/) dependency
-
-```bash
-go get -u github.com/grafana/grafana-plugin-sdk-go
-```
-
-- Build backend plugin binaries for Linux, Windows and MacOS
-
-```bash
-mage -v
-```
-
-### Run using docker-compose
+### Run using `docker-compose`
 
 Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0.
 
@@ -85,9 +60,7 @@ Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module
 docker-compose up
 ```
 
-Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource
-
-You can add as many datasources as you want to support multiple Redis databases.
+Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource. You can add as many datasources as you want to support multiple Redis databases.
 
 ![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
 
@@ -140,14 +113,15 @@ We love to hear from users, developers and the whole community interested by thi
 
 ## Contributing
 
-- Fork the repository
+- Fork the repository.
 - Find an issue to work on and submit a pull request
-  - Pick a [good first issue](https://github.com/RedisTimeSeries/grafana-redis-datasource/labels/good%20first%20issue)
-- Could not find an issue? Look for documentation, bugs, typos, and missing features :)
+  - Pick a [good first issue](https://github.com/RedisTimeSeries/grafana-redis-datasource/labels/good%20first%20issue).
+- Could not find an issue? Look for documentation, bugs, typos, and missing features.
 
 ## Other interesting resources
 
-- [Redis TimeSeries](https://oss.redislabs.com/redistimeseries/)
+- [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/)
+- [Redis Pop-up store](https://github.com/RedisTimeSeries/redis-pop-up-store)
 
 ## License
 
