@@ -49,9 +49,12 @@ Use the `grafana-cli` tool to install from the commandline:
 ```bash
 grafana-cli plugins install redis-datasource
 ```
+
 ### Run using `docker`
 
+```bash
 docker run -d -p 3000:3000 --name=grafana -e "GF_INSTALL_PLUGINS=redis-datasource" grafana/grafana
+```
 
 ### Run using `docker-compose`
 
