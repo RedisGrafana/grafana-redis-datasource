@@ -36,7 +36,7 @@ Only Grafana 7.0 and later with a new plugin platform supported.
 
 Datasource can connect to any Redis database. No special configuration is required.
 
-### How to connect to Redis logical database
+### How to connect to Redis logical database?
 
 Please use `/db-number` or `?db=db-number` in the datasource URL to specify the database number as defined in the [Schema](https://www.iana.org/assignments/uri-schemes/prov/redis).
 
