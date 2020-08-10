@@ -1,5 +1,5 @@
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
-import { DataFrame, DataQueryRequest, DataSourceInstanceSettings, MetricFindValue } from '@grafana/data';
+import { DataFrame, DataQueryRequest, DataSourceInstanceSettings, MetricFindValue, ScopedVars } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
 import { RedisDataSourceOptions, RedisQuery } from './types';
 
@@ -48,7 +48,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
   /**
    * Override to apply template variables
    */
-  applyTemplateVariables(query: RedisQuery) {
+  applyTemplateVariables(query: RedisQuery, scopedVars: ScopedVars) {
     const templateSrv = getTemplateSrv();
 
     /**
@@ -56,9 +56,9 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
      */
     return {
       ...query,
-      key: query.key ? templateSrv.replace(query.key) : '',
-      query: query.query ? templateSrv.replace(query.query) : '',
-      filter: query.filter ? templateSrv.replace(query.filter) : '',
+      key: query.key ? templateSrv.replace(query.key, scopedVars) : '',
+      query: query.query ? templateSrv.replace(query.query, scopedVars) : '',
+      filter: query.filter ? templateSrv.replace(query.filter, scopedVars) : '',
     };
   }
 }
