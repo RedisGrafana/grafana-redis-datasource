@@ -752,12 +752,15 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 		/**
 		 * Redis OSS has arguments as forth element of array
 		 * Redis Enterprise has arguments as fifth
+		 * Redis prior to 4.0 has only 4 fields.
 		 */
 		argumentsID := 3
-		switch query[4].(type) {
-		case []interface{}:
-			argumentsID = 4
-		default:
+		if len(query) > 4 {
+			switch query[4].(type) {
+			case []interface{}:
+				argumentsID = 4
+			default:
+			}
 		}
 
 		/**
