@@ -66,9 +66,7 @@ docker run -d -p 3000:3000 --name=grafana -e "GF_INSTALL_PLUGINS=redis-datasourc
 
 ### Run using `docker-compose`
 
-Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana 7.0.
-
-**Start Redis and Grafana**
+Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana.
 
 ```bash
 docker-compose up
@@ -104,6 +102,14 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 
 ```
     url: redis://host.docker.internal:6379
+```
+
+### Run using `docker-compose` for development
+
+Datasource have to be build following [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
+
+```bash
+docker-compose -f docker-compose-dev.yml up
 ```
 
 ## Supported Commands

@@ -8,6 +8,7 @@
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "start": "docker-compose up",
+    "start:dev": "docker-compose -f docker-compose-dev.yml up",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
   "author": "Redis Labs",
