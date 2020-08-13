@@ -106,7 +106,7 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 
 ### Run using `docker-compose` for development
 
-Datasource have to be build following [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
+Datasource have to be built following [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
 
 ```bash
 docker-compose -f docker-compose-dev.yml up
