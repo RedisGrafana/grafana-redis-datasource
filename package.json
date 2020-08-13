@@ -4,7 +4,7 @@
   "description": "Grafana Redis Datasource",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
-    "build:backend": "golangci-lint run && mage -v",
+    "build:backend": "mage -v lint && mage -v",
     "dev": "grafana-toolkit plugin:dev",
     "start": "docker-compose up",
     "start:dev": "docker-compose -f docker-compose-dev.yml up",
