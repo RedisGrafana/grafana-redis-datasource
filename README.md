@@ -7,6 +7,7 @@
 [![RedisTimeSeries](https://img.shields.io/badge/RedisTimeSeries-inspired-yellowgreen)](https://oss.redislabs.com/redistimeseries/)
 [![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-orange)](https://redislabs.com/redis-enterprise/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RedisTimeSeries/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisTimeSeries/grafana-redis-datasource)
+[![CircleCI](https://circleci.com/gh/RedisTimeSeries/grafana-redis-datasource.svg?style=svg)](https://circleci.com/gh/RedisTimeSeries/grafana-redis-datasource)
 
 ## Summary
 
