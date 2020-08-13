@@ -134,17 +134,14 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool)
 	/**
 	 * Check results and add frames
 	 */
-	switch result.(type) {
+	switch result := result.(type) {
 	case int64:
-		// Format number
-		value := result.(int64)
-
 		// Add Frame
 		response.Frames = append(response.Frames,
 			data.NewFrame(qm.Key,
-				data.NewField("Value", nil, []int64{value})))
+				data.NewField("Value", nil, []int64{result})))
 	case []byte:
-		value := string(result.([]byte))
+		value := string(result)
 
 		// Split lines
 		values := strings.Split(strings.Replace(value, "\r\n", "\n", -1), "\n")
@@ -160,28 +157,26 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool)
 			data.NewFrame(qm.Key,
 				data.NewField("Value", nil, values)))
 	case string:
-		value := result.(string)
-
 		// Add the frames to the response
-		response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, value))
+		response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, result))
 	case []interface{}:
 		var values []string
 
 		// Parse array values
-		for _, value := range result.([]interface{}) {
-			switch value.(type) {
+		for _, value := range result {
+			switch value := value.(type) {
 			case []byte:
-				values = append(values, string(value.([]byte)))
+				values = append(values, string(value))
 			case []interface{}:
 				/**
 				 * Internal array
 				 */
-				for _, element := range value.([]interface{}) {
-					switch element.(type) {
+				for _, element := range value {
+					switch element := element.(type) {
 					case []byte:
-						values = append(values, string(element.([]byte)))
+						values = append(values, string(element))
 					case string:
-						values = append(values, element.(string))
+						values = append(values, element)
 					default:
 						response.Error = fmt.Errorf("Unsupported array return type")
 						return response
@@ -308,9 +303,9 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 	}
 
 	// Check results
-	switch result.(type) {
+	switch result := result.(type) {
 	case string:
-		response.Error = fmt.Errorf(result.(string))
+		response.Error = fmt.Errorf(result)
 		return response
 	default:
 	}
@@ -774,13 +769,13 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) ba
 			}
 
 			// Combine args into single command
-			switch arg.(type) {
+			switch arg := arg.(type) {
 			case int64:
-				command += strconv.FormatInt(arg.(int64), 10)
+				command += strconv.FormatInt(arg, 10)
 			case []byte:
-				command += string(arg.([]byte))
+				command += string(arg)
 			case string:
-				command += arg.(string)
+				command += arg
 			default:
 				log.DefaultLogger.Debug("Slowlog", "default", arg)
 			}
