@@ -66,8 +66,8 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
  * @see https://redis.io/commands/ping
  */
 func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
-	var status = backend.HealthStatusUnknown
-	var message = "Data source health is yet to become known"
+	var status backend.HealthStatus
+	message := "Data source health is yet to become known"
 
 	// Get Instance
 	client, err := ds.getInstance(req.PluginContext)
@@ -81,6 +81,7 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 		// Check errors
 		if err != nil {
 			status = backend.HealthStatusError
+			message = "PING command failed"
 		} else {
 			status = backend.HealthStatusOk
 			message = "Data source working as expected"
