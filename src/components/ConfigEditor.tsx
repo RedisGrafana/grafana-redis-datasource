@@ -1,7 +1,7 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Button, LegacyForms, TextArea } from '@grafana/ui';
-import { RedisDataSourceOptions, RedisSecureJsonData } from './types';
+import { RedisDataSourceOptions, RedisSecureJsonData } from '../types';
 
 /**
  * Form Field

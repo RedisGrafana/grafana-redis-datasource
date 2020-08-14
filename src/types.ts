@@ -1,5 +1,5 @@
-import { QueryTypeValue } from 'command';
 import { DataQuery, DataSourceJsonData } from '@grafana/data';
+import { QueryTypeValue } from './redis';
 
 /**
  * Redis Query
