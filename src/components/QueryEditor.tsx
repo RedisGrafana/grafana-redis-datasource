@@ -1,3 +1,4 @@
+import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana/ui';
@@ -22,7 +23,7 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Key change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
@@ -32,7 +33,7 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Query change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onQueryChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { onChange, query } = this.props;
@@ -40,17 +41,9 @@ export class QueryEditor extends PureComponent<Props> {
   };
 
   /**
-   * Execute the Query
-   */
-  executeQuery = () => {
-    const { onRunQuery } = this.props;
-    onRunQuery();
-  };
-
-  /**
    * Filter change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
@@ -60,7 +53,7 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Field change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
@@ -70,7 +63,7 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Legend change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onLegendChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
@@ -80,7 +73,7 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Value change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
@@ -135,7 +128,7 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Bucket change
    *
-   * @param val Value
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onBucketTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
@@ -147,6 +140,7 @@ export class QueryEditor extends PureComponent<Props> {
    */
   render() {
     const { key, aggregation, bucket, legend, command, field, filter, value, query, type, section } = this.props.query;
+    const { onRunQuery } = this.props;
 
     /**
      * Return
@@ -155,8 +149,16 @@ export class QueryEditor extends PureComponent<Props> {
       <div>
         <div className="gf-form">
           <InlineFormLabel width={8}>Type</InlineFormLabel>
-          <Select width={40} options={QueryType} menuPlacement="bottom" value={type} onChange={this.onTypeChange} />
-          <span>&nbsp;</span>
+          <Select
+            className={css`
+              margin-right: 5px;
+            `}
+            width={40}
+            options={QueryType}
+            menuPlacement="bottom"
+            value={type}
+            onChange={this.onTypeChange}
+          />
 
           {type === QueryTypeValue.CLI && (
             <>
@@ -277,7 +279,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        <Button onClick={this.executeQuery}>Run</Button>
+        <Button onClick={onRunQuery}>Run</Button>
       </div>
     );
   }
