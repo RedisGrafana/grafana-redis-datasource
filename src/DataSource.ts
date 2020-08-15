@@ -1,7 +1,8 @@
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import { DataFrame, DataQueryRequest, DataSourceInstanceSettings, MetricFindValue, ScopedVars } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
-import { RedisDataSourceOptions, RedisQuery } from './types';
+import { RedisQuery } from './redis';
+import { RedisDataSourceOptions } from './types';
 
 /**
  * Redis Data Source
@@ -10,7 +11,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
   /**
    * Constructor
    *
-   * @param instanceSettings Instance Settings
+   * @param {DataSourceInstanceSettings<RedisDataSourceOptions>} instanceSettings Instance Settings
    */
   constructor(instanceSettings: DataSourceInstanceSettings<RedisDataSourceOptions>) {
     super(instanceSettings);
@@ -18,6 +19,10 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
 
   /**
    * Variable query action
+   *
+   * @param {string} query Query
+   * @param {any} options Options
+   * @returns {Promise<MetricFindValue[]>} Metric Find Values
    */
   async metricFindQuery?(query: string, options?: any): Promise<MetricFindValue[]> {
     /**
@@ -47,6 +52,9 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
 
   /**
    * Override to apply template variables
+   *
+   * @param {string} query Query
+   * @param {ScopedVars} scopedVars Scoped variables
    */
   applyTemplateVariables(query: RedisQuery, scopedVars: ScopedVars) {
     const templateSrv = getTemplateSrv();

@@ -3,8 +3,16 @@ import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana/ui';
 import { DataSource } from '../DataSource';
-import { Aggregations, CommandParameters, Commands, InfoSections, QueryType, QueryTypeValue } from '../redis';
-import { RedisDataSourceOptions, RedisQuery } from '../types';
+import {
+  Aggregations,
+  CommandParameters,
+  Commands,
+  InfoSections,
+  QueryType,
+  QueryTypeValue,
+  RedisQuery,
+} from '../redis';
+import { RedisDataSourceOptions } from '../types';
 
 /**
  * Form Field

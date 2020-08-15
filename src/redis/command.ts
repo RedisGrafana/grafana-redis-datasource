@@ -1,35 +1,3 @@
-import { SelectableValue } from '@grafana/data';
-
-/**
- * Query Type Values
- */
-export enum QueryTypeValue {
-  COMMAND = 'command',
-  TIMESERIES = 'timeSeries',
-  CLI = 'cli',
-}
-
-/**
- * Query Type
- */
-export const QueryType: Array<SelectableValue<string>> = [
-  {
-    label: 'Redis commands',
-    description: 'Hashes, Sets, Lists, Strings, Streams, etc.',
-    value: QueryTypeValue.COMMAND,
-  },
-  {
-    label: 'RedisTimeSeries commands',
-    description: 'Redis Module adding a Time Series data structure to Redis',
-    value: QueryTypeValue.TIMESERIES,
-  },
-  {
-    label: 'Command-line interface (CLI)',
-    description: 'Be mindful, not all commands are supported',
-    value: QueryTypeValue.CLI,
-  },
-];
-
 /**
  * Commands
  */
@@ -122,32 +90,3 @@ export const CommandParameters = {
   section: ['info'],
   valueLabel: ['ts.mrange'],
 };
-
-/**
- * Aggregations
- */
-export const Aggregations: Array<SelectableValue<string>> = [
-  { label: 'None', description: 'No aggregation', value: '' },
-  { label: 'Avg', description: 'Average', value: 'avg' },
-  { label: 'Count', description: 'Count number of samples', value: 'count' },
-  { label: 'Max', description: 'Maximum', value: 'max' },
-  { label: 'Min', description: 'Minimum', value: 'min' },
-  { label: 'Range', description: 'Diff between maximum and minimum in the bucket', value: 'range' },
-  { label: 'Sum', description: 'Sum', value: 'sum' },
-];
-
-/**
- * Info sections
- */
-export const InfoSections: Array<SelectableValue<string>> = [
-  { label: 'Server', description: 'General information about the Redis server', value: 'server' },
-  { label: 'Clients', description: 'Client connections section', value: 'clients' },
-  { label: 'Memory', description: 'Memory consumption related information', value: 'memory' },
-  { label: 'Persistence', description: 'RDB and AOF related information', value: 'persistence' },
-  { label: 'Stats', description: 'General statistics', value: 'stats' },
-  { label: 'Replication', description: 'Master/replica replication information', value: 'replication' },
-  { label: 'CPU', description: 'CPU consumption statistics', value: 'cpu' },
-  { label: 'Command Stats', description: 'Redis command statistics', value: 'commandstats' },
-  { label: 'Cluster', description: 'Redis Cluster section', value: 'cluster' },
-  { label: 'Keyspace', description: 'Database related statistics', value: 'keyspace' },
-];
