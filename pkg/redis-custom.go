@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -10,6 +11,10 @@ import (
 	"github.com/mediocregopher/radix/v3"
 )
 
+/**
+ * Execute Query
+ * Can PANIC if command is wrong
+ */
 func (ds *redisDatasource) executeQuery(qm queryModel, client *radix.Pool) (interface{}, error) {
 	// Split query and parse command
 	query := strings.Fields(qm.Query)
@@ -36,6 +41,39 @@ func (ds *redisDatasource) executeQuery(qm queryModel, client *radix.Pool) (inte
 	err = client.Do(radix.FlatCmd(&result, command, key, params))
 
 	return result, err
+}
+
+/**
+ * Parse Value
+ */
+func (ds *redisDatasource) parseInterfaceValue(value []interface{}, response backend.DataResponse) ([]string, backend.DataResponse) {
+	var values []string
+
+	for _, element := range value {
+		switch element := element.(type) {
+		case []byte:
+			values = append(values, string(element))
+		case int64:
+			values = append(values, strconv.FormatInt(element, 10))
+		case string:
+			values = append(values, element)
+		case []interface{}:
+			var parsedValues []string
+			parsedValues, response = ds.parseInterfaceValue(element, response)
+
+			// If no values
+			if len(parsedValues) == 0 {
+				parsedValues = append(parsedValues, "(empty array)")
+			}
+
+			values = append(values, parsedValues...)
+		default:
+			response.Error = fmt.Errorf("Unsupported array return type")
+			return values, response
+		}
+	}
+
+	return values, response
 }
 
 /**
@@ -92,30 +130,12 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool)
 	case []interface{}:
 		var values []string
 
-		// Parse array values
-		for _, value := range result {
-			switch value := value.(type) {
-			case []byte:
-				values = append(values, string(value))
-			case []interface{}:
-				/**
-				 * Internal array
-				 */
-				for _, element := range value {
-					switch element := element.(type) {
-					case []byte:
-						values = append(values, string(element))
-					case string:
-						values = append(values, element)
-					default:
-						response.Error = fmt.Errorf("Unsupported array return type")
-						return response
-					}
-				}
-			default:
-				response.Error = fmt.Errorf("Unsupported array return type")
-				return response
-			}
+		// Parse values
+		values, response = ds.parseInterfaceValue(result, response)
+
+		// Error when parsing intarface
+		if response.Error != nil {
+			return response
 		}
 
 		// Add Frame
