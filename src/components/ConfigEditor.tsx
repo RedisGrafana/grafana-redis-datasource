@@ -267,7 +267,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             label="TLS Client Authentication"
             labelClass="width-10"
             checked={jsonData.tlsAuth || false}
-            onChange={event => {
+            onChange={(event) => {
               const jsonData = { ...options.jsonData, tlsAuth: event.currentTarget.checked };
               onOptionsChange({ ...options, jsonData });
             }}
@@ -279,7 +279,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
               labelClass="width-10"
               tooltip="If checked, the server's certificate will not be checked for validity."
               checked={jsonData.tlsSkipVerify || false}
-              onChange={event => {
+              onChange={(event) => {
                 const jsonData = { ...options.jsonData, tlsSkipVerify: event.currentTarget.checked };
                 onOptionsChange({ ...options, jsonData });
               }}

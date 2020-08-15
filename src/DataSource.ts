@@ -39,10 +39,10 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
       targets: [{ datasource: options.variable.datasource, query: query }],
     } as DataQueryRequest<RedisQuery>)
       .pipe(
-        switchMap$(response => response.data),
+        switchMap$((response) => response.data),
         switchMap$((data: DataFrame) => data.fields),
-        map$(field =>
-          field.values.toArray().map(value => {
+        map$((field) =>
+          field.values.toArray().map((value) => {
             return { text: value };
           })
         )
