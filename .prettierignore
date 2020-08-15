@@ -1,0 +1,20 @@
+.DS_Store
+.gitkeep
+.gitattributes
+.gitignore
+.editorconfig
+.prettierignore
+LICENSE
+yarn.lock
+go.mod
+go.sum
+*.go
+.github
+
+# Folders
+node_modules
+coverage
+data
+dist
+img
+.idea

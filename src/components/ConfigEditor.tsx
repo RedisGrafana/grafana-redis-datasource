@@ -1,7 +1,7 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Button, LegacyForms, TextArea } from '@grafana/ui';
-import { RedisDataSourceOptions, RedisSecureJsonData } from './types';
+import { RedisDataSourceOptions, RedisSecureJsonData } from '../types';
 
 /**
  * Form Field
@@ -25,7 +25,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * URL change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -35,7 +35,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * Pool Size change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onPoolSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -45,7 +45,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * Timeout change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onTimeoutChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -55,7 +55,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * Ping interval change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onPingIntervalChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -65,7 +65,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * Pipeline window change
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onPipelineWindowChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -75,7 +75,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * Password Secure field (only sent to the backend)
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
   onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -97,7 +97,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * TLS Client Certificate
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLTextAreaElement>} event Event
    */
   onTlsClientCertificateChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -122,7 +122,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * TLS Certification Authority
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLTextAreaElement>} event Event
    */
   onTlsCACertificateChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -147,7 +147,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   /**
    * TLS Client key
    *
-   * @param event Event
+   * @param {ChangeEvent<HTMLTextAreaElement>} event Event
    */
   onTlsClientKeyChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const { onOptionsChange, options } = this.props;
@@ -267,7 +267,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             label="TLS Client Authentication"
             labelClass="width-10"
             checked={jsonData.tlsAuth || false}
-            onChange={event => {
+            onChange={(event) => {
               const jsonData = { ...options.jsonData, tlsAuth: event.currentTarget.checked };
               onOptionsChange({ ...options, jsonData });
             }}
@@ -279,7 +279,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
               labelClass="width-10"
               tooltip="If checked, the server's certificate will not be checked for validity."
               checked={jsonData.tlsSkipVerify || false}
-              onChange={event => {
+              onChange={(event) => {
                 const jsonData = { ...options.jsonData, tlsSkipVerify: event.currentTarget.checked };
                 onOptionsChange({ ...options, jsonData });
               }}
