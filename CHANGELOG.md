@@ -1,5 +1,15 @@
 # Change Log
 
+## v1.2.0
+
+- Added docker cmd line option to start in README #31
+- How to query a specific database inside the same Redis single node #34
+- Update docker-compose to load datasource from the repository and add development file #39
+- Use "ScopedVars" when applying template variables #37 (fix for #36)
+- Slowlog returns 'No data' for Redis 3.0.6 #33
+- Fix backend lint issues #41
+- Refactoring to support new commands and modules #42
+
 ## v1.1.2
 
 - Remove developer jargon from README #30

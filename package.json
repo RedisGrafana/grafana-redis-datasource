@@ -23,5 +23,5 @@
     "test": "grafana-toolkit plugin:test",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
-  "version": "1.1.2"
+  "version": "1.2.0"
 }
