@@ -55,6 +55,11 @@ export const Commands = {
   ],
   timeSeries: [
     {
+      label: 'TS.GET',
+      description: 'Get the last sample',
+      value: 'ts.get',
+    },
+    {
       label: 'TS.MRANGE',
       description: 'Query a timestamp range across multiple time-series by filters',
       value: 'ts.mrange',
@@ -80,6 +85,7 @@ export const CommandParameters = {
     'scard',
     'smembers',
     'ts.range',
+    'ts.get',
     'ttl',
     'type',
     'xinfoStream',

@@ -53,6 +53,8 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 	 * Commands switch
 	 */
 	switch qm.Command {
+	case "ts.get":
+		return ds.queryTsGet(qm, client)
 	case "ts.range":
 		return ds.queryTsRange(from, to, qm, client)
 	case "ts.mrange":

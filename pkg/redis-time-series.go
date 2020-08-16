@@ -170,3 +170,38 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 	// Return Response
 	return response
 }
+
+/**
+ * TS.GET key
+ *
+ * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsget
+ */
+func (ds *redisDatasource) queryTsGet(qm queryModel, client *radix.Pool) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	var result []string
+
+	// Execute command
+	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+
+	// Check error
+	if err != nil {
+		return ds.errorHandler(response, err)
+	}
+
+	// Create data frame response
+	frame := data.NewFrame(qm.Key,
+		data.NewField("time", nil, []time.Time{}),
+		data.NewField("value", nil, []float64{}))
+
+	// Add row
+	t, _ := strconv.ParseInt(result[0], 10, 64)
+	v, _ := strconv.ParseFloat(result[1], 64)
+	frame.AppendRow(time.Unix(t/1000, 0), v)
+
+	// Add the frame to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return Response
+	return response
+}

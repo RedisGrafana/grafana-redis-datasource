@@ -15,7 +15,7 @@ import (
  * Execute Query
  * Can PANIC if command is wrong
  */
-func (ds *redisDatasource) executeQuery(qm queryModel, client *radix.Pool) (interface{}, error) {
+func (ds *redisDatasource) executeCustomQuery(qm queryModel, client *radix.Pool) (interface{}, error) {
 	// Split query and parse command
 	query := strings.Fields(qm.Query)
 	command, params := query[0], query[1:]
@@ -92,7 +92,7 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool)
 	var err error
 
 	// Parse and execute query
-	result, err = ds.executeQuery(qm, client)
+	result, err = ds.executeCustomQuery(qm, client)
 
 	// Check error
 	if err != nil {
