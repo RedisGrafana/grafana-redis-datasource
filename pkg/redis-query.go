@@ -5,11 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/mediocregopher/radix/v3"
 	"github.com/mediocregopher/radix/v3/resp/resp2"
 )
@@ -55,6 +53,10 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 	switch qm.Command {
 	case "ts.get":
 		return ds.queryTsGet(qm, client)
+	case "ts.info":
+		return ds.queryTsInfo(qm, client)
+	case "ts.queryindex":
+		return ds.queryTsQueryIndex(qm, client)
 	case "ts.range":
 		return ds.queryTsRange(from, to, qm, client)
 	case "ts.mrange":
@@ -123,24 +125,4 @@ func (ds *redisDatasource) queryKeyCommand(qm queryModel, client *radix.Pool) ba
 
 	// Return Response
 	return response
-}
-
-/**
- * Create frame with single value
- *
- * @param {string} key Key
- * @param {string} value Value
- */
-func (ds *redisDatasource) createFrameValue(key string, value string) *data.Frame {
-	frame := data.NewFrame(key)
-
-	// Parse Float
-	if floatValue, err := strconv.ParseFloat(value, 64); err == nil {
-		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []float64{floatValue}))
-	} else {
-		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []string{value}))
-	}
-
-	// Return
-	return frame
 }
