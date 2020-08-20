@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"bitbucket.org/creachadair/shell"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
@@ -16,12 +17,20 @@ import (
  * Can PANIC if command is wrong
  */
 func (ds *redisDatasource) executeCustomQuery(qm queryModel, client *radix.Pool) (interface{}, error) {
-	// Split query and parse command
-	query := strings.Fields(qm.Query)
-	command, params := query[0], query[1:]
-
 	var result interface{}
 	var err error
+
+	// Split query
+	query, ok := shell.Split(qm.Query)
+
+	// Check if query is valid
+	if !ok {
+		err = fmt.Errorf("Query is not valid")
+		return result, err
+	}
+
+	// Separate command from params
+	command, params := query[0], query[1:]
 
 	// Handle Panic from custom command to catch "should never get here"
 	defer func() {
@@ -36,7 +45,7 @@ func (ds *redisDatasource) executeCustomQuery(qm queryModel, client *radix.Pool)
 		return result, err
 	}
 
-	// Extract key or 1st paremeter as required for FlatCmd
+	// Extract key or 1st parameter as required for FlatCmd
 	key, params := params[0], params[1:]
 	err = client.Do(radix.FlatCmd(&result, command, key, params))
 

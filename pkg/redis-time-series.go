@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"strconv"
-	"strings"
 	"time"
 
+	"bitbucket.org/creachadair/shell"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
@@ -73,7 +73,13 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 	var err error
 
 	// Split Filter to array
-	filter := strings.Fields(qm.Filter)
+	filter, ok := shell.Split(qm.Filter)
+
+	// Check if filter is valid
+	if !ok {
+		response.Error = fmt.Errorf("Filter is not valid")
+		return response
+	}
 
 	// Execute command
 	if qm.Aggregation != "" {
@@ -283,7 +289,13 @@ func (ds *redisDatasource) queryTsQueryIndex(qm queryModel, client *radix.Pool) 
 	response := backend.DataResponse{}
 
 	// Split Filter to array
-	filter := strings.Fields(qm.Filter)
+	filter, ok := shell.Split(qm.Filter)
+
+	// Check if filter is valid
+	if !ok {
+		response.Error = fmt.Errorf("Filter is not valid")
+		return response
+	}
 
 	// Execute command
 	var values []string
