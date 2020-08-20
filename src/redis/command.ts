@@ -55,9 +55,24 @@ export const Commands = {
   ],
   timeSeries: [
     {
+      label: 'TS.GET',
+      description: 'Get the last sample',
+      value: 'ts.get',
+    },
+    {
+      label: 'TS.INFO',
+      description: 'Returns information and statistics on the time-series',
+      value: 'ts.info',
+    },
+    {
       label: 'TS.MRANGE',
       description: 'Query a timestamp range across multiple time-series by filters',
       value: 'ts.mrange',
+    },
+    {
+      label: 'TS.QUERYINDEX',
+      description: 'Get all the keys matching the filter list',
+      value: 'ts.queryindex',
     },
     { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
   ],
@@ -69,7 +84,7 @@ export const Commands = {
 export const CommandParameters = {
   aggregation: ['ts.range', 'ts.mrange'],
   field: ['hget'],
-  filter: ['ts.mrange'],
+  filter: ['ts.mrange', 'ts.queryindex'],
   key: [
     'get',
     'hget',
@@ -80,6 +95,8 @@ export const CommandParameters = {
     'scard',
     'smembers',
     'ts.range',
+    'ts.get',
+    'ts.info',
     'ttl',
     'type',
     'xinfoStream',

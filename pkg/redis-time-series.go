@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/mediocregopher/radix/v3"
 )
@@ -168,5 +169,138 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 	}
 
 	// Return Response
+	return response
+}
+
+/**
+ * TS.GET key
+ *
+ * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsget
+ */
+func (ds *redisDatasource) queryTsGet(qm queryModel, client *radix.Pool) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Execute command
+	var result []string
+	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+
+	// Check error
+	if err != nil {
+		return ds.errorHandler(response, err)
+	}
+
+	// Create data frame response
+	frame := data.NewFrame(qm.Key,
+		data.NewField("time", nil, []time.Time{}),
+		data.NewField("value", nil, []float64{}))
+
+	// Add row
+	t, _ := strconv.ParseInt(result[0], 10, 64)
+	v, _ := strconv.ParseFloat(result[1], 64)
+	frame.AppendRow(time.Unix(t/1000, 0), v)
+
+	// Add the frame to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return Response
+	return response
+}
+
+/**
+ * TS.INFO key
+ *
+ * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsinfo
+ */
+func (ds *redisDatasource) queryTsInfo(qm queryModel, client *radix.Pool) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Execute command
+	var result interface{}
+	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+
+	// Check error
+	if err != nil {
+		return ds.errorHandler(response, err)
+	}
+
+	// Create data frame response
+	frame := data.NewFrame(qm.Key)
+
+	// Add fields and values
+	for i := 0; i < len(result.([]interface{})); i += 2 {
+
+		// Parameter
+		var param string
+		switch value := result.([]interface{})[i].(type) {
+		case string:
+			param = value
+		default:
+			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Key type")
+		}
+
+		// Value
+		switch value := result.([]interface{})[i+1].(type) {
+		case int64:
+			// Return timestamp as time
+			if param == "firstTimestamp" || param == "lastTimestamp" {
+				frame.Fields = append(frame.Fields, data.NewField(param, nil, []time.Time{time.Unix(value/1000, 0)}))
+				break
+			}
+
+			// Add field
+			field := data.NewField(param, nil, []int64{value})
+
+			// Set unit
+			if param == "memoryUsage" {
+				field.Config = &data.FieldConfig{Unit: "decbytes"}
+			} else if param == "retentionTime" {
+				field.Config = &data.FieldConfig{Unit: "ms"}
+			}
+
+			frame.Fields = append(frame.Fields, field)
+		case []byte:
+			frame.Fields = append(frame.Fields, data.NewField(param, nil, []string{string(value)}))
+		case []interface{}:
+			frame = ds.addFrameFieldsFromArray(value, frame)
+		default:
+			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Value type")
+		}
+	}
+
+	// Add the frame to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return Response
+	return response
+}
+
+/**
+ * TS.QUERYINDEX filter...
+ *
+ * @see https://oss.redislabs.com/redistimeseries/commands/#tsqueryindex
+ */
+func (ds *redisDatasource) queryTsQueryIndex(qm queryModel, client *radix.Pool) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Split Filter to array
+	filter := strings.Fields(qm.Filter)
+
+	// Execute command
+	var values []string
+	err := client.Do(radix.Cmd(&values, qm.Command, filter...))
+
+	// Check error
+	if err != nil {
+		return ds.errorHandler(response, err)
+	}
+
+	// New Frame
+	frame := data.NewFrame(qm.Key,
+		data.NewField("Value", nil, values))
+
+	// Add the frames to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return
 	return response
 }
