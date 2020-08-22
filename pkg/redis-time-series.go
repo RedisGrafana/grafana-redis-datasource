@@ -46,10 +46,27 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
 		data.NewField("time", nil, []time.Time{}),
 		data.NewField(legend, nil, []float64{}))
 
+	// Previous time and bucket to fill missing intervals
+	var prevTime time.Time
+	var bucket, _ = strconv.ParseInt(qm.Bucket, 10, 64)
+
 	// Add rows
 	for _, row := range result {
 		t, _ := strconv.ParseInt(row[0], 10, 64)
 		ts := time.Unix(t/1000, 0)
+
+		// Fill missing intervals
+		if qm.Fill && bucket != 0 {
+			if !prevTime.IsZero() {
+				for ts.Sub(prevTime) > time.Duration(bucket)*time.Millisecond {
+					prevTime = prevTime.Add(time.Duration(bucket) * time.Millisecond)
+					frame.AppendRow(prevTime, float64(0))
+				}
+			}
+
+			prevTime = ts
+		}
+
 		v, _ := strconv.ParseFloat(row[1], 64)
 		frame.AppendRow(ts, v)
 	}

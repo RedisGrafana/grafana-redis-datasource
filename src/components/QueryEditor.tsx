@@ -17,7 +17,7 @@ import { RedisDataSourceOptions } from '../types';
 /**
  * Form Field
  */
-const { FormField } = LegacyForms;
+const { FormField, Switch } = LegacyForms;
 
 /**
  * Editor Property
@@ -147,8 +147,21 @@ export class QueryEditor extends PureComponent<Props> {
    * Render Editor
    */
   render() {
-    const { key, aggregation, bucket, legend, command, field, filter, value, query, type, section } = this.props.query;
-    const { onRunQuery } = this.props;
+    const {
+      key,
+      aggregation,
+      bucket,
+      legend,
+      command,
+      field,
+      filter,
+      value,
+      query,
+      type,
+      section,
+      fill,
+    } = this.props.query;
+    const { onRunQuery, onChange } = this.props;
 
     /**
      * Return
@@ -268,6 +281,9 @@ export class QueryEditor extends PureComponent<Props> {
           <div className="gf-form">
             <InlineFormLabel width={8}>Aggregation</InlineFormLabel>
             <Select
+              className={css`
+                margin-right: 5px;
+              `}
               options={Aggregations}
               width={30}
               onChange={this.onAggregationTextChange}
@@ -282,6 +298,17 @@ export class QueryEditor extends PureComponent<Props> {
                 onChange={this.onBucketTextChange}
                 label="Bucket"
                 tooltip="Time bucket for aggregation in milliseconds"
+              />
+            )}
+            {aggregation && bucket && CommandParameters.fill.includes(command) && (
+              <Switch
+                label="Fill Missing"
+                labelClass="width-10"
+                tooltip="If checked, the datasource will fill missing intervals."
+                checked={fill || false}
+                onChange={(event) => {
+                  onChange({ ...this.props.query, fill: event.currentTarget.checked });
+                }}
               />
             )}
           </div>
