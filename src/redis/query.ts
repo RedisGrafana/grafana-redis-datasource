@@ -100,6 +100,13 @@ export interface RedisQuery extends DataQuery {
   bucket?: string;
 
   /**
+   * Fill
+   *
+   * @type {boolean}
+   */
+  fill?: boolean;
+
+  /**
    * Legend label
    *
    * @type {string}
