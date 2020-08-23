@@ -49,9 +49,16 @@ export interface RedisDataSourceOptions extends DataSourceJsonData {
   /**
    * Client Type
    *
-   * @type {string}
+   * @type {ClientTypeValue}
    */
   client: ClientTypeValue;
+
+  /**
+   * Sentinel Master group name
+   *
+   * @type {string}
+   */
+  sentinelName: string;
 }
 
 /**
@@ -101,6 +108,6 @@ export enum ClientTypeValue {
  */
 export const ClientType = [
   { label: 'Redis Cluster', value: ClientTypeValue.CLUSTER },
-  //  { label: 'Sentinel', value: ClientTypeValue.SENTINEL },
+  { label: 'Sentinel', value: ClientTypeValue.SENTINEL },
   { label: 'Standalone', value: ClientTypeValue.STANDALONE },
 ];

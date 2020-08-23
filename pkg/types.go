@@ -36,6 +36,7 @@ type dataModel struct {
 	TLSAuth        bool   `json:"tlsAuth"`
 	TLSSkipVerify  bool   `json:"tlsSkipVerify"`
 	Client         string `json:"client"`
+	SentinelName   string `json:"sentinelName"`
 }
 
 /*

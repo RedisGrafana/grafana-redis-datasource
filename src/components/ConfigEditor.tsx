@@ -1,7 +1,7 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, TextArea } from '@grafana/ui';
-import { ClientTypeValue, ClientType, RedisDataSourceOptions, RedisSecureJsonData } from '../types';
+import { ClientType, ClientTypeValue, RedisDataSourceOptions, RedisSecureJsonData } from '../types';
 
 /**
  * Form Field
@@ -198,6 +198,21 @@ export class ConfigEditor extends PureComponent<Props, State> {
           />
         </div>
 
+        {jsonData.client === ClientTypeValue.SENTINEL && (
+          <div className="gf-form">
+            <FormField
+              label="Master Name"
+              labelWidth={10}
+              inputWidth={10}
+              value={jsonData.sentinelName}
+              tooltip="Provide Master Name to connect to."
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                onOptionsChange({ ...options, jsonData: { ...options.jsonData, sentinelName: event.target.value } });
+              }}
+            />
+          </div>
+        )}
+
         <div className="gf-form">
           <FormField
             label="URL"
@@ -206,7 +221,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             onChange={this.onURLChange}
             value={url || ''}
             tooltip="Accepts host:port address or a URI, as defined in https://www.iana.org/assignments/uri-schemes/prov/redis.
-            For Redis Cluster can contain multiple values with comma."
+            For Redis Cluster and Sentinel can contain multiple values with comma."
             placeholder="redis://..."
           />
         </div>
@@ -219,7 +234,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             placeholder="Database password"
             labelWidth={10}
             inputWidth={20}
-            tooltip="When specified AUTH command will be used to authenticate with the provided password"
+            tooltip="When specified AUTH command will be used to authenticate with the provided password."
             onReset={this.onResetPassword}
             onChange={this.onPasswordChange}
           />
