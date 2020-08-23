@@ -1,4 +1,4 @@
-# Grafana Redis Datasource
+# Redis Data Source for Grafana
 
 ![Dashboard](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/redis-dashboard.png)
 
@@ -21,33 +21,33 @@
 
 ## Introduction
 
-### What is the Grafana Redis Datasource?
+### What is the Redis Data Source for Grafana?
 
-The Grafana Redis Datasource, is a plugin that allows users to connect to Redis database and build dashboards in Grafana to easily monitor Redis data. It provides out-of-the box predefined dashboards - but the plugin allows to build entirely customized dashboards, tuned to your needs.
-
-### What is Grafana?
-
-If you are not familiar with Grafana yet, it is a very popular tool used to build dashboards allowing to monitor applications, infrastructures and any kind of software components.
+If you’re not familiar with Grafana, it’s a very popular tool used to build dashboards to monitor applications, infrastructures, and software components. The Redis Data Source for Grafana is a plug-in that allows users to connect to the Redis database and build dashboards in Grafana to easily monitor Redis data. It provides an out-of-the-box predefined dashboard, but also lets you build customized dashboards tuned to your specific needs.
 
 ### What Grafana version is supported?
 
-Only Grafana 7.0 and later with a new plugin platform supported.
+Grafana 7.1 and later with a new plugin platform supported.
 
-### Does this datasource require anything special configured on the Redis databases?
+### Does this Data Source require anything special configured on the Redis databases?
 
-Datasource can connect to any Redis database. No special configuration is required.
+Data Source can connect to any Redis database. No special configuration is required.
+
+### Does this Data Source support [Redis Cluster](https://redis.io/topics/cluster-tutorial) and [Sentinel](https://redis.io/topics/sentinel)?
+
+Yes, Redis Cluster and Sentinel supported since version 1.2.
 
 ### How to connect to Redis logical database?
 
-Please use `/db-number` or `?db=db-number` in the datasource URL to specify the database number as defined in the [Schema](https://www.iana.org/assignments/uri-schemes/prov/redis).
+Please use `/db-number` or `?db=db-number` in the data Source URL to specify the database number as defined in the [Schema](https://www.iana.org/assignments/uri-schemes/prov/redis).
 
 ```
 redis://redis-server:6379/0
 ```
 
-### Build datasource
+### Build Data Source
 
-To learn step by step how to build Redis Datasource from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
+To learn step by step how to build Redis Data Source from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
 
 ## Getting Started
 
@@ -73,14 +73,14 @@ Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module
 docker-compose up
 ```
 
-Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure datasource. You can add as many datasources as you want to support multiple Redis databases.
+Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure data source. You can add as many data sources as you want to support multiple Redis databases.
 
 ![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
 
 There are certain settings that can be configured based on your own setup:
 
 - Grafana port
-- Datasource URL
+- Data source URL
 
 #### Configure Grafana port in `docker-compose.yml`
 
@@ -91,7 +91,7 @@ If standard port 3000 is occupied by another application update the port to bind
       - '3000:3000'
 ```
 
-#### Configure Datasource url in `provisioning/datasources/redis.yaml`
+#### Configure Data Source URL in `provisioning/datasources/redis.yaml`
 
 If Redis is running and listening on localhost:6379 no changes are required
 
@@ -107,7 +107,7 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 
 ### Run using `docker-compose` for development
 
-Datasource have to be built following [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
+Data Source have to be built following [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
 
 ```bash
 docker-compose -f docker-compose-dev.yml up
@@ -115,7 +115,7 @@ docker-compose -f docker-compose-dev.yml up
 
 ## Supported Commands
 
-Datasource supports many Redis commands using custom components and provide unified interface to query any command.
+Data Source supports many Redis commands using custom components and provide unified interface to query any command.
 
 ![Query](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/query.png)
 
