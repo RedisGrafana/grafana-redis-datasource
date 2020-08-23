@@ -1383,7 +1383,7 @@
       "type": "table"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "datasource": "${DS_REDIS}",
       "gridPos": {
         "h": 1,
@@ -1475,8 +1475,12 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           }
@@ -1485,8 +1489,73 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 21,
+        "w": 3,
         "x": 3,
+        "y": 27
+      },
+      "id": 64,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.4",
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "replication",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Role",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["role"]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "${DS_REDIS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 18,
+        "x": 6,
         "y": 27
       },
       "id": 61,
@@ -1511,7 +1580,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Information",
+      "title": "",
       "transformations": [
         {
           "id": "filterFieldsByName",
@@ -1703,5 +1772,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 5
+  "version": 3
 }
