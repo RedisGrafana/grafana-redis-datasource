@@ -14,6 +14,11 @@ export const Commands = {
       value: 'clusterInfo',
     },
     {
+      label: 'CLUSTER NODES',
+      description: 'Provides current cluster configuration, given by the set of known nodes',
+      value: 'clusterNodes',
+    },
+    {
       label: 'GET',
       description: 'Returns the value of key',
       value: 'get',
