@@ -200,6 +200,8 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	switch jsonData.Client {
 	case "cluster":
 		client, err = radix.NewCluster(strings.Split(setting.URL, ","), radix.ClusterPoolFunc(poolFunc))
+	case "sentinel":
+		client, err = radix.NewSentinel(jsonData.SentinelName, strings.Split(setting.URL, ","), radix.SentinelPoolFunc(poolFunc))
 	default:
 		client, err = poolFunc("tcp", setting.URL)
 	}
