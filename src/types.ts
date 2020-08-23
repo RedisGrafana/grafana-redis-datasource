@@ -45,6 +45,13 @@ export interface RedisDataSourceOptions extends DataSourceJsonData {
    * @type {boolean}
    */
   tlsSkipVerify: boolean;
+
+  /**
+   * Client Type
+   *
+   * @type {string}
+   */
+  client: ClientTypeValue;
 }
 
 /**
@@ -79,3 +86,21 @@ export interface RedisSecureJsonData {
    */
   tlsCACert?: string;
 }
+
+/**
+ * Client Type Values
+ */
+export enum ClientTypeValue {
+  CLUSTER = 'cluster',
+  SENTINEL = 'sentinel',
+  STANDALONE = 'standalone',
+}
+
+/**
+ * Client Types
+ */
+export const ClientType = [
+  { label: 'Redis Cluster', value: ClientTypeValue.CLUSTER },
+  //  { label: 'Sentinel', value: ClientTypeValue.SENTINEL },
+  { label: 'Standalone', value: ClientTypeValue.STANDALONE },
+];
