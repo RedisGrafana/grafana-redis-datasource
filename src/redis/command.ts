@@ -116,5 +116,5 @@ export const CommandParameters = {
   legendLabel: ['ts.mrange'],
   section: ['info'],
   valueLabel: ['ts.mrange'],
-  fill: ['ts.range'],
+  fill: ['ts.range', 'ts.mrange'],
 };
