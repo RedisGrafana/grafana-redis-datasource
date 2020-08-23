@@ -161,6 +161,10 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 			)
 		}
 
+		// Previous time and bucket to fill missing intervals
+		var prevTime time.Time
+		var bucket, _ = strconv.ParseInt(qm.Bucket, 10, 64)
+
 		// Values
 		for _, valueRaw := range tsArrReply[2].([]interface{}) {
 			kvPair := valueRaw.([]interface{})
@@ -175,6 +179,20 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 				k = kvPair[0].(int64)
 			}
 
+			ts := time.Unix(k/1000, 0)
+
+			// Fill missing intervals
+			if qm.Fill && bucket != 0 {
+				if !prevTime.IsZero() {
+					for ts.Sub(prevTime) > time.Duration(bucket)*time.Millisecond {
+						prevTime = prevTime.Add(time.Duration(bucket) * time.Millisecond)
+						frame.AppendRow(prevTime, float64(0))
+					}
+				}
+
+				prevTime = ts
+			}
+
 			// Value
 			switch kvPair[1].(type) {
 			case []byte:
@@ -184,7 +202,7 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 			}
 
 			// Append Row to Frame
-			frame.AppendRow(time.Unix(k/1000, 0), v)
+			frame.AppendRow(ts, v)
 		}
 
 		// add the frames to the response
