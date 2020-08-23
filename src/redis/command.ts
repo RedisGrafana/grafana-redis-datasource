@@ -9,6 +9,11 @@ export const Commands = {
       value: 'clientList',
     },
     {
+      label: 'CLUSTER INFO',
+      description: 'Provides INFO style information about Redis Cluster vital parameters',
+      value: 'clusterInfo',
+    },
+    {
       label: 'GET',
       description: 'Returns the value of key',
       value: 'get',

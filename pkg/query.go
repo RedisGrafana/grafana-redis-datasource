@@ -77,6 +77,8 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.queryKeyCommand(qm, client)
 	case "xinfoStream":
 		return ds.queryXInfoStream(qm, client)
+	case "clusterInfo":
+		return ds.queryClusterInfo(qm, client)
 	default:
 		response := backend.DataResponse{}
 		response.Error = fmt.Errorf("Unknown command")
