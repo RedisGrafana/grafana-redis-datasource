@@ -174,9 +174,14 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 			}
 
 			// Certificate and Key
-			cert, err := tls.X509KeyPair([]byte(secureData["tlsClientCert"]), []byte(secureData["tlsClientKey"]))
-			if err == nil {
-				tlsConfig.Certificates = []tls.Certificate{cert}
+			if secureData["tlsClientCert"] != "" {
+				cert, err := tls.X509KeyPair([]byte(secureData["tlsClientCert"]), []byte(secureData["tlsClientKey"]))
+				if err == nil {
+					tlsConfig.Certificates = []tls.Certificate{cert}
+				} else {
+					log.DefaultLogger.Error("X509KeyPair", "Error", err)
+					return nil, err
+				}
 			}
 
 			// Add TLS Config
