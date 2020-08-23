@@ -27,7 +27,7 @@ If you’re not familiar with Grafana, it’s a very popular tool used to build 
 
 ### What Grafana version is supported?
 
-Grafana 7.1 and later with a new plugin platform supported.
+Grafana 7.1 and later with a new plug-in platform supported.
 
 ### Does this Data Source require anything special configured on the Redis databases?
 
@@ -39,7 +39,7 @@ Yes, Redis Cluster and Sentinel supported since version 1.2.
 
 ### How to connect to Redis logical database?
 
-Please use `/db-number` or `?db=db-number` in the data Source URL to specify the database number as defined in the [Schema](https://www.iana.org/assignments/uri-schemes/prov/redis).
+Please use `/db-number` or `?db=db-number` in the Data Source URL to specify the database number as defined in the [Schema](https://www.iana.org/assignments/uri-schemes/prov/redis).
 
 ```
 redis://redis-server:6379/0
@@ -73,14 +73,14 @@ Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module
 docker-compose up
 ```
 
-Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure data source. You can add as many data sources as you want to support multiple Redis databases.
+Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure Redis Data Source. You can add as many data sources as you want to support multiple Redis databases.
 
 ![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
 
 There are certain settings that can be configured based on your own setup:
 
 - Grafana port
-- Data source URL
+- Data Source URL
 
 #### Configure Grafana port in `docker-compose.yml`
 
