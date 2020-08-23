@@ -11,7 +11,7 @@ import (
  *
  * @see https://redis.io/commands/hgetall
  */
-func (ds *redisDatasource) queryHGetAll(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryHGetAll(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -49,7 +49,7 @@ func (ds *redisDatasource) queryHGetAll(qm queryModel, client *radix.Pool) backe
  *
  * @see https://redis.io/commands/hget
  */
-func (ds *redisDatasource) queryHGet(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryHGet(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command

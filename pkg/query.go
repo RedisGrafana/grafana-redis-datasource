@@ -15,7 +15,7 @@ import (
 /**
  * Query commands
  */
-func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, client ClientInterface) backend.DataResponse {
 	var qm queryModel
 
 	// Unmarshal the json into our queryModel
@@ -108,7 +108,7 @@ func (ds *redisDatasource) errorHandler(response backend.DataResponse, err error
  * @see https://redis.io/commands/ttl
  * @see https://redis.io/commands/hlen
  */
-func (ds *redisDatasource) queryKeyCommand(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryKeyCommand(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command

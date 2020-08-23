@@ -16,7 +16,7 @@ import (
  * Execute Query
  * Can PANIC if command is wrong
  */
-func (ds *redisDatasource) executeCustomQuery(qm queryModel, client *radix.Pool) (interface{}, error) {
+func (ds *redisDatasource) executeCustomQuery(qm queryModel, client ClientInterface) (interface{}, error) {
 	var result interface{}
 	var err error
 
@@ -88,7 +88,7 @@ func (ds *redisDatasource) parseInterfaceValue(value []interface{}, response bac
 /**
  * Custom Command, used for CLI and Variables
  */
-func (ds *redisDatasource) queryCustomCommand(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Query is empty

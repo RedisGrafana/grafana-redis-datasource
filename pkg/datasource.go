@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -81,7 +82,7 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 		// Check errors
 		if err != nil {
 			status = backend.HealthStatusError
-			message = "PING command failed"
+			message = fmt.Sprintf("PING command failed: %s", err.Error())
 		} else {
 			status = backend.HealthStatusOk
 			message = "Data source working as expected"
@@ -98,7 +99,7 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 /**
  * Return Instance
  */
-func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (*radix.Pool, error) {
+func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (ClientInterface, error) {
 	s, err := ds.im.Get(ctx)
 
 	if err != nil {
@@ -186,16 +187,29 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	}
 
 	// Pool with specified Ping Interval, Pipeline Window and Timeout
-	pool, err := radix.NewPool("tcp", setting.URL, poolSize, radix.PoolConnFunc(connFunc),
-		radix.PoolPingInterval(time.Duration(pingInterval)*time.Second/time.Duration(poolSize+1)),
-		radix.PoolPipelineWindow(time.Duration(pipelineWindow)*time.Microsecond, 0))
+	poolFunc := func(network, addr string) (radix.Client, error) {
+		return radix.NewPool(network, addr, poolSize, radix.PoolConnFunc(connFunc),
+			radix.PoolPingInterval(time.Duration(pingInterval)*time.Second/time.Duration(poolSize+1)),
+			radix.PoolPipelineWindow(time.Duration(pipelineWindow)*time.Microsecond, 0))
+	}
+
+	var client ClientInterface
+	var err error
+
+	// Client Type
+	switch jsonData.Client {
+	case "cluster":
+		client, err = radix.NewCluster(strings.Split(setting.URL, ","), radix.ClusterPoolFunc(poolFunc))
+	default:
+		client, err = poolFunc("tcp", setting.URL)
+	}
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &instanceSettings{
-		client: pool,
+		client,
 	}, nil
 }
 

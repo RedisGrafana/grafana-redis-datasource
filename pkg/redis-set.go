@@ -11,7 +11,7 @@ import (
  *
  * @see https://redis.io/commands/smembers
  */
-func (ds *redisDatasource) querySMembers(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) querySMembers(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
