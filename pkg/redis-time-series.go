@@ -17,7 +17,7 @@ import (
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsrangetsrevrange
  */
-func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	var result [][]string
@@ -83,7 +83,7 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsmrangetsmrevrange
  */
-func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	var result interface{}
@@ -200,7 +200,7 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
  *
  * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsget
  */
-func (ds *redisDatasource) queryTsGet(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryTsGet(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -234,7 +234,7 @@ func (ds *redisDatasource) queryTsGet(qm queryModel, client *radix.Pool) backend
  *
  * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsinfo
  */
-func (ds *redisDatasource) queryTsInfo(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryTsInfo(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -302,7 +302,7 @@ func (ds *redisDatasource) queryTsInfo(qm queryModel, client *radix.Pool) backen
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsqueryindex
  */
-func (ds *redisDatasource) queryTsQueryIndex(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryTsQueryIndex(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Split Filter to array

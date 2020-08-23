@@ -5,11 +5,17 @@ import (
 	"github.com/mediocregopher/radix/v3"
 )
 
+// ClientInterface is an interface that represents the skeleton of a connection to Redis ( cluster, standalone, or sentinel )
+type ClientInterface interface {
+	Do(a radix.Action) error
+	Close() error
+}
+
 /**
  * Instance Settings
  */
 type instanceSettings struct {
-	client *radix.Pool
+	client ClientInterface
 }
 
 /**
@@ -23,12 +29,13 @@ type redisDatasource struct {
  * Configuration Data Model
  */
 type dataModel struct {
-	PoolSize       int  `json:"poolSize"`
-	Timeout        int  `json:"timeout"`
-	PingInterval   int  `json:"pingInterval"`
-	PipelineWindow int  `json:"pipelineWindow"`
-	TLSAuth        bool `json:"tlsAuth"`
-	TLSSkipVerify  bool `json:"tlsSkipVerify"`
+	PoolSize       int    `json:"poolSize"`
+	Timeout        int    `json:"timeout"`
+	PingInterval   int    `json:"pingInterval"`
+	PipelineWindow int    `json:"pipelineWindow"`
+	TLSAuth        bool   `json:"tlsAuth"`
+	TLSSkipVerify  bool   `json:"tlsSkipVerify"`
+	Client         string `json:"client"`
 }
 
 /*

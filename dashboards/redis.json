@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 31,
-  "iteration": 1597988841671,
+  "id": 5,
+  "iteration": 1598199603644,
   "links": [
     {
       "icon": "external link",
@@ -100,7 +100,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -181,7 +181,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -324,7 +324,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -417,7 +417,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -488,7 +488,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -559,7 +559,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -631,7 +631,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -691,7 +691,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -774,7 +774,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -857,7 +857,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1001,7 +1001,7 @@
           }
         ]
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1160,7 +1160,7 @@
           }
         ]
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1291,7 +1291,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.1.3",
+      "pluginVersion": "7.1.4",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1334,9 +1334,381 @@
         }
       ],
       "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 58,
+      "panels": [],
+      "title": "Redis Cluster: $redis",
+      "type": "row"
+    },
+    {
+      "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 27
+      },
+      "id": 60,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.4",
+      "targets": [
+        {
+          "command": "clusterInfo",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "State",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["cluster_state"]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 3,
+        "y": 27
+      },
+      "id": 64,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.1.4",
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "replication",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Role",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["role"]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 18,
+        "x": 6,
+        "y": 27
+      },
+      "id": 61,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "7.1.4",
+      "targets": [
+        {
+          "command": "clusterInfo",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["cluster_known_nodes", "cluster_size"]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "cluster_known_nodes": "Total number of known nodes",
+              "cluster_size": "Number of master nodes serving at least one hash slot"
+            }
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ping was sent"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeFromNow"
+              },
+              {
+                "id": "custom.width",
+                "value": 200
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Pong was received"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeFromNow"
+              },
+              {
+                "id": "custom.width",
+                "value": 186
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": null
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Flags"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 185
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Replica's Master"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 321
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Address"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 243
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "id": 62,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Flags"
+          }
+        ]
+      },
+      "pluginVersion": "7.1.4",
+      "targets": [
+        {
+          "command": "clusterNodes",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Nodes",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Epoch": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Address": "",
+              "Id": "",
+              "Master": "Replica's Master",
+              "Ping": "Ping was sent",
+              "Pong": "Pong was received",
+              "Slot": "Hash slot number or range"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
-  "refresh": "5s",
+  "refresh": "10s",
   "schemaVersion": 26,
   "style": "dark",
   "tags": ["redis"],
@@ -1345,7 +1717,7 @@
       {
         "current": {
           "selected": true,
-          "text": "Redis",
+          "text": ["Redis"],
           "value": ["Redis"]
         },
         "hide": 0,
@@ -1373,5 +1745,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 17
+  "version": 13
 }

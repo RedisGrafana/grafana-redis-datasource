@@ -1,7 +1,7 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { Button, LegacyForms, TextArea } from '@grafana/ui';
-import { RedisDataSourceOptions, RedisSecureJsonData } from '../types';
+import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, TextArea } from '@grafana/ui';
+import { ClientTypeValue, ClientType, RedisDataSourceOptions, RedisSecureJsonData } from '../types';
 
 /**
  * Form Field
@@ -185,13 +185,28 @@ export class ConfigEditor extends PureComponent<Props, State> {
         <h3 className="page-heading">Redis</h3>
 
         <div className="gf-form">
+          <InlineFormLabel width={10} tooltip="">
+            Type
+          </InlineFormLabel>
+          <RadioButtonGroup
+            options={ClientType}
+            value={jsonData.client || ClientTypeValue.STANDALONE}
+            onChange={(value) => {
+              const jsonData = { ...options.jsonData, client: value as ClientTypeValue };
+              onOptionsChange({ ...options, jsonData });
+            }}
+          />
+        </div>
+
+        <div className="gf-form">
           <FormField
             label="URL"
             labelWidth={10}
             inputWidth={20}
             onChange={this.onURLChange}
             value={url || ''}
-            tooltip="Accepts host:port address or a URI, as defined in https://www.iana.org/assignments/uri-schemes/prov/redis"
+            tooltip="Accepts host:port address or a URI, as defined in https://www.iana.org/assignments/uri-schemes/prov/redis.
+            For Redis Cluster can contain multiple values with comma."
             placeholder="redis://..."
           />
         </div>
@@ -264,7 +279,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <div className="gf-form-inline">
           <Switch
-            label="TLS Client Authentication"
+            label="Client Authentication"
             labelClass="width-10"
             checked={jsonData.tlsAuth || false}
             onChange={(event) => {
@@ -275,7 +290,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
           {jsonData.tlsAuth && (
             <Switch
-              label="Skip TLS Verify"
+              label="Skip Verify"
               labelClass="width-10"
               tooltip="If checked, the server's certificate will not be checked for validity."
               checked={jsonData.tlsSkipVerify || false}

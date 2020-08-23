@@ -16,7 +16,7 @@ import (
  *
  * @see https://redis.io/commands/info
  */
-func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -125,7 +125,7 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client *radix.Pool) backend.
  *
  * @see https://redis.io/commands/client-list
  */
-func (ds *redisDatasource) queryClientList(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -193,7 +193,7 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client *radix.Pool) ba
  *
  * @see https://redis.io/commands/slowlog
  */
-func (ds *redisDatasource) querySlowlogGet(qm queryModel, client *radix.Pool) backend.DataResponse {
+func (ds *redisDatasource) querySlowlogGet(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
