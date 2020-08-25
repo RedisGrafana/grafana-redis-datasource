@@ -5,6 +5,7 @@
   "metrics": true,
   "backend": true,
   "alerting": true,
+  "streaming": true,
   "executable": "redis-datasource",
   "includes": [{ "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" }],
   "info": {
