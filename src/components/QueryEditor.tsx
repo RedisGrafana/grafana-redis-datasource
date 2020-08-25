@@ -329,26 +329,30 @@ export class QueryEditor extends PureComponent<Props> {
                 onChange({ ...this.props.query, streaming: event.currentTarget.checked });
               }}
             />
-            <FormField
-              labelWidth={8}
-              value={streamingInterval}
-              type="number"
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                onChange({ ...this.props.query, streamingInterval: Number(event.target.value) });
-              }}
-              label="Interval"
-              tooltip="Streaming interval in milliseconds. Default is 1000ms."
-            />
-            <FormField
-              labelWidth={8}
-              value={streamingCapacity}
-              type="number"
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                onChange({ ...this.props.query, streamingCapacity: Number(event.target.value) });
-              }}
-              label="Capacity"
-              tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
-            />
+            {streaming && (
+              <>
+                <FormField
+                  labelWidth={8}
+                  value={streamingInterval}
+                  type="number"
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    onChange({ ...this.props.query, streamingInterval: Number(event.target.value) });
+                  }}
+                  label="Interval"
+                  tooltip="Streaming interval in milliseconds. Default is 1000ms."
+                />
+                <FormField
+                  labelWidth={8}
+                  value={streamingCapacity}
+                  type="number"
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    onChange({ ...this.props.query, streamingCapacity: Number(event.target.value) });
+                  }}
+                  label="Capacity"
+                  tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
+                />
+              </>
+            )}
           </div>
         )}
 

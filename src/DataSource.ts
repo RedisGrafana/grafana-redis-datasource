@@ -136,7 +136,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
           fields.map((field) =>
             field.values.toArray().map((value) => {
               if (frame.fields.length < fields.length + 1) {
-                frame.addField({ name: field.name, type: FieldType.number });
+                frame.addField({ name: field.name, type: field.type });
               }
               return (values[field.name] = value);
             })
