@@ -8,6 +8,7 @@
 [![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-orange)](https://redislabs.com/redis-enterprise/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RedisTimeSeries/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisTimeSeries/grafana-redis-datasource)
 [![CircleCI](https://circleci.com/gh/RedisTimeSeries/grafana-redis-datasource.svg?style=svg)](https://circleci.com/gh/RedisTimeSeries/grafana-redis-datasource)
+[![Downloads](https://img.shields.io/badge/dynamic/json?color=green&label=downloads&query=%24.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-datasource)](https://grafana.com/grafana/plugins/redis-datasource)
 
 ## Summary
 
@@ -73,7 +74,7 @@ Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module
 docker-compose up
 ```
 
-Open Grafana in your browser [http://localhost:3000](http://localhost:3000) and configure Redis Data Source. You can add as many data sources as you want to support multiple Redis databases.
+Open Grafana in your browser and configure Redis Data Source. You can add as many data sources as you want to support multiple Redis databases.
 
 ![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
 
@@ -146,4 +147,4 @@ We love to hear from users, developers and the whole community interested by thi
 
 ## License
 
-- Apache License Version 2.0, see [LICENSE](LICENSE)
+- Apache License Version 2.0, see [LICENSE](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE)

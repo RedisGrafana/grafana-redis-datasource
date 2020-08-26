@@ -38,6 +38,10 @@
         "path": "img/redis-dashboard.png"
       },
       {
+        "name": "Streaming Dashboard",
+        "path": "img/redis-streaming.png"
+      },
+      {
         "name": "Datasource",
         "path": "img/datasource.png"
       },
