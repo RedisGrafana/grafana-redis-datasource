@@ -5,10 +5,19 @@
 - Added docker cmd line option to start in README #31
 - How to query a specific database inside the same Redis single node #34
 - Update docker-compose to load datasource from the repository and add development file #39
-- Use "ScopedVars" when applying template variables #37 (fix for #36)
+- Use "ScopedVars" when applying template variables #37
+- Refactoring to support new commands and modules #42
+- Add support for TS.GET, TS.INFO, and TS.QUERYINDEX commands #45
+- Add Redis dashboard to support multiple Redis instances #49
+- Plugin executable missing for arm64 architecture #48 (Grafana SDK: grafana/grafana-plugin-sdk-go#221)
+- Return 0 for all buckets with 0 counts on time-series TS.RANGE queries #50
+- Add Redis Cluster support and update monitoring dashboard #52
+- Connection issue to Redis deployed in k8s (Sentinel) #38
+- MRANGE: add fill zero option #53
+- Add Streaming capabilities to visualize INFO command #57
 - Slowlog returns 'No data' for Redis 3.0.6 #33
 - Fix backend lint issues #41
-- Refactoring to support new commands and modules #42
+- ts.mrange returns no data when label has spaces within #44
 
 ## v1.1.2
 
@@ -22,9 +31,9 @@
 
 ## v1.1.0
 
-- Updated to Grafana 7.1.0 and the latest version of Radix [#27](https://github.com/RedisTimeSeries/grafana-redis-datasource/pull/27)
-- Add dashboard as a part of datasource [#25](https://github.com/RedisTimeSeries/grafana-redis-datasource/pull/25)
-- Add Field config units to the response [#26](https://github.com/RedisTimeSeries/grafana-redis-datasource/pull/26)
+- Updated to Grafana 7.1.0 and the latest version of Radix #27
+- Add dashboard as a part of datasource #25
+- Add Field config units to the response #26
 
 ## v1.0.0
 
