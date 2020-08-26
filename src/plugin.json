@@ -7,7 +7,10 @@
   "alerting": true,
   "streaming": true,
   "executable": "redis-datasource",
-  "includes": [{ "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" }],
+  "includes": [
+    { "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" },
+    { "type": "dashboard", "name": "Redis Streaming", "path": "dashboards/redis-streaming.json" }
+  ],
   "info": {
     "description": "Grafana Redis Datasource",
     "author": {

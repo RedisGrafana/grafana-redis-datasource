@@ -1,4 +1,40 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_REDIS",
+      "label": "Redis",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "redis-datasource",
+      "pluginName": "Redis"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "7.1.3"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "redis-datasource",
+      "name": "Redis",
+      "version": "1.2.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -15,7 +51,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 6,
+  "id": null,
   "links": [],
   "panels": [
     {
@@ -23,7 +59,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -146,7 +182,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -276,7 +312,7 @@
       }
     },
     {
-      "datasource": "Redis",
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -330,6 +366,8 @@
           "query": "",
           "refId": "A",
           "section": "server",
+          "streaming": true,
+          "streamingCapacity": 1,
           "type": "command"
         }
       ],
@@ -349,7 +387,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -401,6 +439,8 @@
           "query": "",
           "refId": "A",
           "section": "server",
+          "streaming": true,
+          "streamingCapacity": 1,
           "type": "command"
         }
       ],
@@ -420,7 +460,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -473,6 +513,8 @@
           "query": "",
           "refId": "A",
           "section": "memory",
+          "streaming": true,
+          "streamingCapacity": 1,
           "type": "command"
         }
       ],
@@ -493,7 +535,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "${DS_REDIS}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -510,7 +552,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -660,7 +702,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -797,7 +839,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -906,162 +948,11 @@
       }
     },
     {
-      "datasource": "Redis",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": null,
-            "displayMode": "color-text"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Calls"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": 1
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Number of calls"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "custom.width",
-                "value": 127
-              },
-              {
-                "id": "decimals",
-                "value": 1
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total Duration"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 127
-              },
-              {
-                "id": "decimals",
-                "value": 1
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Duration per call"
-            },
-            "properties": [
-              {
-                "id": "decimals",
-                "value": 1
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Command"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 115
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 16,
-        "w": 12,
-        "x": 12,
-        "y": 20
-      },
-      "id": 15,
-      "options": {
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Total Duration"
-          }
-        ]
-      },
-      "pluginVersion": "7.1.3",
-      "scopedVars": {
-        "redis": {
-          "selected": true,
-          "text": "Redis",
-          "value": "Redis"
-        }
-      },
-      "targets": [
-        {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "commandstats",
-          "type": "command"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Command statistics",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {},
-            "indexByName": {},
-            "renameByName": {
-              "Calls": "Number of calls",
-              "Command": "",
-              "Usec": "Total Duration",
-              "Usec_per_call": "Duration per call"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_REDIS}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1089,8 +980,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 28
+        "x": 12,
+        "y": 20
       },
       "hiddenSeries": false,
       "id": 11,
@@ -1193,7 +1084,7 @@
       }
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "schemaVersion": 26,
   "style": "dark",
   "tags": [],
@@ -1210,5 +1101,5 @@
   "timezone": "",
   "title": "Redis Streaming",
   "uid": "_SGxCBNGk",
-  "version": 46
+  "version": 2
 }
