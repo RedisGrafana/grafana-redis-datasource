@@ -1,5 +1,16 @@
+import { head } from 'lodash';
+import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
-import { DataFrame, DataQueryRequest, DataSourceInstanceSettings, MetricFindValue, ScopedVars } from '@grafana/data';
+import {
+  CircularDataFrame,
+  DataFrame,
+  DataQueryRequest,
+  DataQueryResponse,
+  DataSourceInstanceSettings,
+  FieldType,
+  MetricFindValue,
+  ScopedVars,
+} from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
 import { RedisQuery } from './redis';
 import { RedisDataSourceOptions } from './types';
@@ -68,5 +79,83 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
       query: query.query ? templateSrv.replace(query.query, scopedVars) : '',
       filter: query.filter ? templateSrv.replace(query.filter, scopedVars) : '',
     };
+  }
+
+  /**
+   * Override query to support streaming
+   */
+  query(request: DataQueryRequest<RedisQuery>): Observable<DataQueryResponse> {
+    const refA = head(request.targets);
+
+    /**
+     * No streaming enabled
+     */
+    if (!refA?.streaming) {
+      return super.query(request);
+    }
+
+    /**
+     * Streaming enabled
+     */
+    return new Observable<DataQueryResponse>((subscriber) => {
+      /**
+       * This dataframe can have values constantly added, and will never exceed the given capacity
+       */
+      const frame = new CircularDataFrame({
+        append: 'tail',
+        capacity: refA?.streamingCapacity || 1000,
+      });
+
+      /**
+       * Set refId and Time field
+       */
+      frame.refId = refA.refId;
+      frame.addField({ name: 'time', type: FieldType.time });
+
+      /**
+       * Interval
+       */
+      const intervalId = setInterval(async () => {
+        let values: { [index: string]: number } = { time: Date.now() };
+
+        /**
+         * Run Query
+         */
+        const fields = await super
+          .query(request)
+          .pipe(
+            switchMap$((response) => response.data),
+            map$((data: DataFrame) => data.fields)
+          )
+          .toPromise();
+
+        if (fields) {
+          /**
+           * Add fields to frame fields and return values
+           */
+          fields.map((field) =>
+            field.values.toArray().map((value) => {
+              if (frame.fields.length < fields.length + 1) {
+                frame.addField({ name: field.name, type: field.type });
+              }
+              return (values[field.name] = value);
+            })
+          );
+        }
+
+        /**
+         * Add frame
+         */
+        frame.add(values);
+        subscriber.next({
+          data: [frame],
+          key: refA.refId,
+        });
+      }, refA.streamingInterval || 1000);
+
+      return () => {
+        clearInterval(intervalId);
+      };
+    });
   }
 }

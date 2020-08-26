@@ -119,4 +119,25 @@ export interface RedisQuery extends DataQuery {
    * @type {string}
    */
   section?: string;
+
+  /**
+   * Support streaming
+   *
+   * @type {boolean}
+   */
+  streaming?: boolean;
+
+  /**
+   * Streaming interval in milliseconds
+   *
+   * @type {number}
+   */
+  streamingInterval?: number;
+
+  /**
+   * Streaming capacity
+   *
+   * @type {number}
+   */
+  streamingCapacity?: number;
 }

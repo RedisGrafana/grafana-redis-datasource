@@ -160,6 +160,10 @@ export class QueryEditor extends PureComponent<Props> {
       type,
       section,
       fill,
+      streaming,
+      streamingInterval,
+      streamingCapacity,
+      refId,
     } = this.props.query;
     const { onRunQuery, onChange } = this.props;
 
@@ -310,6 +314,44 @@ export class QueryEditor extends PureComponent<Props> {
                   onChange({ ...this.props.query, fill: event.currentTarget.checked });
                 }}
               />
+            )}
+          </div>
+        )}
+
+        {refId === 'A' && (
+          <div className="gf-form">
+            <Switch
+              label="Streaming"
+              labelClass="width-8"
+              tooltip="If checked, the datasource will stream data. Only Ref A is supported. Command should return only one line of data."
+              checked={streaming || false}
+              onChange={(event) => {
+                onChange({ ...this.props.query, streaming: event.currentTarget.checked });
+              }}
+            />
+            {streaming && (
+              <>
+                <FormField
+                  labelWidth={8}
+                  value={streamingInterval}
+                  type="number"
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    onChange({ ...this.props.query, streamingInterval: Number(event.target.value) });
+                  }}
+                  label="Interval"
+                  tooltip="Streaming interval in milliseconds. Default is 1000ms."
+                />
+                <FormField
+                  labelWidth={8}
+                  value={streamingCapacity}
+                  type="number"
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    onChange({ ...this.props.query, streamingCapacity: Number(event.target.value) });
+                  }}
+                  label="Capacity"
+                  tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
+                />
+              </>
             )}
           </div>
         )}
