@@ -100,6 +100,7 @@ export interface RedisSecureJsonData {
 export enum ClientTypeValue {
   CLUSTER = 'cluster',
   SENTINEL = 'sentinel',
+  SOCKET = 'socket',
   STANDALONE = 'standalone',
 }
 
@@ -109,5 +110,6 @@ export enum ClientTypeValue {
 export const ClientType = [
   { label: 'Redis Cluster', value: ClientTypeValue.CLUSTER },
   { label: 'Sentinel', value: ClientTypeValue.SENTINEL },
+  { label: 'Socket', value: ClientTypeValue.SOCKET },
   { label: 'Standalone', value: ClientTypeValue.STANDALONE },
 ];

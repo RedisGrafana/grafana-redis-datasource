@@ -23,16 +23,6 @@ interface State {}
  */
 export class ConfigEditor extends PureComponent<Props, State> {
   /**
-   * URL change
-   *
-   * @param {ChangeEvent<HTMLInputElement>} event Event
-   */
-  onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onOptionsChange, options } = this.props;
-    onOptionsChange({ ...options, url: event.target.value });
-  };
-
-  /**
    * Pool Size change
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
@@ -215,13 +205,16 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <div className="gf-form">
           <FormField
-            label="URL"
+            label="Address"
             labelWidth={10}
             inputWidth={20}
-            onChange={this.onURLChange}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              onOptionsChange({ ...options, url: event.target.value });
+            }}
             value={url || ''}
             tooltip="Accepts host:port address or a URI, as defined in https://www.iana.org/assignments/uri-schemes/prov/redis.
-            For Redis Cluster and Sentinel can contain multiple values with comma."
+            For Redis Cluster and Sentinel can contain multiple values with comma.
+            For a Unix Socket accepts path to socket file."
             placeholder="redis://..."
           />
         </div>
