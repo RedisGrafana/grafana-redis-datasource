@@ -68,7 +68,7 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
  */
 func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRequest) (*backend.CheckHealthResult, error) {
 	var status backend.HealthStatus
-	message := "Data source health is yet to become known"
+	message := "Data Source health is yet to become known."
 
 	// Get Instance
 	client, err := ds.getInstance(req.PluginContext)
@@ -85,7 +85,7 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 			message = fmt.Sprintf("PING command failed: %s", err.Error())
 		} else {
 			status = backend.HealthStatusOk
-			message = "Data source working as expected"
+			message = "Data Source is working as expected."
 		}
 	}
 
@@ -152,9 +152,14 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	connFunc := func(network, addr string) (radix.Conn, error) {
 		opts := []radix.DialOpt{radix.DialTimeout(time.Duration(timeout) * time.Second)}
 
-		// Add Password
+		// Authentication
 		if secureData != nil && secureData["password"] != "" {
-			opts = append(opts, radix.DialAuthPass(secureData["password"]))
+			// If ACL enabled
+			if jsonData.ACL {
+				opts = append(opts, radix.DialAuthUser(jsonData.User, secureData["password"]))
+			} else {
+				opts = append(opts, radix.DialAuthPass(secureData["password"]))
+			}
 		}
 
 		// TLS Authentication

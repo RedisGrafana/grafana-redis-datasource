@@ -220,6 +220,32 @@ export class ConfigEditor extends PureComponent<Props, State> {
         </div>
 
         <div className="gf-form">
+          <Switch
+            label="ACL"
+            labelClass="width-10"
+            tooltip="Allows certain connections to be limited in terms of the commands that can be executed and the keys that can be accessed"
+            checked={jsonData.acl || false}
+            onChange={(event) => {
+              const jsonData = { ...options.jsonData, acl: event.currentTarget.checked };
+              onOptionsChange({ ...options, jsonData });
+            }}
+          />
+
+          {jsonData.acl && (
+            <FormField
+              label="Username"
+              labelWidth={10}
+              inputWidth={10}
+              value={jsonData.user}
+              tooltip="Provide ACL Username to authenticate."
+              onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                onOptionsChange({ ...options, jsonData: { ...options.jsonData, user: event.target.value } });
+              }}
+            />
+          )}
+        </div>
+
+        <div className="gf-form">
           <SecretFormField
             isConfigured={(secureJsonFields && secureJsonFields.password) as boolean}
             value={secureJsonData.password || ''}

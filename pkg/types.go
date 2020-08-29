@@ -37,6 +37,8 @@ type dataModel struct {
 	TLSSkipVerify  bool   `json:"tlsSkipVerify"`
 	Client         string `json:"client"`
 	SentinelName   string `json:"sentinelName"`
+	ACL            bool   `json:"acl"`
+	User           string `json:"user"`
 }
 
 /*
