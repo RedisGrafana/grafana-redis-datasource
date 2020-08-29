@@ -152,9 +152,14 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	connFunc := func(network, addr string) (radix.Conn, error) {
 		opts := []radix.DialOpt{radix.DialTimeout(time.Duration(timeout) * time.Second)}
 
-		// Add Password
+		// Authentication
 		if secureData != nil && secureData["password"] != "" {
-			opts = append(opts, radix.DialAuthPass(secureData["password"]))
+			// If ACL enabled
+			if jsonData.ACL {
+				opts = append(opts, radix.DialAuthUser(jsonData.User, secureData["password"]))
+			} else {
+				opts = append(opts, radix.DialAuthPass(secureData["password"]))
+			}
 		}
 
 		// TLS Authentication
