@@ -53,7 +53,7 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
 	// Add rows
 	for _, row := range result {
 		t, _ := strconv.ParseInt(row[0], 10, 64)
-		ts := time.Unix(t/1000, 0)
+		ts := time.Unix(0, t*int64(time.Millisecond))
 
 		// Fill missing intervals
 		if qm.Fill && bucket != 0 {
@@ -179,7 +179,7 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 				k = kvPair[0].(int64)
 			}
 
-			ts := time.Unix(k/1000, 0)
+			ts := time.Unix(0, k*int64(time.Millisecond))
 
 			// Fill missing intervals
 			if qm.Fill && bucket != 0 {
@@ -238,7 +238,7 @@ func (ds *redisDatasource) queryTsGet(qm queryModel, client ClientInterface) bac
 	// Add row
 	t, _ := strconv.ParseInt(result[0], 10, 64)
 	v, _ := strconv.ParseFloat(result[1], 64)
-	frame.AppendRow(time.Unix(t/1000, 0), v)
+	frame.AppendRow(time.Unix(0, t*int64(time.Millisecond)), v)
 
 	// Add the frame to the response
 	response.Frames = append(response.Frames, frame)
@@ -284,7 +284,7 @@ func (ds *redisDatasource) queryTsInfo(qm queryModel, client ClientInterface) ba
 		case int64:
 			// Return timestamp as time
 			if param == "firstTimestamp" || param == "lastTimestamp" {
-				frame.Fields = append(frame.Fields, data.NewField(param, nil, []time.Time{time.Unix(value/1000, 0)}))
+				frame.Fields = append(frame.Fields, data.NewField(param, nil, []time.Time{time.Unix(0, value*int64(time.Millisecond))}))
 				break
 			}
 
