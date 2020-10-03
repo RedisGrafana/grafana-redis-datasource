@@ -1,27 +1,32 @@
 {
-  "type": "datasource",
-  "name": "Redis",
-  "id": "redis-datasource",
-  "metrics": true,
-  "backend": true,
   "alerting": true,
-  "streaming": true,
+  "backend": true,
+  "dependencies": {
+    "grafanaDependency": ">=7.1.0",
+    "grafanaVersion": "7.x.x",
+    "plugins": []
+  },
   "executable": "redis-datasource",
+  "id": "redis-datasource",
   "includes": [
-    { "type": "dashboard", "name": "Redis Status", "path": "dashboards/redis.json" },
-    { "type": "dashboard", "name": "Redis Streaming", "path": "dashboards/redis-streaming.json" }
+    {
+      "name": "Redis Status",
+      "path": "dashboards/redis.json",
+      "type": "dashboard"
+    },
+    {
+      "name": "Redis Streaming",
+      "path": "dashboards/redis-streaming.json",
+      "type": "dashboard"
+    }
   ],
   "info": {
-    "description": "Grafana Redis Datasource",
     "author": {
       "name": "Redis Labs",
       "url": "https://oss.redislabs.com"
     },
+    "description": "Grafana Redis Datasource",
     "keywords": ["redis", "timeseries", "backend", "plugin"],
-    "logos": {
-      "small": "img/logo.svg",
-      "large": "img/logo.svg"
-    },
     "links": [
       {
         "name": "Website",
@@ -32,6 +37,10 @@
         "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE"
       }
     ],
+    "logos": {
+      "large": "img/logo.svg",
+      "small": "img/logo.svg"
+    },
     "screenshots": [
       {
         "name": "Dashboard",
@@ -54,12 +63,11 @@
         "path": "img/variables.png"
       }
     ],
-    "version": "%VERSION%",
-    "updated": "%TODAY%"
+    "updated": "%TODAY%",
+    "version": "%VERSION%"
   },
-  "dependencies": {
-    "grafanaVersion": "7.x.x",
-    "grafanaDependency": ">=7.1.0",
-    "plugins": []
-  }
+  "metrics": true,
+  "name": "Redis",
+  "streaming": true,
+  "type": "datasource"
 }
