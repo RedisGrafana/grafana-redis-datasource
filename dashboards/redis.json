@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 5,
-  "iteration": 1598199603644,
+  "id": 4,
+  "iteration": 1601786809205,
   "links": [
     {
       "icon": "external link",
@@ -100,7 +100,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -133,7 +133,7 @@
       "type": "stat"
     },
     {
-      "datasource": "$redis",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -181,7 +181,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -191,11 +191,8 @@
       },
       "targets": [
         {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "stats",
-          "type": "command"
+          "panelId": 24,
+          "refId": "A"
         }
       ],
       "timeFrom": null,
@@ -324,7 +321,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -389,7 +386,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
+                "color": "dark-blue",
                 "value": null
               }
             ]
@@ -417,7 +414,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -488,7 +485,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -521,7 +518,7 @@
       "type": "stat"
     },
     {
-      "datasource": "$redis",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -532,7 +529,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
+                "color": "dark-blue",
                 "value": null
               }
             ]
@@ -548,7 +545,7 @@
       },
       "id": 6,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -559,7 +556,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -569,11 +566,8 @@
       },
       "targets": [
         {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "server",
-          "type": "command"
+          "panelId": 19,
+          "refId": "A"
         }
       ],
       "timeFrom": null,
@@ -631,7 +625,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -652,7 +646,7 @@
       "type": "stat"
     },
     {
-      "datasource": "$redis",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -691,7 +685,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -701,11 +695,8 @@
       },
       "targets": [
         {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "stats",
-          "type": "command"
+          "panelId": 24,
+          "refId": "A"
         }
       ],
       "timeFrom": null,
@@ -735,7 +726,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "$redis",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -774,7 +765,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -784,11 +775,8 @@
       },
       "targets": [
         {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "stats",
-          "type": "command"
+          "panelId": 24,
+          "refId": "A"
         }
       ],
       "timeFrom": null,
@@ -818,7 +806,7 @@
       "type": "bargauge"
     },
     {
-      "datasource": "$redis",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -829,7 +817,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
+                "color": "dark-blue",
                 "value": null
               }
             ]
@@ -846,7 +834,7 @@
       },
       "id": 34,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
@@ -857,7 +845,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -867,11 +855,8 @@
       },
       "targets": [
         {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "memory",
-          "type": "command"
+          "panelId": 8,
+          "refId": "A"
         }
       ],
       "timeFrom": null,
@@ -917,7 +902,8 @@
         "defaults": {
           "custom": {
             "align": null,
-            "displayMode": "color-text"
+            "displayMode": "color-text",
+            "filterable": false
           },
           "mappings": [],
           "thresholds": {
@@ -1001,7 +987,7 @@
           }
         ]
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1052,7 +1038,8 @@
         "defaults": {
           "custom": {
             "align": null,
-            "displayMode": "color-text"
+            "displayMode": "color-text",
+            "filterable": false
           },
           "mappings": [],
           "thresholds": {
@@ -1160,7 +1147,7 @@
           }
         ]
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1203,7 +1190,8 @@
         "defaults": {
           "custom": {
             "align": null,
-            "displayMode": "color-text"
+            "displayMode": "color-text",
+            "filterable": false
           },
           "mappings": [
             {
@@ -1291,7 +1279,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "scopedVars": {
         "redis": {
           "selected": true,
@@ -1361,12 +1349,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-blue",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1392,7 +1376,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
           "command": "clusterInfo",
@@ -1428,12 +1412,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-blue",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1459,7 +1439,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
           "command": "info",
@@ -1485,13 +1465,14 @@
       "type": "stat"
     },
     {
-      "datasource": "$redis",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
             "align": null
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1522,13 +1503,11 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
-          "command": "clusterInfo",
-          "query": "",
-          "refId": "A",
-          "type": "command"
+          "panelId": 60,
+          "refId": "A"
         }
       ],
       "timeFrom": null,
@@ -1562,7 +1541,8 @@
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": null
+            "align": null,
+            "filterable": false
           },
           "mappings": [],
           "thresholds": {
@@ -1616,7 +1596,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": null
+                "value": 120
               }
             ]
           },
@@ -1674,7 +1654,7 @@
           }
         ]
       },
-      "pluginVersion": "7.1.4",
+      "pluginVersion": "7.2.0",
       "targets": [
         {
           "command": "clusterNodes",
@@ -1717,6 +1697,7 @@
       {
         "current": {
           "selected": true,
+          "tags": [],
           "text": ["Redis"],
           "value": ["Redis"]
         },
@@ -1745,5 +1726,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 13
+  "version": 2
 }
