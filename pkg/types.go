@@ -57,4 +57,5 @@ type queryModel struct {
 	Value       string `json:"value"`
 	Section     string `json:"section"`
 	Fill        bool   `json:"fill"`
+	Streaming   bool   `json:"streaming"`
 }

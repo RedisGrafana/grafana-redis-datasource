@@ -31,18 +31,18 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) back
 	// Split lines
 	lines := strings.Split(strings.Replace(result, "\r\n", "\n", -1), "\n")
 
+	// New Frame
+	frame := data.NewFrame(qm.Command)
+
 	// Command stats
 	if qm.Section == "commandstats" {
-		// New Frame
-		frame := data.NewFrame(qm.Command,
-			data.NewField("Command", nil, []string{}),
-			data.NewField("Calls", nil, []int64{}),
-			data.NewField("Usec", nil, []float64{}),
-			data.NewField("Usec_per_call", nil, []float64{}))
-
-		// Set Field Config
-		frame.Fields[2].Config = &data.FieldConfig{Unit: "µs"}
-		frame.Fields[3].Config = &data.FieldConfig{Unit: "µs"}
+		// Not Streaming
+		if !qm.Streaming {
+			frame.Fields = append(frame.Fields, data.NewField("Command", nil, []string{}),
+				data.NewField("Calls", nil, []int64{}),
+				data.NewField("Usec", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
+				data.NewField("Usec_per_call", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}))
+		}
 
 		// Parse lines
 		for _, line := range lines {
@@ -83,8 +83,16 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) back
 				usecPerCallValue, _ = strconv.ParseFloat(usecPerCall[1], 64)
 			}
 
-			// Add Query
-			frame.AppendRow(strings.Replace(fields[0], "cmdstat_", "", 1), callsValue, usecValue, usecPerCallValue)
+			// Command name
+			cmd := strings.Replace(fields[0], "cmdstat_", "", 1)
+
+			// Streaming
+			if qm.Streaming {
+				frame.Fields = append(frame.Fields, data.NewField(cmd+"", nil, []int64{callsValue}))
+			} else {
+				// Add Command
+				frame.AppendRow(cmd, callsValue, usecValue, usecPerCallValue)
+			}
 		}
 
 		// Add the frames to the response
@@ -93,9 +101,6 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) back
 		// Return
 		return response
 	}
-
-	// New Frame
-	frame := data.NewFrame(qm.Command)
 
 	// Parse lines
 	for _, line := range lines {

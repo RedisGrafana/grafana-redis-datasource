@@ -26,7 +26,7 @@
       "type": "datasource",
       "id": "redis-datasource",
       "name": "Redis",
-      "version": "1.2.0"
+      "version": "1.2.1"
     },
     {
       "type": "panel",
@@ -585,7 +585,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 10,
+        "h": 9,
         "w": 12,
         "x": 0,
         "y": 10
@@ -711,7 +711,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_REDIS}",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -738,7 +738,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 10,
+        "h": 9,
         "w": 12,
         "x": 12,
         "y": 10
@@ -774,14 +774,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "stats",
-          "streaming": true,
-          "streamingCapacity": 1000,
-          "streamingInterval": 1000,
-          "type": "command"
+          "panelId": 2,
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -855,6 +849,125 @@
       "fieldConfig": {
         "defaults": {
           "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "hiddenSeries": false,
+      "id": 23,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "sort": "avg",
+        "sortDesc": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.2.0",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "commandstats",
+          "streaming": true,
+          "type": "command"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Command Statistics",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transformations": [],
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${DS_REDIS}",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
             "align": null
           },
           "mappings": [],
@@ -878,10 +991,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 20
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 9,
@@ -967,7 +1080,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_REDIS}",
+      "datasource": "-- Dashboard --",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -993,10 +1106,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 20
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 11,
@@ -1029,14 +1142,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "command": "info",
-          "query": "",
-          "refId": "A",
-          "section": "stats",
-          "streaming": true,
-          "streamingCapacity": 1000,
-          "streamingInterval": 1000,
-          "type": "command"
+          "panelId": 2,
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -1110,7 +1217,7 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {

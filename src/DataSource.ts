@@ -119,13 +119,13 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
         let values: { [index: string]: number } = { time: Date.now() };
 
         /**
-         * Run Query
+         * Run Query and filter time field out
          */
         const fields = await super
           .query(request)
           .pipe(
             switchMap$((response) => response.data),
-            map$((data: DataFrame) => data.fields)
+            map$((data: DataFrame) => data.fields.filter((field) => (field.name === 'time' ? false : true)))
           )
           .toPromise();
 
