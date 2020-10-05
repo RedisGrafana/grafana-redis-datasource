@@ -24,7 +24,7 @@
 
 ### What is the Redis Data Source for Grafana?
 
-If you’re not familiar with Grafana, it’s a very popular tool used to build dashboards to monitor applications, infrastructures, and software components. The Redis Data Source for Grafana is a plug-in that allows users to connect to the Redis database and build dashboards in Grafana to easily monitor Redis data. It provides an out-of-the-box predefined dashboard, but also lets you build customized dashboards tuned to your specific needs.
+If you’re not familiar with Grafana, it’s a very popular tool used to build dashboards to monitor applications, infrastructures, and software components. The Redis Data Source for Grafana is a plug-in that allows users to connect to the Redis database and build dashboards in Grafana to easily monitor Redis and application data. It provides an out-of-the-box predefined dashboard, but also lets you build customized dashboards tuned to your specific needs.
 
 ### What Grafana version is supported?
 
@@ -36,7 +36,11 @@ Data Source can connect to any Redis database. No special configuration is requi
 
 ### Does this Data Source support [Redis Cluster](https://redis.io/topics/cluster-tutorial) and [Sentinel](https://redis.io/topics/sentinel)?
 
-Yes, Redis Cluster and Sentinel supported since version 1.2.
+Redis Cluster and Sentinel supported since version 1.2.
+
+### Does this Data Source support Redis modules?
+
+Data Source supports [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/). We are working on supporting additional modules.
 
 ### How to connect to Redis logical database?
 
@@ -116,7 +120,7 @@ docker-compose -f docker-compose-dev.yml up
 
 ## Supported Commands
 
-Data Source supports many Redis commands using custom components and provide unified interface to query any command.
+Data Source supports various Redis commands using custom components and provides a unified interface to query any command.
 
 ![Query](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/query.png)
 
@@ -125,6 +129,12 @@ Data Source supports many Redis commands using custom components and provide uni
 Template variables can query any command and use other variables as parameters.
 
 ![Variables](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/variables.png)
+
+## Learn more
+
+- [Introducing the Redis Data Source Plug-in for Grafana](https://redislabs.com/blog/introducing-the-redis-data-source-plug-in-for-grafana/)
+- [How to Use the New Redis Data Source for Grafana Plug-in](https://redislabs.com/blog/how-to-use-the-new-redis-data-source-for-grafana-plug-in/)
+- [3 Real-Life Apps Built with Redis Data Source for Grafana](https://redislabs.com/blog/3-real-life-apps-built-with-redis-data-source-for-grafana/)
 
 ## Feedback
 
@@ -139,11 +149,6 @@ We love to hear from users, developers and the whole community interested by thi
 - Find an issue to work on and submit a pull request
   - Pick a [good first issue](https://github.com/RedisTimeSeries/grafana-redis-datasource/labels/good%20first%20issue).
 - Could not find an issue? Look for documentation, bugs, typos, and missing features.
-
-## Other interesting resources
-
-- [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/)
-- [Redis Pop-up store](https://github.com/RedisTimeSeries/redis-pop-up-store)
 
 ## License
 
