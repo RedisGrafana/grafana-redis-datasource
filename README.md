@@ -14,8 +14,9 @@
 
 - [**Introduction**](#introduction)
 - [**Getting Started**](#getting-started)
-- [**Supported Commands**](#supported-commands)
-- [**Template variables**](#templates-variables)
+- [**Supported commands**](#supported-commands)
+- [**Template variables**](#template-variables)
+- [**Learn more**](#learn-more)
 - [**Feedback**](#feedback)
 - [**Contributing**](#contributing)
 - [**License**](#license)
@@ -118,7 +119,7 @@ Data Source have to be built following [BUILD](https://github.com/RedisTimeSerie
 docker-compose -f docker-compose-dev.yml up
 ```
 
-## Supported Commands
+## Supported commands
 
 Data Source supports various Redis commands using custom components and provides a unified interface to query any command.
 
