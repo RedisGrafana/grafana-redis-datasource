@@ -43,7 +43,7 @@ Redis Cluster and Sentinel supported since version 1.2.
 
 Data Source supports [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/). We are working on supporting additional modules.
 
-### How to connect to Redis logical database?
+### How to connect to Redis logical database
 
 Please use `/db-number` or `?db=db-number` in the Data Source URL to specify the database number as defined in the [Schema](https://www.iana.org/assignments/uri-schemes/prov/redis).
 
@@ -51,9 +51,9 @@ Please use `/db-number` or `?db=db-number` in the Data Source URL to specify the
 redis://redis-server:6379/0
 ```
 
-### Build Data Source
+### How to build Data Source
 
-To learn step by step how to build Redis Data Source from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
+To learn how to build Redis Data Source from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
 
 ## Getting Started
 
@@ -147,10 +147,9 @@ We love to hear from users, developers and the whole community interested by thi
 ## Contributing
 
 - Fork the repository.
-- Find an issue to work on and submit a pull request
-  - Pick a [good first issue](https://github.com/RedisTimeSeries/grafana-redis-datasource/labels/good%20first%20issue).
+- Find an issue to work on and submit a pull request.
 - Could not find an issue? Look for documentation, bugs, typos, and missing features.
 
 ## License
 
-- Apache License Version 2.0, see [LICENSE](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE)
+- Apache License Version 2.0, see [LICENSE](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE).
