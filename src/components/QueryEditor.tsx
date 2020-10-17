@@ -159,6 +159,7 @@ export class QueryEditor extends PureComponent<Props> {
       query,
       type,
       section,
+      size,
       fill,
       streaming,
       streamingInterval,
@@ -263,7 +264,19 @@ export class QueryEditor extends PureComponent<Props> {
                 value={value}
                 onChange={this.onValueChange}
                 label="Value Label"
-                tooltip="Value Label"
+              />
+            )}
+
+            {CommandParameters.size.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={size}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.props.onChange({ ...this.props.query, size: Number(event.target.value) })
+                }
+                label="Size"
+                tooltip="Size override"
               />
             )}
           </div>

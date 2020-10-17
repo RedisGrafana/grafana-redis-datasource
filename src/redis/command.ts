@@ -117,4 +117,5 @@ export const CommandParameters = {
   section: ['info'],
   valueLabel: ['ts.mrange'],
   fill: ['ts.range', 'ts.mrange'],
+  size: ['slowlogGet']
 };

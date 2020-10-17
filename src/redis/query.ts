@@ -121,6 +121,13 @@ export interface RedisQuery extends DataQuery {
   section?: string;
 
   /**
+   * Size
+   *
+   * @type {number}
+   */
+  size?: number;
+
+  /**
    * Support streaming
    *
    * @type {boolean}
