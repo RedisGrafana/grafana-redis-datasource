@@ -3,7 +3,7 @@
 ## Clone repository
 
 ```bash
-git clone https://github.com/RedisTimeSeries/grafana-redis-datasource.git
+git clone https://github.com/RedisGrafana/grafana-redis-datasource.git
 ```
 
 ## Install Grafana
@@ -103,6 +103,6 @@ t=2020-07-01T06:03:38+0000 lvl=info msg="HTTP Server Listen" logger=http.server 
 
 - Add new Datasource to Grafana using `Configuration` -> `Data Sources`
 
-![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
+![Datasource](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/datasource.png)
 
-If you have questions, enhancement ideas or running into issues, please just open an issue on the repository: https://github.com/RedisTimeSeries/grafana-redis-datasource
+If you have questions, enhancement ideas or running into issues, please just open an issue on the repository: https://github.com/RedisGrafana/grafana-redis-datasource

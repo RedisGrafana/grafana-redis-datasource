@@ -30,11 +30,11 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource"
+        "url": "https://github.com/RedisGrafana/grafana-redis-datasource"
       },
       {
         "name": "License",
-        "url": "https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE"
+        "url": "https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/LICENSE"
       }
     ],
     "logos": {

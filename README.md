@@ -1,13 +1,13 @@
 # Redis Data Source for Grafana
 
-![Dashboard](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/redis-dashboard.png)
+![Dashboard](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/redis-dashboard.png)
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-red)](https://www.grafana.com)
 [![Radix](https://img.shields.io/badge/Radix-powered-blue)](https://github.com/mediocregopher/radix)
 [![RedisTimeSeries](https://img.shields.io/badge/RedisTimeSeries-inspired-yellowgreen)](https://oss.redislabs.com/redistimeseries/)
 [![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-orange)](https://redislabs.com/redis-enterprise/)
-[![Go Report Card](https://goreportcard.com/badge/github.com/RedisTimeSeries/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisTimeSeries/grafana-redis-datasource)
-[![CircleCI](https://circleci.com/gh/RedisTimeSeries/grafana-redis-datasource.svg?style=svg)](https://circleci.com/gh/RedisGrafana/grafana-redis-datasource)
+[![Go Report Card](https://goreportcard.com/badge/github.com/RedisGrafana/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisGrafana/grafana-redis-datasource)
+[![CircleCI](https://circleci.com/gh/RedisGrafana/grafana-redis-datasource.svg?style=svg)](https://circleci.com/gh/RedisGrafana/grafana-redis-datasource)
 [![Downloads](https://img.shields.io/badge/dynamic/json?color=green&label=downloads&query=%24.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-datasource)](https://grafana.com/grafana/plugins/redis-datasource)
 
 ## Summary
@@ -53,7 +53,7 @@ redis://redis-server:6379/0
 
 ### How to build Data Source
 
-To learn how to build Redis Data Source from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions.
+To learn how to build Redis Data Source from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/BUILD.md) instructions.
 
 ## Getting Started
 
@@ -81,7 +81,7 @@ docker-compose up
 
 Open Grafana in your browser and configure Redis Data Source. You can add as many data sources as you want to support multiple Redis databases.
 
-![Datasource](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/datasource.png)
+![Datasource](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/datasource.png)
 
 There are certain settings that can be configured based on your own setup:
 
@@ -113,7 +113,7 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 
 ### Run using `docker-compose` for development
 
-Data Source have to be built following [BUILD](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
+Data Source have to be built following [BUILD](https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
 
 ```bash
 docker-compose -f docker-compose-dev.yml up
@@ -123,13 +123,13 @@ docker-compose -f docker-compose-dev.yml up
 
 Data Source supports various Redis commands using custom components and provides a unified interface to query any command.
 
-![Query](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/query.png)
+![Query](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/query.png)
 
 ## Template variables
 
 Template variables can query any command and use other variables as parameters.
 
-![Variables](https://raw.githubusercontent.com/RedisTimeSeries/grafana-redis-datasource/master/src/img/variables.png)
+![Variables](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/variables.png)
 
 ## Learn more
 
@@ -141,7 +141,7 @@ Template variables can query any command and use other variables as parameters.
 
 We love to hear from users, developers and the whole community interested by this plugin. These are various ways to get in touch with us:
 
-- Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/RedisTimeSeries/grafana-redis-datasource/issues/new/choose).
+- Ask a question, request a new feature and file a bug with [GitHub issues](https://github.com/RedisGrafana/grafana-redis-datasource/issues/new/choose).
 - Star the repository to show your support.
 
 ## Contributing
@@ -152,4 +152,4 @@ We love to hear from users, developers and the whole community interested by thi
 
 ## License
 
-- Apache License Version 2.0, see [LICENSE](https://github.com/RedisTimeSeries/grafana-redis-datasource/blob/master/LICENSE).
+- Apache License Version 2.0, see [LICENSE](https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/LICENSE).
