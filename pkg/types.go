@@ -56,6 +56,7 @@ type queryModel struct {
 	Legend      string `json:"legend"`
 	Value       string `json:"value"`
 	Section     string `json:"section"`
+	Size        int    `json:"size"`
 	Fill        bool   `json:"fill"`
 	Streaming   bool   `json:"streaming"`
 }

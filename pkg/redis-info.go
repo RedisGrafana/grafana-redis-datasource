@@ -203,7 +203,13 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client ClientInterface
 
 	// Execute command
 	var result interface{}
-	err := client.Do(radix.Cmd(&result, "SLOWLOG", "GET"))
+	var err error
+
+	if qm.Size > 0 {
+		err = client.Do(radix.FlatCmd(&result, "SLOWLOG", "GET", qm.Size))
+	} else {
+		err = client.Do(radix.Cmd(&result, "SLOWLOG", "GET"))
+	}
 
 	// Check error
 	if err != nil {
