@@ -1,5 +1,17 @@
 # Change Log
 
+## v1.2.1
+
+- Support Connecting to Redis via Unix Socket #58
+- Support Redis 6 ACL authentication #60
+- Update Grafana dependencies to 7.2.0 #66
+- Update and optimize dashboards for Grafana 7.2.0 #67
+- Add Streaming for Command Statistics #68
+- Add Size parameter for SLOWLOG GET #79
+- Update GitHub org to RedisGrafana #80
+- Plugin health check failed for ARM on Linux #61
+- Timeseries data time stamp truncated to seconds #64
+
 ## v1.2.0
 
 - Added docker cmd line option to start in README #31
