@@ -1,0 +1,98 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0.
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: 12.x
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build plugin
+        run: yarn build
+
+      - name: Build backend
+        run: mage -v buildAll
+
+      - name: Sign plugin
+        run: npx @grafana/toolkit@canary plugin:sign
+        env:
+          GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }} # Requires a Grafana API key from Grafana.com.
+
+      - name: Get plugin information
+        run: |
+          sudo apt-get install jq
+
+          export GRAFANA_PLUGIN_ID=$(cat dist/plugin.json | jq -r .id)
+          export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
+          export GRAFANA_PLUGIN_TYPE=$(cat dist/plugin.json | jq -r .type)
+          export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
+          export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
+
+          # Output to $GITHUB_ENV to be able to use the variables in next steps.
+          echo "GRAFANA_PLUGIN_ID=${GRAFANA_PLUGIN_ID}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_VERSION=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_TYPE=${GRAFANA_PLUGIN_TYPE}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ARTIFACT}" >> $GITHUB_ENV
+          echo "GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}" >> $GITHUB_ENV
+
+      - name: Package plugin
+        run: |
+          mv dist $GRAFANA_PLUGIN_ID
+          zip $GRAFANA_PLUGIN_ARTIFACT $GRAFANA_PLUGIN_ID -r
+          md5sum $GRAFANA_PLUGIN_ARTIFACT > $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Add plugin to release
+        id: upload-plugin-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.GRAFANA_PLUGIN_ARTIFACT }}
+          asset_name: ${{ env.GRAFANA_PLUGIN_ARTIFACT }}
+          asset_content_type: application/zip
+
+      - name: Add checksum to release
+        id: upload-checksum-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
+          asset_name: ${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }}
+          asset_content_type: text/plain
+
+      - name: Get checksum
+        run: |
+          echo "GRAFANA_PLUGIN_CHECKSUM=$(cat ./${{ env.GRAFANA_PLUGIN_ARTIFACT_CHECKSUM }} | cut -d' ' -f1)" >> $GITHUB_ENV
+
+      - name: Publish to Grafana.com
+        run: |
+          echo Publish your plugin to grafana.com/plugins by opening a PR to https://github.com/grafana/grafana-plugin-repository with the following entry:
+          echo
+          echo '{ "id": "${{ env.GRAFANA_PLUGIN_ID }}", "type": "${{ env.GRAFANA_PLUGIN_TYPE }}", "url": "https://github.com/${{ github.repository }}", "versions": [ { "version": "${{ env.GRAFANA_PLUGIN_VERSION }}", "commit": "${{ github.sha }}", "url": "https://github.com/${{ github.repository }}", "download": { "any": { "url": "${{ steps.upload-plugin-asset.outputs.browser_download_url }}", "md5": "${{ env.GRAFANA_PLUGIN_CHECKSUM }}" } } } ] }' | jq .
