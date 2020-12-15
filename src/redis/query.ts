@@ -6,6 +6,7 @@ import { DataQuery, SelectableValue } from '@grafana/data';
 export enum QueryTypeValue {
   COMMAND = 'command',
   TIMESERIES = 'timeSeries',
+  SEARCH = 'search',
   CLI = 'cli',
 }
 
@@ -19,9 +20,14 @@ export const QueryType: Array<SelectableValue<string>> = [
     value: QueryTypeValue.COMMAND,
   },
   {
-    label: 'RedisTimeSeries commands',
+    label: 'RedisTimeSeries',
     description: 'Redis Module adding a Time Series data structure to Redis',
     value: QueryTypeValue.TIMESERIES,
+  },
+  {
+    label: 'RediSearch',
+    description: 'Redis Secondary Index & Query Engine',
+    value: QueryTypeValue.SEARCH,
   },
   {
     label: 'Command-line interface (CLI)',
