@@ -1,5 +1,12 @@
 # Change Log
 
+## v1.3.0
+
+- Update Description and GitHub issues #83
+- Add RediSearch FT.INFO command #97
+- Add HMGET Command #98
+- Update release workflow #99
+
 ## v1.2.1
 
 - Support Connecting to Redis via Unix Socket #58
