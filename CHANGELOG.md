@@ -9,6 +9,8 @@
 - Update Grafana dependencies to 7.3.5 #100
 - Update Grafana SDK 0.80.0 #101
 - Update data source icon and refactoring #102
+- Update field's name for HGET command to align with HMGET #103
+- Update HGETALL command to return fields and support streaming similar to HGET, HMGET #104
 
 ## v1.2.1
 
