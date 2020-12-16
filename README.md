@@ -4,7 +4,6 @@
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-red)](https://www.grafana.com)
 [![Radix](https://img.shields.io/badge/Radix-powered-blue)](https://github.com/mediocregopher/radix)
-[![RedisTimeSeries](https://img.shields.io/badge/RedisTimeSeries-inspired-yellowgreen)](https://oss.redislabs.com/redistimeseries/)
 [![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-orange)](https://redislabs.com/redis-enterprise/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RedisGrafana/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisGrafana/grafana-redis-datasource)
 [![CircleCI](https://circleci.com/gh/RedisGrafana/grafana-redis-datasource.svg?style=svg)](https://circleci.com/gh/RedisGrafana/grafana-redis-datasource)
@@ -25,7 +24,7 @@
 
 ### What is the Redis Data Source for Grafana?
 
-If you’re not familiar with Grafana, it’s a very popular tool used to build dashboards to monitor applications, infrastructures, and software components. The Redis Data Source for Grafana is a plug-in that allows users to connect to the Redis database and build dashboards in Grafana to easily monitor Redis and application data. It provides an out-of-the-box predefined dashboard, but also lets you build customized dashboards tuned to your specific needs.
+The Redis Data Source for Grafana is a plug-in that allows users to connect to the Redis database and build dashboards in Grafana to easily monitor Redis and application data. It provides an out-of-the-box predefined dashboard, but also lets you build customized dashboards tuned to your specific needs.
 
 ### What Grafana version is supported?
 
@@ -73,7 +72,7 @@ docker run -d -p 3000:3000 --name=grafana -e "GF_INSTALL_PLUGINS=redis-datasourc
 
 ### Run using `docker-compose`
 
-Project provides `docker-compose.yml` to start Redis with RedisTimeSeries module and Grafana.
+Project provides `docker-compose.yml` to start Redis with all Redis Labs modules and Grafana.
 
 ```bash
 docker-compose up

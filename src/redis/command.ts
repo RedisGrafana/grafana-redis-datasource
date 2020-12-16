@@ -86,6 +86,13 @@ export const Commands = {
     },
     { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
   ],
+  search: [
+    {
+      label: 'FT.INFO',
+      description: 'Returns information and statistics on the index',
+      value: 'ft.info',
+    },
+  ]
 };
 
 /**
@@ -111,6 +118,7 @@ export const CommandParameters = {
     'type',
     'xinfoStream',
     'xlen',
+    'ft.info'
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],

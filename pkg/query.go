@@ -81,6 +81,8 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.queryClusterInfo(qm, client)
 	case "clusterNodes":
 		return ds.queryClusterNodes(qm, client)
+	case "ft.info":
+		return ds.queryFtInfo(qm, client)
 	default:
 		response := backend.DataResponse{}
 		response.Error = fmt.Errorf("Unknown command")

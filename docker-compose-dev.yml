@@ -2,12 +2,12 @@ version: '3.4'
 
 services:
   redis:
-    container_name: redistimeseries
-    image: redislabs/redistimeseries:latest
+    container_name: redismod
+    image: redislabs/redismod:latest
     ports:
       - '6379:6379'
     # Uncomment and edit the local path in the following line to have
-    # RedisTimeSeries' data persisted to the host's filesystem.
+    # Redis' data persisted to the host's filesystem.
     # volumes:
     #   - ./dump.rdb:/data/dump.rdb
 
