@@ -27,19 +27,17 @@ func (ds *redisDatasource) queryHGetAll(qm queryModel, client ClientInterface) b
 		return ds.errorHandler(response, err)
 	}
 
-	fields := []string{}
-	values := []string{}
+	// New Frame
+	frame := data.NewFrame(qm.Command)
 
 	// Add fields and values
 	for i := 0; i < len(result); i += 2 {
-		fields = append(fields, result[i])
-		values = append(values, result[i+1])
+		if floatValue, err := strconv.ParseFloat(result[i+1], 64); err == nil {
+			frame.Fields = append(frame.Fields, data.NewField(result[i], nil, []float64{floatValue}))
+		} else {
+			frame.Fields = append(frame.Fields, data.NewField(result[i], nil, []string{result[i+1]}))
+		}
 	}
-
-	// New Frame
-	frame := data.NewFrame(qm.Key,
-		data.NewField("Field", nil, fields),
-		data.NewField("Value", nil, values))
 
 	// Add the frames to the response
 	response.Frames = append(response.Frames, frame)
