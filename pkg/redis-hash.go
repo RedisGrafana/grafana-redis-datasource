@@ -66,7 +66,7 @@ func (ds *redisDatasource) queryHGet(qm queryModel, client ClientInterface) back
 	}
 
 	// Add the frames to the response
-	response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, value))
+	response.Frames = append(response.Frames, ds.createFrameValue(qm.Field, value))
 
 	// Return
 	return response
