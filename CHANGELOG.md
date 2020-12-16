@@ -7,6 +7,7 @@
 - Add HMGET Command #98
 - Update release workflow #99
 - Update Grafana dependencies to 7.3.5 #100
+- Update Grafana SDK 0.80.0 #101
 
 ## v1.2.1
 

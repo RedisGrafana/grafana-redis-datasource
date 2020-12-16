@@ -19,7 +19,8 @@ node_modules/
 work/
 ci/
 e2e-results/
-redis
+redis/
+vendor/
 
 # Editor
 .idea
