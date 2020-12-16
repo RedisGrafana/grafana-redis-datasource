@@ -225,14 +225,7 @@ export class QueryEditor extends PureComponent<Props> {
             )}
 
             {CommandParameters.field.includes(command) && (
-              <FormField
-                labelWidth={8}
-                inputWidth={30}
-                value={field}
-                onChange={this.onFieldChange}
-                label="Field"
-                tooltip="Field"
-              />
+              <FormField labelWidth={8} inputWidth={30} value={field} onChange={this.onFieldChange} label="Field" />
             )}
 
             {CommandParameters.legend.includes(command) && (
