@@ -15,19 +15,19 @@ export enum QueryTypeValue {
  */
 export const QueryType: Array<SelectableValue<string>> = [
   {
-    label: 'Redis commands',
+    label: 'Redis',
     description: 'Hashes, Sets, Lists, Strings, Streams, etc.',
     value: QueryTypeValue.COMMAND,
-  },
-  {
-    label: 'RedisTimeSeries',
-    description: 'Redis Module adding a Time Series data structure to Redis',
-    value: QueryTypeValue.TIMESERIES,
   },
   {
     label: 'RediSearch',
     description: 'Redis Secondary Index & Query Engine',
     value: QueryTypeValue.SEARCH,
+  },
+  {
+    label: 'RedisTimeSeries',
+    description: 'Redis Module adding a Time Series data structure to Redis',
+    value: QueryTypeValue.TIMESERIES,
   },
   {
     label: 'Command-line interface (CLI)',
