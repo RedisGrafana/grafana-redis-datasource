@@ -1,2 +1,2 @@
-export * from './ConfigEditor';
-export * from './QueryEditor';
+export * from './config-editor';
+export * from './query-editor';
