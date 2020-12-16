@@ -2,7 +2,7 @@ import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana/ui';
-import { DataSource } from '../DataSource';
+import { DataSource } from '../data-source';
 import {
   Aggregations,
   CommandParameters,
