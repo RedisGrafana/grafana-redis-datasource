@@ -15,7 +15,7 @@ const getOptions = ({
   jsonData = {},
   secureJsonData = {},
   ...overrideOptions
-}: OverrideOptions = {}): DataSourceSettings<RedisDataSourceOptions> => ({
+}: OverrideOptions = {}): DataSourceSettings<RedisDataSourceOptions, object> => ({
   id: 1,
   orgId: 2,
   name: '',
@@ -231,7 +231,7 @@ describe('ConfigEditor', () => {
       const onOptionsChange = jest.fn();
       const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
       const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(options.secureJsonData.password);
+      expect(testedComponent.prop('value')).toEqual(options.secureJsonData?.password);
     });
     it('Should call onResetPassword method when calls onReset prop', () => {
       const options = getOptions();
