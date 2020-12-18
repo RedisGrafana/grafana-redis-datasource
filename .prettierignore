@@ -19,3 +19,4 @@ dist
 img
 .idea
 redis
+vendor

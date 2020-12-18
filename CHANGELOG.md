@@ -1,5 +1,17 @@
 # Change Log
 
+## v1.3.0
+
+- Update description and GitHub issues #83
+- Add RediSearch FT.INFO command #97
+- Add HMGET Command #98
+- Update release workflow #99
+- Update Grafana dependencies to 7.3.5 #100
+- Update Grafana SDK 0.80.0 #101
+- Update data source icon and refactoring #102
+- Update field's name for HGET command to align with HMGET #103
+- Update HGETALL command to return fields and support streaming similar to HGET, HMGET #104
+
 ## v1.2.1
 
 - Support Connecting to Redis via Unix Socket #58

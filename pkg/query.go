@@ -67,6 +67,8 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.querySMembers(qm, client)
 	case "hget":
 		return ds.queryHGet(qm, client)
+	case "hmget":
+		return ds.queryHMGet(qm, client)
 	case "info":
 		return ds.queryInfo(qm, client)
 	case "clientList":
@@ -81,6 +83,8 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.queryClusterInfo(qm, client)
 	case "clusterNodes":
 		return ds.queryClusterNodes(qm, client)
+	case "ft.info":
+		return ds.queryFtInfo(qm, client)
 	default:
 		response := backend.DataResponse{}
 		response.Error = fmt.Errorf("Unknown command")

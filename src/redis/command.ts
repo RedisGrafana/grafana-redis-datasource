@@ -27,6 +27,7 @@ export const Commands = {
     { label: 'HGETALL', description: 'Returns all fields and values of the hash stored at key', value: 'hgetall' },
     { label: 'HKEYS', description: 'Returns all field names in the hash stored at key', value: 'hkeys' },
     { label: 'HLEN', description: 'Returns the number of fields contained in the hash stored at key', value: 'hlen' },
+    { label: 'HMGET', description: 'Returns the values associated with the specified fields in the hash stored at key', value: 'hmget' },
     { label: 'INFO', description: 'Returns information and statistics about the server', value: 'info' },
     { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
     {
@@ -86,6 +87,13 @@ export const Commands = {
     },
     { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
   ],
+  search: [
+    {
+      label: 'FT.INFO',
+      description: 'Returns information and statistics on the index',
+      value: 'ft.info',
+    },
+  ]
 };
 
 /**
@@ -93,7 +101,7 @@ export const Commands = {
  */
 export const CommandParameters = {
   aggregation: ['ts.range', 'ts.mrange'],
-  field: ['hget'],
+  field: ['hget','hmget'],
   filter: ['ts.mrange', 'ts.queryindex'],
   key: [
     'get',
@@ -101,6 +109,7 @@ export const CommandParameters = {
     'hgetall',
     'hkeys',
     'hlen',
+    'hmget',
     'llen',
     'scard',
     'smembers',
@@ -111,6 +120,7 @@ export const CommandParameters = {
     'type',
     'xinfoStream',
     'xlen',
+    'ft.info'
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],
