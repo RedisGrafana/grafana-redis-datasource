@@ -3,6 +3,9 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { QueryEditor } from './query-editor';
 import { QueryTypeValue, RedisQuery } from '../redis';
 
+/**
+ * Query
+ */
 const getQuery = (overrideQuery: object = {}): RedisQuery => ({
   key: '',
   aggregation: '',
@@ -26,6 +29,9 @@ const getQuery = (overrideQuery: object = {}): RedisQuery => ({
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
+/**
+ * Query Editor
+ */
 describe('QueryEditor', () => {
   const onRunQuery = jest.fn();
   const onChange = jest.fn();
@@ -35,11 +41,15 @@ describe('QueryEditor', () => {
     onChange.mockReset();
   });
 
+  /**
+   * Query Type
+   */
   describe('Type', () => {
     const getComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.prop('onChange') === wrapper.instance().onTypeChange;
       });
+
     it('Should set value from query', () => {
       const query = getQuery({ type: QueryTypeValue.CLI });
       const wrapper = shallow<QueryEditor>(
@@ -48,6 +58,7 @@ describe('QueryEditor', () => {
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(query.type);
     });
+
     it('Should call onTypeChange when onChange prop was called', () => {
       const query = getQuery({ type: QueryTypeValue.CLI });
       const wrapper = shallow<QueryEditor>(
@@ -68,11 +79,15 @@ describe('QueryEditor', () => {
     });
   });
 
+  /**
+   * Query
+   */
   describe('Query', () => {
     const getComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.prop('onChange') === wrapper.instance().onQueryChange;
       });
+
     it('Should be shown if type=cli', () => {
       const query = getQuery({ type: QueryTypeValue.CLI });
       const wrapper = shallow<QueryEditor>(
@@ -81,6 +96,7 @@ describe('QueryEditor', () => {
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.exists()).toBeTruthy();
     });
+
     it('Should not be shown if type!=cli', () => {
       const query = getQuery({ type: QueryTypeValue.COMMAND });
       const wrapper = shallow<QueryEditor>(
@@ -89,6 +105,7 @@ describe('QueryEditor', () => {
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should set value from query', () => {
       const query = getQuery({ type: QueryTypeValue.CLI });
       const wrapper = shallow<QueryEditor>(
@@ -97,6 +114,7 @@ describe('QueryEditor', () => {
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(query.query);
     });
+
     it('Should call onQueryChange when onChange prop was called', () => {
       const query = getQuery({ type: QueryTypeValue.CLI });
       const wrapper = shallow<QueryEditor>(
@@ -115,11 +133,15 @@ describe('QueryEditor', () => {
     });
   });
 
+  /**
+   * Command
+   */
   describe('Command', () => {
     const getComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.prop('onChange') === wrapper.instance().onCommandChange;
       });
+
     it('Should be shown if type!=cli', () => {
       const query = getQuery({ type: QueryTypeValue.COMMAND });
       const wrapper = shallow<QueryEditor>(
@@ -128,6 +150,7 @@ describe('QueryEditor', () => {
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.exists()).toBeTruthy();
     });
+
     it('Should not not be shown if type=cli', () => {
       const query = getQuery({ type: QueryTypeValue.CLI });
       const wrapper = shallow<QueryEditor>(
@@ -136,6 +159,7 @@ describe('QueryEditor', () => {
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should set value from query', () => {
       const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
       const wrapper = shallow<QueryEditor>(
@@ -144,6 +168,7 @@ describe('QueryEditor', () => {
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(query.command);
     });
+
     it('Should call onCommandChange when onChange prop was called', () => {
       const query = getQuery({ type: QueryTypeValue.COMMAND });
       const wrapper = shallow<QueryEditor>(
@@ -161,7 +186,14 @@ describe('QueryEditor', () => {
       });
     });
   });
+
+  /**
+   * Command properties
+   */
   describe('Command fields', () => {
+    /**
+     * Key name
+     */
     describe('Key', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -213,6 +245,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Filter
+     */
     describe('LabelFilter', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -264,6 +299,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Field
+     */
     describe('Field', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -315,6 +353,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Legend
+     */
     describe('Legend', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -366,6 +407,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Legend Label
+     */
     describe('LegendLabel', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -417,6 +461,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Value Label
+     */
     describe('ValueLabel', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -468,6 +515,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Size
+     */
     describe('Size', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -516,6 +566,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Section
+     */
     describe('Section', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -567,6 +620,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Aggregation
+     */
     describe('Aggregation', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -618,6 +674,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Bucket
+     */
     describe('Bucket', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -674,6 +733,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Fill Missing
+     */
     describe('FillMissing', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -760,7 +822,13 @@ describe('QueryEditor', () => {
     });
   });
 
+  /**
+   * Streaming options
+   */
   describe('Streaming fields', () => {
+    /**
+     * Streaming enabled
+     */
     describe('Streaming', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -809,6 +877,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Streaming interval
+     */
     describe('Interval', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
@@ -857,6 +928,9 @@ describe('QueryEditor', () => {
       });
     });
 
+    /**
+     * Streaming capacity
+     */
     describe('Capacity', () => {
       const getComponent = (wrapper: ShallowComponent) =>
         wrapper.findWhere((node) => {
