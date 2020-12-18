@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { QueryEditor } from './QueryEditor';
+import { QueryEditor } from './query-editor';
 import { QueryTypeValue, RedisQuery } from '../redis';
 
 const getQuery = (overrideQuery: object = {}): RedisQuery => ({
