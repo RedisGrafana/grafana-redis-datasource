@@ -17,11 +17,6 @@ jobs:
         with:
           node-version: "12.x"
 
-      - name: Setup Go environment
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.14"
-
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -60,6 +55,12 @@ jobs:
           then
             echo "::set-output name=has-backend::true"
           fi
+
+      - name: Setup Go environment
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: actions/setup-go@v2
+        with:
+          go-version: "1.14"
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
