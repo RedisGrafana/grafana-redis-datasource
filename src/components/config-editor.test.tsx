@@ -15,7 +15,7 @@ const getOptions = ({
   jsonData = {},
   secureJsonData = {},
   ...overrideOptions
-}: OverrideOptions = {}): DataSourceSettings<RedisDataSourceOptions, object> => ({
+}: OverrideOptions = {}): DataSourceSettings<RedisDataSourceOptions> => ({
   id: 1,
   orgId: 2,
   name: '',
