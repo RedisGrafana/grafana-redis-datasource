@@ -1,16 +1,22 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { RadioButtonGroup } from '@grafana/ui';
 import { DataSourceSettings } from '@grafana/data';
+import { RadioButtonGroup } from '@grafana/ui';
+import { ClientTypeValue, RedisDataSourceOptions } from '../types';
 import { ConfigEditor } from './config-editor';
-import { RedisDataSourceOptions, ClientTypeValue } from '../types';
 
+/**
+ * Override Options
+ */
 interface OverrideOptions {
   [key: string]: unknown;
   jsonData?: object;
   secureJsonData?: object | null;
 }
 
+/**
+ * Configuration Options
+ */
 const getOptions = ({
   jsonData = {},
   secureJsonData = {},
@@ -58,7 +64,13 @@ const getOptions = ({
 
 type ShallowComponent = ShallowWrapper<ConfigEditor['props'], ConfigEditor['state'], ConfigEditor>;
 
+/**
+ * Config Editor
+ */
 describe('ConfigEditor', () => {
+  /**
+   * Query Type
+   */
   describe('Type', () => {
     const getTestedComponent = (wrapper: ShallowComponent) => wrapper.find(RadioButtonGroup);
     it('Should pass client value to type field', () => {
@@ -90,6 +102,10 @@ describe('ConfigEditor', () => {
       );
     });
   });
+
+  /**
+   * Sentinel Master group name
+   */
   describe('MasterName', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -128,6 +144,10 @@ describe('ConfigEditor', () => {
       );
     });
   });
+
+  /**
+   * Address (URL)
+   */
   describe('Address', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -150,6 +170,10 @@ describe('ConfigEditor', () => {
       expect(onOptionsChange).toHaveBeenCalledWith({ ...options, url: newUrl });
     });
   });
+
+  /**
+   * ACL
+   */
   describe('ACL', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -185,6 +209,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Username for Authentication when ACL enabled
+   */
   describe('Username', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -221,6 +249,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Password
+   */
   describe('Password', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -273,6 +305,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Pool size
+   */
   describe('PoolSize', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -311,6 +347,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Timeout
+   */
   describe('Timeout', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -349,6 +389,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Ping interval
+   */
   describe('PingInterval', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -387,6 +431,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Pipeline Window
+   */
   describe('PipelineWindow', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -425,6 +473,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Client Authentication
+   */
   describe('ClientAuthentication', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -460,6 +512,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Skip Verify
+   */
   describe('SkipVerify', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -509,6 +565,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Client Certificate
+   */
   describe('ClientCertificate', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -578,6 +638,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Client's Key
+   */
   describe('ClientKey', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
@@ -647,6 +711,10 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Certification Authority
+   */
   describe('CertificationAuthority', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
