@@ -46,9 +46,8 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
 		data.NewField("time", nil, []time.Time{}),
 		data.NewField(legend, nil, []float64{}))
 
-	// Previous time and bucket to fill missing intervals
+	// Previous time to fill missing intervals
 	var prevTime time.Time
-	var bucket, _ = strconv.ParseInt(qm.Bucket, 10, 64)
 
 	// Add rows
 	for _, row := range result {
@@ -56,10 +55,10 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
 		ts := time.Unix(0, t*int64(time.Millisecond))
 
 		// Fill missing intervals
-		if qm.Fill && bucket != 0 {
+		if qm.Fill && qm.Bucket != 0 {
 			if !prevTime.IsZero() {
-				for ts.Sub(prevTime) > time.Duration(bucket)*time.Millisecond {
-					prevTime = prevTime.Add(time.Duration(bucket) * time.Millisecond)
+				for ts.Sub(prevTime) > time.Duration(qm.Bucket)*time.Millisecond {
+					prevTime = prevTime.Add(time.Duration(qm.Bucket) * time.Millisecond)
 					frame.AppendRow(prevTime, float64(0))
 				}
 			}
@@ -161,9 +160,8 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 			)
 		}
 
-		// Previous time and bucket to fill missing intervals
+		// Previous time to fill missing intervals
 		var prevTime time.Time
-		var bucket, _ = strconv.ParseInt(qm.Bucket, 10, 64)
 
 		// Values
 		for _, valueRaw := range tsArrReply[2].([]interface{}) {
@@ -182,10 +180,10 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 			ts := time.Unix(0, k*int64(time.Millisecond))
 
 			// Fill missing intervals
-			if qm.Fill && bucket != 0 {
+			if qm.Fill && qm.Bucket != 0 {
 				if !prevTime.IsZero() {
-					for ts.Sub(prevTime) > time.Duration(bucket)*time.Millisecond {
-						prevTime = prevTime.Add(time.Duration(bucket) * time.Millisecond)
+					for ts.Sub(prevTime) > time.Duration(qm.Bucket)*time.Millisecond {
+						prevTime = prevTime.Add(time.Duration(qm.Bucket) * time.Millisecond)
 						frame.AppendRow(prevTime, float64(0))
 					}
 				}

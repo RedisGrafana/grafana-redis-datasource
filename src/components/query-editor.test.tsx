@@ -1,15 +1,15 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { QueryEditor } from './query-editor';
-import { QueryTypeValue, RedisQuery } from '../redis';
+import { AggregationValue, InfoSectionValue, QueryTypeValue, RedisQuery } from '../redis';
 
 /**
  * Query
  */
 const getQuery = (overrideQuery: object = {}): RedisQuery => ({
   key: '',
-  aggregation: '',
-  bucket: '',
+  aggregation: AggregationValue.NONE,
+  bucket: 0,
   legend: '',
   command: '',
   field: '',
@@ -17,7 +17,7 @@ const getQuery = (overrideQuery: object = {}): RedisQuery => ({
   value: '',
   query: '',
   type: QueryTypeValue.CLI,
-  section: '',
+  section: InfoSectionValue.STATS,
   size: 1,
   fill: true,
   streaming: true,
@@ -723,7 +723,7 @@ describe('QueryEditor', () => {
         const testedMethod = jest.spyOn(wrapper.instance(), 'onBucketTextChange');
         wrapper.instance().forceUpdate();
         const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
+        const newValue = 1234;
         testedComponent.simulate('change', { target: { value: newValue } });
         expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
         expect(onChange).toHaveBeenCalledWith({

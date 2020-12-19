@@ -77,6 +77,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
       ...query,
       key: query.key ? templateSrv.replace(query.key, scopedVars) : '',
       query: query.query ? templateSrv.replace(query.query, scopedVars) : '',
+      field: query.field ? templateSrv.replace(query.field, scopedVars) : '',
       filter: query.filter ? templateSrv.replace(query.filter, scopedVars) : '',
     };
   }

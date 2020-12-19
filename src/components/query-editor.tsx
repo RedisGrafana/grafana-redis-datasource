@@ -5,9 +5,11 @@ import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana
 import { DataSource } from '../data-source';
 import {
   Aggregations,
+  AggregationValue,
   CommandParameters,
   Commands,
   InfoSections,
+  InfoSectionValue,
   QueryType,
   QueryTypeValue,
   RedisQuery,
@@ -118,7 +120,7 @@ export class QueryEditor extends PureComponent<Props> {
    *
    * @param val Value
    */
-  onAggregationTextChange = (val: SelectableValue<string>) => {
+  onAggregationTextChange = (val: SelectableValue<AggregationValue>) => {
     const { onChange, query } = this.props;
     onChange({ ...query, aggregation: val.value });
   };
@@ -128,7 +130,7 @@ export class QueryEditor extends PureComponent<Props> {
    *
    * @param val Value
    */
-  onInfoSectionTextChange = (val: SelectableValue<string>) => {
+  onInfoSectionTextChange = (val: SelectableValue<InfoSectionValue>) => {
     const { onChange, query } = this.props;
     onChange({ ...query, section: val.value });
   };
@@ -140,7 +142,7 @@ export class QueryEditor extends PureComponent<Props> {
    */
   onBucketTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
-    onChange({ ...query, bucket: event.target.value });
+    onChange({ ...query, bucket: Number(event.target.value) });
   };
 
   /**
