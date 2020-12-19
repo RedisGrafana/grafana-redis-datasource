@@ -52,7 +52,7 @@ type queryModel struct {
 	Filter      string `json:"filter"`
 	Command     string `json:"command"`
 	Aggregation string `json:"aggregation"`
-	Bucket      string `json:"bucket"`
+	Bucket      int    `json:"bucket"`
 	Legend      string `json:"legend"`
 	Value       string `json:"value"`
 	Section     string `json:"section"`
