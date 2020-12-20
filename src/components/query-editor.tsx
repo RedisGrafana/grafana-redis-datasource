@@ -241,6 +241,17 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
+            {CommandParameters.value.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={value}
+                onChange={this.onValueChange}
+                label="Value"
+                tooltip="Value override"
+              />
+            )}
+
             {CommandParameters.legendLabel.includes(command) && (
               <FormField
                 labelWidth={8}
@@ -248,7 +259,6 @@ export class QueryEditor extends PureComponent<Props> {
                 value={legend}
                 onChange={this.onLegendChange}
                 label="Legend Label"
-                tooltip="Legend Label"
               />
             )}
 

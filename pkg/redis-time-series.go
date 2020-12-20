@@ -41,10 +41,16 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
 		legend = qm.Legend
 	}
 
+	// Value
+	value := ""
+	if qm.Value != "" {
+		value = qm.Value
+	}
+
 	// Create data frame response
-	frame := data.NewFrame(qm.Key,
+	frame := data.NewFrame(legend,
 		data.NewField("time", nil, []time.Time{}),
-		data.NewField(legend, nil, []float64{}))
+		data.NewField(value, nil, []float64{}))
 
 	// Previous time to fill missing intervals
 	var prevTime time.Time
@@ -140,7 +146,7 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 		}
 
 		// Use value's label if specified
-		value := "value"
+		value := ""
 		if qm.Value != "" {
 			value = labels[qm.Value]
 		}

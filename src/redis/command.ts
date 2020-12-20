@@ -125,6 +125,7 @@ export const CommandParameters = {
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],
   section: ['info'],
+  value: ['ts.range'],
   valueLabel: ['ts.mrange'],
   fill: ['ts.range', 'ts.mrange'],
   size: ['slowlogGet']
