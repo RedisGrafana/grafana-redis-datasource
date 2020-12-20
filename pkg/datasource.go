@@ -120,28 +120,35 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 
 	// Unmarshal Configuration
 	var dataError = json.Unmarshal(setting.JSONData, &jsonData)
-
-	// Default Pool size
-	poolSize := 5
-
-	// Default Connect, Read and Write Timeout
-	timeout := 10
-
-	// Default Ping Interval disabled
-	pingInterval := 0
-
-	// Default Pipeline Window disabled
-	pipelineWindow := 0
-
 	if dataError != nil {
 		log.DefaultLogger.Error("JSONData", "Error", dataError)
-	} else {
-		log.DefaultLogger.Debug("JSONData", "Values", jsonData)
+		return nil, dataError
+	}
 
-		// Set values
+	// Debug
+	log.DefaultLogger.Debug("JSONData", "Values", jsonData)
+
+	// Pool size
+	poolSize := 5
+	if jsonData.PoolSize > 0 {
 		poolSize = jsonData.PoolSize
+	}
+
+	// Connect, Read and Write Timeout
+	timeout := 10
+	if jsonData.Timeout > 0 {
 		timeout = jsonData.Timeout
+	}
+
+	// Ping Interval disabled
+	pingInterval := 0
+	if jsonData.PingInterval > 0 {
 		pingInterval = jsonData.PingInterval
+	}
+
+	// Pipeline Window disabled
+	pipelineWindow := 0
+	if jsonData.PipelineWindow > 0 {
 		pipelineWindow = jsonData.PipelineWindow
 	}
 
