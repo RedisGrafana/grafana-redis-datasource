@@ -140,13 +140,13 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 		timeout = jsonData.Timeout
 	}
 
-	// Ping Interval disabled
+	// Ping Interval, disabled by default
 	pingInterval := 0
 	if jsonData.PingInterval > 0 {
 		pingInterval = jsonData.PingInterval
 	}
 
-	// Pipeline Window disabled
+	// Pipeline Window, disabled by default
 	pipelineWindow := 0
 	if jsonData.PipelineWindow > 0 {
 		pipelineWindow = jsonData.PipelineWindow
