@@ -340,14 +340,6 @@ describe('ConfigEditor', () => {
       expect(testedComponent.prop('value')).toEqual(options.jsonData.poolSize);
     });
 
-    it('Should pass default value if poolSize value is empty', () => {
-      const options = getOptions({ jsonData: { poolSize: 0 } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(5);
-    });
-
     it('Should call onPoolSizeChange method when calls onChange prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -383,14 +375,6 @@ describe('ConfigEditor', () => {
       const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.jsonData.timeout);
-    });
-
-    it('Should pass default value if timeout value is empty', () => {
-      const options = getOptions({ jsonData: { timeout: '' } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(10);
     });
 
     it('Should call onTimeoutChange method when calls onChange prop', () => {
@@ -430,14 +414,6 @@ describe('ConfigEditor', () => {
       expect(testedComponent.prop('value')).toEqual(options.jsonData.pingInterval);
     });
 
-    it('Should pass default value if pingInterval value is empty', () => {
-      const options = getOptions({ jsonData: { pingInterval: '' } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(0);
-    });
-
     it('Should call onPingIntervalChange method when calls onChange prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -473,14 +449,6 @@ describe('ConfigEditor', () => {
       const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.jsonData.pipelineWindow);
-    });
-
-    it('Should pass default value if pipelineWindow value is empty', () => {
-      const options = getOptions({ jsonData: { pipelineWindow: '' } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(0);
     });
 
     it('Should call onPipelineWindowChange method when calls onChange prop', () => {

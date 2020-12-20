@@ -265,7 +265,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
             labelWidth={10}
             inputWidth={10}
             onChange={this.onPoolSizeChange}
-            value={jsonData.poolSize || 5}
+            value={jsonData.poolSize}
+            placeholder="5"
             tooltip="Will keep open at least the given number of connections to the redis instance at the given address.
             The recommended size of the pool depends on the number of concurrent goroutines that will use the pool and
             whether implicit pipelining is enabled or not."
@@ -281,7 +282,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
             labelWidth={10}
             inputWidth={10}
             onChange={this.onTimeoutChange}
-            value={jsonData.timeout || 10}
+            value={jsonData.timeout}
+            placeholder="10"
             tooltip="Sets the duration in seconds for connect, read and write timeouts."
           />
           <FormField
@@ -289,7 +291,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
             labelWidth={10}
             inputWidth={10}
             onChange={this.onPingIntervalChange}
-            value={jsonData.pingInterval || 0}
+            value={jsonData.pingInterval}
+            placeholder="0"
             tooltip="Specifies the interval in seconds at which a ping event happens.
             A shorter interval means connections are pinged more frequently, but also means more traffic with the server.
             If interval is zero then ping will be disabled."
@@ -302,7 +305,8 @@ export class ConfigEditor extends PureComponent<Props, State> {
             labelWidth={10}
             inputWidth={10}
             onChange={this.onPipelineWindowChange}
-            value={jsonData.pipelineWindow || 0}
+            value={jsonData.pipelineWindow}
+            placeholder="0"
             tooltip="Sets the duration in microseconds after which internal pipelines will be flushed.
             If window is zero then implicit pipelining will be disabled."
           />
