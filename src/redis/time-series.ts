@@ -23,5 +23,5 @@ export const Aggregations: Array<SelectableValue<AggregationValue>> = [
   { label: 'Max', description: 'Maximum', value: AggregationValue.MAX },
   { label: 'Min', description: 'Minimum', value: AggregationValue.MIN },
   { label: 'Range', description: 'Diff between maximum and minimum in the bucket', value: AggregationValue.RANGE },
-  { label: 'Sum', description: 'Sum', value: AggregationValue.SUM },
+  { label: 'Sum', description: 'Summation', value: AggregationValue.SUM },
 ];
