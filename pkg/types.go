@@ -47,7 +47,7 @@ type dataModel struct {
 type queryModel struct {
 	Type        string `json:"type"`
 	Query       string `json:"query"`
-	Key         string `json:"key"`
+	Key         string `json:"keyName"`
 	Field       string `json:"field"`
 	Filter      string `json:"filter"`
 	Command     string `json:"command"`

@@ -103,7 +103,7 @@ export const CommandParameters = {
   aggregation: ['ts.range', 'ts.mrange'],
   field: ['hget','hmget'],
   filter: ['ts.mrange', 'ts.queryindex'],
-  key: [
+  keyName: [
     'get',
     'hget',
     'hgetall',

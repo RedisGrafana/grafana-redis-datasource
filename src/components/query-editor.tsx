@@ -31,13 +31,13 @@ type Props = QueryEditorProps<DataSource, RedisQuery, RedisDataSourceOptions>;
  */
 export class QueryEditor extends PureComponent<Props> {
   /**
-   * Key change
+   * Key name change
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
+  onKeyNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
-    onChange({ ...query, key: event.target.value });
+    onChange({ ...query, keyName: event.target.value });
   };
 
   /**
@@ -150,7 +150,7 @@ export class QueryEditor extends PureComponent<Props> {
    */
   render() {
     const {
-      key,
+      keyName,
       aggregation,
       bucket,
       legend,
@@ -204,12 +204,12 @@ export class QueryEditor extends PureComponent<Props> {
 
         {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
-            {CommandParameters.key.includes(command) && (
+            {CommandParameters.keyName.includes(command) && (
               <FormField
                 labelWidth={8}
                 inputWidth={30}
-                value={key}
-                onChange={this.onKeyChange}
+                value={keyName}
+                onChange={this.onKeyNameChange}
                 label="Key"
                 tooltip="Key name"
               />
