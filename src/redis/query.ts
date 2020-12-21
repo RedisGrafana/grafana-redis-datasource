@@ -83,7 +83,7 @@ export interface RedisQuery extends DataQuery {
    *
    * @type {string}
    */
-  key?: string;
+  keyName?: string;
 
   /**
    * Value label

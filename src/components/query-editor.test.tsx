@@ -7,7 +7,7 @@ import { AggregationValue, InfoSectionValue, QueryTypeValue, RedisQuery } from '
  * Query
  */
 const getQuery = (overrideQuery: object = {}): RedisQuery => ({
-  key: '',
+  keyName: '',
   aggregation: AggregationValue.NONE,
   bucket: 0,
   legend: '',
@@ -219,12 +219,12 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'get', key: '123' });
+        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'get', keyName: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
         const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.key);
+        expect(testedComponent.prop('value')).toEqual(query.keyName);
       });
 
       it('Should call onKeyChange method when onChange prop was called', () => {
@@ -232,7 +232,7 @@ describe('QueryEditor', () => {
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onKeyChange');
+        const testedMethod = jest.spyOn(wrapper.instance(), 'onKeyNameChange');
         wrapper.instance().forceUpdate();
         const testedComponent = getComponent(wrapper);
         const newValue = '1234';
@@ -240,7 +240,7 @@ describe('QueryEditor', () => {
         expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
         expect(onChange).toHaveBeenCalledWith({
           ...query,
-          key: newValue,
+          keyName: newValue,
         });
       });
     });
