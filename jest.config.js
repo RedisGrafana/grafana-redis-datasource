@@ -8,6 +8,6 @@ const standard = require('@grafana/toolkit/src/config/jest.plugin.config');
 const grafanaJestConfig = standard.jestConfig();
 module.exports = {
   ...grafanaJestConfig,
-  setupFiles: ['./src/setupTests.ts'].concat(grafanaJestConfig.setupFiles ? grafanaJestConfig.setupFiles : []),
+  setupFiles: ['./src/tests.ts'].concat(grafanaJestConfig.setupFiles ? grafanaJestConfig.setupFiles : []),
   collectCoverage: true,
 };

@@ -1,4 +1,6 @@
 import { DataQuery, SelectableValue } from '@grafana/data';
+import { InfoSectionValue } from './info';
+import { AggregationValue } from './time-series';
 
 /**
  * Query Type Values
@@ -13,7 +15,7 @@ export enum QueryTypeValue {
 /**
  * Query Type
  */
-export const QueryType: Array<SelectableValue<string>> = [
+export const QueryType: Array<SelectableValue<QueryTypeValue>> = [
   {
     label: 'Redis',
     description: 'Hashes, Sets, Lists, Strings, Streams, etc.',
@@ -81,7 +83,7 @@ export interface RedisQuery extends DataQuery {
    *
    * @type {string}
    */
-  key?: string;
+  keyName?: string;
 
   /**
    * Value label
@@ -96,14 +98,14 @@ export interface RedisQuery extends DataQuery {
    * @see https://oss.redislabs.com/redistimeseries/commands/#aggregation-compaction-downsampling
    * @type {string}
    */
-  aggregation?: string;
+  aggregation?: AggregationValue;
 
   /**
    * Bucket
    *
-   * @type {string}
+   * @type {number}
    */
-  bucket?: string;
+  bucket?: number;
 
   /**
    * Fill
@@ -124,7 +126,7 @@ export interface RedisQuery extends DataQuery {
    *
    * @type {string}
    */
-  section?: string;
+  section?: InfoSectionValue;
 
   /**
    * Size

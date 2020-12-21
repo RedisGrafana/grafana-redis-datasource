@@ -1,14 +1,27 @@
 import { SelectableValue } from '@grafana/data';
 
 /**
+ * Aggregation Values
+ */
+export enum AggregationValue {
+  NONE = '',
+  AVG = 'avg',
+  COUNT = 'count',
+  MAX = 'max',
+  MIN = 'min',
+  RANGE = 'range',
+  SUM = 'sum',
+}
+
+/**
  * Aggregations
  */
-export const Aggregations: Array<SelectableValue<string>> = [
-  { label: 'None', description: 'No aggregation', value: '' },
-  { label: 'Avg', description: 'Average', value: 'avg' },
-  { label: 'Count', description: 'Count number of samples', value: 'count' },
-  { label: 'Max', description: 'Maximum', value: 'max' },
-  { label: 'Min', description: 'Minimum', value: 'min' },
-  { label: 'Range', description: 'Diff between maximum and minimum in the bucket', value: 'range' },
-  { label: 'Sum', description: 'Sum', value: 'sum' },
+export const Aggregations: Array<SelectableValue<AggregationValue>> = [
+  { label: 'None', description: 'No aggregation', value: AggregationValue.NONE },
+  { label: 'Avg', description: 'Average', value: AggregationValue.AVG },
+  { label: 'Count', description: 'Count number of samples', value: AggregationValue.COUNT },
+  { label: 'Max', description: 'Maximum', value: AggregationValue.MAX },
+  { label: 'Min', description: 'Minimum', value: AggregationValue.MIN },
+  { label: 'Range', description: 'Diff between maximum and minimum in the bucket', value: AggregationValue.RANGE },
+  { label: 'Sum', description: 'Summation', value: AggregationValue.SUM },
 ];

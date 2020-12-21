@@ -5,9 +5,11 @@ import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana
 import { DataSource } from '../data-source';
 import {
   Aggregations,
+  AggregationValue,
   CommandParameters,
   Commands,
   InfoSections,
+  InfoSectionValue,
   QueryType,
   QueryTypeValue,
   RedisQuery,
@@ -29,13 +31,13 @@ type Props = QueryEditorProps<DataSource, RedisQuery, RedisDataSourceOptions>;
  */
 export class QueryEditor extends PureComponent<Props> {
   /**
-   * Key change
+   * Key name change
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
+  onKeyNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
-    onChange({ ...query, key: event.target.value });
+    onChange({ ...query, keyName: event.target.value });
   };
 
   /**
@@ -118,7 +120,7 @@ export class QueryEditor extends PureComponent<Props> {
    *
    * @param val Value
    */
-  onAggregationTextChange = (val: SelectableValue<string>) => {
+  onAggregationTextChange = (val: SelectableValue<AggregationValue>) => {
     const { onChange, query } = this.props;
     onChange({ ...query, aggregation: val.value });
   };
@@ -128,7 +130,7 @@ export class QueryEditor extends PureComponent<Props> {
    *
    * @param val Value
    */
-  onInfoSectionTextChange = (val: SelectableValue<string>) => {
+  onInfoSectionTextChange = (val: SelectableValue<InfoSectionValue>) => {
     const { onChange, query } = this.props;
     onChange({ ...query, section: val.value });
   };
@@ -140,7 +142,7 @@ export class QueryEditor extends PureComponent<Props> {
    */
   onBucketTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query } = this.props;
-    onChange({ ...query, bucket: event.target.value });
+    onChange({ ...query, bucket: Number(event.target.value) });
   };
 
   /**
@@ -148,7 +150,7 @@ export class QueryEditor extends PureComponent<Props> {
    */
   render() {
     const {
-      key,
+      keyName,
       aggregation,
       bucket,
       legend,
@@ -202,12 +204,12 @@ export class QueryEditor extends PureComponent<Props> {
 
         {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
-            {CommandParameters.key.includes(command) && (
+            {CommandParameters.keyName.includes(command) && (
               <FormField
                 labelWidth={8}
                 inputWidth={30}
-                value={key}
-                onChange={this.onKeyChange}
+                value={keyName}
+                onChange={this.onKeyNameChange}
                 label="Key"
                 tooltip="Key name"
               />
@@ -239,6 +241,17 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
+            {CommandParameters.value.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={value}
+                onChange={this.onValueChange}
+                label="Value"
+                tooltip="Value override"
+              />
+            )}
+
             {CommandParameters.legendLabel.includes(command) && (
               <FormField
                 labelWidth={8}
@@ -246,7 +259,6 @@ export class QueryEditor extends PureComponent<Props> {
                 value={legend}
                 onChange={this.onLegendChange}
                 label="Legend Label"
-                tooltip="Legend Label"
               />
             )}
 

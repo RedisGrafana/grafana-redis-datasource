@@ -1,16 +1,22 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { RadioButtonGroup } from '@grafana/ui';
 import { DataSourceSettings } from '@grafana/data';
+import { RadioButtonGroup } from '@grafana/ui';
+import { ClientTypeValue, RedisDataSourceOptions } from '../types';
 import { ConfigEditor } from './config-editor';
-import { RedisDataSourceOptions, ClientTypeValue } from '../types';
 
+/**
+ * Override Options
+ */
 interface OverrideOptions {
   [key: string]: unknown;
   jsonData?: object;
   secureJsonData?: object | null;
 }
 
+/**
+ * Configuration Options
+ */
 const getOptions = ({
   jsonData = {},
   secureJsonData = {},
@@ -58,9 +64,16 @@ const getOptions = ({
 
 type ShallowComponent = ShallowWrapper<ConfigEditor['props'], ConfigEditor['state'], ConfigEditor>;
 
+/**
+ * Config Editor
+ */
 describe('ConfigEditor', () => {
+  /**
+   * Client Type
+   */
   describe('Type', () => {
     const getTestedComponent = (wrapper: ShallowComponent) => wrapper.find(RadioButtonGroup);
+
     it('Should pass client value to type field', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -68,6 +81,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.jsonData.client);
     });
+
     it('Should pass standalone as a value if client value is empty', () => {
       const options = getOptions({ jsonData: { client: null } });
       const onOptionsChange = jest.fn();
@@ -75,6 +89,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(ClientTypeValue.STANDALONE);
     });
+
     it('Should call onOptionsChange function when value was changed', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -90,11 +105,16 @@ describe('ConfigEditor', () => {
       );
     });
   });
+
+  /**
+   * Sentinel Master group name
+   */
   describe('MasterName', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'FormField' && node.prop('label') === 'Master Name';
       });
+
     it('If client is not sentinel should not be shown', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -102,6 +122,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('If client is sentinel should be shown Master Name field', () => {
       const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL } });
       const onOptionsChange = jest.fn();
@@ -110,6 +131,7 @@ describe('ConfigEditor', () => {
       expect(testedComponent.exists()).toBeTruthy();
       expect(testedComponent.prop('value')).toEqual(options.jsonData.sentinelName);
     });
+
     it('Should call onOptionsChange function when value was changed', () => {
       const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL } });
       const onOptionsChange = jest.fn();
@@ -128,11 +150,16 @@ describe('ConfigEditor', () => {
       );
     });
   });
+
+  /**
+   * Address (URL)
+   */
   describe('Address', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'FormField' && node.prop('label') === 'Address';
       });
+
     it('Should pass url value to address field', () => {
       const options = getOptions({ url: 'localhost' });
       const onOptionsChange = jest.fn();
@@ -140,6 +167,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.url);
     });
+
     it('Should call onOptionsChange when value was changed', () => {
       const options = getOptions({ url: 'localhost' });
       const onOptionsChange = jest.fn();
@@ -150,11 +178,16 @@ describe('ConfigEditor', () => {
       expect(onOptionsChange).toHaveBeenCalledWith({ ...options, url: newUrl });
     });
   });
+
+  /**
+   * ACL
+   */
   describe('ACL', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'Switch' && node.prop('label') === 'ACL';
       });
+
     it('Should pass acl value', () => {
       const options = getOptions({ jsonData: { acl: true } });
       const onOptionsChange = jest.fn();
@@ -162,6 +195,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('checked')).toEqual(options.jsonData.acl);
     });
+
     it('Should pass default value if user value is empty', () => {
       const options = getOptions({ jsonData: { acl: null } });
       const onOptionsChange = jest.fn();
@@ -169,6 +203,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('checked')).toEqual(false);
     });
+
     it('Should call onOptionsChange when value was changed', () => {
       const options = getOptions({ jsonData: { acl: true } });
       const onOptionsChange = jest.fn();
@@ -185,11 +220,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Username for Authentication when ACL enabled
+   */
   describe('Username', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'FormField' && node.prop('label') === 'Username';
       });
+
     it('If acl checked should be shown', () => {
       const options = getOptions({ jsonData: { acl: true, user: 'My user' } });
       const onOptionsChange = jest.fn();
@@ -198,6 +238,7 @@ describe('ConfigEditor', () => {
       expect(testedComponent.exists()).toBeTruthy();
       expect(testedComponent.prop('value')).toEqual(options.jsonData.user);
     });
+
     it('If acl not checked should not be shown', () => {
       const options = getOptions({ jsonData: { acl: false } });
       const onOptionsChange = jest.fn();
@@ -205,6 +246,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should call onOptionsChange when value was changed', () => {
       const options = getOptions({ jsonData: { acl: true, user: 'admin' } });
       const onOptionsChange = jest.fn();
@@ -221,11 +263,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Password
+   */
   describe('Password', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'SecretFormField' && node.prop('label') === 'Password';
       });
+
     it('Should pass password value', () => {
       const options = getOptions({ secureJsonData: { password: '123' } });
       const onOptionsChange = jest.fn();
@@ -233,6 +280,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.secureJsonData?.password);
     });
+
     it('Should call onResetPassword method when calls onReset prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -254,6 +302,7 @@ describe('ConfigEditor', () => {
         },
       });
     });
+
     it('Should call onPasswordChange method when calls onChange prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -273,11 +322,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Pool size
+   */
   describe('PoolSize', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'FormField' && node.prop('label') === 'Pool Size';
       });
+
     it('Should pass value from options', () => {
       const options = getOptions({ jsonData: { poolSize: 10 } });
       const onOptionsChange = jest.fn();
@@ -285,13 +339,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.jsonData.poolSize);
     });
-    it('Should pass default value if poolSize value is empty', () => {
-      const options = getOptions({ jsonData: { poolSize: 0 } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(5);
-    });
+
     it('Should call onPoolSizeChange method when calls onChange prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -311,11 +359,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Timeout
+   */
   describe('Timeout', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'FormField' && node.prop('label') === 'Timeout, sec';
       });
+
     it('Should pass value from options', () => {
       const options = getOptions({ jsonData: { timeout: 10 } });
       const onOptionsChange = jest.fn();
@@ -323,13 +376,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.jsonData.timeout);
     });
-    it('Should pass default value if timeout value is empty', () => {
-      const options = getOptions({ jsonData: { timeout: '' } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(10);
-    });
+
     it('Should call onTimeoutChange method when calls onChange prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -349,11 +396,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Ping interval
+   */
   describe('PingInterval', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'FormField' && node.prop('label') === 'Ping Interval, sec';
       });
+
     it('Should pass value from options', () => {
       const options = getOptions({ jsonData: { pingInterval: 10 } });
       const onOptionsChange = jest.fn();
@@ -361,13 +413,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.jsonData.pingInterval);
     });
-    it('Should pass default value if pingInterval value is empty', () => {
-      const options = getOptions({ jsonData: { pingInterval: '' } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(0);
-    });
+
     it('Should call onPingIntervalChange method when calls onChange prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -387,11 +433,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Pipeline Window
+   */
   describe('PipelineWindow', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'FormField' && node.prop('label') === 'Pipeline Window, μs';
       });
+
     it('Should pass value from options', () => {
       const options = getOptions({ jsonData: { pipelineWindow: 10 } });
       const onOptionsChange = jest.fn();
@@ -399,13 +450,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(options.jsonData.pipelineWindow);
     });
-    it('Should pass default value if pipelineWindow value is empty', () => {
-      const options = getOptions({ jsonData: { pipelineWindow: '' } });
-      const onOptionsChange = jest.fn();
-      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
-      const testedComponent = getTestedComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(0);
-    });
+
     it('Should call onPipelineWindowChange method when calls onChange prop', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -425,11 +470,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Client Authentication
+   */
   describe('ClientAuthentication', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'Switch' && node.prop('label') === 'Client Authentication';
       });
+
     it('Should pass value from options', () => {
       const options = getOptions({ jsonData: { tlsAuth: true } });
       const onOptionsChange = jest.fn();
@@ -437,6 +487,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('checked')).toEqual(options.jsonData.tlsAuth);
     });
+
     it('Should pass default value if tlsAuth value is empty', () => {
       const options = getOptions({ jsonData: { tlsAuth: '' } });
       const onOptionsChange = jest.fn();
@@ -444,6 +495,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('checked')).toEqual(false);
     });
+
     it('Should call onChangeOptions', () => {
       const options = getOptions();
       const onOptionsChange = jest.fn();
@@ -460,11 +512,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Skip Verify
+   */
   describe('SkipVerify', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'Switch' && node.prop('label') === 'Skip Verify';
       });
+
     it('Should be shown if tlsAuth=true', () => {
       const options = getOptions({ jsonData: { tlsAuth: true } });
       const onOptionsChange = jest.fn();
@@ -472,6 +529,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).toBeTruthy();
     });
+
     it('Should not be shown if tlsAuth=false', () => {
       const options = getOptions({ jsonData: { tlsAuth: false } });
       const onOptionsChange = jest.fn();
@@ -479,6 +537,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should pass value from options', () => {
       const options = getOptions({ jsonData: { tlsAuth: true, tlsSkipVerify: false } });
       const onOptionsChange = jest.fn();
@@ -486,6 +545,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('checked')).toEqual(options.jsonData.tlsSkipVerify);
     });
+
     it('Should pass default value if tlsSkipVerify value is empty', () => {
       const options = getOptions({ jsonData: { tlsAuth: true, tlsSkipVerify: '' } });
       const onOptionsChange = jest.fn();
@@ -493,6 +553,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.prop('checked')).toEqual(false);
     });
+
     it('Should call onChangeOptions', () => {
       const options = getOptions({ jsonData: { tlsAuth: true } });
       const onOptionsChange = jest.fn();
@@ -509,11 +570,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Client Certificate
+   */
   describe('ClientCertificate', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'TextArea' && node.prop('onChange') === wrapper.instance().onTlsClientCertificateChange;
       });
+
     it('Should be shown if tlsAuth=true and tlsClientCert=false', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientCert: false } });
       const onOptionsChange = jest.fn();
@@ -521,6 +587,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).toBeTruthy();
     });
+
     it('Should not be shown if tlsAuth=false', () => {
       const options = getOptions({ jsonData: { tlsAuth: false } });
       const onOptionsChange = jest.fn();
@@ -528,6 +595,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should not be shown if tlsClientCert=true', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientCert: true } });
       const onOptionsChange = jest.fn();
@@ -535,6 +603,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should call onTlsClientCertificateChange when onChange prop was called', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientCert: false } });
       const onOptionsChange = jest.fn();
@@ -553,6 +622,7 @@ describe('ConfigEditor', () => {
         },
       });
     });
+
     it('Should call onResetTlsClientCertificate when reset button was clicked', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientCert: true } });
       const onOptionsChange = jest.fn();
@@ -578,11 +648,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Client's Key
+   */
   describe('ClientKey', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'TextArea' && node.prop('onChange') === wrapper.instance().onTlsClientKeyChange;
       });
+
     it('Should be shown if tlsAuth=true and tlsClientKey=false', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientKey: false } });
       const onOptionsChange = jest.fn();
@@ -590,6 +665,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).toBeTruthy();
     });
+
     it('Should not be shown if tlsAuth=false', () => {
       const options = getOptions({ jsonData: { tlsAuth: false } });
       const onOptionsChange = jest.fn();
@@ -597,6 +673,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should not be shown if tlsClientKey=true', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientKey: true } });
       const onOptionsChange = jest.fn();
@@ -604,6 +681,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should call onTlsClientKeyChange when onChange prop was called', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientKey: false } });
       const onOptionsChange = jest.fn();
@@ -622,6 +700,7 @@ describe('ConfigEditor', () => {
         },
       });
     });
+
     it('Should call onResetTlsClientKey when reset button was clicked', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsClientKey: true } });
       const onOptionsChange = jest.fn();
@@ -647,11 +726,16 @@ describe('ConfigEditor', () => {
       });
     });
   });
+
+  /**
+   * Certification Authority
+   */
   describe('CertificationAuthority', () => {
     const getTestedComponent = (wrapper: ShallowComponent) =>
       wrapper.findWhere((node) => {
         return node.name() === 'TextArea' && node.prop('onChange') === wrapper.instance().onTlsCACertificateChange;
       });
+
     it('Should be shown if tlsAuth=true and tlsCACert=false', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsCACert: false } });
       const onOptionsChange = jest.fn();
@@ -659,6 +743,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).toBeTruthy();
     });
+
     it('Should not be shown if tlsAuth=false', () => {
       const options = getOptions({ jsonData: { tlsAuth: false } });
       const onOptionsChange = jest.fn();
@@ -666,6 +751,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should not be shown if tlsClientKey=true', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsCACert: true } });
       const onOptionsChange = jest.fn();
@@ -673,6 +759,7 @@ describe('ConfigEditor', () => {
       const testedComponent = getTestedComponent(wrapper);
       expect(testedComponent.exists()).not.toBeTruthy();
     });
+
     it('Should call onTlsCACertificateChange when onChange prop was called', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsCACert: false } });
       const onOptionsChange = jest.fn();
@@ -691,6 +778,7 @@ describe('ConfigEditor', () => {
         },
       });
     });
+
     it('Should call onResetTlsCACertificate when reset button was clicked', () => {
       const options = getOptions({ jsonData: { tlsAuth: true }, secureJsonFields: { tlsCACert: true } });
       const onOptionsChange = jest.fn();

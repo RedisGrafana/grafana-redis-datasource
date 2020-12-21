@@ -11,6 +11,7 @@
 - Update data source icon and refactoring #102
 - Update field's name for HGET command to align with HMGET #103
 - Update HGETALL command to return fields and support streaming similar to HGET, HMGET #104
+- Add tests for React Config and Query editors #105
 
 ## v1.2.1
 
