@@ -1,31 +1,8 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { QueryEditor } from './query-editor';
-import { AggregationValue, InfoSectionValue, QueryTypeValue, RedisQuery } from '../redis';
-
-/**
- * Query
- */
-const getQuery = (overrideQuery: object = {}): RedisQuery => ({
-  keyName: '',
-  aggregation: AggregationValue.NONE,
-  bucket: 0,
-  legend: '',
-  command: '',
-  field: '',
-  filter: '',
-  value: '',
-  query: '',
-  type: QueryTypeValue.CLI,
-  section: InfoSectionValue.STATS,
-  size: 1,
-  fill: true,
-  streaming: true,
-  streamingInterval: 1,
-  streamingCapacity: 1,
-  refId: '',
-  ...overrideQuery,
-});
+import { QueryTypeValue } from '../redis';
+import { getQuery } from '../tests/utils';
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
