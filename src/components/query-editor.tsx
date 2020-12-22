@@ -358,6 +358,7 @@ export class QueryEditor extends PureComponent<Props> {
                   }}
                   label="Interval"
                   tooltip="Streaming interval in milliseconds. Default is 1000ms."
+                  placeholder="1000"
                 />
                 <FormField
                   labelWidth={8}
@@ -368,6 +369,7 @@ export class QueryEditor extends PureComponent<Props> {
                   }}
                   label="Capacity"
                   tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
+                  placeholder="1000"
                 />
               </>
             )}

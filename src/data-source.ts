@@ -141,7 +141,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
               if (frame.fields.length < fields.length + 1) {
                 frame.addField({
                   name: field.name,
-                  type: field.type == FieldType.string && !isNaN(value) ? FieldType.number : field.type,
+                  type: field.type === FieldType.string && !isNaN(value) ? FieldType.number : field.type,
                 });
               }
               return (values[field.name] = value);
