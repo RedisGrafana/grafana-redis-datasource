@@ -318,7 +318,7 @@ export class QueryEditor extends PureComponent<Props> {
                 value={bucket}
                 type="number"
                 onChange={this.onBucketTextChange}
-                label="Bucket"
+                label="Time Bucket"
                 tooltip="Time bucket for aggregation in milliseconds"
               />
             )}
