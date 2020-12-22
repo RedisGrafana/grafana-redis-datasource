@@ -1,17 +1,17 @@
-import {
-  DataQueryRequest,
-  DataSourceInstanceSettings,
-  PluginType,
-  CircularDataFrame,
-  MetricFindValue,
-} from '@grafana/data';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import {
+  CircularDataFrame,
+  DataQueryRequest,
+  DataSourceInstanceSettings,
+  MetricFindValue,
+  PluginType,
+} from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
 import { DataSource } from './data-source';
 import { QueryTypeValue, RedisQuery } from './redis';
-import { ClientTypeValue, RedisDataSourceOptions } from './types';
 import { getQuery } from './tests/utils';
+import { ClientTypeValue, RedisDataSourceOptions } from './types';
 
 /**
  * Instance Settings
