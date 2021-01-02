@@ -12,6 +12,9 @@ import (
 	"github.com/mediocregopher/radix/v3"
 )
 
+// EmptyArray for (empty array)
+const EmptyArray = "(empty array)"
+
 /**
  * Execute Query
  * Can PANIC if command is wrong
@@ -72,7 +75,7 @@ func (ds *redisDatasource) parseInterfaceValue(value []interface{}, response bac
 
 			// If no values
 			if len(parsedValues) == 0 {
-				parsedValues = append(parsedValues, "(empty array)")
+				parsedValues = append(parsedValues, EmptyArray)
 			}
 
 			values = append(values, parsedValues...)
@@ -140,7 +143,11 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterf
 		var values []string
 
 		// Parse values
-		values, response = ds.parseInterfaceValue(result, response)
+		if len(values) == 0 {
+			values = append(values, EmptyArray)
+		} else {
+			values, response = ds.parseInterfaceValue(result, response)
+		}
 
 		// Error when parsing intarface
 		if response.Error != nil {
