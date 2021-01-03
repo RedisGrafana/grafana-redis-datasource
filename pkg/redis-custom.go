@@ -143,7 +143,7 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterf
 		var values []string
 
 		// Parse values
-		if len(values) == 0 {
+		if len(result) == 0 {
 			values = append(values, EmptyArray)
 		} else {
 			values, response = ds.parseInterfaceValue(result, response)
