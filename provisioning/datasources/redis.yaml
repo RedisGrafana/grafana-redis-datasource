@@ -7,7 +7,7 @@ datasources:
     orgId: 1
     isDefault: true
     version: 1
-    url: redis://localhost:6379
+    url: redis://host.docker.internal:6379
     jsonData:
       poolSize: 5
       timeout: 10

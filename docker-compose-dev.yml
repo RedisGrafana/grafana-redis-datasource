@@ -6,10 +6,8 @@ services:
     image: redislabs/redismod:latest
     ports:
       - '6379:6379'
-    # Uncomment and edit the local path in the following line to have
-    # Redis' data persisted to the host's filesystem.
-    # volumes:
-    #   - ./dump.rdb:/data/dump.rdb
+    volumes:
+      - ./dump.rdb:/data/dump.rdb
 
   grafana:
     container_name: grafana
@@ -27,5 +25,6 @@ services:
     volumes:
       - ./dist:/var/lib/grafana/plugins/redis-datasource
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards
       # Uncomment to preserve Grafana configuration
       # - ./data:/var/lib/grafana
