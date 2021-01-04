@@ -41,6 +41,7 @@ func (ds *redisDatasource) addFrameFieldsFromArray(values []interface{}, frame *
 			key = string(k)
 		default:
 			log.DefaultLogger.Error("addFrameFieldsFromArray", "Conversion Error", "Unsupported Key type")
+			continue
 		}
 
 		// Value
