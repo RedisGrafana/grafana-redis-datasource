@@ -7,7 +7,7 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - ./dump.rdb:/data/dump.rdb
+      - './data:/data/:rw'
 
   grafana:
     container_name: grafana

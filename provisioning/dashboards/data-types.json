@@ -15,16 +15,310 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 1,
   "links": [],
   "panels": [
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 26,
+      "title": "General",
+      "type": "row"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 1
+      },
+      "id": 29,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "server",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "INFO Server - Redis Version",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": ["redis_version"]
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 7,
+        "x": 3,
+        "y": 1
+      },
+      "id": 28,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "",
+          "query": "keys *",
+          "refId": "A",
+          "type": "cli"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "KEYS *",
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 7,
+        "x": 10,
+        "y": 1
+      },
+      "hiddenSeries": false,
+      "id": 30,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.5",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "command": "info",
+          "query": "",
+          "refId": "A",
+          "section": "memory",
+          "streaming": true,
+          "type": "command"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Used Memory - Streaming",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "active_defrag_running": true,
+              "allocator_active": true,
+              "allocator_allocated": true,
+              "allocator_frag_bytes": true,
+              "allocator_frag_ratio": true,
+              "allocator_resident": true,
+              "allocator_rss_bytes": true,
+              "allocator_rss_ratio": true,
+              "lazyfree_pending_objects": true,
+              "maxmemory": true,
+              "maxmemory_human": true,
+              "maxmemory_policy": true,
+              "mem_allocator": true,
+              "mem_aof_buffer": true,
+              "mem_clients_normal": true,
+              "mem_clients_slaves": true,
+              "mem_fragmentation_bytes": true,
+              "mem_fragmentation_ratio": true,
+              "mem_not_counted_for_evict": true,
+              "mem_replication_backlog": true,
+              "number_of_cached_scripts": true,
+              "rss_overhead_bytes": true,
+              "rss_overhead_ratio": true,
+              "total_system_memory": true,
+              "total_system_memory_human": true,
+              "used_memory_dataset": false,
+              "used_memory_dataset_perc": true,
+              "used_memory_human": true,
+              "used_memory_lua": true,
+              "used_memory_lua_human": true,
+              "used_memory_overhead": true,
+              "used_memory_peak": false,
+              "used_memory_peak_human": true,
+              "used_memory_peak_perc": true,
+              "used_memory_rss": true,
+              "used_memory_rss_human": true,
+              "used_memory_scripts": true,
+              "used_memory_scripts_human": true,
+              "used_memory_startup": false
+            },
+            "indexByName": {},
+            "renameByName": {
+              "used_memory": "Used",
+              "used_memory_peak": "Peak"
+            }
+          }
+        }
+      ],
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "decbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
     {
       "datasource": "Redis",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 7,
       "title": "Strings",
@@ -54,7 +348,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 1
+        "y": 9
       },
       "id": 10,
       "options": {
@@ -112,7 +406,7 @@
         "h": 3,
         "w": 4,
         "x": 4,
-        "y": 1
+        "y": 9
       },
       "id": 9,
       "options": {
@@ -148,7 +442,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 12
       },
       "id": 2,
       "title": "Hash",
@@ -184,7 +478,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 5
+        "y": 13
       },
       "id": 4,
       "options": {
@@ -246,7 +540,7 @@
         "h": 3,
         "w": 3,
         "x": 4,
-        "y": 5
+        "y": 13
       },
       "id": 5,
       "options": {
@@ -308,7 +602,7 @@
         "h": 3,
         "w": 3,
         "x": 7,
-        "y": 5
+        "y": 13
       },
       "id": 14,
       "options": {
@@ -366,7 +660,7 @@
         "h": 3,
         "w": 6,
         "x": 10,
-        "y": 5
+        "y": 13
       },
       "id": 12,
       "options": {
@@ -424,7 +718,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 5
+        "y": 13
       },
       "id": 15,
       "options": {
@@ -491,7 +785,7 @@
         "h": 7,
         "w": 10,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 11,
@@ -598,7 +892,7 @@
         "h": 7,
         "w": 6,
         "x": 10,
-        "y": 8
+        "y": 16
       },
       "id": 13,
       "options": {
@@ -654,7 +948,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 8
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 16,
@@ -741,12 +1035,64 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 23
       },
       "id": 20,
       "panels": [],
       "title": "List",
       "type": "row"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 24
+      },
+      "id": 34,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "type",
+          "keyName": "test:list",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "TYPE test:list",
+      "type": "stat"
     },
     {
       "datasource": "Redis",
@@ -772,9 +1118,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 16
+        "w": 3,
+        "x": 3,
+        "y": 24
       },
       "id": 18,
       "options": {
@@ -812,12 +1158,123 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 27
       },
       "id": 22,
       "panels": [],
       "title": "Set",
       "type": "row"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 28
+      },
+      "id": 33,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/.*/",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "type",
+          "keyName": "test:set",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "TYPE test:set",
+      "type": "stat"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": -1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 3,
+        "y": 28
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "ttl",
+          "keyName": "test:set",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "TTL test:set",
+      "type": "stat"
     },
     {
       "datasource": "Redis",
@@ -843,9 +1300,9 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 20
+        "w": 3,
+        "x": 6,
+        "y": 28
       },
       "id": 24,
       "options": {
@@ -873,6 +1330,126 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "SCARD test:set",
+      "type": "stat"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 9,
+        "y": 28
+      },
+      "id": 31,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "smembers",
+          "keyName": "test:set",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "SMEMBERS test:set",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 37,
+      "panels": [],
+      "title": "Stream",
+      "type": "row"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 2
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 35
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "xlen",
+          "keyName": "test:stream",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "XLEN test:stream",
       "type": "stat"
     }
   ],
