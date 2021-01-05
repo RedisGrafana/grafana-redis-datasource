@@ -54,7 +54,7 @@ func TestQuerySMembers(t *testing.T) {
 				require.Equal(t, tt.qm.Key, response.Frames[0].Name, "Invalid frame name")
 				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
-				require.NoError(t, response.Error, "Should not return error")
+
 				if tt.valuesToCheckInResponse != nil {
 					for _, value := range tt.valuesToCheckInResponse {
 						require.Equalf(t, value.value, response.Frames[value.frameIndex].Fields[value.fieldIndex].At(value.rowIndex), "Invalid value at Frame[%v]:Field[%v]:Row[%v]", value.frameIndex, value.fieldIndex, value.rowIndex)

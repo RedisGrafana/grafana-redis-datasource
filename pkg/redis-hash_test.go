@@ -54,7 +54,7 @@ func TestQueryHGetAll(t *testing.T) {
 				require.Equal(t, tt.qm.Command, response.Frames[0].Name, "Invalid frame name")
 				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
-				require.NoError(t, response.Error, "Should not return error")
+
 				if tt.valuesToCheckInResponse != nil {
 					for _, value := range tt.valuesToCheckInResponse {
 						require.Equalf(t, value.value, response.Frames[value.frameIndex].Fields[value.fieldIndex].At(value.rowIndex), "Invalid value at Frame[%v]:Field[%v]:Row[%v]", value.frameIndex, value.fieldIndex, value.rowIndex)
@@ -119,7 +119,7 @@ func TestQueryHGet(t *testing.T) {
 				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
 				require.Equal(t, tt.value, response.Frames[0].Fields[0].At(0), "Invalid value contained in frame")
-				require.NoError(t, response.Error, "Should not return error")
+
 			}
 		})
 	}
@@ -183,21 +183,15 @@ func TestQueryHMGet(t *testing.T) {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
 			} else {
-				if tt.rcv == nil {
-
-				} else {
-					if tt.shouldCreateFrames {
-						require.Equal(t, tt.qm.Command, response.Frames[0].Name, "Invalid frame name")
-						require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
-						require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
-						for _, value := range tt.valuesToCheckInResponse {
-							require.Equalf(t, value.value, response.Frames[value.frameIndex].Fields[value.fieldIndex].At(value.rowIndex), "Invalid value at Frame[%v]:Field[%v]:Row[%v]", value.frameIndex, value.fieldIndex, value.rowIndex)
-						}
-					} else {
-						require.Nil(t, response.Frames, "Should not create frames in response")
+				if tt.shouldCreateFrames {
+					require.Equal(t, tt.qm.Command, response.Frames[0].Name, "Invalid frame name")
+					require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
+					require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
+					for _, value := range tt.valuesToCheckInResponse {
+						require.Equalf(t, value.value, response.Frames[value.frameIndex].Fields[value.fieldIndex].At(value.rowIndex), "Invalid value at Frame[%v]:Field[%v]:Row[%v]", value.frameIndex, value.fieldIndex, value.rowIndex)
 					}
-
-					require.NoError(t, response.Error, "Should not return error")
+				} else {
+					require.Nil(t, response.Frames, "Should not create frames in response")
 				}
 			}
 		})
