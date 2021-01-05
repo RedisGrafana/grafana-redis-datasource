@@ -15,7 +15,7 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 	response := backend.DataResponse{}
 
 	// Execute command
-	var result []string
+	var result map[string]string
 	err := client.Do(radix.FlatCmd(&result, "XINFO", "STREAM", qm.Key))
 
 	// Check error
@@ -23,15 +23,14 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 		return ds.errorHandler(response, err)
 	}
 
-	fields := []string{}
-	values := []string{}
+  var fields []string
+  var values []string
 
-	// Add fields and values
-	for i := 0; i < len(result); i += 2 {
-		fields = append(fields, result[i])
-		values = append(values, result[i+1])
-	}
-
+  // Add fields and values
+  for k := range result {
+    fields = append(fields, k)
+    values = append(values, result[k])
+  }
 	// New Frame
 	frame := data.NewFrame(qm.Key,
 		data.NewField("Field", nil, fields),
@@ -43,3 +42,4 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 	// Return
 	return response
 }
+
