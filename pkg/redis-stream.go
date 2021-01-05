@@ -23,8 +23,8 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 		return ds.errorHandler(response, err)
 	}
 
-	var fields []string
-	var values []string
+	fields := []string{}
+	values := []string{}
 
 	// Add fields and values
 	for k := range result {
