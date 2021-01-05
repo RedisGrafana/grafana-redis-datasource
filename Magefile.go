@@ -10,7 +10,7 @@ import (
   "os"
 )
 
-// Coverage runs backend tests and makes a coverage report.
+// runs backend tests and makes a txt coverage report in "atomic" mode and html coverage report.
 func Cover() error {
   // Create a coverage file if it does not already exist
   if err := os.MkdirAll(filepath.Join(".", "coverage"), os.ModePerm); err != nil {
