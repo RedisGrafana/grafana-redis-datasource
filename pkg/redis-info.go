@@ -160,10 +160,10 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface
 			// Split properties
 			value := strings.Split(field, "=")
 
-      // Skip if less than 2 elements
-      if len(value) < 2 {
-        continue
-      }
+			// Skip if less than 2 elements
+			if len(value) < 2 {
+				continue
+			}
 
 			// Add Header for first row
 			if i == 0 {

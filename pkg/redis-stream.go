@@ -23,14 +23,14 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 		return ds.errorHandler(response, err)
 	}
 
-  var fields []string
-  var values []string
+	var fields []string
+	var values []string
 
-  // Add fields and values
-  for k := range result {
-    fields = append(fields, k)
-    values = append(values, result[k])
-  }
+	// Add fields and values
+	for k := range result {
+		fields = append(fields, k)
+		values = append(values, result[k])
+	}
 	// New Frame
 	frame := data.NewFrame(qm.Key,
 		data.NewField("Field", nil, fields),
@@ -42,4 +42,3 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 	// Return
 	return response
 }
-
