@@ -254,7 +254,7 @@ func (ds *redisDatasource) queryTsInfo(qm queryModel, client ClientInterface) ba
 	response := backend.DataResponse{}
 
 	// Execute command
-	var result interface{}
+	var result map[string]interface{}
 	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
 
 	// Check error
@@ -266,46 +266,35 @@ func (ds *redisDatasource) queryTsInfo(qm queryModel, client ClientInterface) ba
 	frame := data.NewFrame(qm.Key)
 
 	// Add fields and values
-	for i := 0; i < len(result.([]interface{})); i += 2 {
-
-		// Parameter
-		var param string
-		switch value := result.([]interface{})[i].(type) {
-		case string:
-			param = value
-		default:
-			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Key type")
-		}
-
+	for key := range result {
 		// Value
-		switch value := result.([]interface{})[i+1].(type) {
+		switch value := result[key].(type) {
 		case int64:
 			// Return timestamp as time
-			if param == "firstTimestamp" || param == "lastTimestamp" {
-				frame.Fields = append(frame.Fields, data.NewField(param, nil, []time.Time{time.Unix(0, value*int64(time.Millisecond))}))
+			if key == "firstTimestamp" || key == "lastTimestamp" {
+				frame.Fields = append(frame.Fields, data.NewField(key, nil, []time.Time{time.Unix(0, value*int64(time.Millisecond))}))
 				break
 			}
 
 			// Add field
-			field := data.NewField(param, nil, []int64{value})
+			field := data.NewField(key, nil, []int64{value})
 
 			// Set unit
-			if param == "memoryUsage" {
+			if key == "memoryUsage" {
 				field.Config = &data.FieldConfig{Unit: "decbytes"}
-			} else if param == "retentionTime" {
+			} else if key == "retentionTime" {
 				field.Config = &data.FieldConfig{Unit: "ms"}
 			}
 
 			frame.Fields = append(frame.Fields, field)
 		case []byte:
-			frame.Fields = append(frame.Fields, data.NewField(param, nil, []string{string(value)}))
+			frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{string(value)}))
 		case []interface{}:
 			frame = ds.addFrameFieldsFromArray(value, frame)
 		default:
 			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Value type")
 		}
 	}
-
 	// Add the frame to the response
 	response.Frames = append(response.Frames, frame)
 
