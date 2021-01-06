@@ -45,7 +45,7 @@ func TestQueryHGetAll(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryHGetAll(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
@@ -109,7 +109,7 @@ func TestQueryHGet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryHGet(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
@@ -177,7 +177,7 @@ func TestQueryHMGet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryHMGet(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")

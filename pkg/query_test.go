@@ -42,7 +42,7 @@ func TestQuery(t *testing.T) {
 		t.Run(tt.qm.Command, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{nil, nil}
+			client := testClient{nil, nil}
 			var marshaled, _ = json.Marshal(tt.qm)
 			response := ds.query(context.TODO(), backend.DataQuery{
 				RefID:         "",
@@ -63,7 +63,7 @@ func TestQueryWithErrors(t *testing.T) {
 	t.Run("Marshalling failure", func(t *testing.T) {
 		t.Parallel()
 		ds := redisDatasource{}
-		client := TestClient{nil, nil}
+		client := testClient{nil, nil}
 		response := ds.query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
@@ -79,7 +79,7 @@ func TestQueryWithErrors(t *testing.T) {
 	t.Run("Unknown command failure", func(t *testing.T) {
 		t.Parallel()
 		ds := redisDatasource{}
-		client := TestClient{nil, nil}
+		client := testClient{nil, nil}
 		var marshaled, _ = json.Marshal(queryModel{Command: "unknown"})
 		response := ds.query(context.TODO(), backend.DataQuery{
 			RefID:         "",
@@ -162,7 +162,7 @@ func TestQueryKeyCommand(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryKeyCommand(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")

@@ -4,19 +4,19 @@ import (
 	"github.com/mediocregopher/radix/v3"
 )
 
-type TestClient struct {
+type testClient struct {
 	rcv interface{}
 	err error
 }
 
-func (client TestClient) Do(action radix.Action) error {
+func (client testClient) Do(action radix.Action) error {
 	stub := radix.Stub("tcp", "127.0.0.1:6379", func(args []string) interface{} {
 		return client.rcv
 	})
 	var _ = stub.Do(action)
 	return client.err
 }
-func (client TestClient) Close() error {
+func (client testClient) Close() error {
 	return client.err
 }
 

@@ -54,7 +54,7 @@ func TestQueryClusterInfo(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryClusterInfo(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
@@ -125,7 +125,7 @@ func TestQueryClusterNodes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryClusterNodes(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")

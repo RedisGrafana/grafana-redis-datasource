@@ -81,7 +81,7 @@ func TestQueryInfo(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryInfo(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
@@ -148,7 +148,7 @@ func TestQueryClientList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.queryClientList(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
@@ -257,7 +257,7 @@ func TestQuerySlowlogGet(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			ds := redisDatasource{}
-			client := TestClient{tt.rcv, tt.err}
+			client := testClient{tt.rcv, tt.err}
 			response := ds.querySlowlogGet(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
