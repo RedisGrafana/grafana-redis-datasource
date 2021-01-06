@@ -20,6 +20,16 @@ func (client testClient) Close() error {
 	return client.err
 }
 
+type panickingClient struct {
+}
+
+func (client panickingClient) Do(action radix.Action) error {
+	panic("Panic")
+}
+func (client panickingClient) Close() error {
+	return nil
+}
+
 type valueToCheckInResponse struct {
 	frameIndex int
 	fieldIndex int
