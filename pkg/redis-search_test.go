@@ -78,7 +78,7 @@ func TestQueryFtInfo(t *testing.T) {
 				"num_records",
 				"0",
 				"inverted_sz_mb",
-				"0",
+				int64(0),
 				"total_inverted_index_blocks",
 				"933290",
 				"offset_vectors_sz_mb",
