@@ -52,7 +52,7 @@ func TestQuerySMembers(t *testing.T) {
 				require.Nil(t, response.Frames, "No frames should be created if failed")
 			} else {
 				require.Equal(t, tt.qm.Key, response.Frames[0].Name, "Invalid frame name")
-				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
+				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created ")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
 
 				if tt.valuesToCheckInResponse != nil {

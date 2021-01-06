@@ -52,7 +52,7 @@ func TestQueryHGetAll(t *testing.T) {
 				require.Nil(t, response.Frames, "No frames should be created if failed")
 			} else {
 				require.Equal(t, tt.qm.Command, response.Frames[0].Name, "Invalid frame name")
-				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
+				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created ")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
 
 				if tt.valuesToCheckInResponse != nil {
@@ -116,7 +116,7 @@ func TestQueryHGet(t *testing.T) {
 				require.Nil(t, response.Frames, "No frames should be created if failed")
 			} else {
 				require.Equal(t, tt.qm.Field, response.Frames[0].Name, "Invalid frame name")
-				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
+				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created ")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
 				require.Equal(t, tt.value, response.Frames[0].Fields[0].At(0), "Invalid value contained in frame")
 
@@ -185,7 +185,7 @@ func TestQueryHMGet(t *testing.T) {
 			} else {
 				if tt.shouldCreateFrames {
 					require.Equal(t, tt.qm.Command, response.Frames[0].Name, "Invalid frame name")
-					require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created from bulk string")
+					require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created ")
 					require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
 					for _, value := range tt.valuesToCheckInResponse {
 						require.Equalf(t, value.value, response.Frames[value.frameIndex].Fields[value.fieldIndex].At(value.rowIndex), "Invalid value at Frame[%v]:Field[%v]:Row[%v]", value.frameIndex, value.fieldIndex, value.rowIndex)
