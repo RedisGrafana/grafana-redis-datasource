@@ -36,3 +36,10 @@ type valueToCheckInResponse struct {
 	rowIndex   int
 	value      interface{}
 }
+
+type valueToCheckByLabelInResponse struct {
+	frameIndex int
+	fieldName  string
+	rowIndex   int
+	value      interface{}
+}

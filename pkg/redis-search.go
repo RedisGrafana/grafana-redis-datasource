@@ -18,7 +18,7 @@ func (ds *redisDatasource) queryFtInfo(qm queryModel, client ClientInterface) ba
 	response := backend.DataResponse{}
 
 	// Execute command
-	var result interface{}
+	var result map[string]interface{}
 	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
 
 	// Check error
@@ -30,29 +30,17 @@ func (ds *redisDatasource) queryFtInfo(qm queryModel, client ClientInterface) ba
 	frame := data.NewFrame(qm.Key)
 
 	// Add fields and values
-	for i := 0; i < len(result.([]interface{})); i += 2 {
-
-		// Parameter
-		var param string
-		switch value := result.([]interface{})[i].(type) {
-		case string:
-			param = value
-		case []byte:
-			param = string(value)
-		default:
-			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Key type")
-		}
-
+	for key := range result {
 		// Value
-		switch value := result.([]interface{})[i+1].(type) {
+		switch value := result[key].(type) {
 		case int64:
 			// Add field
-			field := data.NewField(param, nil, []int64{value})
+			field := data.NewField(key, nil, []int64{value})
 			frame.Fields = append(frame.Fields, field)
 		case []byte:
 			// Parse Float
 			if floatValue, err := strconv.ParseFloat(string(value), 64); err == nil {
-				field := data.NewField(param, nil, []float64{floatValue})
+				field := data.NewField(key, nil, []float64{floatValue})
 
 				// Field Units
 				config := map[string]string{"inverted_sz_mb": "decmbytes", "offset_vectors_sz_mb": "decmbytes",
@@ -60,22 +48,21 @@ func (ds *redisDatasource) queryFtInfo(qm queryModel, client ClientInterface) ba
 					"key_table_size_mb": "decmbytes", "percent_indexed": "percentunit"}
 
 				// Set unit
-				if config[param] != "" {
-					field.Config = &data.FieldConfig{Unit: config[param]}
+				if config[key] != "" {
+					field.Config = &data.FieldConfig{Unit: config[key]}
 				}
 
 				frame.Fields = append(frame.Fields, field)
 			} else {
-				frame.Fields = append(frame.Fields, data.NewField(param, nil, []string{string(value)}))
+				frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{string(value)}))
 			}
 		case string:
-			frame.Fields = append(frame.Fields, data.NewField(param, nil, []string{string(value)}))
+			frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{string(value)}))
 		case []interface{}:
 		default:
 			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Value type")
 		}
 	}
-
 	// Add the frame to the response
 	response.Frames = append(response.Frames, frame)
 

@@ -9,13 +9,13 @@ import (
 func TestQueryFtInfo(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		name                    string
-		qm                      queryModel
-		rcv                     interface{}
-		fieldsCount             int
-		rowsPerField            int
-		valuesToCheckInResponse []valueToCheckInResponse
-		err                     error
+		name                          string
+		qm                            queryModel
+		rcv                           interface{}
+		fieldsCount                   int
+		rowsPerField                  int
+		valueToCheckByLabelInResponse []valueToCheckByLabelInResponse
+		err                           error
 	}{
 		{
 			"should parse default bulk string",
@@ -140,11 +140,10 @@ func TestQueryFtInfo(t *testing.T) {
 			},
 			18,
 			1,
-			[]valueToCheckInResponse{
-				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: "wikipedia"},
-				{frameIndex: 0, fieldIndex: 3, rowIndex: 0, value: float64(691356)},
-				{frameIndex: 0, fieldIndex: 7, rowIndex: 0, value: float64(0.6593284606933594)},
-				{frameIndex: 0, fieldIndex: 7, rowIndex: 0, value: float64(0.6593284606933594)},
+			[]valueToCheckByLabelInResponse{
+				{frameIndex: 0, fieldName: "index_name", rowIndex: 0, value: "wikipedia"},
+				{frameIndex: 0, fieldName: "num_terms", rowIndex: 0, value: float64(691356)},
+				{frameIndex: 0, fieldName: "offset_vectors_sz_mb", rowIndex: 0, value: float64(0.6593284606933594)},
 			},
 			nil,
 		},
@@ -173,9 +172,14 @@ func TestQueryFtInfo(t *testing.T) {
 				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created ")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
 
-				if tt.valuesToCheckInResponse != nil {
-					for _, value := range tt.valuesToCheckInResponse {
-						require.Equalf(t, value.value, response.Frames[value.frameIndex].Fields[value.fieldIndex].At(value.rowIndex), "Invalid value at Frame[%v]:Field[%v]:Row[%v]", value.frameIndex, value.fieldIndex, value.rowIndex)
+				if tt.valueToCheckByLabelInResponse != nil {
+					for _, value := range tt.valueToCheckByLabelInResponse {
+						for _, field := range response.Frames[value.frameIndex].Fields {
+							if field.Name == value.fieldName {
+								require.Equalf(t, value.value, field.At(value.rowIndex), "Invalid value at Frame[%v]:Field[Name:%v]:Row[%v]", value.frameIndex, value.fieldName, value.rowIndex)
+							}
+						}
+
 					}
 				}
 			}
