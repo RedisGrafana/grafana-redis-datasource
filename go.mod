@@ -15,12 +15,14 @@ require (
 	github.com/hashicorp/yamux v0.0.0-20200609203250-aecfd211c9ce // indirect
 	github.com/jhump/protoreflect v1.8.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
+	github.com/magefile/mage v1.10.0
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/mediocregopher/radix/v3 v3.6.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/oklog/run v1.1.0 // indirect
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/prometheus/common v0.15.0 // indirect
+	github.com/stretchr/testify v1.6.1
 	golang.org/x/net v0.0.0-20201209123823-ac852fbbde11 // indirect
 	golang.org/x/sys v0.0.0-20201214210602-f9fddec55a1e // indirect
 	golang.org/x/text v0.3.4 // indirect

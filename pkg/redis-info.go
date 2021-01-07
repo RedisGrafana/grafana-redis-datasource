@@ -160,6 +160,11 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface
 			// Split properties
 			value := strings.Split(field, "=")
 
+			// Skip if less than 2 elements
+			if len(value) < 2 {
+				continue
+			}
+
 			// Add Header for first row
 			if i == 0 {
 				if _, err := strconv.ParseInt(value[1], 10, 64); err == nil {
@@ -167,11 +172,6 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface
 				} else {
 					frame.Fields = append(frame.Fields, data.NewField(value[0], nil, []string{}))
 				}
-			}
-
-			// Skip if less than 2 elements
-			if len(value) < 2 {
-				continue
 			}
 
 			// Add Int64 or String value

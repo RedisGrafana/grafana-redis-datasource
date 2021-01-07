@@ -64,7 +64,7 @@ jobs:
         uses: magefile/mage-action@v1
         with:
           version: latest
-          args: coverage
+          args: cover
 
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
@@ -77,6 +77,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           directory: ./coverage/
+          files: ./coverage/lcov.info,./coverage/backend.txt
           env_vars: OS,PYTHON
           fail_ci_if_error: true
           path_to_write_report: ./coverage/codecov_report.txt
