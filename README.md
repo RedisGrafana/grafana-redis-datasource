@@ -111,6 +111,7 @@ If Redis is running as Docker container on MacOS, please update host to `host.do
 ```
     url: redis://host.docker.internal:6379
 ```
+
 If Redis is running as Docker container on Linux, please update host to `redis`
 
 ```

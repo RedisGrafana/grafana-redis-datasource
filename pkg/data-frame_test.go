@@ -1,9 +1,10 @@
 package main
 
 import (
+	"testing"
+
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestCreateFrameValue(t *testing.T) {

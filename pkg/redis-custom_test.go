@@ -2,9 +2,10 @@ package main
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestExecuteCustomQuery(t *testing.T) {

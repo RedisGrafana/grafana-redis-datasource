@@ -63,6 +63,7 @@ func (ds *redisDatasource) queryFtInfo(qm queryModel, client ClientInterface) ba
 			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Value type")
 		}
 	}
+
 	// Add the frame to the response
 	response.Frames = append(response.Frames, frame)
 

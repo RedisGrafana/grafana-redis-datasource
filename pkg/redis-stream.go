@@ -31,6 +31,7 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 		fields = append(fields, k)
 		values = append(values, result[k])
 	}
+
 	// New Frame
 	frame := data.NewFrame(qm.Key,
 		data.NewField("Field", nil, fields),

@@ -2,8 +2,9 @@ package main
 
 import (
 	"errors"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestQuerySMembers(t *testing.T) {

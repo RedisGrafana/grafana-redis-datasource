@@ -4,11 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"testing"
+	"time"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/mediocregopher/radix/v3/resp/resp2"
 	"github.com/stretchr/testify/require"
-	"testing"
-	"time"
 )
 
 func TestQuery(t *testing.T) {

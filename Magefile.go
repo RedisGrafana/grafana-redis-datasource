@@ -3,11 +3,12 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
+
 	// mage:import
 	build "github.com/grafana/grafana-plugin-sdk-go/build"
 	"github.com/magefile/mage/sh"
-	"os"
-	"path/filepath"
 )
 
 // runs backend tests and makes a txt coverage report in "atomic" mode and html coverage report.
