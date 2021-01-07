@@ -15,7 +15,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
   "panels": [
     {
@@ -1451,6 +1450,478 @@
       "timeShift": null,
       "title": "XLEN test:stream",
       "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 38
+      },
+      "id": 39,
+      "panels": [],
+      "title": "RediSearch 2.0",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 41,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.5",
+      "targets": [
+        {
+          "command": "ft.info",
+          "keyName": "idx:test",
+          "query": "",
+          "refId": "A",
+          "type": "search"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Index idx:test",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "bytes_per_record_avg": true,
+              "doc_table_size_mb": false,
+              "indexing": true,
+              "inverted_sz_mb": false,
+              "max_doc_id": true,
+              "offset_bits_per_record_avg": true,
+              "offset_vectors_sz_mb": true,
+              "offsets_per_term_avg": true,
+              "records_per_doc_avg": true,
+              "sortable_values_size_mb": true,
+              "total_inverted_index_blocks": true
+            },
+            "indexByName": {
+              "bytes_per_record_avg": 12,
+              "doc_table_size_mb": 14,
+              "hash_indexing_failures": 5,
+              "index_name": 0,
+              "indexing": 17,
+              "inverted_sz_mb": 11,
+              "key_table_size_mb": 9,
+              "max_doc_id": 6,
+              "num_docs": 2,
+              "num_records": 1,
+              "num_terms": 3,
+              "offset_bits_per_record_avg": 10,
+              "offset_vectors_sz_mb": 8,
+              "offsets_per_term_avg": 13,
+              "percent_indexed": 4,
+              "records_per_doc_avg": 16,
+              "sortable_values_size_mb": 15,
+              "total_inverted_index_blocks": 7
+            },
+            "renameByName": {
+              "bytes_per_record_avg": "",
+              "doc_table_size_mb": "Documents table size",
+              "hash_indexing_failures": "Failures",
+              "index_name": "Name",
+              "inverted_sz_mb": "Inverted size",
+              "key_table_size_mb": "Key Table size",
+              "num_docs": "Documents",
+              "num_records": "Records",
+              "num_terms": "Terms",
+              "percent_indexed": "Indexed"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 11,
+        "x": 0,
+        "y": 42
+      },
+      "hiddenSeries": false,
+      "id": 44,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.5",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "command": "ft.info",
+          "keyName": "idx:test",
+          "query": "",
+          "refId": "A",
+          "streaming": true,
+          "type": "search"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Index idx:test",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "bytes_per_record_avg": true,
+              "doc_table_size_mb": true,
+              "hash_indexing_failures": true,
+              "index_name": false,
+              "indexing": true,
+              "inverted_sz_mb": true,
+              "key_table_size_mb": true,
+              "max_doc_id": true,
+              "num_docs": false,
+              "num_records": false,
+              "num_terms": false,
+              "offset_bits_per_record_avg": true,
+              "offset_vectors_sz_mb": true,
+              "offsets_per_term_avg": true,
+              "percent_indexed": true,
+              "records_per_doc_avg": true,
+              "sortable_values_size_mb": true,
+              "total_inverted_index_blocks": true
+            },
+            "indexByName": {
+              "bytes_per_record_avg": 13,
+              "doc_table_size_mb": 15,
+              "hash_indexing_failures": 6,
+              "index_name": 1,
+              "indexing": 18,
+              "inverted_sz_mb": 12,
+              "key_table_size_mb": 10,
+              "max_doc_id": 7,
+              "num_docs": 3,
+              "num_records": 2,
+              "num_terms": 4,
+              "offset_bits_per_record_avg": 11,
+              "offset_vectors_sz_mb": 9,
+              "offsets_per_term_avg": 14,
+              "percent_indexed": 5,
+              "records_per_doc_avg": 17,
+              "sortable_values_size_mb": 16,
+              "time": 0,
+              "total_inverted_index_blocks": 8
+            },
+            "renameByName": {
+              "bytes_per_record_avg": "",
+              "doc_table_size_mb": "Documents table size",
+              "hash_indexing_failures": "Failures",
+              "index_name": "Name",
+              "inverted_sz_mb": "Inverted size",
+              "key_table_size_mb": "Key Table size",
+              "num_docs": "Documents",
+              "num_records": "Records",
+              "num_terms": "Terms",
+              "percent_indexed": "Indexed"
+            }
+          }
+        }
+      ],
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:282",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:283",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 13,
+        "x": 11,
+        "y": 42
+      },
+      "hiddenSeries": false,
+      "id": 42,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "max": true,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.5",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "command": "ft.info",
+          "keyName": "idx:test",
+          "query": "",
+          "refId": "A",
+          "streaming": true,
+          "type": "search"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Index idx:test Size",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "bytes_per_record_avg": true,
+              "doc_table_size_mb": false,
+              "hash_indexing_failures": true,
+              "index_name": true,
+              "indexing": true,
+              "inverted_sz_mb": false,
+              "max_doc_id": true,
+              "num_docs": true,
+              "num_records": true,
+              "num_terms": true,
+              "offset_bits_per_record_avg": true,
+              "offset_vectors_sz_mb": true,
+              "offsets_per_term_avg": true,
+              "percent_indexed": true,
+              "records_per_doc_avg": true,
+              "sortable_values_size_mb": true,
+              "total_inverted_index_blocks": true
+            },
+            "indexByName": {
+              "bytes_per_record_avg": 13,
+              "doc_table_size_mb": 15,
+              "hash_indexing_failures": 6,
+              "index_name": 1,
+              "indexing": 18,
+              "inverted_sz_mb": 12,
+              "key_table_size_mb": 10,
+              "max_doc_id": 7,
+              "num_docs": 3,
+              "num_records": 2,
+              "num_terms": 4,
+              "offset_bits_per_record_avg": 11,
+              "offset_vectors_sz_mb": 9,
+              "offsets_per_term_avg": 14,
+              "percent_indexed": 5,
+              "records_per_doc_avg": 17,
+              "sortable_values_size_mb": 16,
+              "time": 0,
+              "total_inverted_index_blocks": 8
+            },
+            "renameByName": {
+              "bytes_per_record_avg": "",
+              "doc_table_size_mb": "Documents table size",
+              "hash_indexing_failures": "Failures",
+              "index_name": "Name",
+              "inverted_sz_mb": "Inverted size",
+              "key_table_size_mb": "Key Table size",
+              "num_docs": "Documents",
+              "num_records": "Records",
+              "num_terms": "Terms",
+              "percent_indexed": "Indexed"
+            }
+          }
+        }
+      ],
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:183",
+          "decimals": null,
+          "format": "decbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:184",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "schemaVersion": 26,
