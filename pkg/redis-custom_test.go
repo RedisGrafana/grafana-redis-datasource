@@ -52,9 +52,8 @@ func TestExecuteCustomQuery(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{tt.rcv, tt.err}
-			result, err := ds.executeCustomQuery(tt.qm, client)
+			result, err := executeCustomQuery(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, err, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, result, "No result should be created if failed")
@@ -67,9 +66,8 @@ func TestExecuteCustomQuery(t *testing.T) {
 
 func TestExecuteCustomQueryWithPanic(t *testing.T) {
 	t.Parallel()
-	ds := redisDatasource{}
 	client := panickingClient{}
-	result, err := ds.executeCustomQuery(queryModel{Query: "panic"}, client)
+	result, err := executeCustomQuery(queryModel{Query: "panic"}, client)
 	require.NoError(t, err, "Should return error")
 	require.Nil(t, result, "No result if panicked")
 }
@@ -78,7 +76,6 @@ func TestParseInterfaceValue(t *testing.T) {
 	t.Parallel()
 	t.Run("should parse complex input", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
 		inputResponse := backend.DataResponse{}
 		input := []interface{}{
 			"str",
@@ -93,14 +90,13 @@ func TestParseInterfaceValue(t *testing.T) {
 		}
 
 		expected := []string{"str", "str2", "42", "(empty array)", "str", "str3", "66"}
-		result, response := ds.parseInterfaceValue(input, inputResponse)
+		result, response := parseInterfaceValue(input, inputResponse)
 		require.NoError(t, response.Error, "Should return error")
 		require.Equal(t, expected, result, "Invalid function return value")
 
 	})
 	t.Run("should fail on unsupported type", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
 		inputResponse := backend.DataResponse{}
 		input := []interface{}{
 			"str",
@@ -117,7 +113,7 @@ func TestParseInterfaceValue(t *testing.T) {
 		}
 
 		expected := []string{"str", "str2", "42"}
-		result, response := ds.parseInterfaceValue(input, inputResponse)
+		result, response := parseInterfaceValue(input, inputResponse)
 		require.EqualError(t, response.Error, "Unsupported array return type", "Should return error")
 		require.Equal(t, expected, result, "Should contain results before unsupported parameter")
 	})
@@ -244,9 +240,8 @@ func TestQueryCustomCommand(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{tt.rcv, tt.err}
-			response := ds.queryCustomCommand(tt.qm, client)
+			response := queryCustomCommand(tt.qm, client)
 			if tt.errToCheck != "" {
 				require.EqualError(t, response.Error, tt.errToCheck, "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

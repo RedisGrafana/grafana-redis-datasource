@@ -15,7 +15,7 @@ import (
  *
  * @see https://redis.io/commands/cluster-info
  */
-func (ds *redisDatasource) queryClusterInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryClusterInfo(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -24,7 +24,7 @@ func (ds *redisDatasource) queryClusterInfo(qm queryModel, client ClientInterfac
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Split lines
@@ -61,7 +61,7 @@ func (ds *redisDatasource) queryClusterInfo(qm queryModel, client ClientInterfac
  *
  * @see https://redis.io/commands/cluster-nodes
  */
-func (ds *redisDatasource) queryClusterNodes(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryClusterNodes(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -70,7 +70,7 @@ func (ds *redisDatasource) queryClusterNodes(qm queryModel, client ClientInterfa
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Split lines

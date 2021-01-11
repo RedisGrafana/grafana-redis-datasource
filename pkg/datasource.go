@@ -52,7 +52,7 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 
 	// Loop over queries and execute them individually
 	for _, q := range req.Queries {
-		res := ds.query(ctx, q, client)
+		res := query(ctx, q, client)
 
 		// save the response in a hashmap based on with RefID as identifier
 		response.Responses[q.RefID] = res

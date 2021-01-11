@@ -21,8 +21,7 @@ func TestCreateFrameValue(t *testing.T) {
 		tt := tt
 		t.Run(tt.value, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			frame := ds.createFrameValue("keyName", tt.value)
+			frame := createFrameValue("keyName", tt.value)
 			field := frame.Fields[0].At(0)
 			require.Equal(t, tt.expected, field, "Unexpected conversation")
 		})
@@ -77,9 +76,8 @@ func TestAddFrameFieldsFromArray(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			frame := data.NewFrame("name")
-			frame = ds.addFrameFieldsFromArray(tt.values, frame)
+			frame = addFrameFieldsFromArray(tt.values, frame)
 			require.Len(t, frame.Fields, tt.fieldsCount, "Invalid number of fields created in Frame")
 		})
 	}

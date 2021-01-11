@@ -42,10 +42,9 @@ func TestQuery(t *testing.T) {
 		tt := tt
 		t.Run(tt.qm.Command, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{nil, nil}
 			var marshaled, _ = json.Marshal(tt.qm)
-			response := ds.query(context.TODO(), backend.DataQuery{
+			response := query(context.TODO(), backend.DataQuery{
 				RefID:         "",
 				QueryType:     "",
 				MaxDataPoints: 100,
@@ -63,9 +62,8 @@ func TestQueryWithErrors(t *testing.T) {
 
 	t.Run("Marshalling failure", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
 		client := testClient{nil, nil}
-		response := ds.query(context.TODO(), backend.DataQuery{
+		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
 			MaxDataPoints: 100,
@@ -79,10 +77,10 @@ func TestQueryWithErrors(t *testing.T) {
 
 	t.Run("Unknown command failure", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
+
 		client := testClient{nil, nil}
 		var marshaled, _ = json.Marshal(queryModel{Command: "unknown"})
-		response := ds.query(context.TODO(), backend.DataQuery{
+		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
 			MaxDataPoints: 100,
@@ -101,15 +99,13 @@ func TestErrorHandler(t *testing.T) {
 
 	t.Run("Common error", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
-		resp := ds.errorHandler(backend.DataResponse{}, errors.New("common error"))
+		resp := errorHandler(backend.DataResponse{}, errors.New("common error"))
 		require.EqualError(t, resp.Error, "common error", "Should return marshalling error")
 	})
 
 	t.Run("Redis error", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
-		resp := ds.errorHandler(backend.DataResponse{}, resp2.Error{E: errors.New("redis error")})
+		resp := errorHandler(backend.DataResponse{}, resp2.Error{E: errors.New("redis error")})
 		require.EqualError(t, resp.Error, "redis error", "Should return marshalling error")
 	})
 
@@ -162,9 +158,8 @@ func TestQueryKeyCommand(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{tt.rcv, tt.err}
-			response := ds.queryKeyCommand(tt.qm, client)
+			response := queryKeyCommand(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

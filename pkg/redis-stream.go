@@ -11,7 +11,7 @@ import (
  *
  * @see https://redis.io/commands/xinfo
  */
-func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryXInfoStream(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -20,7 +20,7 @@ func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterfac
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	fields := []string{}

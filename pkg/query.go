@@ -14,7 +14,7 @@ import (
 /**
  * Query commands
  */
-func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, client ClientInterface) backend.DataResponse {
+func query(ctx context.Context, query backend.DataQuery, client ClientInterface) backend.DataResponse {
 	var qm queryModel
 
 	// Unmarshal the json into our queryModel
@@ -43,7 +43,7 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 	 * Custom Command using Query
 	 */
 	if qm.Query != "" {
-		return ds.queryCustomCommand(qm, client)
+		return queryCustomCommand(qm, client)
 	}
 
 	/**
@@ -51,39 +51,39 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 	 */
 	switch qm.Command {
 	case "ts.get":
-		return ds.queryTsGet(qm, client)
+		return queryTsGet(qm, client)
 	case "ts.info":
-		return ds.queryTsInfo(qm, client)
+		return queryTsInfo(qm, client)
 	case "ts.queryindex":
-		return ds.queryTsQueryIndex(qm, client)
+		return queryTsQueryIndex(qm, client)
 	case "ts.range":
-		return ds.queryTsRange(from, to, qm, client)
+		return queryTsRange(from, to, qm, client)
 	case "ts.mrange":
-		return ds.queryTsMRange(from, to, qm, client)
+		return queryTsMRange(from, to, qm, client)
 	case "hgetall":
-		return ds.queryHGetAll(qm, client)
+		return queryHGetAll(qm, client)
 	case "smembers", "hkeys":
-		return ds.querySMembers(qm, client)
+		return querySMembers(qm, client)
 	case "hget":
-		return ds.queryHGet(qm, client)
+		return queryHGet(qm, client)
 	case "hmget":
-		return ds.queryHMGet(qm, client)
+		return queryHMGet(qm, client)
 	case "info":
-		return ds.queryInfo(qm, client)
+		return queryInfo(qm, client)
 	case "clientList":
-		return ds.queryClientList(qm, client)
+		return queryClientList(qm, client)
 	case "slowlogGet":
-		return ds.querySlowlogGet(qm, client)
+		return querySlowlogGet(qm, client)
 	case "type", "get", "ttl", "hlen", "xlen", "llen", "scard":
-		return ds.queryKeyCommand(qm, client)
+		return queryKeyCommand(qm, client)
 	case "xinfoStream":
-		return ds.queryXInfoStream(qm, client)
+		return queryXInfoStream(qm, client)
 	case "clusterInfo":
-		return ds.queryClusterInfo(qm, client)
+		return queryClusterInfo(qm, client)
 	case "clusterNodes":
-		return ds.queryClusterNodes(qm, client)
+		return queryClusterNodes(qm, client)
 	case "ft.info":
-		return ds.queryFtInfo(qm, client)
+		return queryFtInfo(qm, client)
 	default:
 		response := backend.DataResponse{}
 		log.DefaultLogger.Error("Query", "Command", qm.Command)
@@ -94,7 +94,7 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 /**
  * Error Handler
  */
-func (ds *redisDatasource) errorHandler(response backend.DataResponse, err error) backend.DataResponse {
+func errorHandler(response backend.DataResponse, err error) backend.DataResponse {
 	var redisErr resp2.Error
 
 	// Check for RESP2 Error
@@ -115,7 +115,7 @@ func (ds *redisDatasource) errorHandler(response backend.DataResponse, err error
  * @see https://redis.io/commands/ttl
  * @see https://redis.io/commands/hlen
  */
-func (ds *redisDatasource) queryKeyCommand(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryKeyCommand(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -124,11 +124,11 @@ func (ds *redisDatasource) queryKeyCommand(qm queryModel, client ClientInterface
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Add the frames to the response
-	response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, value))
+	response.Frames = append(response.Frames, createFrameValue(qm.Key, value))
 
 	// Return Response
 	return response
