@@ -20,7 +20,7 @@
   "name": "redis-datasource",
   "scripts": {
     "build": "grafana-toolkit plugin:build --coverage",
-    "build:backend": "mage -v lint && mage -v",
+    "build:backend": "mage -v lint && mage cover && mage -v",
     "dev": "grafana-toolkit plugin:dev",
     "format": "prettier --write \"**\"",
     "start": "docker-compose up",
