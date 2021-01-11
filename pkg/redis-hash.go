@@ -7,7 +7,6 @@ import (
 	"bitbucket.org/creachadair/shell"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -15,12 +14,12 @@ import (
  *
  * @see https://redis.io/commands/hgetall
  */
-func queryHGetAll(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHGetAll(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result []string
-	err := client.Do(radix.FlatCmd(&result, qm.Command, qm.Key))
+	err := client.RunFlatCmd(&result, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {
@@ -51,12 +50,12 @@ func queryHGetAll(qm queryModel, client ClientInterface) backend.DataResponse {
  *
  * @see https://redis.io/commands/hget
  */
-func queryHGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var value string
-	err := client.Do(radix.FlatCmd(&value, qm.Command, qm.Key, qm.Field))
+	err := client.RunFlatCmd(&value, qm.Command, qm.Key, qm.Field)
 
 	// Check error
 	if err != nil {
@@ -75,7 +74,7 @@ func queryHGet(qm queryModel, client ClientInterface) backend.DataResponse {
  *
  * @see https://redis.io/commands/hmget
  */
-func queryHMGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHMGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Split Field to array
@@ -89,7 +88,7 @@ func queryHMGet(qm queryModel, client ClientInterface) backend.DataResponse {
 
 	// Execute command
 	var result []string
-	err := client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, fields))
+	err := client.RunFlatCmd(&result, qm.Command, qm.Key, fields)
 
 	// Check error
 	if err != nil {

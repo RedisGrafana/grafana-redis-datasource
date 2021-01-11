@@ -6,7 +6,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -14,12 +13,12 @@ import (
  *
  * @see https://oss.redislabs.com/redisearch/Commands/#ftinfo
  */
-func queryFtInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryFtInfo(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result map[string]interface{}
-	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+	err := client.RunCmd(&result, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {

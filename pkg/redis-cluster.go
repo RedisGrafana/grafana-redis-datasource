@@ -7,7 +7,6 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -15,12 +14,12 @@ import (
  *
  * @see https://redis.io/commands/cluster-info
  */
-func queryClusterInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryClusterInfo(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result string
-	err := client.Do(radix.Cmd(&result, "CLUSTER", "INFO"))
+	err := client.RunCmd(&result, "CLUSTER", "INFO")
 
 	// Check error
 	if err != nil {
@@ -61,12 +60,12 @@ func queryClusterInfo(qm queryModel, client ClientInterface) backend.DataRespons
  *
  * @see https://redis.io/commands/cluster-nodes
  */
-func queryClusterNodes(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryClusterNodes(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result string
-	err := client.Do(radix.Cmd(&result, "CLUSTER", "NODES"))
+	err := client.RunCmd(&result, "CLUSTER", "NODES")
 
 	// Check error
 	if err != nil {

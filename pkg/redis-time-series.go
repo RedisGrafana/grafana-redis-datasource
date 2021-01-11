@@ -9,7 +9,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -17,7 +16,7 @@ import (
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsrangetsrevrange
  */
-func queryTsRange(from int64, to int64, qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsRange(from int64, to int64, qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	var result [][]string
@@ -25,9 +24,9 @@ func queryTsRange(from int64, to int64, qm queryModel, client ClientInterface) b
 
 	// Execute command
 	if qm.Aggregation != "" {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, from, to, "AGGREGATION", qm.Aggregation, qm.Bucket))
+		err = client.RunFlatCmd(&result, qm.Command, qm.Key, from, to, "AGGREGATION", qm.Aggregation, qm.Bucket)
 	} else {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, from, to))
+		err = client.RunFlatCmd(&result, qm.Command, qm.Key, from, to)
 	}
 
 	// Check error
@@ -82,7 +81,7 @@ func queryTsRange(from int64, to int64, qm queryModel, client ClientInterface) b
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsmrangetsmrevrange
  */
-func queryTsMRange(from int64, to int64, qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsMRange(from int64, to int64, qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	var result interface{}
@@ -99,9 +98,9 @@ func queryTsMRange(from int64, to int64, qm queryModel, client ClientInterface) 
 
 	// Execute command
 	if qm.Aggregation != "" {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter))
+		err = client.RunFlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter)
 	} else {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "WITHLABELS", "FILTER", filter))
+		err = client.RunFlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "WITHLABELS", "FILTER", filter)
 	}
 
 	// Check error
@@ -216,12 +215,12 @@ func queryTsMRange(from int64, to int64, qm queryModel, client ClientInterface) 
  *
  * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsget
  */
-func queryTsGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result []string
-	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+	err := client.RunCmd(&result, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {
@@ -250,12 +249,12 @@ func queryTsGet(qm queryModel, client ClientInterface) backend.DataResponse {
  *
  * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsinfo
  */
-func queryTsInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsInfo(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result map[string]interface{}
-	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+	err := client.RunCmd(&result, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {
@@ -307,7 +306,7 @@ func queryTsInfo(qm queryModel, client ClientInterface) backend.DataResponse {
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsqueryindex
  */
-func queryTsQueryIndex(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsQueryIndex(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Split Filter to array
@@ -321,7 +320,7 @@ func queryTsQueryIndex(qm queryModel, client ClientInterface) backend.DataRespon
 
 	// Execute command
 	var values []string
-	err := client.Do(radix.Cmd(&values, qm.Command, filter...))
+	err := client.RunCmd(&values, qm.Command, filter...)
 
 	// Check error
 	if err != nil {
