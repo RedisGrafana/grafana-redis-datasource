@@ -91,7 +91,7 @@ func TestQueryWithErrors(t *testing.T) {
 			JSON:          marshaled,
 		}, client)
 
-		require.EqualError(t, response.Error, "Unknown command", "Should return unknown command error")
+		require.NoError(t, response.Error, "Should not return error")
 	})
 
 }
