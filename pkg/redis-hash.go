@@ -15,7 +15,7 @@ import (
  *
  * @see https://redis.io/commands/hgetall
  */
-func (ds *redisDatasource) queryHGetAll(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHGetAll(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -24,7 +24,7 @@ func (ds *redisDatasource) queryHGetAll(qm queryModel, client ClientInterface) b
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame
@@ -51,7 +51,7 @@ func (ds *redisDatasource) queryHGetAll(qm queryModel, client ClientInterface) b
  *
  * @see https://redis.io/commands/hget
  */
-func (ds *redisDatasource) queryHGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHGet(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -60,11 +60,11 @@ func (ds *redisDatasource) queryHGet(qm queryModel, client ClientInterface) back
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Add the frames to the response
-	response.Frames = append(response.Frames, ds.createFrameValue(qm.Field, value))
+	response.Frames = append(response.Frames, createFrameValue(qm.Field, value))
 
 	// Return
 	return response
@@ -75,7 +75,7 @@ func (ds *redisDatasource) queryHGet(qm queryModel, client ClientInterface) back
  *
  * @see https://redis.io/commands/hmget
  */
-func (ds *redisDatasource) queryHMGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHMGet(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Split Field to array
@@ -93,7 +93,7 @@ func (ds *redisDatasource) queryHMGet(qm queryModel, client ClientInterface) bac
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame

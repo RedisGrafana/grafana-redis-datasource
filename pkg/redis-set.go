@@ -11,7 +11,7 @@ import (
  *
  * @see https://redis.io/commands/smembers
  */
-func (ds *redisDatasource) querySMembers(qm queryModel, client ClientInterface) backend.DataResponse {
+func querySMembers(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -20,7 +20,7 @@ func (ds *redisDatasource) querySMembers(qm queryModel, client ClientInterface) 
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame

@@ -81,9 +81,8 @@ func TestQueryInfo(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{tt.rcv, tt.err}
-			response := ds.queryInfo(tt.qm, client)
+			response := queryInfo(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
@@ -148,9 +147,8 @@ func TestQueryClientList(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{tt.rcv, tt.err}
-			response := ds.queryClientList(tt.qm, client)
+			response := queryClientList(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
@@ -257,9 +255,8 @@ func TestQuerySlowlogGet(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{tt.rcv, tt.err}
-			response := ds.querySlowlogGet(tt.qm, client)
+			response := querySlowlogGet(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

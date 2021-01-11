@@ -65,9 +65,8 @@ func TestQueryXInfoStream(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
 			client := testClient{tt.rcv, tt.err}
-			response := ds.queryXInfoStream(tt.qm, client)
+			response := queryXInfoStream(tt.qm, client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

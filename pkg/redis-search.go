@@ -14,7 +14,7 @@ import (
  *
  * @see https://oss.redislabs.com/redisearch/Commands/#ftinfo
  */
-func (ds *redisDatasource) queryFtInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryFtInfo(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -23,7 +23,7 @@ func (ds *redisDatasource) queryFtInfo(qm queryModel, client ClientInterface) ba
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Create data frame response

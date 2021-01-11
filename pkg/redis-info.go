@@ -16,7 +16,7 @@ import (
  *
  * @see https://redis.io/commands/info
  */
-func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryInfo(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -25,7 +25,7 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) back
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Split lines
@@ -130,7 +130,7 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) back
  *
  * @see https://redis.io/commands/client-list
  */
-func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryClientList(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -139,7 +139,7 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Split lines
@@ -198,7 +198,7 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface
  *
  * @see https://redis.io/commands/slowlog
  */
-func (ds *redisDatasource) querySlowlogGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func querySlowlogGet(qm queryModel, client ClientInterface) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -213,7 +213,7 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client ClientInterface
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame
