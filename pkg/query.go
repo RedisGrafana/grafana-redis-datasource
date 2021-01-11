@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
@@ -87,7 +86,7 @@ func (ds *redisDatasource) query(ctx context.Context, query backend.DataQuery, c
 		return ds.queryFtInfo(qm, client)
 	default:
 		response := backend.DataResponse{}
-		response.Error = fmt.Errorf("Unknown command")
+		log.DefaultLogger.Error("Query", "Command", qm.Command)
 		return response
 	}
 }
