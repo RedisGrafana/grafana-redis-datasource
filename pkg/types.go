@@ -2,20 +2,13 @@ package main
 
 import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
-	"github.com/mediocregopher/radix/v3"
 )
-
-// ClientInterface is an interface that represents the skeleton of a connection to Redis ( cluster, standalone, or sentinel )
-type ClientInterface interface {
-	Do(a radix.Action) error
-	Close() error
-}
 
 /**
  * Instance Settings
  */
 type instanceSettings struct {
-	client ClientInterface
+	client redisClient
 }
 
 /**

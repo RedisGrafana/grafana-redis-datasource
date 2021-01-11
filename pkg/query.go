@@ -8,14 +8,13 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	"github.com/mediocregopher/radix/v3"
 	"github.com/mediocregopher/radix/v3/resp/resp2"
 )
 
 /**
  * Query commands
  */
-func query(ctx context.Context, query backend.DataQuery, client ClientInterface) backend.DataResponse {
+func query(ctx context.Context, query backend.DataQuery, client redisClient) backend.DataResponse {
 	var qm queryModel
 
 	// Unmarshal the json into our queryModel
@@ -116,12 +115,12 @@ func errorHandler(response backend.DataResponse, err error) backend.DataResponse
  * @see https://redis.io/commands/ttl
  * @see https://redis.io/commands/hlen
  */
-func queryKeyCommand(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryKeyCommand(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var value string
-	err := client.Do(radix.Cmd(&value, qm.Command, qm.Key))
+	err := client.RunCmd(&value, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {

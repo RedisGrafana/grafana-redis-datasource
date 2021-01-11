@@ -9,7 +9,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 // EmptyArray for (empty array)
@@ -19,7 +18,7 @@ const EmptyArray = "(empty array)"
  * Execute Query
  * Can PANIC if command is wrong
  */
-func executeCustomQuery(qm queryModel, client ClientInterface) (interface{}, error) {
+func executeCustomQuery(qm queryModel, client redisClient) (interface{}, error) {
 	var result interface{}
 	var err error
 
@@ -44,13 +43,13 @@ func executeCustomQuery(qm queryModel, client ClientInterface) (interface{}, err
 
 	// Run command without params
 	if len(params) == 0 {
-		err = client.Do(radix.Cmd(&result, command))
+		err = client.RunCmd(&result, command)
 		return result, err
 	}
 
-	// Extract key or 1st parameter as required for FlatCmd
+	// Extract key or 1st parameter as required for RunFlatCmd
 	key, params := params[0], params[1:]
-	err = client.Do(radix.FlatCmd(&result, command, key, params))
+	err = client.RunFlatCmd(&result, command, key, params)
 
 	return result, err
 }
@@ -91,7 +90,7 @@ func parseInterfaceValue(value []interface{}, response backend.DataResponse) ([]
 /**
  * Custom Command, used for CLI and Variables
  */
-func queryCustomCommand(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Query is empty
