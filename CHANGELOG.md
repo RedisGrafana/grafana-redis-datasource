@@ -1,3 +1,10 @@
+# 1.3.1 (In progress)
+
+### Features / Enhancements
+
+- Add Unit test for Golang Backend #119
+- Remove "Unknown command" error from response for custom panels #125
+
 # 1.3.0 (2021-01-05)
 
 ### Breaking changes
