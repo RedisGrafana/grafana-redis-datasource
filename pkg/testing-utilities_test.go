@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/stretchr/testify/mock"
 	"reflect"
 )
@@ -110,4 +112,18 @@ type valueToCheckByLabelInResponse struct {
 	fieldName  string
 	rowIndex   int
 	value      interface{}
+}
+
+type fakeInstanceManager struct {
+	mock.Mock
+}
+
+func (im *fakeInstanceManager) Get(pluginContext backend.PluginContext) (instancemgmt.Instance, error) {
+	args := im.Called(pluginContext)
+	return args.Get(0), args.Error(1)
+}
+
+func (im *fakeInstanceManager) Do(pluginContext backend.PluginContext, fn instancemgmt.InstanceCallbackFunc) error {
+	args := im.Called(pluginContext, fn)
+	return args.Error(0)
 }
