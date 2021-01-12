@@ -36,7 +36,6 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "clusterNodes"}},
 		{queryModel{Command: "ft.info"}},
 		{queryModel{Command: "xinfoStream"}},
-		{queryModel{Query: "DO something"}},
 	}
 	for _, tt := range tests {
 		tt := tt
@@ -55,6 +54,21 @@ func TestQuery(t *testing.T) {
 			require.NoError(t, response.Error, "Should not return error")
 		})
 	}
+
+	t.Run("custom query", func(t *testing.T) {
+		t.Parallel()
+		client := testClient{[]interface{}{}, nil}
+		var marshaled, _ = json.Marshal(queryModel{Query: "Test"})
+		response := query(context.TODO(), backend.DataQuery{
+			RefID:         "",
+			QueryType:     "",
+			MaxDataPoints: 100,
+			Interval:      10,
+			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
+			JSON:          marshaled,
+		}, client)
+		require.NoError(t, response.Error, "Should not return error")
+	})
 }
 
 func TestQueryWithErrors(t *testing.T) {

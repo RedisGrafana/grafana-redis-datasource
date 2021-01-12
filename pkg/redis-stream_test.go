@@ -20,33 +20,12 @@ func TestQueryXInfoStream(t *testing.T) {
 		{
 			"should handle default payload, but collect only top-level key-value pairs",
 			queryModel{Command: "xinfoStream", Key: "test1"},
-			[]interface{}{
-				"length",
-				2,
-				"radix-tree-keys",
-				1,
-				"radix-tree-nodes",
-				2,
-				"groups",
-				2,
-				"last-generated-id",
-				"1538385846314-0",
-				"first-entry",
-				[]interface{}{
-					"1538385820729-0",
-					[]interface{}{
-						"foo",
-						"bar",
-					},
-				},
-				"last-entry",
-				[]interface{}{
-					"1538385846314-0",
-					[]interface{}{
-						"field",
-						"value",
-					},
-				},
+			map[string]string{
+				"length":            "2",
+				"radix-tree-keys":   "1",
+				"radix-tree-nodes":  "2",
+				"groups":            "2",
+				"last-generated-id": "1538385846314-0",
 			},
 			2,
 			5,

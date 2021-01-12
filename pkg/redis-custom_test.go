@@ -32,7 +32,7 @@ func TestExecuteCustomQuery(t *testing.T) {
 		{
 			"should parse correct real-world command without params",
 			queryModel{Query: "lastsave"},
-			int64(1609840612),
+			interface{}(int64(1609840612)),
 			nil,
 		},
 		{
@@ -214,6 +214,26 @@ func TestQueryCustomCommand(t *testing.T) {
 			},
 			nil,
 			"",
+		},
+		{
+			"should return error on nil value received",
+			queryModel{Query: "test"},
+			nil,
+			1,
+			1,
+			nil,
+			nil,
+			"Wrong command",
+		},
+		{
+			"should return error on int32 value (unsupported)",
+			queryModel{Query: "test"},
+			15,
+			1,
+			1,
+			nil,
+			nil,
+			"Unsupported return type",
 		},
 		{
 			"should fail with emtpy command",

@@ -211,7 +211,7 @@ func TestQuerySlowlogGet(t *testing.T) {
 			"should parse payload with array of command arguments having specific types",
 			queryModel{Command: "slowlogGet"},
 			[]interface{}{
-				[]interface{}{int64(14), int64(1309448221), int64(15), []interface{}{"ping", int32(3), []byte("pong"), []interface{}{}}, "127.0.0.1:58217", "worker-123"},
+				[]interface{}{int64(14), int64(1309448221), int64(15), []interface{}{"ping", int32(3), int64(3), []byte("pong"), []interface{}{}}, "127.0.0.1:58217", "worker-123"},
 			},
 			4,
 			1,
