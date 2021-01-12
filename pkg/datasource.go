@@ -126,7 +126,7 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	}, nil
 }
 
-// Create redisClientConfiguration instance
+// Create redisClientConfiguration instance from the grafana settings
 func createRedisClientConfig(setting backend.DataSourceInstanceSettings) (redisClientConfiguration, error) {
 	var jsonData dataModel
 
