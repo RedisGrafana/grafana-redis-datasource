@@ -1,13 +1,17 @@
 package main
 
-import "reflect"
+import (
+	"github.com/stretchr/testify/mock"
+	"reflect"
+)
 
 type testClient struct {
 	rcv interface{}
 	err error
+	mock.Mock
 }
 
-func (client testClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
+func (client *testClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	if client.err != nil {
 		return client.err
 	} else {
@@ -16,7 +20,7 @@ func (client testClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...in
 	}
 
 }
-func (client testClient) RunCmd(rcv interface{}, cmd string, args ...string) error {
+func (client *testClient) RunCmd(rcv interface{}, cmd string, args ...string) error {
 	if client.err != nil {
 		return client.err
 	} else {
@@ -25,7 +29,7 @@ func (client testClient) RunCmd(rcv interface{}, cmd string, args ...string) err
 	}
 }
 
-func (client testClient) assignReceiver(rcv interface{}) {
+func (client *testClient) assignReceiver(rcv interface{}) {
 	switch rcv.(type) {
 	case int:
 		*(rcv.(*int)) = client.rcv.(int)
@@ -76,20 +80,21 @@ func (client testClient) assignReceiver(rcv interface{}) {
 		panic("Unsupported type of rcv: " + reflect.TypeOf(rcv).String())
 	}
 }
-func (client testClient) Close() error {
-	return client.err
+func (client *testClient) Close() error {
+	args := client.Called()
+	return args.Error(0)
 }
 
 type panickingClient struct {
 }
 
-func (client panickingClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
+func (client *panickingClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	panic("Panic")
 }
-func (client panickingClient) RunCmd(rcv interface{}, cmd string, args ...string) error {
+func (client *panickingClient) RunCmd(rcv interface{}, cmd string, args ...string) error {
 	panic("Panic")
 }
-func (client panickingClient) Close() error {
+func (client *panickingClient) Close() error {
 	return nil
 }
 

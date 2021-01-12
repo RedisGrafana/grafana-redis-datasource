@@ -41,7 +41,7 @@ func TestQuery(t *testing.T) {
 		tt := tt
 		t.Run(tt.qm.Command, func(t *testing.T) {
 			t.Parallel()
-			client := testClient{nil, nil}
+			client := testClient{rcv: nil, err: nil}
 			var marshaled, _ = json.Marshal(tt.qm)
 			response := query(context.TODO(), backend.DataQuery{
 				RefID:         "",
@@ -50,14 +50,14 @@ func TestQuery(t *testing.T) {
 				Interval:      10,
 				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
 				JSON:          marshaled,
-			}, client)
+			}, &client)
 			require.NoError(t, response.Error, "Should not return error")
 		})
 	}
 
 	t.Run("custom query", func(t *testing.T) {
 		t.Parallel()
-		client := testClient{[]interface{}{}, nil}
+		client := testClient{rcv: []interface{}{}, err: nil}
 		var marshaled, _ = json.Marshal(queryModel{Query: "Test"})
 		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
@@ -66,7 +66,7 @@ func TestQuery(t *testing.T) {
 			Interval:      10,
 			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
 			JSON:          marshaled,
-		}, client)
+		}, &client)
 		require.NoError(t, response.Error, "Should not return error")
 	})
 }
@@ -76,7 +76,7 @@ func TestQueryWithErrors(t *testing.T) {
 
 	t.Run("Marshalling failure", func(t *testing.T) {
 		t.Parallel()
-		client := testClient{nil, nil}
+		client := testClient{rcv: nil, err: nil}
 		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
@@ -84,7 +84,7 @@ func TestQueryWithErrors(t *testing.T) {
 			Interval:      10,
 			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
 			JSON:          []byte{31, 17, 45},
-		}, client)
+		}, &client)
 
 		require.EqualError(t, response.Error, "invalid character '\\x1f' looking for beginning of value", "Should return marshalling error")
 	})
@@ -92,7 +92,7 @@ func TestQueryWithErrors(t *testing.T) {
 	t.Run("Unknown command failure", func(t *testing.T) {
 		t.Parallel()
 
-		client := testClient{nil, nil}
+		client := testClient{rcv: nil, err: nil}
 		var marshaled, _ = json.Marshal(queryModel{Command: "unknown"})
 		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
@@ -101,7 +101,7 @@ func TestQueryWithErrors(t *testing.T) {
 			Interval:      10,
 			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
 			JSON:          marshaled,
-		}, client)
+		}, &client)
 
 		require.NoError(t, response.Error, "Should not return error")
 	})
@@ -172,8 +172,8 @@ func TestQueryKeyCommand(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			client := testClient{tt.rcv, tt.err}
-			response := queryKeyCommand(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryKeyCommand(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

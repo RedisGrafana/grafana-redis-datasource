@@ -94,3 +94,11 @@ func TestCreateRedisClientConfig(t *testing.T) {
 		require.EqualError(t, err, "unexpected end of JSON input")
 	})
 }
+
+func TestInstanceSettings_Dispose(t *testing.T) {
+	client := &testClient{}
+	client.On("Close").Return(nil)
+	is := instanceSettings{client}
+	is.Dispose()
+	client.AssertNumberOfCalls(t, "Close", 1)
+}
