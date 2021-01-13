@@ -13,7 +13,7 @@ import (
  * @param {string} key Key
  * @param {string} value Value
  */
-func (ds *redisDatasource) createFrameValue(key string, value string) *data.Frame {
+func createFrameValue(key string, value string) *data.Frame {
 	frame := data.NewFrame(key)
 
 	// Parse Float
@@ -30,7 +30,7 @@ func (ds *redisDatasource) createFrameValue(key string, value string) *data.Fram
 /**
  * Add Frame Fields from Array
  */
-func (ds *redisDatasource) addFrameFieldsFromArray(values []interface{}, frame *data.Frame) *data.Frame {
+func addFrameFieldsFromArray(values []interface{}, frame *data.Frame) *data.Frame {
 	for _, value := range values {
 		pair := value.([]interface{})
 		var key string

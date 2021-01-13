@@ -8,7 +8,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -16,16 +15,16 @@ import (
  *
  * @see https://redis.io/commands/info
  */
-func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result string
-	err := client.Do(radix.Cmd(&result, qm.Command, qm.Section))
+	err := client.RunCmd(&result, qm.Command, qm.Section)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Split lines
@@ -130,16 +129,16 @@ func (ds *redisDatasource) queryInfo(qm queryModel, client ClientInterface) back
  *
  * @see https://redis.io/commands/client-list
  */
-func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryClientList(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result string
-	err := client.Do(radix.Cmd(&result, "CLIENT", "LIST"))
+	err := client.RunCmd(&result, "CLIENT", "LIST")
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Split lines
@@ -198,7 +197,7 @@ func (ds *redisDatasource) queryClientList(qm queryModel, client ClientInterface
  *
  * @see https://redis.io/commands/slowlog
  */
-func (ds *redisDatasource) querySlowlogGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func querySlowlogGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
@@ -206,14 +205,14 @@ func (ds *redisDatasource) querySlowlogGet(qm queryModel, client ClientInterface
 	var err error
 
 	if qm.Size > 0 {
-		err = client.Do(radix.FlatCmd(&result, "SLOWLOG", "GET", qm.Size))
+		err = client.RunFlatCmd(&result, "SLOWLOG", "GET", qm.Size)
 	} else {
-		err = client.Do(radix.Cmd(&result, "SLOWLOG", "GET"))
+		err = client.RunCmd(&result, "SLOWLOG", "GET")
 	}
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame

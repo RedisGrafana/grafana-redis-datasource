@@ -36,26 +36,39 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "clusterNodes"}},
 		{queryModel{Command: "ft.info"}},
 		{queryModel{Command: "xinfoStream"}},
-		{queryModel{Query: "DO something"}},
 	}
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.qm.Command, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{nil, nil}
+			client := testClient{rcv: nil, err: nil}
 			var marshaled, _ = json.Marshal(tt.qm)
-			response := ds.query(context.TODO(), backend.DataQuery{
+			response := query(context.TODO(), backend.DataQuery{
 				RefID:         "",
 				QueryType:     "",
 				MaxDataPoints: 100,
 				Interval:      10,
 				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
 				JSON:          marshaled,
-			}, client)
+			}, &client)
 			require.NoError(t, response.Error, "Should not return error")
 		})
 	}
+
+	t.Run("custom query", func(t *testing.T) {
+		t.Parallel()
+		client := testClient{rcv: []interface{}{}, err: nil}
+		var marshaled, _ = json.Marshal(queryModel{Query: "Test"})
+		response := query(context.TODO(), backend.DataQuery{
+			RefID:         "",
+			QueryType:     "",
+			MaxDataPoints: 100,
+			Interval:      10,
+			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
+			JSON:          marshaled,
+		}, &client)
+		require.NoError(t, response.Error, "Should not return error")
+	})
 }
 
 func TestQueryWithErrors(t *testing.T) {
@@ -63,33 +76,32 @@ func TestQueryWithErrors(t *testing.T) {
 
 	t.Run("Marshalling failure", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
-		client := testClient{nil, nil}
-		response := ds.query(context.TODO(), backend.DataQuery{
+		client := testClient{rcv: nil, err: nil}
+		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
 			MaxDataPoints: 100,
 			Interval:      10,
 			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
 			JSON:          []byte{31, 17, 45},
-		}, client)
+		}, &client)
 
 		require.EqualError(t, response.Error, "invalid character '\\x1f' looking for beginning of value", "Should return marshalling error")
 	})
 
 	t.Run("Unknown command failure", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
-		client := testClient{nil, nil}
+
+		client := testClient{rcv: nil, err: nil}
 		var marshaled, _ = json.Marshal(queryModel{Command: "unknown"})
-		response := ds.query(context.TODO(), backend.DataQuery{
+		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
 			MaxDataPoints: 100,
 			Interval:      10,
 			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
 			JSON:          marshaled,
-		}, client)
+		}, &client)
 
 		require.NoError(t, response.Error, "Should not return error")
 	})
@@ -101,15 +113,13 @@ func TestErrorHandler(t *testing.T) {
 
 	t.Run("Common error", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
-		resp := ds.errorHandler(backend.DataResponse{}, errors.New("common error"))
+		resp := errorHandler(backend.DataResponse{}, errors.New("common error"))
 		require.EqualError(t, resp.Error, "common error", "Should return marshalling error")
 	})
 
 	t.Run("Redis error", func(t *testing.T) {
 		t.Parallel()
-		ds := redisDatasource{}
-		resp := ds.errorHandler(backend.DataResponse{}, resp2.Error{E: errors.New("redis error")})
+		resp := errorHandler(backend.DataResponse{}, resp2.Error{E: errors.New("redis error")})
 		require.EqualError(t, resp.Error, "redis error", "Should return marshalling error")
 	})
 
@@ -162,9 +172,8 @@ func TestQueryKeyCommand(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.queryKeyCommand(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryKeyCommand(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

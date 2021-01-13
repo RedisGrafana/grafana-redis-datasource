@@ -45,9 +45,8 @@ func TestQueryHGetAll(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.queryHGetAll(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryHGetAll(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
@@ -109,9 +108,8 @@ func TestQueryHGet(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.queryHGet(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryHGet(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
@@ -177,9 +175,8 @@ func TestQueryHMGet(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.queryHMGet(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryHMGet(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

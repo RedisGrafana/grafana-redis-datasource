@@ -2,18 +2,13 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"encoding/json"
 	"fmt"
-	"strings"
-	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -52,7 +47,7 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 
 	// Loop over queries and execute them individually
 	for _, q := range req.Queries {
-		res := ds.query(ctx, q, client)
+		res := query(ctx, q, client)
 
 		// save the response in a hashmap based on with RefID as identifier
 		response.Responses[q.RefID] = res
@@ -77,7 +72,7 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 		status = backend.HealthStatusError
 		message = fmt.Sprintf("getInstance error: %s", err.Error())
 	} else {
-		err = client.Do(radix.Cmd(&message, "PING"))
+		err = client.RunCmd(&message, "PING")
 
 		// Check errors
 		if err != nil {
@@ -99,7 +94,7 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 /**
  * Return Instance
  */
-func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (ClientInterface, error) {
+func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (redisClient, error) {
 	s, err := ds.im.Get(ctx)
 
 	if err != nil {
@@ -116,13 +111,33 @@ func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (ClientInterfa
  * @see https://github.com/mediocregopher/radix
  */
 func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+	// Parse configuration provided by grafana and create configuration for redisClient
+	config, err := createRedisClientConfig(setting)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create radix implementation of redisClient
+	client, err := newRadixV3Client(config)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create datasource instance with redisClient inside
+	return &instanceSettings{
+		client,
+	}, nil
+}
+
+// Create redisClientConfiguration instance from the grafana settings
+func createRedisClientConfig(setting backend.DataSourceInstanceSettings) (redisClientConfiguration, error) {
 	var jsonData dataModel
 
 	// Unmarshal Configuration
 	var dataError = json.Unmarshal(setting.JSONData, &jsonData)
 	if dataError != nil {
 		log.DefaultLogger.Error("JSONData", "Error", dataError)
-		return nil, dataError
+		return redisClientConfiguration{}, dataError
 	}
 
 	// Debug
@@ -152,87 +167,36 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 		pipelineWindow = jsonData.PipelineWindow
 	}
 
+	// Configuration
+	configuration := redisClientConfiguration{
+		URL:            setting.URL,
+		Timeout:        timeout,
+		PoolSize:       poolSize,
+		PingInterval:   pingInterval,
+		PipelineWindow: pipelineWindow,
+		ACL:            jsonData.ACL,
+		TLSAuth:        jsonData.TLSAuth,
+		TLSSkipVerify:  jsonData.TLSSkipVerify,
+		Client:         jsonData.Client,
+		SentinelName:   jsonData.SentinelName,
+		User:           jsonData.User,
+	}
+
 	// Secured Data
 	var secureData = setting.DecryptedSecureJSONData
-
-	// Set up connection
-	connFunc := func(network, addr string) (radix.Conn, error) {
-		opts := []radix.DialOpt{radix.DialTimeout(time.Duration(timeout) * time.Second)}
-
-		// Authentication
-		if secureData != nil && secureData["password"] != "" {
-			// If ACL enabled
-			if jsonData.ACL {
-				opts = append(opts, radix.DialAuthUser(jsonData.User, secureData["password"]))
-			} else {
-				opts = append(opts, radix.DialAuthPass(secureData["password"]))
-			}
+	if secureData != nil {
+		if secureData["password"] != "" {
+			configuration.Password = secureData["password"]
 		}
-
-		// TLS Authentication
-		if jsonData.TLSAuth {
-			// TLS Config
-			tlsConfig := &tls.Config{
-				InsecureSkipVerify: jsonData.TLSSkipVerify,
-			}
-
-			// Certification Authority
-			if secureData["tlsCACert"] != "" {
-				caPool := x509.NewCertPool()
-				ok := caPool.AppendCertsFromPEM([]byte(secureData["tlsCACert"]))
-				if ok {
-					tlsConfig.RootCAs = caPool
-				}
-			}
-
-			// Certificate and Key
-			if secureData["tlsClientCert"] != "" {
-				cert, err := tls.X509KeyPair([]byte(secureData["tlsClientCert"]), []byte(secureData["tlsClientKey"]))
-				if err == nil {
-					tlsConfig.Certificates = []tls.Certificate{cert}
-				} else {
-					log.DefaultLogger.Error("X509KeyPair", "Error", err)
-					return nil, err
-				}
-			}
-
-			// Add TLS Config
-			opts = append(opts, radix.DialUseTLS(tlsConfig))
+		if secureData["tlsCACert"] != "" {
+			configuration.TLSCACert = secureData["tlsCACert"]
 		}
-
-		return radix.Dial(network, addr, opts...)
+		if secureData["tlsClientCert"] != "" {
+			configuration.TLSClientCert = secureData["tlsClientCert"]
+		}
 	}
 
-	// Pool with specified Ping Interval, Pipeline Window and Timeout
-	poolFunc := func(network, addr string) (radix.Client, error) {
-		return radix.NewPool(network, addr, poolSize, radix.PoolConnFunc(connFunc),
-			radix.PoolPingInterval(time.Duration(pingInterval)*time.Second/time.Duration(poolSize+1)),
-			radix.PoolPipelineWindow(time.Duration(pipelineWindow)*time.Microsecond, 0))
-	}
-
-	var client ClientInterface
-	var err error
-
-	// Client Type
-	switch jsonData.Client {
-	case "cluster":
-		client, err = radix.NewCluster(strings.Split(setting.URL, ","), radix.ClusterPoolFunc(poolFunc))
-	case "sentinel":
-		client, err = radix.NewSentinel(jsonData.SentinelName, strings.Split(setting.URL, ","), radix.SentinelConnFunc(connFunc),
-			radix.SentinelPoolFunc(poolFunc))
-	case "socket":
-		client, err = poolFunc("unix", setting.URL)
-	default:
-		client, err = poolFunc("tcp", setting.URL)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &instanceSettings{
-		client,
-	}, nil
+	return configuration, nil
 }
 
 /**

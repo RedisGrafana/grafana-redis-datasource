@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -11,16 +10,16 @@ import (
  *
  * @see https://redis.io/commands/xinfo
  */
-func (ds *redisDatasource) queryXInfoStream(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryXInfoStream(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result map[string]string
-	err := client.Do(radix.FlatCmd(&result, "XINFO", "STREAM", qm.Key))
+	err := client.RunFlatCmd(&result, "XINFO", "STREAM", qm.Key)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	fields := []string{}

@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -11,16 +10,16 @@ import (
  *
  * @see https://redis.io/commands/smembers
  */
-func (ds *redisDatasource) querySMembers(qm queryModel, client ClientInterface) backend.DataResponse {
+func querySMembers(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var values []string
-	err := client.Do(radix.FlatCmd(&values, qm.Command, qm.Key))
+	err := client.RunFlatCmd(&values, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame

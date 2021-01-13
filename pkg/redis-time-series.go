@@ -9,7 +9,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -17,7 +16,7 @@ import (
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsrangetsrevrange
  */
-func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsRange(from int64, to int64, qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	var result [][]string
@@ -25,14 +24,14 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
 
 	// Execute command
 	if qm.Aggregation != "" {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, from, to, "AGGREGATION", qm.Aggregation, qm.Bucket))
+		err = client.RunFlatCmd(&result, qm.Command, qm.Key, from, to, "AGGREGATION", qm.Aggregation, qm.Bucket)
 	} else {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, from, to))
+		err = client.RunFlatCmd(&result, qm.Command, qm.Key, from, to)
 	}
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Legend
@@ -82,7 +81,7 @@ func (ds *redisDatasource) queryTsRange(from int64, to int64, qm queryModel, cli
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsmrangetsmrevrange
  */
-func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsMRange(from int64, to int64, qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	var result interface{}
@@ -99,14 +98,14 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
 
 	// Execute command
 	if qm.Aggregation != "" {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter))
+		err = client.RunFlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter)
 	} else {
-		err = client.Do(radix.FlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "WITHLABELS", "FILTER", filter))
+		err = client.RunFlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "WITHLABELS", "FILTER", filter)
 	}
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Check results
@@ -216,16 +215,16 @@ func (ds *redisDatasource) queryTsMRange(from int64, to int64, qm queryModel, cl
  *
  * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsget
  */
-func (ds *redisDatasource) queryTsGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result []string
-	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+	err := client.RunCmd(&result, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Create data frame response
@@ -250,16 +249,16 @@ func (ds *redisDatasource) queryTsGet(qm queryModel, client ClientInterface) bac
  *
  * @see https://oss.redislabs.com/redistimeseries/1.4/commands/#tsinfo
  */
-func (ds *redisDatasource) queryTsInfo(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsInfo(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result map[string]interface{}
-	err := client.Do(radix.Cmd(&result, qm.Command, qm.Key))
+	err := client.RunCmd(&result, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Create data frame response
@@ -290,7 +289,7 @@ func (ds *redisDatasource) queryTsInfo(qm queryModel, client ClientInterface) ba
 		case []byte:
 			frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{string(value)}))
 		case []interface{}:
-			frame = ds.addFrameFieldsFromArray(value, frame)
+			frame = addFrameFieldsFromArray(value, frame)
 		default:
 			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Value type")
 		}
@@ -307,7 +306,7 @@ func (ds *redisDatasource) queryTsInfo(qm queryModel, client ClientInterface) ba
  *
  * @see https://oss.redislabs.com/redistimeseries/commands/#tsqueryindex
  */
-func (ds *redisDatasource) queryTsQueryIndex(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryTsQueryIndex(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Split Filter to array
@@ -321,11 +320,11 @@ func (ds *redisDatasource) queryTsQueryIndex(qm queryModel, client ClientInterfa
 
 	// Execute command
 	var values []string
-	err := client.Do(radix.Cmd(&values, qm.Command, filter...))
+	err := client.RunCmd(&values, qm.Command, filter...)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame

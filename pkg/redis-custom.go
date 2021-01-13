@@ -9,7 +9,6 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 // EmptyArray for (empty array)
@@ -19,7 +18,7 @@ const EmptyArray = "(empty array)"
  * Execute Query
  * Can PANIC if command is wrong
  */
-func (ds *redisDatasource) executeCustomQuery(qm queryModel, client ClientInterface) (interface{}, error) {
+func executeCustomQuery(qm queryModel, client redisClient) (interface{}, error) {
 	var result interface{}
 	var err error
 
@@ -44,13 +43,13 @@ func (ds *redisDatasource) executeCustomQuery(qm queryModel, client ClientInterf
 
 	// Run command without params
 	if len(params) == 0 {
-		err = client.Do(radix.Cmd(&result, command))
+		err = client.RunCmd(&result, command)
 		return result, err
 	}
 
-	// Extract key or 1st parameter as required for FlatCmd
+	// Extract key or 1st parameter as required for RunFlatCmd
 	key, params := params[0], params[1:]
-	err = client.Do(radix.FlatCmd(&result, command, key, params))
+	err = client.RunFlatCmd(&result, command, key, params)
 
 	return result, err
 }
@@ -58,7 +57,7 @@ func (ds *redisDatasource) executeCustomQuery(qm queryModel, client ClientInterf
 /**
  * Parse Value
  */
-func (ds *redisDatasource) parseInterfaceValue(value []interface{}, response backend.DataResponse) ([]string, backend.DataResponse) {
+func parseInterfaceValue(value []interface{}, response backend.DataResponse) ([]string, backend.DataResponse) {
 	var values []string
 
 	for _, element := range value {
@@ -71,7 +70,7 @@ func (ds *redisDatasource) parseInterfaceValue(value []interface{}, response bac
 			values = append(values, element)
 		case []interface{}:
 			var parsedValues []string
-			parsedValues, response = ds.parseInterfaceValue(element, response)
+			parsedValues, response = parseInterfaceValue(element, response)
 
 			// If no values
 			if len(parsedValues) == 0 {
@@ -91,7 +90,7 @@ func (ds *redisDatasource) parseInterfaceValue(value []interface{}, response bac
 /**
  * Custom Command, used for CLI and Variables
  */
-func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Query is empty
@@ -104,11 +103,11 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterf
 	var err error
 
 	// Parse and execute query
-	result, err = ds.executeCustomQuery(qm, client)
+	result, err = executeCustomQuery(qm, client)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	/**
@@ -128,7 +127,7 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterf
 
 		// Parse float if only one value
 		if len(values) == 1 {
-			response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, values[0]))
+			response.Frames = append(response.Frames, createFrameValue(qm.Key, values[0]))
 			break
 		}
 
@@ -138,7 +137,7 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterf
 				data.NewField("Value", nil, values)))
 	case string:
 		// Add Frame
-		response.Frames = append(response.Frames, ds.createFrameValue(qm.Key, result))
+		response.Frames = append(response.Frames, createFrameValue(qm.Key, result))
 	case []interface{}:
 		var values []string
 
@@ -146,7 +145,7 @@ func (ds *redisDatasource) queryCustomCommand(qm queryModel, client ClientInterf
 		if len(result) == 0 {
 			values = append(values, EmptyArray)
 		} else {
-			values, response = ds.parseInterfaceValue(result, response)
+			values, response = parseInterfaceValue(result, response)
 		}
 
 		// Error when parsing intarface

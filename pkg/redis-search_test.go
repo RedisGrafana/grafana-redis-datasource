@@ -21,13 +21,10 @@ func TestQueryFtInfo(t *testing.T) {
 		{
 			"should parse default bulk string",
 			queryModel{Command: "ft.info", Key: "wik{0}"},
-			[]interface{}{
-				"index_name",
-				"wikipedia",
-				"index_options",
-				[]interface{}{},
-				"index_definition",
-				[]interface{}{
+			map[string]interface{}{
+				"index_name":    []byte("wikipedia"),
+				"index_options": []interface{}{},
+				"index_definition": []interface{}{
 					"key_type",
 					"HASH",
 					"prefixes",
@@ -43,8 +40,7 @@ func TestQueryFtInfo(t *testing.T) {
 					"payload_field",
 					"__payload",
 				},
-				"fields",
-				[]interface{}{
+				"fields": []interface{}{
 					[]interface{}{
 						"title",
 						"type",
@@ -70,42 +66,26 @@ func TestQueryFtInfo(t *testing.T) {
 						"GEO",
 					},
 				},
-				"num_docs",
-				"0",
-				"max_doc_id",
-				"345678",
-				"num_terms",
-				"691356",
-				"num_records",
-				"0",
-				"inverted_sz_mb",
-				int64(0),
-				"total_inverted_index_blocks",
-				"933290",
-				"offset_vectors_sz_mb",
-				"0.65932846069335938",
-				"doc_table_size_mb",
-				"29.893482208251953",
-				"sortable_values_size_mb",
-				"11.432285308837891",
-				"key_table_size_mb",
-				"1.239776611328125e-05",
-				"records_per_doc_avg",
-				"-nan",
-				"bytes_per_record_avg",
-				"-nan",
-				"offsets_per_term_avg",
-				"inf",
-				"offset_bits_per_record_avg",
-				"8",
-				"hash_indexing_failures",
-				"0",
-				"indexing",
-				"0",
-				"percent_indexed",
-				"1",
-				"gc_stats",
-				[]interface{}{
+				"num_docs":                      []byte("0"),
+				"test_field":                    "test_string",
+				"conversaton_error_test_int_32": 32,
+				"max_doc_id":                    []byte("345678"),
+				"num_terms":                     []byte("691356"),
+				"num_records":                   []byte("0"),
+				"inverted_sz_mb":                int64(0),
+				"total_inverted_index_blocks":   []byte("933290"),
+				"offset_vectors_sz_mb":          []byte("0.65932846069335938"),
+				"doc_table_size_mb":             []byte("29.893482208251953"),
+				"sortable_values_size_mb":       []byte("11.432285308837891"),
+				"key_table_size_mb":             []byte("1.239776611328125e-05"),
+				"records_per_doc_avg":           []byte("-nan"),
+				"bytes_per_record_avg":          []byte("-nan"),
+				"offsets_per_term_avg":          []byte("inf"),
+				"offset_bits_per_record_avg":    []byte("8"),
+				"hash_indexing_failures":        []byte("0"),
+				"indexing":                      []byte("0"),
+				"percent_indexed":               []byte("1"),
+				"gc_stats": []interface{}{
 					"bytes_collected",
 					"4148136",
 					"total_ms_run",
@@ -121,8 +101,7 @@ func TestQueryFtInfo(t *testing.T) {
 					"gc_blocks_denied",
 					"0",
 				},
-				"cursor_stats",
-				[]interface{}{
+				"cursor_stats": []interface{}{
 					"global_idle",
 					int64(0),
 					"global_total",
@@ -132,14 +111,13 @@ func TestQueryFtInfo(t *testing.T) {
 					"index_total",
 					int64(0),
 				},
-				"stopwords_list",
-				[]interface{}{
+				"stopwords_list": []interface{}{
 					"tlv",
 					"summer",
 					"2020",
 				},
 			},
-			18,
+			19,
 			1,
 			[]valueToCheckByLabelInResponse{
 				{frameIndex: 0, fieldName: "index_name", rowIndex: 0, value: "wikipedia"},
@@ -162,9 +140,8 @@ func TestQueryFtInfo(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.queryFtInfo(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryFtInfo(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

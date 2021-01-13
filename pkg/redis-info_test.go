@@ -81,9 +81,8 @@ func TestQueryInfo(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.queryInfo(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryInfo(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
@@ -148,9 +147,8 @@ func TestQueryClientList(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.queryClientList(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryClientList(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
@@ -213,7 +211,7 @@ func TestQuerySlowlogGet(t *testing.T) {
 			"should parse payload with array of command arguments having specific types",
 			queryModel{Command: "slowlogGet"},
 			[]interface{}{
-				[]interface{}{int64(14), int64(1309448221), int64(15), []interface{}{"ping", int32(3), []byte("pong"), []interface{}{}}, "127.0.0.1:58217", "worker-123"},
+				[]interface{}{int64(14), int64(1309448221), int64(15), []interface{}{"ping", int32(3), int64(3), []byte("pong"), []interface{}{}}, "127.0.0.1:58217", "worker-123"},
 			},
 			4,
 			1,
@@ -257,9 +255,8 @@ func TestQuerySlowlogGet(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			ds := redisDatasource{}
-			client := testClient{tt.rcv, tt.err}
-			response := ds.querySlowlogGet(tt.qm, client)
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := querySlowlogGet(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")

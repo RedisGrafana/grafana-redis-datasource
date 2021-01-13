@@ -7,7 +7,6 @@ import (
 	"bitbucket.org/creachadair/shell"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
-	"github.com/mediocregopher/radix/v3"
 )
 
 /**
@@ -15,16 +14,16 @@ import (
  *
  * @see https://redis.io/commands/hgetall
  */
-func (ds *redisDatasource) queryHGetAll(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHGetAll(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var result []string
-	err := client.Do(radix.FlatCmd(&result, qm.Command, qm.Key))
+	err := client.RunFlatCmd(&result, qm.Command, qm.Key)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame
@@ -51,20 +50,20 @@ func (ds *redisDatasource) queryHGetAll(qm queryModel, client ClientInterface) b
  *
  * @see https://redis.io/commands/hget
  */
-func (ds *redisDatasource) queryHGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Execute command
 	var value string
-	err := client.Do(radix.FlatCmd(&value, qm.Command, qm.Key, qm.Field))
+	err := client.RunFlatCmd(&value, qm.Command, qm.Key, qm.Field)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// Add the frames to the response
-	response.Frames = append(response.Frames, ds.createFrameValue(qm.Field, value))
+	response.Frames = append(response.Frames, createFrameValue(qm.Field, value))
 
 	// Return
 	return response
@@ -75,7 +74,7 @@ func (ds *redisDatasource) queryHGet(qm queryModel, client ClientInterface) back
  *
  * @see https://redis.io/commands/hmget
  */
-func (ds *redisDatasource) queryHMGet(qm queryModel, client ClientInterface) backend.DataResponse {
+func queryHMGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Split Field to array
@@ -89,11 +88,11 @@ func (ds *redisDatasource) queryHMGet(qm queryModel, client ClientInterface) bac
 
 	// Execute command
 	var result []string
-	err := client.Do(radix.FlatCmd(&result, qm.Command, qm.Key, fields))
+	err := client.RunFlatCmd(&result, qm.Command, qm.Key, fields)
 
 	// Check error
 	if err != nil {
-		return ds.errorHandler(response, err)
+		return errorHandler(response, err)
 	}
 
 	// New Frame
