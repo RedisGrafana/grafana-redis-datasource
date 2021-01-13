@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"testing"
+	"time"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"testing"
-	"time"
 )
 
 func TestCreateRedisClientConfig(t *testing.T) {
@@ -61,15 +62,15 @@ func TestCreateRedisClientConfig(t *testing.T) {
 				},
 			},
 			redisClientConfiguration{
-				Url:            "localhost:6379",
+				URL:            "localhost:6379",
 				Timeout:        10,
 				PoolSize:       5,
 				PingInterval:   0,
 				PipelineWindow: 0,
 				User:           "username",
 				Password:       "1234",
-				TlsCACert:      "BEGIN CERTIFICATE",
-				TlsClientCert:  "BEGIN CERTIFICATE",
+				TLSCACert:      "BEGIN CERTIFICATE",
+				TLSClientCert:  "BEGIN CERTIFICATE",
 			},
 			"",
 		},

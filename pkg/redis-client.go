@@ -3,17 +3,18 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	"github.com/mediocregopher/radix/v3"
 	"strings"
 	"time"
+
+	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
+	"github.com/mediocregopher/radix/v3"
 )
 
 /**
  * Configuration Data Model for redisClient
  */
 type redisClientConfiguration struct {
-	Url            string
+	URL            string
 	Client         string
 	Timeout        int
 	PoolSize       int
@@ -24,8 +25,8 @@ type redisClientConfiguration struct {
 	TLSSkipVerify  bool
 	User           string
 	Password       string
-	TlsCACert      string
-	TlsClientCert  string
+	TLSCACert      string
+	TLSClientCert  string
 	SentinelName   string
 }
 
@@ -49,12 +50,17 @@ type radixV3Impl struct {
 	radixClient radixClient
 }
 
+// Execute Radix FlatCmd
 func (client *radixV3Impl) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	return client.radixClient.Do(radix.FlatCmd(rcv, cmd, key, args...))
 }
+
+// Execute Radix Cmd
 func (client *radixV3Impl) RunCmd(rcv interface{}, cmd string, args ...string) error {
 	return client.radixClient.Do(radix.Cmd(rcv, cmd, args...))
 }
+
+// Close connection
 func (client *radixV3Impl) Close() error {
 	return client.radixClient.Close()
 }
@@ -87,17 +93,17 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 			}
 
 			// Certification Authority
-			if configuration.TlsCACert != "" {
+			if configuration.TLSCACert != "" {
 				caPool := x509.NewCertPool()
-				ok := caPool.AppendCertsFromPEM([]byte(configuration.TlsCACert))
+				ok := caPool.AppendCertsFromPEM([]byte(configuration.TLSCACert))
 				if ok {
 					tlsConfig.RootCAs = caPool
 				}
 			}
 
 			// Certificate and Key
-			if configuration.TlsClientCert != "" {
-				cert, err := tls.X509KeyPair([]byte(configuration.TlsClientCert), []byte(configuration.TlsClientCert))
+			if configuration.TLSClientCert != "" {
+				cert, err := tls.X509KeyPair([]byte(configuration.TLSClientCert), []byte(configuration.TLSClientCert))
 				if err == nil {
 					tlsConfig.Certificates = []tls.Certificate{cert}
 				} else {
@@ -123,20 +129,21 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 	// Client Type
 	switch configuration.Client {
 	case "cluster":
-		radixClient, err = radix.NewCluster(strings.Split(configuration.Url, ","), radix.ClusterPoolFunc(poolFunc))
+		radixClient, err = radix.NewCluster(strings.Split(configuration.URL, ","), radix.ClusterPoolFunc(poolFunc))
 	case "sentinel":
-		radixClient, err = radix.NewSentinel(configuration.SentinelName, strings.Split(configuration.Url, ","), radix.SentinelConnFunc(connFunc),
+		radixClient, err = radix.NewSentinel(configuration.SentinelName, strings.Split(configuration.URL, ","), radix.SentinelConnFunc(connFunc),
 			radix.SentinelPoolFunc(poolFunc))
 	case "socket":
-		radixClient, err = poolFunc("unix", configuration.Url)
+		radixClient, err = poolFunc("unix", configuration.URL)
 	default:
-		radixClient, err = poolFunc("tcp", configuration.Url)
+		radixClient, err = poolFunc("tcp", configuration.URL)
 	}
 
 	if err != nil {
 		return nil, err
 	}
 
+	// Return Radix client
 	var client = &radixV3Impl{radixClient}
 	return client, nil
 }

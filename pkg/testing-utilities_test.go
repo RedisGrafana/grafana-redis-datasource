@@ -1,10 +1,11 @@
 package main
 
 import (
+	"reflect"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/stretchr/testify/mock"
-	"reflect"
 )
 
 type testClient struct {

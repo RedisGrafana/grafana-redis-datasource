@@ -1,9 +1,10 @@
 package main
 
 import (
+	"testing"
+
 	"github.com/mediocregopher/radix/v3"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestRadixV3Impl(t *testing.T) {

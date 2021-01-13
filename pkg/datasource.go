@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
@@ -115,11 +116,13 @@ func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instance
 	if err != nil {
 		return nil, err
 	}
+
 	// Create radix implementation of redisClient
 	client, err := newRadixV3Client(config)
 	if err != nil {
 		return nil, err
 	}
+
 	// Create datasource instance with redisClient inside
 	return &instanceSettings{
 		client,
@@ -164,11 +167,9 @@ func createRedisClientConfig(setting backend.DataSourceInstanceSettings) (redisC
 		pipelineWindow = jsonData.PipelineWindow
 	}
 
-	// Secured Data
-	var secureData = setting.DecryptedSecureJSONData
-
+	// Configuration
 	configuration := redisClientConfiguration{
-		Url:            setting.URL,
+		URL:            setting.URL,
 		Timeout:        timeout,
 		PoolSize:       poolSize,
 		PingInterval:   pingInterval,
@@ -180,17 +181,21 @@ func createRedisClientConfig(setting backend.DataSourceInstanceSettings) (redisC
 		SentinelName:   jsonData.SentinelName,
 		User:           jsonData.User,
 	}
+
+	// Secured Data
+	var secureData = setting.DecryptedSecureJSONData
 	if secureData != nil {
 		if secureData["password"] != "" {
 			configuration.Password = secureData["password"]
 		}
 		if secureData["tlsCACert"] != "" {
-			configuration.TlsCACert = secureData["tlsCACert"]
+			configuration.TLSCACert = secureData["tlsCACert"]
 		}
 		if secureData["tlsClientCert"] != "" {
-			configuration.TlsClientCert = secureData["tlsClientCert"]
+			configuration.TLSClientCert = secureData["tlsClientCert"]
 		}
 	}
+
 	return configuration, nil
 }
 
