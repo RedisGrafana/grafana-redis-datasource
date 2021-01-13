@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 
 	"bitbucket.org/creachadair/shell"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -110,59 +112,110 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 		return errorHandler(response, err)
 	}
 
-	/**
-	 * Check results and add frames
-	 */
-	switch result := result.(type) {
-	case int64:
-		// Add Frame
-		response.Frames = append(response.Frames,
-			data.NewFrame(qm.Key,
-				data.NewField("Value", nil, []int64{result})))
-	case []byte:
-		value := string(result)
-
-		// Split lines
-		values := strings.Split(strings.Replace(value, "\r\n", "\n", -1), "\n")
-
-		// Parse float if only one value
-		if len(values) == 1 {
-			response.Frames = append(response.Frames, createFrameValue(qm.Key, values[0]))
-			break
+	if qm.CLI == true {
+		var builder strings.Builder
+		// Use a tab writer for having CLI-like tabulation aligned right
+		tabWriter := tabwriter.NewWriter(&builder, 0, 1, 0, ' ', tabwriter.AlignRight)
+		// Concatenate everything to string with proper tabs and newlines and pass it to tabWriter for tab formatting
+		_, err := fmt.Fprint(tabWriter, convertToCLI(result, ""))
+		// Check formatting error
+		if err != nil {
+			log.DefaultLogger.Error("Error when writing to TabWriter", "error", err.Error(), "query", qm.Query)
 		}
-
-		// Add Frame
-		response.Frames = append(response.Frames,
-			data.NewFrame(qm.Key,
-				data.NewField("Value", nil, values)))
-	case string:
-		// Add Frame
-		response.Frames = append(response.Frames, createFrameValue(qm.Key, result))
-	case []interface{}:
-		var values []string
-
-		// Parse values
-		if len(result) == 0 {
-			values = append(values, EmptyArray)
-		} else {
-			values, response = parseInterfaceValue(result, response)
+		err = tabWriter.Flush()
+		// Check tab writer error
+		if err != nil {
+			log.DefaultLogger.Error("Error when flushing TabWriter", "error", err.Error(), "query", qm.Query)
 		}
+		// Get the properly formatted string from the string builder
+		processed := builder.String()
+		// Write result string as a single frame with a single field with name "Value"
+		response.Frames = append(response.Frames, data.NewFrame(qm.Key, data.NewField("Value", nil, []string{processed})))
+	} else {
+		/**
+		 * Check results and add frames
+		 */
+		switch result := result.(type) {
+		case int64:
+			// Add Frame
+			response.Frames = append(response.Frames,
+				data.NewFrame(qm.Key,
+					data.NewField("Value", nil, []int64{result})))
+		case []byte:
+			value := string(result)
 
-		// Error when parsing intarface
-		if response.Error != nil {
-			return response
+			// Split lines
+			values := strings.Split(strings.Replace(value, "\r\n", "\n", -1), "\n")
+
+			// Parse float if only one value
+			if len(values) == 1 {
+				response.Frames = append(response.Frames, createFrameValue(qm.Key, values[0]))
+				break
+			}
+
+			// Add Frame
+			response.Frames = append(response.Frames,
+				data.NewFrame(qm.Key,
+					data.NewField("Value", nil, values)))
+		case string:
+			// Add Frame
+			response.Frames = append(response.Frames, createFrameValue(qm.Key, result))
+		case []interface{}:
+			var values []string
+
+			// Parse values
+			if len(result) == 0 {
+				values = append(values, EmptyArray)
+			} else {
+				values, response = parseInterfaceValue(result, response)
+			}
+
+			// Error when parsing intarface
+			if response.Error != nil {
+				return response
+			}
+
+			// Add Frame
+			response.Frames = append(response.Frames,
+				data.NewFrame(qm.Key,
+					data.NewField("Value", nil, values)))
+		case nil:
+			response.Error = fmt.Errorf("Wrong command")
+		default:
+			response.Error = fmt.Errorf("Unsupported return type")
 		}
-
-		// Add Frame
-		response.Frames = append(response.Frames,
-			data.NewFrame(qm.Key,
-				data.NewField("Value", nil, values)))
-	case nil:
-		response.Error = fmt.Errorf("Wrong command")
-	default:
-		response.Error = fmt.Errorf("Unsupported return type")
 	}
-
 	// Return Response
 	return response
+}
+
+func convertToCLI(input interface{}, tabs string) string {
+	switch value := input.(type) {
+	case int64:
+		return fmt.Sprintf("(integer) %d\n", value)
+	case []byte:
+		return fmt.Sprintf("\"%v\"\n", string(value))
+	case string:
+		return fmt.Sprintf("\"%v\"\n", value)
+	case []interface{}:
+		if len(value) < 1 {
+			return "(empty list or set)\n"
+		} else {
+			var builder strings.Builder
+			for i, member := range value {
+				additionalTabs := ""
+				if i != 0 {
+					additionalTabs = tabs
+				}
+				builder.WriteString(fmt.Sprintf("%v%d)\t %v", additionalTabs, i+1, convertToCLI(member, tabs+"\t")))
+			}
+			return builder.String()
+		}
+
+	case nil:
+		return "(nil)\n"
+	default:
+		log.DefaultLogger.Error("Unsupported type for CLI mode", "value", value, "type", reflect.TypeOf(value).String())
+		return fmt.Sprintf("\"%v\"\n", value)
+	}
 }
