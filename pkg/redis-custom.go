@@ -112,23 +112,30 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 		return errorHandler(response, err)
 	}
 
-	if qm.CLI == true {
+	// Command-line mode enabled
+	if qm.CLI {
 		var builder strings.Builder
+
 		// Use a tab writer for having CLI-like tabulation aligned right
 		tabWriter := tabwriter.NewWriter(&builder, 0, 1, 0, ' ', tabwriter.AlignRight)
+
 		// Concatenate everything to string with proper tabs and newlines and pass it to tabWriter for tab formatting
 		_, err := fmt.Fprint(tabWriter, convertToCLI(result, ""))
+
 		// Check formatting error
 		if err != nil {
 			log.DefaultLogger.Error("Error when writing to TabWriter", "error", err.Error(), "query", qm.Query)
 		}
-		err = tabWriter.Flush()
+
 		// Check tab writer error
+		err = tabWriter.Flush()
 		if err != nil {
 			log.DefaultLogger.Error("Error when flushing TabWriter", "error", err.Error(), "query", qm.Query)
 		}
+
 		// Get the properly formatted string from the string builder
 		processed := builder.String()
+
 		// Write result string as a single frame with a single field with name "Value"
 		response.Frames = append(response.Frames, data.NewFrame(qm.Key, data.NewField("Value", nil, []string{processed})))
 	} else {
@@ -189,6 +196,10 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 	return response
 }
 
+/**
+ * Convert results to CLI format
+ */
+
 func convertToCLI(input interface{}, tabs string) string {
 	switch value := input.(type) {
 	case int64:
@@ -199,19 +210,20 @@ func convertToCLI(input interface{}, tabs string) string {
 		return fmt.Sprintf("\"%v\"\n", value)
 	case []interface{}:
 		if len(value) < 1 {
-			return "(empty list or set)\n"
-		} else {
-			var builder strings.Builder
-			for i, member := range value {
-				additionalTabs := ""
-				if i != 0 {
-					additionalTabs = tabs
-				}
-				builder.WriteString(fmt.Sprintf("%v%d)\t %v", additionalTabs, i+1, convertToCLI(member, tabs+"\t")))
-			}
-			return builder.String()
+			return EmptyArray + "\n"
 		}
 
+		var builder strings.Builder
+		for i, member := range value {
+			additionalTabs := ""
+			if i != 0 {
+				additionalTabs = tabs
+			}
+
+			builder.WriteString(fmt.Sprintf("%v%d)\t %v", additionalTabs, i+1, convertToCLI(member, tabs+"\t")))
+		}
+
+		return builder.String()
 	case nil:
 		return "(nil)\n"
 	default:

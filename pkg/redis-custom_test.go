@@ -203,7 +203,7 @@ func TestQueryCustomCommand(t *testing.T) {
 			1,
 			1,
 			[]valueToCheckInResponse{
-				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: " 1) \"str\"\n 2) \"str2\"\n 3) \"str3\"\n 4) \"str4\"\n 5) \"str55\"\n 6) \"str8888888\"\n 7) \"strtttttttttt\"\n 8) (nil)\n 9) \"str\"\n10) \"str\"\n11) \"str2\"\n12) (integer) 42\n13) (empty list or set)\n14) 1) \"str\"\n    2) \"str34444444444444444444444444444444444\"\n    3) (integer) 66\n    4) 1) \"str\"\n       2) \"str3\"\n       3) \"str3\"\n       4) (integer) 66\n15) \"stryyyyyyyyyyyyyyyyyy\"\n16) \"strttttttttttttttttttttttt\"\n17) \"strgggggggggggggggggggggggggg\"\n18) \"strggggg\"\n19) \"strerer\"\n"},
+				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: " 1) \"str\"\n 2) \"str2\"\n 3) \"str3\"\n 4) \"str4\"\n 5) \"str55\"\n 6) \"str8888888\"\n 7) \"strtttttttttt\"\n 8) (nil)\n 9) \"str\"\n10) \"str\"\n11) \"str2\"\n12) (integer) 42\n13) (empty array)\n14) 1) \"str\"\n    2) \"str34444444444444444444444444444444444\"\n    3) (integer) 66\n    4) 1) \"str\"\n       2) \"str3\"\n       3) \"str3\"\n       4) (integer) 66\n15) \"stryyyyyyyyyyyyyyyyyy\"\n16) \"strttttttttttttttttttttttt\"\n17) \"strgggggggggggggggggggggggggg\"\n18) \"strggggg\"\n19) \"strerer\"\n"},
 			},
 			nil,
 			"",
