@@ -52,4 +52,5 @@ type queryModel struct {
 	Size        int    `json:"size"`
 	Fill        bool   `json:"fill"`
 	Streaming   bool   `json:"streaming"`
+	CLI         bool   `json:"cli"`
 }
