@@ -177,7 +177,7 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 				values, response = parseInterfaceValue(result, response)
 			}
 
-			// Error when parsing intarface
+			// Error when parsing interface
 			if response.Error != nil {
 				return response
 			}
