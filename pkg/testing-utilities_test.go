@@ -8,8 +8,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-const integrationTestPort = 63790
-
 type testClient struct {
 	rcv        interface{}
 	batchRcv   [][]interface{}
