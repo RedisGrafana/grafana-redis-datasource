@@ -11,7 +11,7 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
-// up docker-compose environment and run backend tests including integration tests with coverage report
+// runs backend tests and makes a txt coverage report in "atomic" mode and html coverage report.
 func Cover() error {
 	// Create a coverage file if it does not already exist
 	if err := os.MkdirAll(filepath.Join(".", "coverage"), os.ModePerm); err != nil {
@@ -29,7 +29,7 @@ func Cover() error {
 	return nil
 }
 
-// runs integration tests and makes a txt coverage report in "atomic" mode and html coverage report.
+// up docker-compose environment and run backend tests including integration tests with coverage report
 func Integration() error {
 	// Create a coverage file if it does not already exist
 	if err := os.MkdirAll(filepath.Join(".", "coverage"), os.ModePerm); err != nil {
