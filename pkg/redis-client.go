@@ -36,7 +36,15 @@ type redisClientConfiguration struct {
 type redisClient interface {
 	RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error
 	RunCmd(rcv interface{}, cmd string, args ...string) error
+	RunBatchFlatCmd(commands []flatCommandArgs) error
 	Close() error
+}
+
+type flatCommandArgs struct {
+	rcv  interface{}
+	cmd  string
+	key  string
+	args []interface{}
 }
 
 // radixClient is an interface that represents the skeleton of a connection to Redis ( cluster, standalone, or sentinel)
@@ -53,6 +61,16 @@ type radixV3Impl struct {
 // Execute Radix FlatCmd
 func (client *radixV3Impl) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	return client.radixClient.Do(radix.FlatCmd(rcv, cmd, key, args...))
+}
+
+// Execute Batch FlatCmd
+func (client *radixV3Impl) RunBatchFlatCmd(commands []flatCommandArgs) error {
+	var actions []radix.CmdAction
+	for _, command := range commands {
+		actions = append(actions, radix.FlatCmd(command.rcv, command.cmd, command.key, command.args...))
+	}
+	pipeline := radix.Pipeline(actions...)
+	return client.radixClient.Do(pipeline)
 }
 
 // Execute Radix Cmd

@@ -8,9 +8,14 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+const integrationTestPort = 63790
+
 type testClient struct {
-	rcv interface{}
-	err error
+	rcv        interface{}
+	batchRcv   [][]interface{}
+	batchErr   []error
+	err        error
+	batchCalls int
 	mock.Mock
 }
 
@@ -18,7 +23,7 @@ func (client *testClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...i
 	if client.err != nil {
 		return client.err
 	} else {
-		client.assignReceiver(rcv)
+		assignReceiver(rcv, client.rcv)
 		return nil
 	}
 
@@ -27,60 +32,88 @@ func (client *testClient) RunCmd(rcv interface{}, cmd string, args ...string) er
 	if client.err != nil {
 		return client.err
 	} else {
-		client.assignReceiver(rcv)
+		assignReceiver(rcv, client.rcv)
 		return nil
 	}
 }
 
-func (client *testClient) assignReceiver(rcv interface{}) {
-	switch rcv.(type) {
+func (client *testClient) RunBatchFlatCmd(commands []flatCommandArgs) error {
+	for i, args := range commands {
+		assignReceiver(args.rcv, client.batchRcv[client.batchCalls][i])
+	}
+	var err error
+	if client.batchErr != nil && client.batchErr[client.batchCalls] != nil {
+		err = client.batchErr[client.batchCalls]
+	}
+	client.batchCalls++
+	return err
+}
+
+func assignReceiver(to interface{}, from interface{}) {
+	switch to.(type) {
 	case int:
-		*(rcv.(*int)) = client.rcv.(int)
+		*(to.(*int)) = from.(int)
 	case int64:
-		*(rcv.(*int64)) = client.rcv.(int64)
+		*(to.(*int64)) = from.(int64)
 	case float64:
-		*(rcv.(*float64)) = client.rcv.(float64)
+		*(to.(*float64)) = from.(float64)
 	case []string:
-		*(rcv.(*[]string)) = client.rcv.([]string)
+		*(to.(*[]string)) = from.([]string)
 	case []interface{}:
-		*(rcv.(*[]interface{})) = client.rcv.([]interface{})
+		*(to.(*[]interface{})) = from.([]interface{})
 	case [][]string:
-		*(rcv.(*[][]string)) = client.rcv.([][]string)
+		*(to.(*[][]string)) = from.([][]string)
 	case map[string]string:
-		*(rcv.(*map[string]string)) = client.rcv.(map[string]string)
+		*(to.(*map[string]string)) = from.(map[string]string)
 	case map[string]interface{}:
-		*(rcv.(*map[string]interface{})) = client.rcv.(map[string]interface{})
+		*(to.(*map[string]interface{})) = from.(map[string]interface{})
 	case *string:
-		*(rcv.(*string)) = client.rcv.(string)
+		*(to.(*string)) = from.(string)
 	case interface{}:
-		switch client.rcv.(type) {
+		switch from.(type) {
 		case int:
-			*(rcv.(*interface{})) = client.rcv.(int)
+			*(to.(*interface{})) = from.(int)
 		case int64:
-			*(rcv.(*interface{})) = client.rcv.(int64)
+			_, ok := to.(*int64)
+			if ok {
+				*(to.(*int64)) = from.(int64)
+			} else {
+				_, ok = to.(*interface{})
+				if ok {
+					*(to.(*interface{})) = from.(int64)
+				}
+			}
 		case float64:
-			*(rcv.(*interface{})) = client.rcv.(float64)
+			*(to.(*interface{})) = from.(float64)
 		case []string:
-			*(rcv.(*[]string)) = client.rcv.([]string)
+			*(to.(*[]string)) = from.([]string)
 		case []interface{}:
-			*(rcv.(*interface{})) = client.rcv.([]interface{})
+			_, ok := to.(*[]interface{})
+			if ok {
+				*(to.(*[]interface{})) = from.([]interface{})
+			} else {
+				_, ok = to.(*interface{})
+				if ok {
+					*(to.(*interface{})) = from.([]interface{})
+				}
+			}
 		case [][]string:
-			*(rcv.(*[][]string)) = client.rcv.([][]string)
+			*(to.(*[][]string)) = from.([][]string)
 		case map[string]string:
-			*(rcv.(*map[string]string)) = client.rcv.(map[string]string)
+			*(to.(*map[string]string)) = from.(map[string]string)
 		case *string:
-			*(rcv.(*string)) = client.rcv.(string)
+			*(to.(*string)) = from.(string)
 		case string:
-			*(rcv.(*interface{})) = client.rcv.(string)
+			*(to.(*interface{})) = from.(string)
 		case []uint8:
-			*(rcv.(*interface{})) = client.rcv.([]uint8)
+			*(to.(*interface{})) = from.([]uint8)
 		case map[string]interface{}:
-			*(rcv.(*map[string]interface{})) = client.rcv.(map[string]interface{})
+			*(to.(*map[string]interface{})) = from.(map[string]interface{})
 		default:
-			panic("Unsupported type of client.rcv: " + reflect.TypeOf(client.rcv).String())
+			panic("Unsupported type of from rcv: " + reflect.TypeOf(from).String())
 		}
 	default:
-		panic("Unsupported type of rcv: " + reflect.TypeOf(rcv).String())
+		panic("Unsupported type of to rcv: " + reflect.TypeOf(to).String())
 	}
 }
 func (client *testClient) Close() error {
@@ -99,6 +132,9 @@ func (client *panickingClient) RunCmd(rcv interface{}, cmd string, args ...strin
 }
 func (client *panickingClient) Close() error {
 	return nil
+}
+func (client *panickingClient) RunBatchFlatCmd(commands []flatCommandArgs) error {
+	panic("Panic")
 }
 
 type valueToCheckInResponse struct {
