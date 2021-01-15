@@ -14,6 +14,7 @@ export enum InfoSectionValue {
   COMMANDSTATS = 'commandstats',
   CLUSTER = 'cluster',
   KEYSPACE = 'keyspace',
+  ERRORSTATS = 'errorstats',
 }
 
 /**
@@ -30,4 +31,5 @@ export const InfoSections: Array<SelectableValue<InfoSectionValue>> = [
   { label: 'Command Stats', description: 'Redis command statistics', value: InfoSectionValue.COMMANDSTATS },
   { label: 'Cluster', description: 'Redis Cluster section', value: InfoSectionValue.CLUSTER },
   { label: 'Keyspace', description: 'Database related statistics', value: InfoSectionValue.KEYSPACE },
+  { label: 'Error Stats', description: 'Redis error statistics', value: InfoSectionValue.ERRORSTATS },
 ];

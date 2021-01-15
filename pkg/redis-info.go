@@ -43,6 +43,7 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 				data.NewField("Usec_per_call", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}))
 		}
 
+		alreadyIncludedErrorStats := false
 		// Parse lines
 		for _, line := range lines {
 			fields := strings.Split(line, ":")
@@ -62,14 +63,38 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 			calls := strings.Split(stats[0], "=")
 			usec := strings.Split(stats[1], "=")
 			usecPerCall := strings.Split(stats[2], "=")
+			var failedCalls = make([]string, 0)
+			var rejectedCalls = make([]string, 0)
+			if len(stats) == 5 {
+				rejectedCalls = strings.Split(stats[3], "=")
+				failedCalls = strings.Split(stats[4], "=")
+				if !alreadyIncludedErrorStats {
+					frame.Fields = append(frame.Fields,
+						data.NewField("RejectedCalls", nil, []int64{}),
+						data.NewField("FailedCalls", nil, []int64{}))
+				}
+				alreadyIncludedErrorStats = true
+			}
 
 			var callsValue int64
+			var rejectedCallsValue int64
+			var failedCallsValue int64
 			var usecValue float64
 			var usecPerCallValue float64
 
 			// Parse Calls
 			if len(calls) == 2 {
 				callsValue, _ = strconv.ParseInt(calls[1], 10, 64)
+			}
+
+			// Parse rejectedCalls
+			if len(rejectedCalls) == 2 {
+				rejectedCallsValue, _ = strconv.ParseInt(rejectedCalls[1], 10, 64)
+			}
+
+			// Parse failedCalls
+			if len(failedCalls) == 2 {
+				failedCallsValue, _ = strconv.ParseInt(failedCalls[1], 10, 64)
 			}
 
 			// Parse Usec
@@ -90,8 +115,51 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 				frame.Fields = append(frame.Fields, data.NewField(cmd+"", nil, []int64{callsValue}))
 			} else {
 				// Add Command
-				frame.AppendRow(cmd, callsValue, usecValue, usecPerCallValue)
+				if len(stats) > 3 {
+					frame.AppendRow(cmd, callsValue, usecValue, usecPerCallValue, rejectedCallsValue, failedCallsValue)
+				} else {
+					frame.AppendRow(cmd, callsValue, usecValue, usecPerCallValue)
+				}
 			}
+		}
+
+		// Add the frames to the response
+		response.Frames = append(response.Frames, frame)
+
+		// Return
+		return response
+	}
+
+	// Error stats ( added in Redis >= v6.2 )
+	if qm.Section == "errorstats" {
+		// Not Streaming
+		if !qm.Streaming {
+			frame.Fields = append(frame.Fields,
+				data.NewField("Error", nil, []string{}),
+				data.NewField("Count", nil, []int64{}))
+		}
+
+		// Parse lines
+		for _, line := range lines {
+			fields := strings.Split(line, ":")
+
+			if len(fields) < 2 {
+				continue
+			}
+
+			// Parse Error Stats
+			count := strings.Split(fields[1], "=")
+			var callsValue int64
+
+			// Parse Calls
+			if len(count) == 2 {
+				callsValue, _ = strconv.ParseInt(count[1], 10, 64)
+			}
+
+			// Error prefix
+			error := strings.Replace(fields[0], "errorstat_", "", 1)
+
+			frame.AppendRow(error, callsValue)
 		}
 
 		// Add the frames to the response
