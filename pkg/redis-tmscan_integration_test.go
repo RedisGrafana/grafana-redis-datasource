@@ -32,26 +32,27 @@ func TestTMScanIntegration(t *testing.T) {
 
 	client := radixV3Impl{radixClient: radixClient}
 	resp := queryTMScan(queryModel{Cursor: "0"}, &client)
-	require.Len(t, resp.Frames, 1)
-	require.Len(t, resp.Frames[0].Fields, 4)
-	require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
+	require.Len(t, resp.Frames, 2)
+	require.Len(t, resp.Frames[0].Fields, 3)
+	require.Len(t, resp.Frames[1].Fields, 1)
+	require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
+	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
 	require.Equal(t, 6, resp.Frames[0].Fields[1].Len())
 	require.Equal(t, 6, resp.Frames[0].Fields[2].Len())
-	require.Equal(t, 6, resp.Frames[0].Fields[3].Len())
-	require.Equal(t, "0", resp.Frames[0].Fields[0].At(0))
+	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
 
 	keys := []string{
-		resp.Frames[0].Fields[1].At(0).(string),
-		resp.Frames[0].Fields[1].At(1).(string),
-		resp.Frames[0].Fields[1].At(2).(string),
-		resp.Frames[0].Fields[1].At(3).(string),
-		resp.Frames[0].Fields[1].At(4).(string),
-		resp.Frames[0].Fields[1].At(5).(string),
+		resp.Frames[0].Fields[0].At(0).(string),
+		resp.Frames[0].Fields[0].At(1).(string),
+		resp.Frames[0].Fields[0].At(2).(string),
+		resp.Frames[0].Fields[0].At(3).(string),
+		resp.Frames[0].Fields[0].At(4).(string),
+		resp.Frames[0].Fields[0].At(5).(string),
 	}
 
 	for i, key := range keys {
-		require.Equal(t, types[key], resp.Frames[0].Fields[2].At(i), "Invalid type returned")
-		require.Equal(t, memory[key], resp.Frames[0].Fields[3].At(i), "Invalid memory size returned")
+		require.Equal(t, types[key], resp.Frames[0].Fields[1].At(i), "Invalid type returned")
+		require.Equal(t, memory[key], resp.Frames[0].Fields[2].At(i), "Invalid memory size returned")
 	}
 }
 
@@ -60,13 +61,14 @@ func TestTMScanIntegrationWithNoMatched(t *testing.T) {
 
 	client := radixV3Impl{radixClient: radixClient}
 	resp := queryTMScan(queryModel{Cursor: "0", Match: "nomatch"}, &client)
-	require.Len(t, resp.Frames, 1)
-	require.Len(t, resp.Frames[0].Fields, 4)
-	require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
-	require.Equal(t, 0, resp.Frames[0].Fields[1].Len())
-	require.Equal(t, 0, resp.Frames[0].Fields[2].Len())
-	require.Equal(t, 0, resp.Frames[0].Fields[3].Len())
-	require.Equal(t, "0", resp.Frames[0].Fields[0].At(0))
+	require.Len(t, resp.Frames, 2)
+	require.Len(t, resp.Frames[0].Fields, 3)
+	require.Len(t, resp.Frames[1].Fields, 1)
+	require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
+	require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
 }
 
 func TestTMScanIntegrationWithMatched(t *testing.T) {
@@ -74,13 +76,14 @@ func TestTMScanIntegrationWithMatched(t *testing.T) {
 
 	client := radixV3Impl{radixClient: radixClient}
 	resp := queryTMScan(queryModel{Cursor: "0", Match: "test:*"}, &client)
-	require.Len(t, resp.Frames, 1)
-	require.Len(t, resp.Frames[0].Fields, 4)
-	require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
-	require.Equal(t, 6, resp.Frames[0].Fields[1].Len())
-	require.Equal(t, 6, resp.Frames[0].Fields[2].Len())
-	require.Equal(t, 6, resp.Frames[0].Fields[3].Len())
-	require.Equal(t, "0", resp.Frames[0].Fields[0].At(0))
+	require.Len(t, resp.Frames, 2)
+	require.Len(t, resp.Frames[0].Fields, 3)
+	require.Len(t, resp.Frames[1].Fields, 1)
+	require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
+	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
 }
 
 func TestTMScanIntegrationWithCount(t *testing.T) {
@@ -88,11 +91,12 @@ func TestTMScanIntegrationWithCount(t *testing.T) {
 
 	client := radixV3Impl{radixClient: radixClient}
 	resp := queryTMScan(queryModel{Cursor: "0", Count: 1}, &client)
-	require.Len(t, resp.Frames, 1)
-	require.Len(t, resp.Frames[0].Fields, 4)
+	require.Len(t, resp.Frames, 2)
+	require.Len(t, resp.Frames[0].Fields, 3)
+	require.Len(t, resp.Frames[1].Fields, 1)
+	require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
 	require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
-	require.Equal(t, 1, resp.Frames[0].Fields[1].Len())
-	require.Equal(t, 1, resp.Frames[0].Fields[2].Len())
-	require.Equal(t, 1, resp.Frames[0].Fields[3].Len())
-	require.NotEqual(t, "0", resp.Frames[0].Fields[0].At(0))
+	require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
+	require.NotEqual(t, "0", resp.Frames[1].Fields[0].At(0))
 }
