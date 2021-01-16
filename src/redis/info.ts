@@ -28,8 +28,8 @@ export const InfoSections: Array<SelectableValue<InfoSectionValue>> = [
   { label: 'Stats', description: 'General statistics', value: InfoSectionValue.STATS },
   { label: 'Replication', description: 'Master/replica replication information', value: InfoSectionValue.REPLICATION },
   { label: 'CPU', description: 'CPU consumption statistics', value: InfoSectionValue.CPU },
-  { label: 'Command Stats', description: 'Redis command statistics', value: InfoSectionValue.COMMANDSTATS },
-  { label: 'Cluster', description: 'Redis Cluster section', value: InfoSectionValue.CLUSTER },
+  { label: 'Command Stats', description: 'Command statistics', value: InfoSectionValue.COMMANDSTATS },
+  { label: 'Cluster', description: 'Cluster section', value: InfoSectionValue.CLUSTER },
   { label: 'Keyspace', description: 'Database related statistics', value: InfoSectionValue.KEYSPACE },
-  { label: 'Error Stats', description: 'Redis error statistics (Redis 6.2)', value: InfoSectionValue.ERRORSTATS },
+  { label: 'Error Stats', description: 'Error statistics (Redis 6.2)', value: InfoSectionValue.ERRORSTATS },
 ];
