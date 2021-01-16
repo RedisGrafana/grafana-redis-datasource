@@ -228,7 +228,7 @@
         {
           "id": "seriesToColumns",
           "options": {
-            "byField": "tmscan key"
+            "byField": "key"
           }
         },
         {
@@ -237,6 +237,7 @@
             "excludeByName": {},
             "indexByName": {},
             "renameByName": {
+              "key": "Key",
               "memory tmscan": "Memory Usage",
               "tmscan key": "Key",
               "type tmscan": "Type"
