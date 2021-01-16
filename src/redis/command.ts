@@ -32,7 +32,7 @@ export const Commands = {
     { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
     {
       label: 'SCAN with Type and Memory Usage',
-      description: 'Returns keys with types and memory usage',
+      description: 'Returns keys with types and memory usage (CAUSE LATENCY)',
       value: 'tmscan',
     },
     {

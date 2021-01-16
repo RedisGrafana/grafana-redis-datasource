@@ -323,6 +323,7 @@ export class QueryEditor extends PureComponent<Props> {
                   this.props.onChange({ ...this.props.query, count: Number(event.target.value) })
                 }
                 label="Count"
+                tooltip="The default value is 10. Bigger number can cause latency and is not recommended to use in Production."
               />
             )}
           </div>
