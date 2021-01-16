@@ -31,5 +31,5 @@ export const InfoSections: Array<SelectableValue<InfoSectionValue>> = [
   { label: 'Command Stats', description: 'Redis command statistics', value: InfoSectionValue.COMMANDSTATS },
   { label: 'Cluster', description: 'Redis Cluster section', value: InfoSectionValue.CLUSTER },
   { label: 'Keyspace', description: 'Database related statistics', value: InfoSectionValue.KEYSPACE },
-  { label: 'Error Stats', description: 'Redis error statistics', value: InfoSectionValue.ERRORSTATS },
+  { label: 'Error Stats', description: 'Redis error statistics (Redis 6.2)', value: InfoSectionValue.ERRORSTATS },
 ];
