@@ -6,7 +6,7 @@ import (
 )
 
 /**
- * TMSCAN cursor
+ * TMSCAN cursor match count
  *
  * Iterates over the collection of keys and query type and memory usage
  * Cursor iteration similar to SCAN command
@@ -17,19 +17,25 @@ import (
 func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
-	// Execute SCAN
 	var result []interface{}
+
+	// Cursor
 	cursor := "0"
 	if qm.Cursor != "" {
 		cursor = qm.Cursor
 	}
+
+	// Match
 	var args []interface{}
 	if qm.Match != "" {
 		args = append(args, "match", qm.Match)
 	}
+
+	// Count
 	if qm.Count != 0 {
 		args = append(args, "count", qm.Count)
 	}
+
 	// Running CURSOR command
 	err := client.RunFlatCmd(&result, "SCAN", cursor, args...)
 
@@ -37,36 +43,54 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	if err != nil {
 		return errorHandler(response, err)
 	}
+
 	// New Frame
 	frame := data.NewFrame(qm.Command)
 
-	// Next cursor value is first value ([]byte) in result array see https://redis.io/commands/scan
+	/**
+	 * Next cursor value is first value ([]byte) in result array
+	 * @see https://redis.io/commands/scan
+	 */
 	nextCursor := string(result[0].([]byte))
+
 	// Add cursor field to frame
 	frame.Fields = append(frame.Fields, data.NewField("cursor", nil, []string{nextCursor}))
-	// Array with keys is second value in result array see https://redis.io/commands/scan
+
+	/**
+	 * Array with keys is second value in result array
+	 * @see https://redis.io/commands/scan
+	 */
 	keys := result[1].([]interface{})
 
 	var typeCommands []flatCommandArgs
 	var memoryCommands []flatCommandArgs
+
 	// Slices with batch receiver pointers
 	var typePointers []*string
 	var memoryPointers []*int64
+
 	// Slices with output values
 	var names []string
 	var types []string
 	var memory []int64
 
+	// Check type and usage for all keys
 	for _, key := range keys {
 		name := string(key.([]byte))
 		names = append(names, name)
+
 		var keyType string
 		var keyMemory int64
+
+		// Pointers
 		typePointers = append(typePointers, &keyType)
 		memoryPointers = append(memoryPointers, &keyMemory)
+
+		// Commands
 		typeCommands = append(typeCommands, flatCommandArgs{cmd: "TYPE", key: name, rcv: &keyType})
 		memoryCommands = append(memoryCommands, flatCommandArgs{cmd: "MEMORY", key: "USAGE", args: []interface{}{name}, rcv: &keyMemory})
 	}
+
 	// Send batch with TYPE commands
 	err = client.RunBatchFlatCmd(typeCommands)
 
@@ -74,6 +98,7 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	if err != nil {
 		return errorHandler(response, err)
 	}
+
 	// Get the values stored by pointers and apply it to result slice
 	for _, typePointer := range typePointers {
 		types = append(types, *typePointer)
@@ -94,8 +119,10 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 
 	// Add key names field to frame
 	frame.Fields = append(frame.Fields, data.NewField("key", nil, names))
+
 	// Add key types field to frame
 	frame.Fields = append(frame.Fields, data.NewField("type", nil, types))
+
 	// Add key memory to frame with a proper config
 	memoryField := data.NewField("memory", nil, memory)
 	memoryField.Config = &data.FieldConfig{Unit: "decbytes"}

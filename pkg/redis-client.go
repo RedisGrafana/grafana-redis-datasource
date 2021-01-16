@@ -69,6 +69,8 @@ func (client *radixV3Impl) RunBatchFlatCmd(commands []flatCommandArgs) error {
 	for _, command := range commands {
 		actions = append(actions, radix.FlatCmd(command.rcv, command.cmd, command.key, command.args...))
 	}
+
+	// Pipeline commands
 	pipeline := radix.Pipeline(actions...)
 	return client.radixClient.Do(pipeline)
 }
