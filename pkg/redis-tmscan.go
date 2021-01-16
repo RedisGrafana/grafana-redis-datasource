@@ -44,8 +44,9 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 		return errorHandler(response, err)
 	}
 
-	// New Frame
+	// New Frames
 	frame := data.NewFrame(qm.Command)
+	frameCursor := data.NewFrame("Cursor")
 
 	/**
 	 * Next cursor value is first value ([]byte) in result array
@@ -54,7 +55,7 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	nextCursor := string(result[0].([]byte))
 
 	// Add cursor field to frame
-	frame.Fields = append(frame.Fields, data.NewField("cursor", nil, []string{nextCursor}))
+	frameCursor.Fields = append(frame.Fields, data.NewField("cursor", nil, []string{nextCursor}))
 
 	/**
 	 * Array with keys is second value in result array
@@ -129,7 +130,7 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	frame.Fields = append(frame.Fields, memoryField)
 
 	// Add the frames to the response
-	response.Frames = append(response.Frames, frame)
+	response.Frames = append(response.Frames, frame, frameCursor)
 
 	// Return
 	return response
