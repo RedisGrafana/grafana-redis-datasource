@@ -15,6 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -69,7 +70,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "info",
@@ -129,7 +130,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "",
@@ -142,6 +143,122 @@
       "timeShift": null,
       "title": "KEYS *",
       "type": "table"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Key"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 322
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 224
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 14,
+        "x": 10,
+        "y": 1
+      },
+      "id": 45,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Memory Usage"
+          }
+        ]
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "command": "tmscan",
+          "count": 1000,
+          "cursor": "0",
+          "query": "",
+          "refId": "A",
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Scan with Type and Memory Usage",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "tmscan key"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "memory tmscan": "Memory Usage",
+              "tmscan key": "Key",
+              "type tmscan": "Type"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 47,
+      "panels": [],
+      "title": "Streaming",
+      "type": "row"
     },
     {
       "aliasColors": {},
@@ -178,8 +295,8 @@
       "gridPos": {
         "h": 7,
         "w": 7,
-        "x": 10,
-        "y": 1
+        "x": 0,
+        "y": 9
       },
       "hiddenSeries": false,
       "id": 30,
@@ -199,7 +316,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -317,7 +434,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 7,
       "title": "Strings",
@@ -347,7 +464,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 9
+        "y": 17
       },
       "id": 10,
       "options": {
@@ -362,7 +479,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "get",
@@ -405,7 +522,7 @@
         "h": 3,
         "w": 4,
         "x": 4,
-        "y": 9
+        "y": 17
       },
       "id": 9,
       "options": {
@@ -420,7 +537,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "get",
@@ -441,7 +558,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 20
       },
       "id": 2,
       "title": "Hash",
@@ -477,7 +594,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 13
+        "y": 21
       },
       "id": 4,
       "options": {
@@ -492,7 +609,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "hget",
@@ -539,7 +656,7 @@
         "h": 3,
         "w": 3,
         "x": 4,
-        "y": 13
+        "y": 21
       },
       "id": 5,
       "options": {
@@ -554,7 +671,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "hget",
@@ -601,7 +718,7 @@
         "h": 3,
         "w": 3,
         "x": 7,
-        "y": 13
+        "y": 21
       },
       "id": 14,
       "options": {
@@ -616,7 +733,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "hlen",
@@ -659,7 +776,7 @@
         "h": 3,
         "w": 6,
         "x": 10,
-        "y": 13
+        "y": 21
       },
       "id": 12,
       "options": {
@@ -674,7 +791,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "hgetall",
@@ -717,7 +834,7 @@
         "h": 3,
         "w": 8,
         "x": 16,
-        "y": 13
+        "y": 21
       },
       "id": 15,
       "options": {
@@ -732,7 +849,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "hmget",
@@ -784,7 +901,7 @@
         "h": 7,
         "w": 10,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "hiddenSeries": false,
       "id": 11,
@@ -804,7 +921,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -891,13 +1008,13 @@
         "h": 7,
         "w": 6,
         "x": 10,
-        "y": 16
+        "y": 24
       },
       "id": 13,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "hkeys",
@@ -947,7 +1064,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 16
+        "y": 24
       },
       "hiddenSeries": false,
       "id": 16,
@@ -967,7 +1084,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1034,7 +1151,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 23
+        "y": 31
       },
       "id": 20,
       "panels": [],
@@ -1063,7 +1180,7 @@
         "h": 3,
         "w": 3,
         "x": 0,
-        "y": 24
+        "y": 32
       },
       "id": 34,
       "options": {
@@ -1078,7 +1195,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "type",
@@ -1119,7 +1236,7 @@
         "h": 3,
         "w": 3,
         "x": 3,
-        "y": 24
+        "y": 32
       },
       "id": 18,
       "options": {
@@ -1134,7 +1251,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "llen",
@@ -1157,7 +1274,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 35
       },
       "id": 22,
       "panels": [],
@@ -1186,7 +1303,7 @@
         "h": 3,
         "w": 3,
         "x": 0,
-        "y": 28
+        "y": 36
       },
       "id": 33,
       "options": {
@@ -1201,7 +1318,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "type",
@@ -1245,7 +1362,7 @@
         "h": 3,
         "w": 3,
         "x": 3,
-        "y": 28
+        "y": 36
       },
       "id": 32,
       "options": {
@@ -1260,7 +1377,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "ttl",
@@ -1301,7 +1418,7 @@
         "h": 3,
         "w": 3,
         "x": 6,
-        "y": 28
+        "y": 36
       },
       "id": 24,
       "options": {
@@ -1316,7 +1433,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "scard",
@@ -1360,13 +1477,13 @@
         "h": 6,
         "w": 5,
         "x": 9,
-        "y": 28
+        "y": 36
       },
       "id": 31,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "smembers",
@@ -1388,7 +1505,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 42
       },
       "id": 37,
       "panels": [],
@@ -1421,7 +1538,7 @@
         "h": 3,
         "w": 3,
         "x": 0,
-        "y": 35
+        "y": 43
       },
       "id": 35,
       "options": {
@@ -1436,7 +1553,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "xlen",
@@ -1458,7 +1575,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 46
       },
       "id": 39,
       "panels": [],
@@ -1494,13 +1611,13 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 47
       },
       "id": 41,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "targets": [
         {
           "command": "ft.info",
@@ -1603,7 +1720,7 @@
         "h": 9,
         "w": 11,
         "x": 0,
-        "y": 42
+        "y": 50
       },
       "hiddenSeries": false,
       "id": 44,
@@ -1624,7 +1741,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1722,7 +1839,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:282",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1731,7 +1847,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:283",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1781,7 +1896,7 @@
         "h": 9,
         "w": 13,
         "x": 11,
-        "y": 42
+        "y": 50
       },
       "hiddenSeries": false,
       "id": 42,
@@ -1802,7 +1917,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.5",
+      "pluginVersion": "7.3.7",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1899,7 +2014,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:183",
           "decimals": null,
           "format": "decbytes",
           "label": null,
@@ -1909,7 +2023,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:184",
           "format": "short",
           "label": null,
           "logBase": 1,
