@@ -43,7 +43,9 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 				data.NewField("Usec_per_call", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}))
 		}
 
+		// Redis 6.2 new fields
 		alreadyIncludedErrorStats := false
+
 		// Parse lines
 		for _, line := range lines {
 			fields := strings.Split(line, ":")
@@ -63,16 +65,21 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 			calls := strings.Split(stats[0], "=")
 			usec := strings.Split(stats[1], "=")
 			usecPerCall := strings.Split(stats[2], "=")
+
+			// Redis 6.2
 			var failedCalls = make([]string, 0)
 			var rejectedCalls = make([]string, 0)
-			if len(stats) == 5 {
+			if len(stats) > 3 {
 				rejectedCalls = strings.Split(stats[3], "=")
 				failedCalls = strings.Split(stats[4], "=")
-				if !alreadyIncludedErrorStats {
+
+				// Add new Fields
+				if !alreadyIncludedErrorStats && !qm.Streaming {
 					frame.Fields = append(frame.Fields,
 						data.NewField("RejectedCalls", nil, []int64{}),
 						data.NewField("FailedCalls", nil, []int64{}))
 				}
+
 				alreadyIncludedErrorStats = true
 			}
 
@@ -149,17 +156,22 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 
 			// Parse Error Stats
 			count := strings.Split(fields[1], "=")
-			var callsValue int64
+			var errorValue int64
 
-			// Parse Calls
+			// Parse Error
 			if len(count) == 2 {
-				callsValue, _ = strconv.ParseInt(count[1], 10, 64)
+				errorValue, _ = strconv.ParseInt(count[1], 10, 64)
 			}
 
 			// Error prefix
 			error := strings.Replace(fields[0], "errorstat_", "", 1)
 
-			frame.AppendRow(error, callsValue)
+			// Streaming
+			if qm.Streaming {
+				frame.Fields = append(frame.Fields, data.NewField(error, nil, []int64{errorValue}))
+			} else {
+				frame.AppendRow(error, errorValue)
+			}
 		}
 
 		// Add the frames to the response
