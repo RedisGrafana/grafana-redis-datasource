@@ -163,6 +163,9 @@ export class QueryEditor extends PureComponent<Props> {
       section,
       size,
       fill,
+      cursor,
+      count,
+      match,
       streaming,
       streamingInterval,
       streamingCapacity,
@@ -277,11 +280,49 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={size}
+                type="number"
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   this.props.onChange({ ...this.props.query, size: Number(event.target.value) })
                 }
                 label="Size"
                 tooltip="Size override"
+              />
+            )}
+
+            {CommandParameters.cursor.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={cursor}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.props.onChange({ ...this.props.query, cursor: event.target.value })
+                }
+                label="Cursor"
+              />
+            )}
+
+            {CommandParameters.match.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={match}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.props.onChange({ ...this.props.query, match: event.target.value })
+                }
+                label="Match pattern"
+              />
+            )}
+
+            {CommandParameters.count.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={count}
+                type="number"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.props.onChange({ ...this.props.query, count: Number(event.target.value) })
+                }
+                label="Count"
               />
             )}
           </div>
