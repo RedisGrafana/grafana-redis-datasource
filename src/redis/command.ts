@@ -31,6 +31,11 @@ export const Commands = {
     { label: 'INFO', description: 'Returns information and statistics about the server', value: 'info' },
     { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
     {
+      label: 'SCAN with Type and Memory Usage',
+      description: 'Returns keys with types and memory usage (CAUSE LATENCY)',
+      value: 'tmscan',
+    },
+    {
       label: 'SCARD',
       description: 'Returns the set cardinality (number of elements) of the set stored at key',
       value: 'scard',
@@ -128,5 +133,8 @@ export const CommandParameters = {
   value: ['ts.range'],
   valueLabel: ['ts.mrange'],
   fill: ['ts.range', 'ts.mrange'],
-  size: ['slowlogGet']
+  size: ['slowlogGet'],
+  cursor: ['tmscan'],
+  match: ['tmscan'],
+  count: ['tmscan']
 };

@@ -36,6 +36,7 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "clusterNodes"}},
 		{queryModel{Command: "ft.info"}},
 		{queryModel{Command: "xinfoStream"}},
+		{queryModel{Command: "tmscan"}},
 	}
 	for _, tt := range tests {
 		tt := tt
