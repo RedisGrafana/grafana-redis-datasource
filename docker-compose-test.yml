@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  redis:
+    container_name: redis-test
+    image: redislabs/redismod:latest
+    ports:
+      - '63790:6379'
+    volumes:
+      - './data:/data/:rw'

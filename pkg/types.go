@@ -53,4 +53,7 @@ type queryModel struct {
 	Fill        bool   `json:"fill"`
 	Streaming   bool   `json:"streaming"`
 	CLI         bool   `json:"cli"`
+	Cursor      string `json:"cursor"`
+	Match       string `json:"match"`
+	Count       int    `json:"count"`
 }

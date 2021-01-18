@@ -83,6 +83,8 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryClusterNodes(qm, client)
 	case "ft.info":
 		return queryFtInfo(qm, client)
+	case "tmscan":
+		return queryTMScan(qm, client)
 	default:
 		response := backend.DataResponse{}
 		log.DefaultLogger.Error("Query", "Command", qm.Command)

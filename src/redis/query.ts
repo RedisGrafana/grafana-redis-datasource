@@ -155,4 +155,25 @@ export interface RedisQuery extends DataQuery {
    * @type {number}
    */
   streamingCapacity?: number;
+
+  /**
+   * Cursor for SCAN command
+   *
+   * @type {string}
+   */
+  cursor?: string;
+
+  /**
+   * Match for SCAN command
+   *
+   * @type {string}
+   */
+  match?: string;
+
+  /**
+   * Count for SCAN command
+   *
+   * @type {number}
+   */
+  count?: number;
 }
