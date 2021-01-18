@@ -51,7 +51,7 @@ func TestQueryTMScan(t *testing.T) {
 		}
 
 		// Response
-		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100, Cursor: "0"}, &client)
+		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100, Cursor: "0", Samples: 10}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Len(t, resp.Frames[1].Fields, 1)

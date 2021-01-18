@@ -89,7 +89,11 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 
 		// Commands
 		typeCommands = append(typeCommands, flatCommandArgs{cmd: "TYPE", key: name, rcv: &keyType})
-		memoryCommands = append(memoryCommands, flatCommandArgs{cmd: "MEMORY", key: "USAGE", args: []interface{}{name}, rcv: &keyMemory})
+		memoryCommandArgs := []interface{}{name}
+		if qm.Samples > 0 {
+			memoryCommandArgs = append(memoryCommandArgs, "SAMPLES", qm.Samples)
+		}
+		memoryCommands = append(memoryCommands, flatCommandArgs{cmd: "MEMORY", key: "USAGE", args: memoryCommandArgs, rcv: &keyMemory})
 	}
 
 	// Send batch with TYPE commands

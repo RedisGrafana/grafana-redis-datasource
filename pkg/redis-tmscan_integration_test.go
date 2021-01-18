@@ -124,3 +124,18 @@ func TestTMScanIntegrationWithCount(t *testing.T) {
 	require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
 	require.NotEqual(t, "0", resp.Frames[1].Fields[0].At(0))
 }
+
+func TestTMScanIntegrationWithSamples(t *testing.T) {
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+
+	client := radixV3Impl{radixClient: radixClient}
+	resp := queryTMScan(queryModel{Cursor: "0", Samples: 10}, &client)
+	require.Len(t, resp.Frames, 2)
+	require.Len(t, resp.Frames[0].Fields, 3)
+	require.Len(t, resp.Frames[1].Fields, 1)
+	require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
+	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
+}
