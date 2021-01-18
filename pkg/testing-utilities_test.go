@@ -67,6 +67,10 @@ func assignReceiver(to interface{}, from interface{}) {
 		*(to.(*map[string]interface{})) = from.(map[string]interface{})
 	case *string:
 		*(to.(*string)) = from.(string)
+	case *pystats:
+		*(to.(*pystats)) = from.(pystats)
+	case *[]dumpregistrations:
+		*(to.(*[]dumpregistrations)) = from.([]dumpregistrations)
 	case interface{}:
 		switch from.(type) {
 		case int:
