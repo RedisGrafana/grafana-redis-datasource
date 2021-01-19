@@ -2,7 +2,7 @@
  * Commands
  */
 export const Commands = {
-  command: [
+  redis: [
     {
       label: 'CLIENT LIST',
       description: 'Returns information and statistics about the client connections server',
@@ -72,7 +72,7 @@ export const Commands = {
   timeSeries: [
     {
       label: 'TS.GET',
-      description: 'Get the last sample',
+      description: 'Returns the last sample',
       value: 'ts.get',
     },
     {
@@ -87,7 +87,7 @@ export const Commands = {
     },
     {
       label: 'TS.QUERYINDEX',
-      description: 'Get all the keys matching the filter list',
+      description: 'Query all the keys matching the filter list',
       value: 'ts.queryindex',
     },
     { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
@@ -97,6 +97,18 @@ export const Commands = {
       label: 'FT.INFO',
       description: 'Returns information and statistics on the index',
       value: 'ft.info',
+    },
+  ],
+  gears: [
+    {
+      label: 'RG.PYSTATS',
+      description: 'Returns memory usage statistics from the Python interpreter',
+      value: 'rg.pystats',
+    },
+    {
+      label: 'RG.DUMPREGISTRATIONS',
+      description: 'Outputs the list of function registrations',
+      value: 'rg.dumpregistrations',
     },
   ]
 };

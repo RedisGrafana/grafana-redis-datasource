@@ -7,10 +7,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * TMSCAN
+ */
 func TestQueryTMScan(t *testing.T) {
 	t.Parallel()
+
 	t.Run("should process cursor", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{
 			rcv: []interface{}{
 				[]byte("24"),
@@ -43,6 +49,8 @@ func TestQueryTMScan(t *testing.T) {
 			},
 			err: nil,
 		}
+
+		// Response
 		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100, Cursor: "0"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 3)
@@ -76,18 +84,25 @@ func TestQueryTMScan(t *testing.T) {
 
 	})
 
+	// Cursor Error
 	t.Run("should handle error during CURSOR", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{
 			rcv:      nil,
 			batchRcv: nil,
 			err:      errors.New("error when call cursor")}
+
+		// Error
 		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
 		require.EqualError(t, resp.Error, "error when call cursor")
 	})
 
 	t.Run("should handle error during first batch", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{
 			rcv: []interface{}{
 				[]byte("24"),
@@ -121,11 +136,16 @@ func TestQueryTMScan(t *testing.T) {
 			batchErr: []error{errors.New("error when batch types"), nil},
 			err:      nil,
 		}
+
+		// Response
 		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
 		require.EqualError(t, resp.Error, "error when batch types")
 	})
+
 	t.Run("should handle error during second batch", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{
 			rcv: []interface{}{
 				[]byte("24"),
@@ -159,6 +179,8 @@ func TestQueryTMScan(t *testing.T) {
 			batchErr: []error{nil, errors.New("error when batch memory")},
 			err:      nil,
 		}
+
+		// Response
 		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
 		require.EqualError(t, resp.Error, "error when batch memory")
 	})

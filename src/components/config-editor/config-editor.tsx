@@ -1,7 +1,7 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, TextArea } from '@grafana/ui';
-import { ClientType, ClientTypeValue, RedisDataSourceOptions, RedisSecureJsonData } from '../types';
+import { ClientType, ClientTypeValue, RedisDataSourceOptions, RedisSecureJsonData } from '../../types';
 
 /**
  * Form Field

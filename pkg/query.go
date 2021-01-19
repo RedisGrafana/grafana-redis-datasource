@@ -46,9 +46,12 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 	}
 
 	/**
-	 * Commands switch
+	 * Supported commands
 	 */
 	switch qm.Command {
+	/**
+	 * Redis Timeseries
+	 */
 	case "ts.get":
 		return queryTsGet(qm, client)
 	case "ts.info":
@@ -59,6 +62,10 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryTsRange(from, to, qm, client)
 	case "ts.mrange":
 		return queryTsMRange(from, to, qm, client)
+
+	/**
+	 * Redis (Hash, Set, Info, Streams, Cluster, etc.)
+	 */
 	case "hgetall":
 		return queryHGetAll(qm, client)
 	case "smembers", "hkeys":
@@ -81,10 +88,30 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryClusterInfo(qm, client)
 	case "clusterNodes":
 		return queryClusterNodes(qm, client)
+
+	/**
+	 * RediSearch
+	 */
 	case "ft.info":
 		return queryFtInfo(qm, client)
+
+	/**
+	 * Custom commands
+	 */
 	case "tmscan":
 		return queryTMScan(qm, client)
+
+	/**
+	 * Redis Gears
+	 */
+	case "rg.pystats":
+		return queryRgPystats(qm, client)
+	case "rg.dumpregistrations":
+		return queryRgDumpregistrations(qm, client)
+
+	/**
+	 * Default
+	 */
 	default:
 		response := backend.DataResponse{}
 		log.DefaultLogger.Error("Query", "Command", qm.Command)

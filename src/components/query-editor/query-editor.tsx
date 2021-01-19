@@ -2,7 +2,7 @@ import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana/ui';
-import { DataSource } from '../data-source';
+import { DataSource } from '../../data-source';
 import {
   Aggregations,
   AggregationValue,
@@ -13,8 +13,8 @@ import {
   QueryType,
   QueryTypeValue,
   RedisQuery,
-} from '../redis';
-import { RedisDataSourceOptions } from '../types';
+} from '../../redis';
+import { RedisDataSourceOptions } from '../../types';
 
 /**
  * Form Field
@@ -329,7 +329,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {type === QueryTypeValue.COMMAND && command && CommandParameters.section.includes(command) && (
+        {type === QueryTypeValue.REDIS && command && CommandParameters.section.includes(command) && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Section</InlineFormLabel>
             <Select

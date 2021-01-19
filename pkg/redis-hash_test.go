@@ -7,8 +7,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * HGETALL
+ */
 func TestQueryHGetAll(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		name                    string
 		qm                      queryModel
@@ -41,10 +45,13 @@ func TestQueryHGetAll(t *testing.T) {
 			errors.New("error occurred"),
 		},
 	}
+
+	// Run Tests
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
 			client := testClient{rcv: tt.rcv, err: tt.err}
 			response := queryHGetAll(tt.qm, &client)
 			if tt.err != nil {
@@ -65,8 +72,12 @@ func TestQueryHGetAll(t *testing.T) {
 	}
 }
 
+/**
+ * HGET
+ */
 func TestQueryHGet(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		name         string
 		qm           queryModel
@@ -104,10 +115,13 @@ func TestQueryHGet(t *testing.T) {
 			errors.New("error occurred"),
 		},
 	}
+
+	// Run Tests
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
 			client := testClient{rcv: tt.rcv, err: tt.err}
 			response := queryHGet(tt.qm, &client)
 			if tt.err != nil {
@@ -124,8 +138,12 @@ func TestQueryHGet(t *testing.T) {
 	}
 }
 
+/**
+ * HMGET
+ */
 func TestQueryHMGet(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		name                    string
 		qm                      queryModel
@@ -171,10 +189,13 @@ func TestQueryHMGet(t *testing.T) {
 			errors.New("error occurred"),
 		},
 	}
+
+	// Run Tests
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
 			client := testClient{rcv: tt.rcv, err: tt.err}
 			response := queryHMGet(tt.qm, &client)
 			if tt.err != nil {
