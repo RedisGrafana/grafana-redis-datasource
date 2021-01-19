@@ -10,10 +10,36 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * RG.PYSTATS
+ */
+func TestRgPystatsIntegration(t *testing.T) {
+	// Client
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
+	resp := queryRgPystats(queryModel{Command: "rg.pystats"}, &client)
+	require.Len(t, resp.Frames, 1)
+	require.Len(t, resp.Frames[0].Fields, 3)
+	require.IsType(t, int64(0), resp.Frames[0].Fields[0].At(0))
+	require.IsType(t, int64(0), resp.Frames[0].Fields[1].At(0))
+	require.IsType(t, int64(0), resp.Frames[0].Fields[2].At(0))
+	require.Equal(t, "TotalAllocated", resp.Frames[0].Fields[0].Name)
+	require.Equal(t, "PeakAllocated", resp.Frames[0].Fields[1].Name)
+	require.Equal(t, "CurrAllocated", resp.Frames[0].Fields[2].Name)
+}
+
+/**
+ * RG.DUMPREGISTRATIONS
+ */
 func TestRgDumpregistrationsIntegration(t *testing.T) {
+	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
 	_ = radixClient.Do(radix.Cmd(nil, "RG.PYEXECUTE", "GB('CommandReader').register(trigger='mytrigger')"))
 	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
 	resp := queryRgDumpregistrations(queryModel{Command: "rg.dumpregistrations"}, &client)
 	require.Len(t, resp.Frames[0].Fields, 11)
 	require.Equal(t, "id", resp.Frames[0].Fields[0].Name)

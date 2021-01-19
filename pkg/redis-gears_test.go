@@ -7,14 +7,75 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * RG.PYSTATS
+ */
+func TestRgPystats(t *testing.T) {
+	t.Parallel()
+
+	/**
+	 * Success
+	 */
+	t.Run("should process command", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: pystats{
+				TotalAllocated: int64(11),
+				PeakAllocated:  int64(12),
+				CurrAllocated:  int64(13),
+			},
+			err: nil,
+		}
+
+		// Response
+		resp := queryRgPystats(queryModel{Command: "rg.pystats"}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 3)
+		require.Equal(t, int64(11), resp.Frames[0].Fields[0].At(0))
+		require.Equal(t, int64(12), resp.Frames[0].Fields[1].At(0))
+		require.Equal(t, int64(13), resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, "TotalAllocated", resp.Frames[0].Fields[0].Name)
+		require.Equal(t, "PeakAllocated", resp.Frames[0].Fields[1].Name)
+		require.Equal(t, "CurrAllocated", resp.Frames[0].Fields[2].Name)
+
+	})
+
+	/**
+	 * Error
+	 */
+	t.Run("should handle error", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv:      nil,
+			batchRcv: nil,
+			err:      errors.New("error occurred")}
+
+		// Response
+		resp := queryRgPystats(queryModel{Command: "rg.pystats"}, &client)
+		require.EqualError(t, resp.Error, "error occurred")
+	})
+}
+
+/**
+ * RG.DUMPREGISTRATIONS
+ */
 func TestRgDumpregistrations(t *testing.T) {
 	t.Parallel()
 
+	/**
+	 * Success
+	 */
 	t.Run("should process command", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{
 			rcv: []dumpregistrations{{
-				Id:     "123",
+				ID:     "123",
 				Reader: "reader",
 				Desc:   "desc",
 				RegistrationData: registrationData{
@@ -30,6 +91,8 @@ func TestRgDumpregistrations(t *testing.T) {
 			}},
 			err: nil,
 		}
+
+		// Response
 		resp := queryRgDumpregistrations(queryModel{Command: "rg.dumpregistrations"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 11)
@@ -57,12 +120,19 @@ func TestRgDumpregistrations(t *testing.T) {
 		require.Equal(t, "\"mytrigger\"=\"trigger\"\n", resp.Frames[0].Fields[10].At(0))
 	})
 
+	/**
+	 * Error
+	 */
 	t.Run("should handle error", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{
 			rcv:      nil,
 			batchRcv: nil,
 			err:      errors.New("error occurred")}
+
+		// Response
 		resp := queryRgDumpregistrations(queryModel{Command: "rg.dumpregistrations"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
