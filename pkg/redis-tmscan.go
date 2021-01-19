@@ -122,7 +122,7 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	// Add key types field to frame
 	frame.Fields = append(frame.Fields, data.NewField("type", nil, []string{}))
 
-	// Add key ьemory to frame with a proper config
+	// Add key memory to frame with a proper config
 	memoryField := data.NewField("memory", nil, []int64{})
 	memoryField.Config = &data.FieldConfig{Unit: "decbytes"}
 	frame.Fields = append(frame.Fields, memoryField)
