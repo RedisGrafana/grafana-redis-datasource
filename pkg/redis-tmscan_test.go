@@ -231,12 +231,12 @@ func TestQueryTMScan(t *testing.T) {
 					"hash",
 				},
 			},
-			batchErr: []error{nil, errors.New("error when batch keyMemory")},
+			batchErr: []error{nil, errors.New("error when batch memory")},
 			err:      nil,
 		}
 
 		// Response
 		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
-		require.EqualError(t, resp.Error, "error when batch keyMemory")
+		require.EqualError(t, resp.Error, "error when batch memory")
 	})
 }
