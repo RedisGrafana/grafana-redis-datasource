@@ -9,6 +9,7 @@ import (
 
 func TestCreateFrameValue(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		value    string
 		expected interface{}
@@ -17,6 +18,7 @@ func TestCreateFrameValue(t *testing.T) {
 		{"3", float64(3)},
 		{"somestring", "somestring"},
 	}
+
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.value, func(t *testing.T) {
@@ -30,6 +32,7 @@ func TestCreateFrameValue(t *testing.T) {
 
 func TestAddFrameFieldsFromArray(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		name        string
 		values      []interface{}
@@ -72,6 +75,7 @@ func TestAddFrameFieldsFromArray(t *testing.T) {
 			0,
 		},
 	}
+
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {

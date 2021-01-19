@@ -13,6 +13,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * Client Config
+ */
 func TestCreateRedisClientConfig(t *testing.T) {
 	tests := []struct {
 		name      string
@@ -76,12 +79,15 @@ func TestCreateRedisClientConfig(t *testing.T) {
 		},
 	}
 
+	// Run Tests
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			raw, _ := json.Marshal(&tt.dataModel)
 			tt.settings.JSONData = raw
+
+			// Config
 			config, err := createRedisClientConfig(tt.settings)
 			if tt.err != "" {
 				require.EqualError(t, err, tt.err)
@@ -93,6 +99,7 @@ func TestCreateRedisClientConfig(t *testing.T) {
 		})
 	}
 
+	// Error
 	t.Run("handle marshalling error", func(t *testing.T) {
 		t.Parallel()
 		_, err := createRedisClientConfig(backend.DataSourceInstanceSettings{})
@@ -100,42 +107,71 @@ func TestCreateRedisClientConfig(t *testing.T) {
 	})
 }
 
+/**
+ * Dispose
+ */
 func TestDispose(t *testing.T) {
+	// Client
 	client := &testClient{}
 	client.On("Close").Return(nil)
+
+	// Instance
 	is := instanceSettings{client}
 	is.Dispose()
 	client.AssertNumberOfCalls(t, "Close", 1)
 }
 
+/**
+ * Get Instance
+ */
 func TestGetInstance(t *testing.T) {
+	// Data Source
 	client := &testClient{}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+
+	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, nil)
 	actualClient, err := ds.getInstance(backend.PluginContext{})
 	require.Equal(t, client, actualClient)
 	require.NoError(t, err)
 }
+
+/**
+ * Get Instance Error
+ */
 func TestGetInstanceError(t *testing.T) {
+	// Data Source
 	client := &testClient{}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+
+	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, errors.New("some_err"))
 	_, err := ds.getInstance(backend.PluginContext{})
 	require.EqualError(t, err, "some_err")
 }
 
+/**
+ * Query Data
+ */
 func TestQueryData(t *testing.T) {
+	// Data Source
 	client := &testClient{rcv: "3.14", err: nil}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+
+	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// HGET
 	dm := queryModel{Command: "hget", Key: "test1", Field: "key1"}
 	marshaled, _ := json.Marshal(dm)
+
+	// Response
 	response, err := ds.QueryData(context.TODO(), &backend.QueryDataRequest{
 		PluginContext: backend.PluginContext{},
 		Headers:       nil,
@@ -154,14 +190,24 @@ func TestQueryData(t *testing.T) {
 	require.Len(t, response.Responses, 1)
 }
 
+/**
+ * Query Data with Error
+ */
 func TestQueryDataWithError(t *testing.T) {
+	// Client
 	client := &testClient{rcv: "3.14", err: nil}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+
+	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, errors.New("some_err"))
+
+	// HGET
 	dm := queryModel{Command: "hget", Key: "test1", Field: "key1"}
 	marshaled, _ := json.Marshal(dm)
+
+	// Query
 	_, err := ds.QueryData(context.TODO(), &backend.QueryDataRequest{
 		PluginContext: backend.PluginContext{},
 		Headers:       nil,
@@ -179,34 +225,58 @@ func TestQueryDataWithError(t *testing.T) {
 	require.EqualError(t, err, "some_err")
 }
 
+/**
+ * Check Health
+ */
 func TestCheckHealth(t *testing.T) {
+	// Client
 	client := &testClient{rcv: "PONG", err: nil}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+
+	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// Result
 	result, err := ds.CheckHealth(context.TODO(), &backend.CheckHealthRequest{})
 	require.NoError(t, err)
 	require.Equal(t, result.Status, backend.HealthStatusOk)
 }
 
+/**
+ * Check Health with Error
+ */
 func TestCheckHealthWithErrorFromIm(t *testing.T) {
+	// Client
 	client := &testClient{rcv: "PONG", err: nil}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+
+	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, errors.New("some_err"))
+
+	// Result
 	result, err := ds.CheckHealth(context.TODO(), &backend.CheckHealthRequest{})
 	require.NoError(t, err)
 	require.Equal(t, result.Status, backend.HealthStatusError)
 }
 
+/**
+ * Check Health with Client Error
+ */
 func TestCheckHealthWithErrorFromClient(t *testing.T) {
+	// Client
 	client := &testClient{rcv: "PONG", err: errors.New("some_err")}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+
+	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// Result
 	result, err := ds.CheckHealth(context.TODO(), &backend.CheckHealthRequest{})
 	require.NoError(t, err)
 	require.Equal(t, result.Status, backend.HealthStatusError)

@@ -12,8 +12,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * Query
+ */
 func TestQuery(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		qm queryModel
 	}{
@@ -40,12 +44,18 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "rg.pystats"}},
 		{queryModel{Command: "rg.dumpregistrations"}},
 	}
+
+	// Run Tests
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.qm.Command, func(t *testing.T) {
 			t.Parallel()
+
+			// Client
 			client := testClient{rcv: nil, err: nil}
 			var marshaled, _ = json.Marshal(tt.qm)
+
+			// Response
 			response := query(context.TODO(), backend.DataQuery{
 				RefID:         "",
 				QueryType:     "",
@@ -58,10 +68,15 @@ func TestQuery(t *testing.T) {
 		})
 	}
 
+	// Custom Query
 	t.Run("custom query", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{rcv: []interface{}{}, err: nil}
 		var marshaled, _ = json.Marshal(queryModel{Query: "Test"})
+
+		// Response
 		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
@@ -74,12 +89,19 @@ func TestQuery(t *testing.T) {
 	})
 }
 
+/**
+ * Query with Error
+ */
 func TestQueryWithErrors(t *testing.T) {
 	t.Parallel()
 
 	t.Run("Marshalling failure", func(t *testing.T) {
 		t.Parallel()
+
+		// Client
 		client := testClient{rcv: nil, err: nil}
+
+		// Response
 		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
@@ -92,11 +114,15 @@ func TestQueryWithErrors(t *testing.T) {
 		require.EqualError(t, response.Error, "invalid character '\\x1f' looking for beginning of value", "Should return marshalling error")
 	})
 
+	// Unknown command
 	t.Run("Unknown command failure", func(t *testing.T) {
 		t.Parallel()
 
+		// Client
 		client := testClient{rcv: nil, err: nil}
 		var marshaled, _ = json.Marshal(queryModel{Command: "unknown"})
+
+		// Response
 		response := query(context.TODO(), backend.DataQuery{
 			RefID:         "",
 			QueryType:     "",
@@ -111,6 +137,9 @@ func TestQueryWithErrors(t *testing.T) {
 
 }
 
+/**
+ * Error Handler
+ */
 func TestErrorHandler(t *testing.T) {
 	t.Parallel()
 
@@ -128,8 +157,12 @@ func TestErrorHandler(t *testing.T) {
 
 }
 
+/**
+ * Query Command with Key
+ */
 func TestQueryKeyCommand(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		name                    string
 		qm                      queryModel
@@ -171,11 +204,18 @@ func TestQueryKeyCommand(t *testing.T) {
 			errors.New("error occurred"),
 		},
 	}
+
+	// Run Tests
 	for _, tt := range tests {
 		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
+			// Client
 			client := testClient{rcv: tt.rcv, err: tt.err}
+
+			// Response
 			response := queryKeyCommand(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")

@@ -10,8 +10,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * TMSCAN
+ */
 func TestTMScanIntegration(t *testing.T) {
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	// Types
 	types := map[string]string{
 		"test:string": "string",
 		"test:stream": "stream",
@@ -21,6 +24,7 @@ func TestTMScanIntegration(t *testing.T) {
 		"test:hash":   "hash",
 	}
 
+	// Memory
 	memory := map[string]int64{
 		"test:string": int64(59),
 		"test:stream": int64(612),
@@ -30,7 +34,11 @@ func TestTMScanIntegration(t *testing.T) {
 		"test:hash":   int64(108),
 	}
 
+	// Client
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
 	resp := queryTMScan(queryModel{Cursor: "0"}, &client)
 	require.Len(t, resp.Frames, 2)
 	require.Len(t, resp.Frames[0].Fields, 3)
@@ -41,6 +49,7 @@ func TestTMScanIntegration(t *testing.T) {
 	require.Equal(t, 6, resp.Frames[0].Fields[2].Len())
 	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
 
+	// Keys
 	keys := []string{
 		resp.Frames[0].Fields[0].At(0).(string),
 		resp.Frames[0].Fields[0].At(1).(string),
@@ -56,10 +65,15 @@ func TestTMScanIntegration(t *testing.T) {
 	}
 }
 
+/**
+ * TMSCAN with Match nomatch
+ */
 func TestTMScanIntegrationWithNoMatched(t *testing.T) {
+	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
-
 	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
 	resp := queryTMScan(queryModel{Cursor: "0", Match: "nomatch"}, &client)
 	require.Len(t, resp.Frames, 2)
 	require.Len(t, resp.Frames[0].Fields, 3)
@@ -68,13 +82,18 @@ func TestTMScanIntegrationWithNoMatched(t *testing.T) {
 	require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
 	require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
 	require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
-	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
+	require.NotEqual(t, "0", resp.Frames[1].Fields[0].At(0))
 }
 
+/**
+ * TMSCAN with Match test:*
+ */
 func TestTMScanIntegrationWithMatched(t *testing.T) {
+	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
-
 	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
 	resp := queryTMScan(queryModel{Cursor: "0", Match: "test:*"}, &client)
 	require.Len(t, resp.Frames, 2)
 	require.Len(t, resp.Frames[0].Fields, 3)
@@ -86,10 +105,15 @@ func TestTMScanIntegrationWithMatched(t *testing.T) {
 	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
 }
 
+/**
+ * TMSCAN with Count 1
+ */
 func TestTMScanIntegrationWithCount(t *testing.T) {
+	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
-
 	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
 	resp := queryTMScan(queryModel{Cursor: "0", Count: 1}, &client)
 	require.Len(t, resp.Frames, 2)
 	require.Len(t, resp.Frames[0].Fields, 3)
