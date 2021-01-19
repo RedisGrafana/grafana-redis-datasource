@@ -95,7 +95,7 @@ func TestRgDumpregistrations(t *testing.T) {
 		// Response
 		resp := queryRgDumpregistrations(queryModel{Command: "rg.dumpregistrations"}, &client)
 		require.Len(t, resp.Frames, 1)
-		require.Len(t, resp.Frames[0].Fields, 11)
+		require.Len(t, resp.Frames[0].Fields, 12)
 		require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
 		require.Equal(t, "reader", resp.Frames[0].Fields[1].Name)
 		require.Equal(t, "desc", resp.Frames[0].Fields[2].Name)

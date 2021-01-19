@@ -39,6 +39,7 @@ type registrationData struct {
 	NumAborted   int64             `redis:"numAborted"`
 	LastError    string            `redis:"lastError"`
 	Args         map[string]string `redis:"args"`
+	Status       string            `redis:"status"`
 }
 
 /**
@@ -110,6 +111,7 @@ func queryRgDumpregistrations(qm queryModel, client redisClient) backend.DataRes
 	frame.Fields = append(frame.Fields, data.NewField("numAborted", nil, []int64{}))
 	frame.Fields = append(frame.Fields, data.NewField("lastError", nil, []string{}))
 	frame.Fields = append(frame.Fields, data.NewField("args", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("status", nil, []string{}))
 
 	for _, model := range models {
 		// Merging args to string like "key"="value"\n
@@ -120,7 +122,7 @@ func queryRgDumpregistrations(qm queryModel, client redisClient) backend.DataRes
 
 		frame.AppendRow(model.ID, model.Reader, model.Desc, model.PD, model.RegistrationData.Mode,
 			model.RegistrationData.NumTriggered, model.RegistrationData.NumSuccess, model.RegistrationData.NumFailures,
-			model.RegistrationData.NumAborted, model.RegistrationData.LastError, args.String())
+			model.RegistrationData.NumAborted, model.RegistrationData.LastError, args.String(), model.RegistrationData.Status)
 	}
 
 	return response
