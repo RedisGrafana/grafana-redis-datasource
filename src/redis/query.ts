@@ -6,10 +6,11 @@ import { AggregationValue } from './time-series';
  * Query Type Values
  */
 export enum QueryTypeValue {
-  COMMAND = 'command',
+  REDIS = 'redis',
   TIMESERIES = 'timeSeries',
   SEARCH = 'search',
   CLI = 'cli',
+  GEARS = 'gears',
 }
 
 /**
@@ -19,16 +20,21 @@ export const QueryType: Array<SelectableValue<QueryTypeValue>> = [
   {
     label: 'Redis',
     description: 'Hashes, Sets, Lists, Strings, Streams, etc.',
-    value: QueryTypeValue.COMMAND,
+    value: QueryTypeValue.REDIS,
+  },
+  {
+    label: 'RedisGears',
+    description: 'Dynamic framework for data processing',
+    value: QueryTypeValue.GEARS,
   },
   {
     label: 'RediSearch',
-    description: 'Redis Secondary Index & Query Engine',
+    description: 'Secondary Index & Query Engine',
     value: QueryTypeValue.SEARCH,
   },
   {
     label: 'RedisTimeSeries',
-    description: 'Redis Module adding a Time Series data structure to Redis',
+    description: 'Time Series data structure',
     value: QueryTypeValue.TIMESERIES,
   },
   {
