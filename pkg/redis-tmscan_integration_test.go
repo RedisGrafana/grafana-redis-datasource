@@ -65,19 +65,17 @@ func TestTMScanIntegration(t *testing.T) {
 	require.Len(t, resp.Frames[0].Fields, 3)
 	require.Len(t, resp.Frames[1].Fields, 1)
 	require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
-	require.Equal(t, 16, resp.Frames[0].Fields[0].Len())
-	require.Equal(t, 16, resp.Frames[0].Fields[1].Len())
-	require.Equal(t, 16, resp.Frames[0].Fields[2].Len())
-	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
 
 	// Keys
-	keys := []string{}
+	keys := map[string]int{}
 	for i := 0; i < resp.Frames[0].Fields[0].Len(); i++ {
-		keys = append(keys, resp.Frames[0].Fields[0].At(i).(string))
+		if _, ok := types[resp.Frames[0].Fields[0].At(i).(string)]; ok {
+			keys[resp.Frames[0].Fields[0].At(i).(string)] = i
+		}
 	}
-	for i, key := range keys {
-		require.Equal(t, types[key], resp.Frames[0].Fields[1].At(i), "Invalid type returned")
-		require.Equal(t, memory[key], resp.Frames[0].Fields[2].At(i), "Invalid memory size returned")
+	for key, value := range keys {
+		require.Equal(t, types[key], resp.Frames[0].Fields[1].At(value), "Invalid type returned")
+		require.Equal(t, memory[key], resp.Frames[0].Fields[2].At(value), "Invalid memory size returned")
 	}
 }
 
