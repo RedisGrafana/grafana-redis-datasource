@@ -31,20 +31,20 @@ func TestQueryTMScan(t *testing.T) {
 			},
 			batchRcv: [][]interface{}{
 				{
-					"string",
-					"stream",
-					"set",
-					"list",
-					"string",
-					"hash",
-				},
-				{
 					int64(59),
 					int64(612),
 					int64(265),
 					int64(140),
 					int64(59),
 					int64(108),
+				},
+				{
+					"string",
+					"stream",
+					"set",
+					"list",
+					"string",
+					"hash",
 				},
 			},
 			err: nil,
@@ -84,6 +84,61 @@ func TestQueryTMScan(t *testing.T) {
 
 	})
 
+	t.Run("should properly handle Size", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []interface{}{
+				[]byte("0"),
+				[]interface{}{
+					[]byte("test:string"),
+					[]byte("test:stream"),
+					[]byte("test:set"),
+					[]byte("test:list"),
+					[]byte("test:float"),
+					[]byte("test:hash"),
+				},
+			},
+			batchRcv: [][]interface{}{
+				{
+					int64(59),
+					int64(612),
+					int64(265),
+					int64(140),
+					int64(59),
+					int64(108),
+				},
+				{
+					"stream",
+					"set",
+				},
+			},
+			err: nil,
+		}
+
+		// Response
+		resp := queryTMScan(queryModel{Command: "tmscan", Size: 2, Count: 10, Cursor: "0"}, &client)
+		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames[0].Fields, 3)
+		require.Len(t, resp.Frames[1].Fields, 1)
+		require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
+		require.Equal(t, 2, resp.Frames[0].Fields[0].Len())
+		require.Equal(t, 2, resp.Frames[0].Fields[1].Len())
+		require.Equal(t, 2, resp.Frames[0].Fields[2].Len())
+		require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
+
+		require.Equal(t, "test:stream", resp.Frames[0].Fields[0].At(0))
+		require.Equal(t, "test:set", resp.Frames[0].Fields[0].At(1))
+
+		require.Equal(t, "stream", resp.Frames[0].Fields[1].At(0))
+		require.Equal(t, "set", resp.Frames[0].Fields[1].At(1))
+
+		require.Equal(t, int64(612), resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, int64(265), resp.Frames[0].Fields[2].At(1))
+
+	})
+
 	// Cursor Error
 	t.Run("should handle error during CURSOR", func(t *testing.T) {
 		t.Parallel()
@@ -117,20 +172,20 @@ func TestQueryTMScan(t *testing.T) {
 			},
 			batchRcv: [][]interface{}{
 				{
-					"string",
-					"stream",
-					"set",
-					"list",
-					"string",
-					"hash",
-				},
-				{
 					int64(59),
 					int64(612),
 					int64(265),
 					int64(140),
 					int64(59),
 					int64(108),
+				},
+				{
+					"string",
+					"stream",
+					"set",
+					"list",
+					"string",
+					"hash",
 				},
 			},
 			batchErr: []error{errors.New("error when batch types"), nil},
@@ -160,14 +215,6 @@ func TestQueryTMScan(t *testing.T) {
 			},
 			batchRcv: [][]interface{}{
 				{
-					"string",
-					"stream",
-					"set",
-					"list",
-					"string",
-					"hash",
-				},
-				{
 					int64(59),
 					int64(612),
 					int64(265),
@@ -175,13 +222,21 @@ func TestQueryTMScan(t *testing.T) {
 					int64(59),
 					int64(108),
 				},
+				{
+					"string",
+					"stream",
+					"set",
+					"list",
+					"string",
+					"hash",
+				},
 			},
-			batchErr: []error{nil, errors.New("error when batch memory")},
+			batchErr: []error{nil, errors.New("error when batch keyMemory")},
 			err:      nil,
 		}
 
 		// Response
 		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
-		require.EqualError(t, resp.Error, "error when batch memory")
+		require.EqualError(t, resp.Error, "error when batch keyMemory")
 	})
 }
