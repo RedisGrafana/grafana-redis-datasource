@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { DataSourceSettings } from '@grafana/data';
 import { RadioButtonGroup } from '@grafana/ui';
-import { ClientTypeValue, RedisDataSourceOptions } from '../types';
+import { ClientTypeValue, RedisDataSourceOptions } from '../../types';
 import { ConfigEditor } from './config-editor';
 
 /**

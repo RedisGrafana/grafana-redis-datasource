@@ -72,7 +72,7 @@ export const Commands = {
   timeSeries: [
     {
       label: 'TS.GET',
-      description: 'Get the last sample',
+      description: 'Returns the last sample',
       value: 'ts.get',
     },
     {
@@ -87,7 +87,7 @@ export const Commands = {
     },
     {
       label: 'TS.QUERYINDEX',
-      description: 'Get all the keys matching the filter list',
+      description: 'Query all the keys matching the filter list',
       value: 'ts.queryindex',
     },
     { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
