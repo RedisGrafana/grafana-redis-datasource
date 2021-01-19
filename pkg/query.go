@@ -85,6 +85,10 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryFtInfo(qm, client)
 	case "tmscan":
 		return queryTMScan(qm, client)
+	case "rg.pystats":
+		return queryRgPystats(qm, client)
+	case "rg.dumpregistrations":
+		return queryRgDumpregistrations(qm, client)
 	default:
 		response := backend.DataResponse{}
 		log.DefaultLogger.Error("Query", "Command", qm.Command)

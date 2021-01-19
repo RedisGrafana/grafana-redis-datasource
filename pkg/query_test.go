@@ -37,6 +37,8 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "ft.info"}},
 		{queryModel{Command: "xinfoStream"}},
 		{queryModel{Command: "tmscan"}},
+		{queryModel{Command: "rg.pystats"}},
+		{queryModel{Command: "rg.dumpregistrations"}},
 	}
 	for _, tt := range tests {
 		tt := tt

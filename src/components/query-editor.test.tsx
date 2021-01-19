@@ -44,7 +44,7 @@ describe('QueryEditor', () => {
       const testedMethod = jest.spyOn(wrapper.instance(), 'onTypeChange');
       wrapper.instance().forceUpdate();
       const testedComponent = getComponent(wrapper);
-      const newValue = QueryTypeValue.COMMAND;
+      const newValue = QueryTypeValue.REDIS;
       testedComponent.simulate('change', { value: newValue });
       expect(testedMethod).toHaveBeenCalledWith({ value: newValue });
       expect(onChange).toHaveBeenCalledWith({
@@ -75,7 +75,7 @@ describe('QueryEditor', () => {
     });
 
     it('Should not be shown if type!=cli', () => {
-      const query = getQuery({ type: QueryTypeValue.COMMAND });
+      const query = getQuery({ type: QueryTypeValue.REDIS });
       const wrapper = shallow<QueryEditor>(
         <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
       );
@@ -120,7 +120,7 @@ describe('QueryEditor', () => {
       });
 
     it('Should be shown if type!=cli', () => {
-      const query = getQuery({ type: QueryTypeValue.COMMAND });
+      const query = getQuery({ type: QueryTypeValue.REDIS });
       const wrapper = shallow<QueryEditor>(
         <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
       );
@@ -138,7 +138,7 @@ describe('QueryEditor', () => {
     });
 
     it('Should set value from query', () => {
-      const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+      const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
       const wrapper = shallow<QueryEditor>(
         <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
       );
@@ -147,7 +147,7 @@ describe('QueryEditor', () => {
     });
 
     it('Should call onCommandChange when onChange prop was called', () => {
-      const query = getQuery({ type: QueryTypeValue.COMMAND });
+      const query = getQuery({ type: QueryTypeValue.REDIS });
       const wrapper = shallow<QueryEditor>(
         <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
       );
@@ -178,7 +178,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.key', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'get' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'get' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -187,7 +187,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.key', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'gettt' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'gettt' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -196,7 +196,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'get', keyName: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'get', keyName: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -205,7 +205,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onKeyChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'get' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'get' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -232,7 +232,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.filter', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -241,7 +241,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.filter', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -250,7 +250,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange', filter: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange', filter: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -259,7 +259,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onFilterChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -286,7 +286,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.field', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'hget' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'hget' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -295,7 +295,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.field', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -304,7 +304,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'hget', field: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'hget', field: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -313,7 +313,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onFieldChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'hget' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'hget' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -340,7 +340,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.legend', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.range' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.range' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -349,7 +349,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.legend', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -358,7 +358,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.range', legend: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.range', legend: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -367,7 +367,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onLegendChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.range' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.range' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -394,7 +394,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.legendLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -403,7 +403,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.legendLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -412,7 +412,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange', legend: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange', legend: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -421,7 +421,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onLegendChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -448,7 +448,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.valueLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -457,7 +457,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.valueLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -466,7 +466,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange', value: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange', value: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -475,7 +475,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onValueChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'ts.mrange' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -502,7 +502,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.size', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'slowlogGet' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'slowlogGet' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -511,7 +511,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.size', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -520,7 +520,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'slowlogGet', size: 123 });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'slowlogGet', size: 123 });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -529,7 +529,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onChange prop when value was changed', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'slowlogGet' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'slowlogGet' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -553,7 +553,7 @@ describe('QueryEditor', () => {
         });
 
       it('Should be shown when command exists in commands.section', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'info' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'info' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -562,7 +562,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should not be shown when command is not exists in commands.section', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -571,7 +571,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'info', section: '123' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'info', section: '123' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );
@@ -580,7 +580,7 @@ describe('QueryEditor', () => {
       });
 
       it('Should call onInfoSectionTextChange method when value was changed', () => {
-        const query = getQuery({ type: QueryTypeValue.COMMAND, command: 'info' });
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'info' });
         const wrapper = shallow<QueryEditor>(
           <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
         );

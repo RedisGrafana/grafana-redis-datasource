@@ -8,6 +8,9 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+/**
+ * Test client
+ */
 type testClient struct {
 	rcv        interface{}
 	batchRcv   [][]interface{}
@@ -17,36 +20,83 @@ type testClient struct {
 	mock.Mock
 }
 
+/**
+ * PANIC
+ */
+type panickingClient struct {
+}
+
+/**
+ * Response
+ */
+type valueToCheckInResponse struct {
+	frameIndex int
+	fieldIndex int
+	rowIndex   int
+	value      interface{}
+}
+
+/**
+ * Response
+ */
+type valueToCheckByLabelInResponse struct {
+	frameIndex int
+	fieldName  string
+	rowIndex   int
+	value      interface{}
+}
+
+/**
+ * Fake Instance manager
+ */
+type fakeInstanceManager struct {
+	mock.Mock
+}
+
+/**
+ * FlatCmd()
+ */
 func (client *testClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	if client.err != nil {
 		return client.err
-	} else {
-		assignReceiver(rcv, client.rcv)
-		return nil
 	}
 
+	assignReceiver(rcv, client.rcv)
+	return nil
 }
+
+/**
+ * Cmd()
+ */
 func (client *testClient) RunCmd(rcv interface{}, cmd string, args ...string) error {
 	if client.err != nil {
 		return client.err
-	} else {
-		assignReceiver(rcv, client.rcv)
-		return nil
 	}
+
+	assignReceiver(rcv, client.rcv)
+	return nil
 }
 
+/**
+ * Pipeline execution using Batch
+ */
 func (client *testClient) RunBatchFlatCmd(commands []flatCommandArgs) error {
 	for i, args := range commands {
 		assignReceiver(args.rcv, client.batchRcv[client.batchCalls][i])
 	}
+
 	var err error
 	if client.batchErr != nil && client.batchErr[client.batchCalls] != nil {
 		err = client.batchErr[client.batchCalls]
 	}
+
 	client.batchCalls++
 	return err
 }
 
+/**
+ * Receiver
+ */
 func assignReceiver(to interface{}, from interface{}) {
 	switch to.(type) {
 	case int:
@@ -67,6 +117,10 @@ func assignReceiver(to interface{}, from interface{}) {
 		*(to.(*map[string]interface{})) = from.(map[string]interface{})
 	case *string:
 		*(to.(*string)) = from.(string)
+	case *pystats:
+		*(to.(*pystats)) = from.(pystats)
+	case *[]dumpregistrations:
+		*(to.(*[]dumpregistrations)) = from.([]dumpregistrations)
 	case interface{}:
 		switch from.(type) {
 		case int:
@@ -114,50 +168,54 @@ func assignReceiver(to interface{}, from interface{}) {
 		panic("Unsupported type of to rcv: " + reflect.TypeOf(to).String())
 	}
 }
+
+/**
+ * Close session
+ */
 func (client *testClient) Close() error {
 	args := client.Called()
 	return args.Error(0)
 }
 
-type panickingClient struct {
-}
-
+/**
+ * FlatCmd() Error
+ */
 func (client *panickingClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	panic("Panic")
 }
+
+/**
+ * Cmd() Error
+ */
 func (client *panickingClient) RunCmd(rcv interface{}, cmd string, args ...string) error {
 	panic("Panic")
 }
+
+/**
+ * Close() Error
+ */
 func (client *panickingClient) Close() error {
 	return nil
 }
+
+/**
+ * Batch command
+ */
 func (client *panickingClient) RunBatchFlatCmd(commands []flatCommandArgs) error {
 	panic("Panic")
 }
 
-type valueToCheckInResponse struct {
-	frameIndex int
-	fieldIndex int
-	rowIndex   int
-	value      interface{}
-}
-
-type valueToCheckByLabelInResponse struct {
-	frameIndex int
-	fieldName  string
-	rowIndex   int
-	value      interface{}
-}
-
-type fakeInstanceManager struct {
-	mock.Mock
-}
-
+/**
+ * Get
+ */
 func (im *fakeInstanceManager) Get(pluginContext backend.PluginContext) (instancemgmt.Instance, error) {
 	args := im.Called(pluginContext)
 	return args.Get(0), args.Error(1)
 }
 
+/**
+ * Do
+ */
 func (im *fakeInstanceManager) Do(pluginContext backend.PluginContext, fn instancemgmt.InstanceCallbackFunc) error {
 	args := im.Called(pluginContext, fn)
 	return args.Error(0)

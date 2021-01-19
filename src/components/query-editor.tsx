@@ -329,7 +329,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {type === QueryTypeValue.COMMAND && command && CommandParameters.section.includes(command) && (
+        {type === QueryTypeValue.REDIS && command && CommandParameters.section.includes(command) && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Section</InlineFormLabel>
             <Select

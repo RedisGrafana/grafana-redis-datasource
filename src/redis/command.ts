@@ -2,7 +2,7 @@
  * Commands
  */
 export const Commands = {
-  command: [
+  redis: [
     {
       label: 'CLIENT LIST',
       description: 'Returns information and statistics about the client connections server',
@@ -97,6 +97,18 @@ export const Commands = {
       label: 'FT.INFO',
       description: 'Returns information and statistics on the index',
       value: 'ft.info',
+    },
+  ],
+  gears: [
+    {
+      label: 'RG.PYSTATS',
+      description: 'Returns memory usage statistics from the Python interpreter',
+      value: 'rg.pystats',
+    },
+    {
+      label: 'RG.DUMPREGISTRATIONS',
+      description: 'Outputs the list of function registrations',
+      value: 'rg.dumpregistrations',
     },
   ]
 };
