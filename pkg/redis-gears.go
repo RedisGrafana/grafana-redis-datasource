@@ -113,6 +113,7 @@ func queryRgDumpregistrations(qm queryModel, client redisClient) backend.DataRes
 	frame.Fields = append(frame.Fields, data.NewField("args", nil, []string{}))
 	frame.Fields = append(frame.Fields, data.NewField("status", nil, []string{}))
 
+	// Registrations
 	for _, model := range models {
 		// Merging args to string like "key"="value"\n
 		args := new(bytes.Buffer)

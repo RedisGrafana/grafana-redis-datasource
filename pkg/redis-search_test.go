@@ -7,8 +7,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+/**
+ * FT.INFO
+ */
 func TestQueryFtInfo(t *testing.T) {
 	t.Parallel()
+
 	tests := []struct {
 		name                          string
 		qm                            queryModel
@@ -136,11 +140,17 @@ func TestQueryFtInfo(t *testing.T) {
 			errors.New("error occurred"),
 		},
 	}
+
+	// Run Tests
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
+			// Client
 			client := testClient{rcv: tt.rcv, err: tt.err}
+
+			// Response
 			response := queryFtInfo(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
