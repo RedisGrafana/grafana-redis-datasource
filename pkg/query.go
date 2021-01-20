@@ -108,6 +108,8 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryRgPystats(qm, client)
 	case "rg.dumpregistrations":
 		return queryRgDumpregistrations(qm, client)
+	case "rg.pyexecute":
+		return queryRgPyexecute(qm, client)
 
 	/**
 	 * Default
