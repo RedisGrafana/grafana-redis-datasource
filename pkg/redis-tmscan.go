@@ -66,7 +66,7 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	nextCursor := string(result[0].([]byte))
 
 	// Add cursor field to frame
-	frameCursor.Fields = append(frame.Fields, data.NewField("cursor", nil, []string{nextCursor}))
+	frameCursor.Fields = append(frameCursor.Fields, data.NewField("cursor", nil, []string{nextCursor}))
 
 	/**
 	 * Array with keys is second value in result array
@@ -101,6 +101,9 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	if err != nil {
 		return errorHandler(response, err)
 	}
+
+	// Add count field to cursor frame
+	frameCursor.Fields = append(frameCursor.Fields, data.NewField("count", nil, []int64{int64(len(rows))}))
 
 	// Check if size is less than the number of rows and we need to select biggest keys
 	if qm.Size > 0 && qm.Size < len(rows) {
