@@ -6,7 +6,7 @@ import { AggregationValue } from './time-series';
  * Query Type Values
  */
 export enum QueryTypeValue {
-  REDIS = 'redis',
+  REDIS = 'command',
   TIMESERIES = 'timeSeries',
   SEARCH = 'search',
   CLI = 'cli',
@@ -182,4 +182,11 @@ export interface RedisQuery extends DataQuery {
    * @type {number}
    */
   count?: number;
+
+  /**
+   * Samples for MEMORY USAGE command
+   *
+   * @type {number}
+   */
+  samples?: number;
 }

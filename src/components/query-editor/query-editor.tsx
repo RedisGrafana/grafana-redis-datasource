@@ -166,6 +166,7 @@ export class QueryEditor extends PureComponent<Props> {
       cursor,
       count,
       match,
+      samples,
       streaming,
       streamingInterval,
       streamingCapacity,
@@ -285,7 +286,6 @@ export class QueryEditor extends PureComponent<Props> {
                   this.props.onChange({ ...this.props.query, size: Number(event.target.value) })
                 }
                 label="Size"
-                tooltip="Size override"
               />
             )}
 
@@ -309,10 +309,15 @@ export class QueryEditor extends PureComponent<Props> {
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   this.props.onChange({ ...this.props.query, match: event.target.value })
                 }
+                placeholder="*"
                 label="Match pattern"
               />
             )}
+          </div>
+        )}
 
+        {type !== QueryTypeValue.CLI && command && (
+          <div className="gf-form">
             {CommandParameters.count.includes(command) && (
               <FormField
                 labelWidth={8}
@@ -323,7 +328,23 @@ export class QueryEditor extends PureComponent<Props> {
                   this.props.onChange({ ...this.props.query, count: Number(event.target.value) })
                 }
                 label="Count"
-                tooltip="The default value is 10. Bigger number can cause latency and is not recommended to use in Production."
+                placeholder="10"
+                tooltip="Can cause latency and is not recommended to use in Production."
+              />
+            )}
+
+            {CommandParameters.samples.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={samples}
+                type="number"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.props.onChange({ ...this.props.query, samples: Number(event.target.value) })
+                }
+                label="Samples"
+                placeholder="5"
+                tooltip="Number of sampled nested values. 0 (all values) is not supported."
               />
             )}
           </div>

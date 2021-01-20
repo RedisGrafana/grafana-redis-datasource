@@ -2,7 +2,7 @@
  * Commands
  */
 export const Commands = {
-  redis: [
+  command: [
     {
       label: 'CLIENT LIST',
       description: 'Returns information and statistics about the client connections server',
@@ -145,8 +145,9 @@ export const CommandParameters = {
   value: ['ts.range'],
   valueLabel: ['ts.mrange'],
   fill: ['ts.range', 'ts.mrange'],
-  size: ['slowlogGet'],
+  size: ['slowlogGet', 'tmscan'],
   cursor: ['tmscan'],
   match: ['tmscan'],
-  count: ['tmscan']
+  count: ['tmscan'],
+  samples: ['tmscan']
 };
