@@ -36,11 +36,11 @@ func Integration() error {
 		return err
 	}
 
-	if err := sh.RunV("docker-compose", "-f", "docker-compose-test.yml", "-p", "grd-integration", "up", "-d"); err != nil {
+	if err := Up(); err != nil {
 		return err
 	}
 
-	defer sh.RunV("docker-compose", "-f", "docker-compose-test.yml", "-p", "grd-integration", "down")
+	defer Down()
 
 	if err := sh.RunV("go", "test", "./pkg/...", "-tags=integration", "-v", "-cover", "-covermode=atomic", "-coverprofile=coverage/backend.txt"); err != nil {
 		return err
