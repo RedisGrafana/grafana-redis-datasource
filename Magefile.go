@@ -36,11 +36,11 @@ func Integration() error {
 		return err
 	}
 
-	if err := sh.RunV("docker-compose", "-f", "docker-compose-test.yml", "up", "-d"); err != nil {
+	if err := Up(); err != nil {
 		return err
 	}
 
-	defer sh.RunV("docker-compose", "-f", "docker-compose-test.yml", "down")
+	defer Down()
 
 	if err := sh.RunV("go", "test", "./pkg/...", "-tags=integration", "-v", "-cover", "-covermode=atomic", "-coverprofile=coverage/backend.txt"); err != nil {
 		return err
@@ -51,6 +51,16 @@ func Integration() error {
 	}
 
 	return nil
+}
+
+// up docker-compose environment from integration tests
+func Up() error {
+	return sh.RunV("docker-compose", "-f", "docker-compose-test.yml", "-p", "grd-integration", "up", "-d")
+}
+
+// down docker-compose environment from integration tests
+func Down() error {
+	return sh.RunV("docker-compose", "-f", "docker-compose-test.yml", "-p", "grd-integration", "down")
 }
 
 // Default configures the default target.

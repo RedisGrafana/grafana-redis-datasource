@@ -30,7 +30,7 @@
       "type": "row"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -95,7 +95,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -168,6 +168,7 @@
           "cursor": "0",
           "query": "",
           "refId": "A",
+          "size": 10,
           "type": "command"
         }
       ],
@@ -202,7 +203,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -366,7 +367,7 @@
       }
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -435,7 +436,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -447,7 +448,7 @@
       "type": "row"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "Should return 'test'",
       "fieldConfig": {
         "defaults": {
@@ -501,7 +502,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "Should return 1.234",
       "fieldConfig": {
         "defaults": {
@@ -559,7 +560,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -611,7 +612,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -668,7 +669,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -727,7 +728,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -783,7 +784,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -839,7 +840,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -895,7 +896,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "Should return 100",
       "fieldConfig": {
         "defaults": {
@@ -956,7 +957,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -1018,7 +1019,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -1080,7 +1081,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1138,7 +1139,7 @@
       "type": "stat"
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1200,7 +1201,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Redis",
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1312,7 +1313,7 @@
       }
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -1366,7 +1367,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Redis",
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1475,7 +1476,7 @@
       }
     },
     {
-      "datasource": "Redis",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -2168,7 +2169,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:157",
           "format": "decbytes",
           "label": null,
           "logBase": 1,
@@ -2177,7 +2177,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:158",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -2414,5 +2413,5 @@
   "timezone": "",
   "title": "Redis Data Types",
   "uid": "2TKvUH-Gk",
-  "version": 4
+  "version": 1
 }

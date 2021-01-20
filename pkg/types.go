@@ -56,4 +56,5 @@ type queryModel struct {
 	Cursor      string `json:"cursor"`
 	Match       string `json:"match"`
 	Count       int    `json:"count"`
+	Samples     int    `json:"samples"`
 }
