@@ -8,6 +8,15 @@ import (
 )
 
 /**
+ * TMSCAN result row entity
+ */
+type tmscanRow struct {
+	keyName   string
+	keyMemory int64
+	keyType   string
+}
+
+/**
  * TMSCAN cursor match count
  *
  * Iterates over the collection of keys and query type and memory usage
@@ -75,11 +84,13 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	for i, key := range keys {
 		rows = append(rows, &tmscanRow{keyName: string(key.([]byte))})
 
-		// Commands
+		// Arguments
 		memoryCommandArgs := []interface{}{rows[i].keyName}
 		if qm.Samples > 0 {
 			memoryCommandArgs = append(memoryCommandArgs, "SAMPLES", qm.Samples)
 		}
+
+		// Commands
 		memoryCommands = append(memoryCommands, flatCommandArgs{cmd: "MEMORY", key: "USAGE", args: memoryCommandArgs, rcv: &(rows[i].keyMemory)})
 	}
 
@@ -98,13 +109,13 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 			// Use reversed condition for Descending sort
 			return rows[i].keyMemory > rows[j].keyMemory
 		})
+
 		// Get first qm.Size keys
 		rows = rows[:qm.Size]
 	}
 
 	// Check type for all keys
 	for _, row := range rows {
-		// Commands
 		typeCommands = append(typeCommands, flatCommandArgs{cmd: "TYPE", key: row.keyName, rcv: &(row.keyType)})
 	}
 
@@ -137,13 +148,4 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 
 	// Return
 	return response
-}
-
-/**
- * TMSCAN result row entity
- */
-type tmscanRow struct {
-	keyName   string
-	keyMemory int64
-	keyType   string
 }

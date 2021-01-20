@@ -13,6 +13,7 @@ import (
 func TestQueryTMScan(t *testing.T) {
 	t.Parallel()
 
+	// Cursor
 	t.Run("should process cursor", func(t *testing.T) {
 		t.Parallel()
 
@@ -84,6 +85,7 @@ func TestQueryTMScan(t *testing.T) {
 
 	})
 
+	// Size
 	t.Run("should properly handle Size", func(t *testing.T) {
 		t.Parallel()
 
@@ -154,6 +156,7 @@ func TestQueryTMScan(t *testing.T) {
 		require.EqualError(t, resp.Error, "error when call cursor")
 	})
 
+	// First batch
 	t.Run("should handle error during first batch", func(t *testing.T) {
 		t.Parallel()
 
@@ -197,6 +200,7 @@ func TestQueryTMScan(t *testing.T) {
 		require.EqualError(t, resp.Error, "error when batch types")
 	})
 
+	// Second batch
 	t.Run("should handle error during second batch", func(t *testing.T) {
 		t.Parallel()
 
