@@ -1,9 +1,20 @@
 package main
 
 import (
+	"sort"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
+
+/**
+ * TMSCAN result row entity
+ */
+type tmscanRow struct {
+	keyName   string
+	keyMemory int64
+	keyType   string
+}
 
 /**
  * TMSCAN cursor match count
@@ -66,43 +77,21 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 	var typeCommands []flatCommandArgs
 	var memoryCommands []flatCommandArgs
 
-	// Slices with batch receiver pointers
-	var typePointers []*string
-	var memoryPointers []*int64
-
 	// Slices with output values
-	var names []string
-	var types []string
-	var memory []int64
+	var rows []*tmscanRow
 
-	// Check type and usage for all keys
-	for _, key := range keys {
-		name := string(key.([]byte))
-		names = append(names, name)
+	// Check memory usage for all keys
+	for i, key := range keys {
+		rows = append(rows, &tmscanRow{keyName: string(key.([]byte))})
 
-		var keyType string
-		var keyMemory int64
-
-		// Pointers
-		typePointers = append(typePointers, &keyType)
-		memoryPointers = append(memoryPointers, &keyMemory)
+		// Arguments
+		memoryCommandArgs := []interface{}{rows[i].keyName}
+		if qm.Samples > 0 {
+			memoryCommandArgs = append(memoryCommandArgs, "SAMPLES", qm.Samples)
+		}
 
 		// Commands
-		typeCommands = append(typeCommands, flatCommandArgs{cmd: "TYPE", key: name, rcv: &keyType})
-		memoryCommands = append(memoryCommands, flatCommandArgs{cmd: "MEMORY", key: "USAGE", args: []interface{}{name}, rcv: &keyMemory})
-	}
-
-	// Send batch with TYPE commands
-	err = client.RunBatchFlatCmd(typeCommands)
-
-	// Check error
-	if err != nil {
-		return errorHandler(response, err)
-	}
-
-	// Get the values stored by pointers and apply it to result slice
-	for _, typePointer := range typePointers {
-		types = append(types, *typePointer)
+		memoryCommands = append(memoryCommands, flatCommandArgs{cmd: "MEMORY", key: "USAGE", args: memoryCommandArgs, rcv: &(rows[i].keyMemory)})
 	}
 
 	// Send batch with MEMORY USAGE commands
@@ -113,21 +102,46 @@ func queryTMScan(qm queryModel, client redisClient) backend.DataResponse {
 		return errorHandler(response, err)
 	}
 
-	// Get the values stored by pointers and apply it to result slice
-	for _, memoryPointer := range memoryPointers {
-		memory = append(memory, *memoryPointer)
+	// Check if size is less than the number of rows and we need to select biggest keys
+	if qm.Size > 0 && qm.Size < len(rows) {
+		// Sort by memory usage
+		sort.Slice(rows, func(i, j int) bool {
+			// Use reversed condition for Descending sort
+			return rows[i].keyMemory > rows[j].keyMemory
+		})
+
+		// Get first qm.Size keys
+		rows = rows[:qm.Size]
+	}
+
+	// Check type for all keys
+	for _, row := range rows {
+		typeCommands = append(typeCommands, flatCommandArgs{cmd: "TYPE", key: row.keyName, rcv: &(row.keyType)})
+	}
+
+	// Send batch with TYPE commands
+	err = client.RunBatchFlatCmd(typeCommands)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
 	}
 
 	// Add key names field to frame
-	frame.Fields = append(frame.Fields, data.NewField("key", nil, names))
+	frame.Fields = append(frame.Fields, data.NewField("key", nil, []string{}))
 
 	// Add key types field to frame
-	frame.Fields = append(frame.Fields, data.NewField("type", nil, types))
+	frame.Fields = append(frame.Fields, data.NewField("type", nil, []string{}))
 
 	// Add key memory to frame with a proper config
-	memoryField := data.NewField("memory", nil, memory)
+	memoryField := data.NewField("memory", nil, []int64{})
 	memoryField.Config = &data.FieldConfig{Unit: "decbytes"}
 	frame.Fields = append(frame.Fields, memoryField)
+
+	// Append result rows to frame
+	for _, row := range rows {
+		frame.AppendRow(row.keyName, row.keyType, row.keyMemory)
+	}
 
 	// Add the frames to the response
 	response.Frames = append(response.Frames, frame, frameCursor)
