@@ -119,6 +119,8 @@ func assignReceiver(to interface{}, from interface{}) {
 		*(to.(*string)) = from.(string)
 	case *pystats:
 		*(to.(*pystats)) = from.(pystats)
+	case *xinfo:
+		*(to.(*xinfo)) = from.(xinfo)
 	case *[]dumpregistrations:
 		*(to.(*[]dumpregistrations)) = from.([]dumpregistrations)
 	case interface{}:
