@@ -52,15 +52,53 @@ func TestRgDumpregistrationsIntegration(t *testing.T) {
 	require.Equal(t, "numAborted", resp.Frames[0].Fields[8].Name)
 	require.Equal(t, "lastError", resp.Frames[0].Fields[9].Name)
 	require.Equal(t, "args", resp.Frames[0].Fields[10].Name)
-	require.Equal(t, 3, resp.Frames[0].Fields[0].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[1].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[2].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[3].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[4].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[5].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[6].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[7].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[8].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[9].Len())
-	require.Equal(t, 3, resp.Frames[0].Fields[10].Len())
+	for i := 0; i < len(resp.Frames[0].Fields); i++ {
+		require.Equal(t, 3, resp.Frames[0].Fields[0].Len())
+	}
+}
+
+/**
+ * RG.PYEXECUTE
+ */
+func TestRgPyexecuteIntegration(t *testing.T) {
+	// Client
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	client := radixV3Impl{radixClient: radixClient}
+
+	t.Run("Test command with full response", func(t *testing.T) {
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
+		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, "results", resp.Frames[0].Name)
+		require.Equal(t, "results", resp.Frames[0].Fields[0].Name)
+		require.Greater(t, resp.Frames[0].Fields[0].Len(), 0)
+		require.IsType(t, "", resp.Frames[0].Fields[0].At(0))
+		require.Len(t, resp.Frames[1].Fields, 1)
+		require.Equal(t, "errors", resp.Frames[1].Name)
+		require.Equal(t, "errors", resp.Frames[1].Fields[0].Name)
+		require.NoError(t, resp.Error)
+	})
+
+	t.Run("Test command with full OK string", func(t *testing.T) {
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB('CommandReader')"}, &client)
+		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, "results", resp.Frames[0].Name)
+		require.Equal(t, "results", resp.Frames[0].Fields[0].Name)
+		require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
+		require.Len(t, resp.Frames[1].Fields, 1)
+		require.Equal(t, "errors", resp.Frames[1].Name)
+		require.Equal(t, "errors", resp.Frames[1].Fields[0].Name)
+		require.Equal(t, 0, resp.Frames[1].Fields[0].Len())
+		require.NoError(t, resp.Error)
+	})
+
+	t.Run("Test command with error", func(t *testing.T) {
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "some key"}, &client)
+		require.Len(t, resp.Frames, 0)
+		require.Error(t, resp.Error)
+	})
 }

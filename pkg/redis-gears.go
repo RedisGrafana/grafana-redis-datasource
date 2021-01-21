@@ -3,8 +3,10 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"reflect"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
@@ -127,4 +129,55 @@ func queryRgDumpregistrations(qm queryModel, client redisClient) backend.DataRes
 	}
 
 	return response
+}
+
+/**
+ * RG.PYEXECUTE
+ *
+ * Returns the list of function registrations
+ * @see https://oss.redislabs.com/redisgears/commands.html#rgdumpregistrations
+ */
+func queryRgPyexecute(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	var result interface{}
+
+	// Run command
+	err := client.RunFlatCmd(&result, "RG.PYEXECUTE", qm.Key)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// New Frame for results
+	frameWithResults := data.NewFrame("results")
+	frameWithResults.Fields = append(frameWithResults.Fields, data.NewField("results", nil, []string{}))
+
+	// New Frame for errors
+	frameWithErrors := data.NewFrame("errors")
+	frameWithErrors.Fields = append(frameWithErrors.Fields, data.NewField("errors", nil, []string{}))
+
+	// Adding frames to response
+	response.Frames = append(response.Frames, frameWithResults)
+	response.Frames = append(response.Frames, frameWithErrors)
+
+	switch value := result.(type) {
+	case string:
+		return response
+	case []interface{}:
+		// Inserting results
+		for _, entry := range value[0].([]interface{}) {
+			frameWithResults.AppendRow(string(entry.([]byte)))
+		}
+
+		// Inserting errors
+		for _, entry := range value[1].([]interface{}) {
+			frameWithErrors.AppendRow(string(entry.([]byte)))
+		}
+		return response
+	default:
+		log.DefaultLogger.Error("Unexpected type received", "value", value, "type", reflect.TypeOf(value).String())
+		return response
+	}
 }

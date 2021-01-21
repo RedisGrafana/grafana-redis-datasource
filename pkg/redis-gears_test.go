@@ -137,3 +137,89 @@ func TestRgDumpregistrations(t *testing.T) {
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
+
+/**
+ * RG.PYEXECUTE
+ */
+func TestRgPyexecute(t *testing.T) {
+	t.Parallel()
+
+	/**
+	 * Success with OK
+	 */
+	t.Run("should process command with OK result", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: "OK",
+			err: nil,
+		}
+
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute"}, &client)
+		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, "results", resp.Frames[0].Name)
+		require.Equal(t, "results", resp.Frames[0].Fields[0].Name)
+		require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
+		require.Len(t, resp.Frames[1].Fields, 1)
+		require.Equal(t, "errors", resp.Frames[1].Name)
+		require.Equal(t, "errors", resp.Frames[1].Fields[0].Name)
+		require.Equal(t, 0, resp.Frames[1].Fields[0].Len())
+		require.NoError(t, resp.Error)
+	})
+
+	/**
+	 * Success with 2 arrays in result
+	 */
+	t.Run("should process command with 2 arrays in result", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []interface{}{
+				[]interface{}{
+					[]byte("success info"),
+				},
+				[]interface{}{
+					[]byte("error info"),
+				},
+			},
+			err: nil,
+		}
+
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute"}, &client)
+		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, "results", resp.Frames[0].Name)
+		require.Equal(t, "results", resp.Frames[0].Fields[0].Name)
+		require.IsType(t, "", resp.Frames[0].Fields[0].At(0))
+		require.Len(t, resp.Frames[1].Fields, 1)
+		require.Equal(t, "errors", resp.Frames[1].Name)
+		require.Equal(t, "errors", resp.Frames[1].Fields[0].Name)
+		require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
+		require.Equal(t, "success info", resp.Frames[0].Fields[0].At(0))
+		require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
+		require.Equal(t, "error info", resp.Frames[1].Fields[0].At(0))
+		require.NoError(t, resp.Error)
+	})
+
+	/**
+	 * Error
+	 */
+	t.Run("should handle error", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv:      nil,
+			batchRcv: nil,
+			err:      errors.New("error occurred")}
+
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute"}, &client)
+		require.EqualError(t, resp.Error, "error occurred")
+	})
+}
