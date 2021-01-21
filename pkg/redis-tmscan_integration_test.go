@@ -158,5 +158,5 @@ func TestTMScanIntegrationWithSize(t *testing.T) {
 	}
 
 	require.NotEqual(t, "0", resp.Frames[1].Fields[0].At(0))
-	require.Equal(t, int64(10), resp.Frames[1].Fields[1].At(0))
+	require.GreaterOrEqual(t, int64(10), resp.Frames[1].Fields[1].At(0))
 }
