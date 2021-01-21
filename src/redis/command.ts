@@ -101,14 +101,14 @@ export const Commands = {
   ],
   gears: [
     {
-      label: 'RG.PYSTATS',
-      description: 'Returns memory usage statistics from the Python interpreter',
-      value: 'rg.pystats',
-    },
-    {
       label: 'RG.DUMPREGISTRATIONS',
       description: 'Outputs the list of function registrations',
       value: 'rg.dumpregistrations',
+    },
+    {
+      label: 'RG.PYSTATS',
+      description: 'Returns memory usage statistics from the Python interpreter',
+      value: 'rg.pystats',
     },
   ]
 };

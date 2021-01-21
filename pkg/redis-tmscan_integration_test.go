@@ -33,7 +33,6 @@ var memory = map[string]int64{
 /**
  * TMSCAN
  */
-
 func TestTMScanIntegration(t *testing.T) {
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
@@ -106,16 +105,23 @@ func TestTMScanIntegrationWithMatched(t *testing.T) {
 			keys[resp.Frames[0].Fields[0].At(i).(string)] = i
 		}
 	}
+
 	for key, value := range keys {
 		require.Equal(t, types[key], resp.Frames[0].Fields[1].At(value), "Invalid type returned")
 		require.Equal(t, memory[key], resp.Frames[0].Fields[2].At(value), "Invalid memory size returned")
 	}
 }
 
+/**
+ * TMSCAN with Samples count
+ */
 func TestTMScanIntegrationWithSamples(t *testing.T) {
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
 
+	// Client
 	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
 	resp := queryTMScan(queryModel{Cursor: "0", Samples: 10}, &client)
 	require.Len(t, resp.Frames, 2)
 	require.Len(t, resp.Frames[0].Fields, 3)
@@ -145,10 +151,12 @@ func TestTMScanIntegrationWithSize(t *testing.T) {
 	require.Equal(t, 8, resp.Frames[0].Fields[0].Len())
 	require.Equal(t, 8, resp.Frames[0].Fields[1].Len())
 	require.Equal(t, 8, resp.Frames[0].Fields[2].Len())
+
 	// Check proper sorting by memory
 	for i := 0; i < 7; i++ {
 		require.LessOrEqual(t, resp.Frames[0].Fields[2].At(i+1), resp.Frames[0].Fields[2].At(i))
 	}
+
 	require.NotEqual(t, "0", resp.Frames[1].Fields[0].At(0))
 	require.Equal(t, int64(10), resp.Frames[1].Fields[1].At(0))
 }
