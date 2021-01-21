@@ -43,6 +43,7 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "tmscan"}},
 		{queryModel{Command: "rg.pystats"}},
 		{queryModel{Command: "rg.dumpregistrations"}},
+		{queryModel{Command: "rg.pyexecute"}},
 	}
 
 	// Run Tests
