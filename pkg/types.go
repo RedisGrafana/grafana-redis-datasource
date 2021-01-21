@@ -57,4 +57,6 @@ type queryModel struct {
 	Match       string `json:"match"`
 	Count       int    `json:"count"`
 	Samples     int    `json:"samples"`
+	Unblocking   bool   `json:"unblocking"`
+	Requirements string `json:"requirements"`
 }
