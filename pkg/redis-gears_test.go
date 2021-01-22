@@ -157,7 +157,7 @@ func TestRgPyexecute(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "results", resp.Frames[0].Name)
@@ -167,6 +167,29 @@ func TestRgPyexecute(t *testing.T) {
 		require.Equal(t, "errors", resp.Frames[1].Name)
 		require.Equal(t, "errors", resp.Frames[1].Fields[0].Name)
 		require.Equal(t, 0, resp.Frames[1].Fields[0].Len())
+		require.NoError(t, resp.Error)
+	})
+
+	/**
+	 * Success with Unblocking
+	 */
+	t.Run("should process command with Unblocking and requirements", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []byte("0000000000000000000000000000000000000000-11"),
+			err: nil,
+		}
+
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()", Unblocking: true, Requirements: "numpy"}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, "operationId", resp.Frames[0].Name)
+		require.Equal(t, "operationId", resp.Frames[0].Fields[0].Name)
+		require.Greater(t, resp.Frames[0].Fields[0].Len(), 0)
+		require.Equal(t, "0000000000000000000000000000000000000000-11", resp.Frames[0].Fields[0].At(0))
 		require.NoError(t, resp.Error)
 	})
 
@@ -190,7 +213,7 @@ func TestRgPyexecute(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "results", resp.Frames[0].Name)
@@ -219,7 +242,7 @@ func TestRgPyexecute(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }

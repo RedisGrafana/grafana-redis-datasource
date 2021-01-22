@@ -38,23 +38,25 @@ type dataModel struct {
  * Query Model
  */
 type queryModel struct {
-	Type        string `json:"type"`
-	Query       string `json:"query"`
-	Key         string `json:"keyName"`
-	Field       string `json:"field"`
-	Filter      string `json:"filter"`
-	Command     string `json:"command"`
-	Aggregation string `json:"aggregation"`
-	Bucket      int    `json:"bucket"`
-	Legend      string `json:"legend"`
-	Value       string `json:"value"`
-	Section     string `json:"section"`
-	Size        int    `json:"size"`
-	Fill        bool   `json:"fill"`
-	Streaming   bool   `json:"streaming"`
-	CLI         bool   `json:"cli"`
-	Cursor      string `json:"cursor"`
-	Match       string `json:"match"`
-	Count       int    `json:"count"`
-	Samples     int    `json:"samples"`
+	Type         string `json:"type"`
+	Query        string `json:"query"`
+	Key          string `json:"keyName"`
+	Field        string `json:"field"`
+	Filter       string `json:"filter"`
+	Command      string `json:"command"`
+	Aggregation  string `json:"aggregation"`
+	Bucket       int    `json:"bucket"`
+	Legend       string `json:"legend"`
+	Value        string `json:"value"`
+	Section      string `json:"section"`
+	Size         int    `json:"size"`
+	Fill         bool   `json:"fill"`
+	Streaming    bool   `json:"streaming"`
+	CLI          bool   `json:"cli"`
+	Cursor       string `json:"cursor"`
+	Match        string `json:"match"`
+	Count        int    `json:"count"`
+	Samples      int    `json:"samples"`
+	Unblocking   bool   `json:"unblocking"`
+	Requirements string `json:"requirements"`
 }
