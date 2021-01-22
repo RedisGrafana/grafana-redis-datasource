@@ -16,7 +16,7 @@ type xinfo struct {
 	RadixTreeKeys   int64         `redis:"radix-tree-keys"`
 	RadixTreeNodes  int64         `redis:"radix-tree-nodes"`
 	Groups          int64         `redis:"groups"`
-	LastGeneratedId string        `redis:"last-generated-id"`
+	LastGeneratedID string        `redis:"last-generated-id"`
 	FirstEntry      []interface{} `redis:"first-entry"`
 	LastEntry       []interface{} `redis:"last-entry"`
 }
@@ -37,40 +37,52 @@ func queryXInfoStream(qm queryModel, client redisClient) backend.DataResponse {
 	if err != nil {
 		return errorHandler(response, err)
 	}
+
 	// New Frame
 	frame := data.NewFrame(qm.Key)
+
 	// Add the frames to the response
 	response.Frames = append(response.Frames, frame)
+
 	// Add plain fields to frame
 	frame.Fields = append(frame.Fields, data.NewField("length", nil, []int64{model.Length}))
 	frame.Fields = append(frame.Fields, data.NewField("radix-tree-keys", nil, []int64{model.RadixTreeKeys}))
 	frame.Fields = append(frame.Fields, data.NewField("radix-tree-nodes", nil, []int64{model.RadixTreeNodes}))
 	frame.Fields = append(frame.Fields, data.NewField("groups", nil, []int64{model.Groups}))
-	frame.Fields = append(frame.Fields, data.NewField("last-generated-id", nil, []string{model.LastGeneratedId}))
+	frame.Fields = append(frame.Fields, data.NewField("last-generated-id", nil, []string{model.LastGeneratedID}))
+
+	// First entry
 	if model.FirstEntry != nil {
 		frame.Fields = append(frame.Fields, data.NewField("first-entry-id", nil, []string{string(model.FirstEntry[0].([]byte))}))
-		// Merging args to string like "key"="value"\n
 		entryFields := model.FirstEntry[1].([]interface{})
 		fields := new(bytes.Buffer)
+
+		// Merging args to string like "key"="value"\n
 		for i := 0; i < len(entryFields); i += 2 {
 			field := string(entryFields[i].([]byte))
 			value := string(entryFields[i+1].([]byte))
 			fmt.Fprintf(fields, "\"%s\"=\"%s\"\n", field, value)
 		}
+
 		frame.Fields = append(frame.Fields, data.NewField("first-entry-fields", nil, []string{fields.String()}))
 	}
+
+	// Last entry
 	if model.LastEntry != nil {
 		frame.Fields = append(frame.Fields, data.NewField("last-entry-id", nil, []string{string(model.LastEntry[0].([]byte))}))
-		// Merging args to string like "key"="value"\n
 		entryFields := model.LastEntry[1].([]interface{})
 		fields := new(bytes.Buffer)
+
+		// Merging args to string like "key"="value"\n
 		for i := 0; i < len(entryFields); i += 2 {
 			field := string(entryFields[i].([]byte))
 			value := string(entryFields[i+1].([]byte))
 			fmt.Fprintf(fields, "\"%s\"=\"%s\"\n", field, value)
 		}
+
 		frame.Fields = append(frame.Fields, data.NewField("last-entry-fields", nil, []string{fields.String()}))
 	}
+
 	// Return
 	return response
 }

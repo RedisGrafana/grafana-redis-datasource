@@ -23,7 +23,7 @@ func TestQueryXInfoStream(t *testing.T) {
 				RadixTreeKeys:   4,
 				RadixTreeNodes:  3,
 				Groups:          2,
-				LastGeneratedId: "id",
+				LastGeneratedID: "id",
 				FirstEntry: []interface{}{
 					[]byte("id2"),
 					[]interface{}{
@@ -70,7 +70,7 @@ func TestQueryXInfoStream(t *testing.T) {
 		require.Equal(t, "\"key3\"=\"value3\"\n\"key4\"=\"value4\"\n", resp.Frames[0].Fields[8].At(0))
 	})
 
-	t.Run("should handle response without FirstEntry and LasEntry", func(t *testing.T) {
+	t.Run("should handle response without FirstEntry and LastEntry", func(t *testing.T) {
 		t.Parallel()
 
 		// Client
@@ -79,7 +79,7 @@ func TestQueryXInfoStream(t *testing.T) {
 			RadixTreeKeys:   4,
 			RadixTreeNodes:  3,
 			Groups:          2,
-			LastGeneratedId: "id",
+			LastGeneratedID: "id",
 			FirstEntry:      nil,
 			LastEntry:       nil,
 		}}
@@ -91,6 +91,7 @@ func TestQueryXInfoStream(t *testing.T) {
 		require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
 	})
 
+	// Error
 	t.Run("should handle rerror", func(t *testing.T) {
 		t.Parallel()
 

@@ -147,6 +147,7 @@ func queryRgPyexecute(qm queryModel, client redisClient) backend.DataResponse {
 	if qm.Unblocking {
 		args = append(args, "UNBLOCKING")
 	}
+
 	if qm.Requirements != "" {
 		args = append(args, "REQUIREMENTS", qm.Requirements)
 	}
@@ -159,10 +160,12 @@ func queryRgPyexecute(qm queryModel, client redisClient) backend.DataResponse {
 		return errorHandler(response, err)
 	}
 
+	// UNBLOCKING
 	if qm.Unblocking {
 		// when running with UNBLOCKING only operationId is returned
 		frame := data.NewFrame("operationId")
 		frame.Fields = append(frame.Fields, data.NewField("operationId", nil, []string{string(result.([]byte))}))
+
 		// Adding frame to response
 		response.Frames = append(response.Frames, frame)
 		return response
@@ -180,6 +183,7 @@ func queryRgPyexecute(qm queryModel, client redisClient) backend.DataResponse {
 	response.Frames = append(response.Frames, frameWithResults)
 	response.Frames = append(response.Frames, frameWithErrors)
 
+	// Parse result
 	switch value := result.(type) {
 	case string:
 		return response
