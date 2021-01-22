@@ -92,9 +92,9 @@ func TestTMScanIntegrationWithMatched(t *testing.T) {
 	require.Len(t, resp.Frames[0].Fields, 3)
 	require.Len(t, resp.Frames[1].Fields, 2)
 	require.Equal(t, 1, resp.Frames[1].Fields[0].Len())
-	require.Equal(t, 6, resp.Frames[0].Fields[0].Len())
-	require.Equal(t, 6, resp.Frames[0].Fields[1].Len())
-	require.Equal(t, 6, resp.Frames[0].Fields[2].Len())
+	require.Equal(t, 8, resp.Frames[0].Fields[0].Len())
+	require.Equal(t, 8, resp.Frames[0].Fields[1].Len())
+	require.Equal(t, 8, resp.Frames[0].Fields[2].Len())
 	require.Equal(t, "0", resp.Frames[1].Fields[0].At(0))
 	require.Equal(t, int64(resp.Frames[0].Fields[0].Len()), resp.Frames[1].Fields[1].At(0))
 
