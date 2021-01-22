@@ -132,22 +132,43 @@ func queryRgDumpregistrations(qm queryModel, client redisClient) backend.DataRes
 }
 
 /**
- * RG.PYEXECUTE
+ * RG.PYEXECUTE "<function>" [UNBLOCKING] [REQUIREMENTS "<dep> ..."]
  *
- * Returns the list of function registrations
- * @see https://oss.redislabs.com/redisgears/commands.html#rgdumpregistrations
+ * Executes a Python function
+ * @see https://oss.redislabs.com/redisgears/commands.html#rgpyexecute
  */
 func queryRgPyexecute(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	var result interface{}
 
+	// Check and create list of optional parameters
+	var args []interface{}
+	if qm.Unblocking {
+		args = append(args, "UNBLOCKING")
+	}
+
+	if qm.Requirements != "" {
+		args = append(args, "REQUIREMENTS", qm.Requirements)
+	}
+
 	// Run command
-	err := client.RunFlatCmd(&result, "RG.PYEXECUTE", qm.Key)
+	err := client.RunFlatCmd(&result, "RG.PYEXECUTE", qm.Key, args...)
 
 	// Check error
 	if err != nil {
 		return errorHandler(response, err)
+	}
+
+	// UNBLOCKING
+	if qm.Unblocking {
+		// when running with UNBLOCKING only operationId is returned
+		frame := data.NewFrame("operationId")
+		frame.Fields = append(frame.Fields, data.NewField("operationId", nil, []string{string(result.([]byte))}))
+
+		// Adding frame to response
+		response.Frames = append(response.Frames, frame)
+		return response
 	}
 
 	// New Frame for results
@@ -162,6 +183,7 @@ func queryRgPyexecute(qm queryModel, client redisClient) backend.DataResponse {
 	response.Frames = append(response.Frames, frameWithResults)
 	response.Frames = append(response.Frames, frameWithErrors)
 
+	// Parse result
 	switch value := result.(type) {
 	case string:
 		return response

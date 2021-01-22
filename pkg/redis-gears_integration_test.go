@@ -65,8 +65,8 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
+	// Results
 	t.Run("Test command with full response", func(t *testing.T) {
-		// Response
 		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
@@ -80,8 +80,19 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 		require.NoError(t, resp.Error)
 	})
 
+	// UNBLOCKING and REQUIREMENTS
+	t.Run("Test command with UNBLOCKING and REQUIREMENTS", func(t *testing.T) {
+		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GearsBuilder(reader=\"KeysReader\").run()", Unblocking: true, Requirements: "numpy"}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, "operationId", resp.Frames[0].Name)
+		require.Equal(t, "operationId", resp.Frames[0].Fields[0].Name)
+		require.Greater(t, resp.Frames[0].Fields[0].Len(), 0)
+		require.IsType(t, "", resp.Frames[0].Fields[0].At(0))
+	})
+
+	// OK
 	t.Run("Test command with full OK string", func(t *testing.T) {
-		// Response
 		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB('CommandReader')"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
@@ -95,8 +106,8 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 		require.NoError(t, resp.Error)
 	})
 
+	// Error
 	t.Run("Test command with error", func(t *testing.T) {
-		// Response
 		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "some key"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.Error(t, resp.Error)
