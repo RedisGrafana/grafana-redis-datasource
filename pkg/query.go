@@ -84,6 +84,10 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryKeyCommand(qm, client)
 	case "xinfoStream":
 		return queryXInfoStream(qm, client)
+	case "xrange":
+		return queryXRange(qm, client)
+	case "xrevrange":
+		return queryXRevRange(qm, client)
 	case "clusterInfo":
 		return queryClusterInfo(qm, client)
 	case "clusterNodes":

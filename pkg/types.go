@@ -59,4 +59,6 @@ type queryModel struct {
 	Samples      int    `json:"samples"`
 	Unblocking   bool   `json:"unblocking"`
 	Requirements string `json:"requirements"`
+	Start        string `json:"start"`
+	End          string `json:"end"`
 }
