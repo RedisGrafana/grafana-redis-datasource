@@ -314,7 +314,7 @@ func TestQueryCustomCommand(t *testing.T) {
 			"Unsupported return type",
 		},
 		{
-			"should fail with emtpy command",
+			"should fail with empty command",
 			queryModel{Query: ""},
 			nil,
 			0,

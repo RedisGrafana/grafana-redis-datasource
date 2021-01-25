@@ -8,10 +8,11 @@ import {
   PluginType,
 } from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
+import { ClientTypeValue } from './constants';
 import { DataSource } from './data-source';
 import { QueryTypeValue, RedisQuery } from './redis';
 import { getQuery } from './tests/utils';
-import { ClientTypeValue, RedisDataSourceOptions } from './types';
+import { RedisDataSourceOptions } from './types';
 
 /**
  * Instance Settings
