@@ -64,30 +64,42 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryTsMRange(from, to, qm, client)
 
 	/**
-	 * Redis (Hash, Set, Info, Streams, Cluster, etc.)
+	 * Hash, Set, etc.
 	 */
 	case "hgetall":
 		return queryHGetAll(qm, client)
-	case "smembers", "hkeys":
-		return querySMembers(qm, client)
 	case "hget":
 		return queryHGet(qm, client)
 	case "hmget":
 		return queryHMGet(qm, client)
+	case "smembers", "hkeys":
+		return querySMembers(qm, client)
+	case "type", "get", "ttl", "hlen", "xlen", "llen", "scard":
+		return queryKeyCommand(qm, client)
+
+	/**
+	 * Info
+	 */
 	case "info":
 		return queryInfo(qm, client)
 	case "clientList":
 		return queryClientList(qm, client)
 	case "slowlogGet":
 		return querySlowlogGet(qm, client)
-	case "type", "get", "ttl", "hlen", "xlen", "llen", "scard":
-		return queryKeyCommand(qm, client)
+
+	/**
+	 * Streams
+	 */
 	case "xinfoStream":
 		return queryXInfoStream(qm, client)
 	case "xrange":
 		return queryXRange(qm, client)
 	case "xrevrange":
 		return queryXRevRange(qm, client)
+
+	/**
+	 * Cluster
+	 */
 	case "clusterInfo":
 		return queryClusterInfo(qm, client)
 	case "clusterNodes":
