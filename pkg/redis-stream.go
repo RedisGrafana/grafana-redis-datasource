@@ -95,20 +95,27 @@ func queryXInfoStream(qm queryModel, client redisClient) backend.DataResponse {
 func queryXRange(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
-	// Execute command
-	var result []interface{}
+	// Start
 	start := "-"
 	if qm.Start != "" {
 		start = qm.Start
 	}
+
+	// End
 	end := "+"
 	if qm.End != "" {
 		end = qm.End
 	}
+
+	// Arguments
 	args := []interface{}{start, end}
 	if qm.Count > 0 {
 		args = append(args, "COUNT", qm.Count)
 	}
+
+	var result []interface{}
+
+	// Execute command
 	err := client.RunFlatCmd(&result, "XRANGE", qm.Key, args...)
 
 	// Check error
@@ -134,20 +141,27 @@ func queryXRange(qm queryModel, client redisClient) backend.DataResponse {
 func queryXRevRange(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
-	// Execute command
-	var result []interface{}
+	// Start
 	start := "-"
 	if qm.Start != "" {
 		start = qm.Start
 	}
+
+	// End
 	end := "+"
 	if qm.End != "" {
 		end = qm.End
 	}
+
+	// Arguments
 	args := []interface{}{end, start}
 	if qm.Count > 0 {
 		args = append(args, "COUNT", qm.Count)
 	}
+
+	var result []interface{}
+
+	// Execute command
 	err := client.RunFlatCmd(&result, "XREVRANGE", qm.Key, args...)
 
 	// Check error
@@ -169,11 +183,11 @@ func queryXRevRange(qm queryModel, client redisClient) backend.DataResponse {
  * Iterate over xrange/xrevrange result and build new Frame with required fields
  */
 func createFrameFromRangeResponse(command string, result []interface{}) *data.Frame {
-	// creating new frame
+	// Create new frame
 	frame := data.NewFrame(command)
 
 	// Create field to store entry id
-	idField := data.NewField("$streamOperationId", nil, []string{})
+	idField := data.NewField("$streamId", nil, []string{})
 
 	// Add id field to the response
 	frame.Fields = append(frame.Fields, idField)
@@ -189,24 +203,28 @@ func createFrameFromRangeResponse(command string, result []interface{}) *data.Fr
 		keysFoundInCurrentEntry := map[string]bool{}
 
 		keyValuePairs := entry.([]interface{})[1].([]interface{})
-
 		for i := 0; i < len(keyValuePairs); i += 2 {
 			key := string(keyValuePairs[i].([]byte))
 			value := string(keyValuePairs[i+1].([]byte))
+
 			// Check if field has been already created before
 			if _, ok := fields[key]; !ok {
 				// Create new field
 				newField := data.NewField(key, nil, []string{})
 				fields[key] = newField
-				//Append field to frame
+
+				// Append field to frame
 				frame.Fields = append(frame.Fields, newField)
+
 				// Get the number of rows we processed previously
 				rowsCount := idField.Len() - 1
+
 				// Generate empty values for all previous rows
 				for j := 0; j < rowsCount; j++ {
 					newField.Append("")
 				}
 			}
+
 			// Insert value for current row
 			fields[key].Append(value)
 			keysFoundInCurrentEntry[key] = true
