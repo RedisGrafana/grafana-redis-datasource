@@ -44,6 +44,8 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "rg.pystats"}},
 		{queryModel{Command: "rg.dumpregistrations"}},
 		{queryModel{Command: "rg.pyexecute"}},
+		{queryModel{Command: "rg.xrange"}},
+		{queryModel{Command: "rg.xrevrange"}},
 	}
 
 	// Run Tests

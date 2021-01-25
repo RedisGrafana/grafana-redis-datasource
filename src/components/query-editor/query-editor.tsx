@@ -167,6 +167,8 @@ export class QueryEditor extends PureComponent<Props> {
       count,
       match,
       samples,
+      start,
+      end,
       streaming,
       streamingInterval,
       streamingCapacity,
@@ -313,6 +315,32 @@ export class QueryEditor extends PureComponent<Props> {
                 label="Match pattern"
               />
             )}
+
+            {CommandParameters.start.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={start}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.props.onChange({ ...this.props.query, start: event.target.value })
+                }
+                placeholder="-"
+                label="Start"
+              />
+            )}
+
+            {CommandParameters.end.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={end}
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  this.props.onChange({ ...this.props.query, end: event.target.value })
+                }
+                placeholder="+"
+                label="End"
+              />
+            )}
           </div>
         )}
 
@@ -328,7 +356,6 @@ export class QueryEditor extends PureComponent<Props> {
                   this.props.onChange({ ...this.props.query, count: Number(event.target.value) })
                 }
                 label="Count"
-                placeholder="10"
                 tooltip="Can cause latency and is not recommended to use in Production."
               />
             )}

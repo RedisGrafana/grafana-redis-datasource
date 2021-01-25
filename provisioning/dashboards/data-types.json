@@ -1526,6 +1526,20 @@
       "type": "table"
     },
     {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 60,
+      "panels": [],
+      "title": "Streams",
+      "type": "row"
+    },
+    {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -1554,7 +1568,7 @@
         "h": 6,
         "w": 19,
         "x": 0,
-        "y": 22
+        "y": 23
       },
       "id": 57,
       "options": {
@@ -1611,7 +1625,7 @@
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 22
+        "y": 23
       },
       "hiddenSeries": false,
       "id": 58,
@@ -1713,13 +1727,117 @@
       }
     },
     {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 61,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "command": "xrange",
+          "count": 100,
+          "keyName": "test:stream",
+          "query": "",
+          "refId": "A",
+          "streaming": false,
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "XRANGE test:stream",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 62,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.3.7",
+      "targets": [
+        {
+          "command": "xrange",
+          "count": 10,
+          "keyName": "queue:complete",
+          "query": "",
+          "refId": "A",
+          "streaming": false,
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "XRANGE queue:complete",
+      "type": "table"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 36
       },
       "id": 39,
       "panels": [],
@@ -1755,7 +1873,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 37
       },
       "id": 41,
       "options": {
@@ -1864,7 +1982,7 @@
         "h": 9,
         "w": 11,
         "x": 0,
-        "y": 32
+        "y": 40
       },
       "hiddenSeries": false,
       "id": 44,
@@ -2040,7 +2158,7 @@
         "h": 9,
         "w": 13,
         "x": 11,
-        "y": 32
+        "y": 40
       },
       "hiddenSeries": false,
       "id": 42,
@@ -2187,7 +2305,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 41
+        "y": 49
       },
       "id": 50,
       "panels": [],
@@ -2220,7 +2338,7 @@
         "h": 9,
         "w": 2,
         "x": 0,
-        "y": 42
+        "y": 50
       },
       "id": 53,
       "options": {
@@ -2282,7 +2400,7 @@
         "h": 9,
         "w": 6,
         "x": 2,
-        "y": 42
+        "y": 50
       },
       "hiddenSeries": false,
       "id": 54,
@@ -2527,7 +2645,7 @@
         "h": 9,
         "w": 16,
         "x": 8,
-        "y": 42
+        "y": 50
       },
       "id": 56,
       "options": {
@@ -2600,5 +2718,5 @@
   "timezone": "",
   "title": "Redis Data Types",
   "uid": "2TKvUH-Gk",
-  "version": 1
+  "version": 3
 }
