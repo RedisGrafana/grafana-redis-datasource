@@ -1,7 +1,8 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, TextArea } from '@grafana/ui';
-import { ClientType, ClientTypeValue, RedisDataSourceOptions, RedisSecureJsonData } from '../../types';
+import { ClientType, ClientTypeValue } from '../../constants';
+import { RedisDataSourceOptions, RedisSecureJsonData } from '../../types';
 
 /**
  * Form Field
@@ -175,7 +176,11 @@ export class ConfigEditor extends PureComponent<Props, State> {
         <h3 className="page-heading">Redis</h3>
 
         <div className="gf-form">
-          <InlineFormLabel width={10} tooltip="">
+          <InlineFormLabel
+            width={10}
+            tooltip="Redis accepts clients connections on the configured listening TCP port and on the Unix socket if enabled.
+            Cluster is a distributed implementation of OSS Redis. Sentinel provides high availability."
+          >
             Type
           </InlineFormLabel>
           <RadioButtonGroup
