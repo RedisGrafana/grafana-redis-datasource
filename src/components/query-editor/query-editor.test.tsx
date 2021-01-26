@@ -544,6 +544,312 @@ describe('QueryEditor', () => {
     });
 
     /**
+     * Cursor
+     */
+    describe('Cursor', () => {
+      const getComponent = (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.name() === 'FormField', node.prop('label') === 'Cursor';
+        });
+
+      it('Should be shown when command exists in commands.cursor', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).toBeTruthy();
+      });
+
+      it('Should not be shown when command is not exists in commands.cursor', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).not.toBeTruthy();
+      });
+
+      it('Should set value from query', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan', cursor: '2' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.prop('value')).toEqual(query.cursor);
+      });
+
+      it('Should call onChange prop when value was changed', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        const newValue = '1234';
+        testedComponent.simulate('change', { target: { value: newValue } });
+        expect(onChange).toHaveBeenCalledWith({
+          ...query,
+          cursor: newValue,
+        });
+      });
+    });
+
+    /**
+     * Match
+     */
+    describe('Match Pattern', () => {
+      const getComponent = (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.name() === 'FormField', node.prop('label') === 'Match pattern';
+        });
+
+      it('Should be shown when command exists in commands.match', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).toBeTruthy();
+      });
+
+      it('Should not be shown when command is not exists in commands.match', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).not.toBeTruthy();
+      });
+
+      it('Should set value from query', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan', match: '**' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.prop('value')).toEqual(query.match);
+      });
+
+      it('Should call onChange prop when value was changed', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        const newValue = '1234';
+        testedComponent.simulate('change', { target: { value: newValue } });
+        expect(onChange).toHaveBeenCalledWith({
+          ...query,
+          match: newValue,
+        });
+      });
+    });
+
+    /**
+     * Start
+     */
+    describe('Start', () => {
+      const getComponent = (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.name() === 'FormField', node.prop('label') === 'Start';
+        });
+
+      it('Should be shown when command exists in commands.start', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'xrange' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).toBeTruthy();
+      });
+
+      it('Should not be shown when command is not exists in commands.start', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).not.toBeTruthy();
+      });
+
+      it('Should set value from query', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'xrange', start: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.prop('value')).toEqual(query.start);
+      });
+
+      it('Should call onChange prop when value was changed', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'xrange' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        const newValue = '1234';
+        testedComponent.simulate('change', { target: { value: newValue } });
+        expect(onChange).toHaveBeenCalledWith({
+          ...query,
+          start: newValue,
+        });
+      });
+    });
+
+    /**
+     * End
+     */
+    describe('End', () => {
+      const getComponent = (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.name() === 'FormField', node.prop('label') === 'End';
+        });
+
+      it('Should be shown when command exists in commands.end', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'xrange' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).toBeTruthy();
+      });
+
+      it('Should not be shown when command is not exists in commands.end', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).not.toBeTruthy();
+      });
+
+      it('Should set value from query', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'xrange', end: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.prop('value')).toEqual(query.end);
+      });
+
+      it('Should call onChange prop when value was changed', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'xrange' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        const newValue = '1234';
+        testedComponent.simulate('change', { target: { value: newValue } });
+        expect(onChange).toHaveBeenCalledWith({
+          ...query,
+          end: newValue,
+        });
+      });
+    });
+
+    /**
+     * Count
+     */
+    describe('Count', () => {
+      const getComponent = (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.name() === 'FormField', node.prop('label') === 'Count';
+        });
+
+      it('Should be shown when command exists in commands.count', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).toBeTruthy();
+      });
+
+      it('Should not be shown when command is not exists in commands.count', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).not.toBeTruthy();
+      });
+
+      it('Should set value from query', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan', count: 123 });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.prop('value')).toEqual(query.count);
+      });
+
+      it('Should call onChange prop when value was changed', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        const newValue = '1234';
+        testedComponent.simulate('change', { target: { value: newValue } });
+        expect(onChange).toHaveBeenCalledWith({
+          ...query,
+          count: parseInt(newValue, 10),
+        });
+      });
+    });
+
+    /**
+     * Samples
+     */
+    describe('Samples', () => {
+      const getComponent = (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.name() === 'FormField', node.prop('label') === 'Samples';
+        });
+
+      it('Should be shown when command exists in commands.samples', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).toBeTruthy();
+      });
+
+      it('Should not be shown when command is not exists in commands.samples', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.exists()).not.toBeTruthy();
+      });
+
+      it('Should set value from query', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan', count: 123 });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        expect(testedComponent.prop('value')).toEqual(query.samples);
+      });
+
+      it('Should call onChange prop when value was changed', () => {
+        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'tmscan' });
+        const wrapper = shallow<QueryEditor>(
+          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+        );
+        const testedComponent = getComponent(wrapper);
+        const newValue = '1234';
+        testedComponent.simulate('change', { target: { value: newValue } });
+        expect(onChange).toHaveBeenCalledWith({
+          ...query,
+          samples: parseInt(newValue, 10),
+        });
+      });
+    });
+
+    /**
      * Section
      */
     describe('Section', () => {
