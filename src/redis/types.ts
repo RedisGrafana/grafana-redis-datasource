@@ -1,7 +1,23 @@
-import { DataQuery } from '@grafana/data';
+import { DataQuery, SelectableValue } from '@grafana/data';
 import { InfoSectionValue } from './info';
 import { QueryTypeValue } from './query';
 import { AggregationValue } from './time-series';
+
+export enum StreamingDataType {
+  TimeSeries = 'TimeSeries',
+  DataFrame = 'DataFrame',
+}
+
+export const StreamingDataTypes: Array<SelectableValue<StreamingDataType>> = [
+  {
+    label: 'TimeSeries',
+    value: StreamingDataType.TimeSeries,
+  },
+  {
+    label: 'DataFrame',
+    value: StreamingDataType.DataFrame,
+  }
+]
 
 /**
  * Redis Query
@@ -120,6 +136,12 @@ export interface RedisQuery extends DataQuery {
      * @type {number}
      */
     streamingCapacity?: number;
+
+    /**
+     * Streaming data type
+     * @type {StreamingDataType}
+     */
+    streamingDataType?: StreamingDataType;
 
     /**
      * Cursor for SCAN command

@@ -10,7 +10,7 @@ interface QueryFieldTest {
   name: keyof RedisQuery;
   testName?: string;
   getComponent: (wrapper: ShallowComponent) => ShallowWrapper;
-  type: 'number' | 'string' | 'select' | 'switch';
+  type: 'number' | 'string' | 'select' | 'switch' | 'radioButton';
   queryWhenShown: RedisQuery;
   queryWhenHidden: RedisQuery;
 }
@@ -77,6 +77,9 @@ describe('QueryEditor', () => {
           if (type === 'switch') {
             newValue = true;
             testedComponent.simulate('change', { currentTarget: { checked: newValue } });
+          }
+          if (type === 'radioButton') {
+            testedComponent.simulate('change', newValue);
           }
           expect(onChange).toHaveBeenCalledWith({
             ...query,
@@ -391,6 +394,24 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Capacity';
           }),
         type: 'number',
+        queryWhenShown: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: true,
+        },
+        queryWhenHidden: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: false,
+        },
+      },
+      {
+        name: 'streamingDataType',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onStreamingDataTypeChange;
+          }),
+        type: 'radioButton',
         queryWhenShown: {
           refId: 'A',
           type: QueryTypeValue.TIMESERIES,

@@ -1,7 +1,7 @@
 import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
-import { Button, InlineFormLabel, LegacyForms, Select, TextArea } from '@grafana/ui';
+import { Button, InlineFormLabel, LegacyForms, Select, TextArea, RadioButtonGroup } from '@grafana/ui';
 import { DataSource } from '../../data-source';
 import {
   Aggregations,
@@ -13,6 +13,8 @@ import {
   QueryType,
   QueryTypeValue,
   RedisQuery,
+  StreamingDataTypes,
+  StreamingDataType,
 } from '../../redis';
 import { RedisDataSourceOptions } from '../../types';
 
@@ -65,6 +67,17 @@ export class QueryEditor extends PureComponent<Props> {
   createSelectFieldHandler<ValueType>(name: keyof RedisQuery) {
     return (val: SelectableValue<ValueType>) => {
       this.props.onChange({ ...this.props.query, [name]: val.value });
+    };
+  }
+
+  /**
+   * Create change handler for radio button field
+   *
+   * @param {value: ValueType}
+   */
+  createRedioButtonFieldHandler<ValueType>(name: keyof RedisQuery) {
+    return (value?: ValueType) => {
+      this.props.onChange({ ...this.props.query, [name]: value });
     };
   }
 
@@ -198,6 +211,11 @@ export class QueryEditor extends PureComponent<Props> {
   onStreamingCapacityChange = this.createNumberFieldHandler('streamingCapacity');
 
   /**
+   * Streaming data type change
+   */
+  onStreamingDataTypeChange = this.createRedioButtonFieldHandler<StreamingDataType>('streamingDataType');
+
+  /**
    * Render Editor
    */
   render() {
@@ -224,6 +242,7 @@ export class QueryEditor extends PureComponent<Props> {
       streaming,
       streamingInterval,
       streamingCapacity,
+      streamingDataType,
       refId,
     } = this.props.query;
     const { onRunQuery } = this.props;
@@ -467,7 +486,7 @@ export class QueryEditor extends PureComponent<Props> {
             <Switch
               label="Streaming"
               labelClass="width-8"
-              tooltip="If checked, the datasource will stream data. Only Ref A is supported. Command should return only one line of data."
+              tooltip="If checked, the datasource will stream data. Only Ref A is supported."
               checked={streaming || false}
               onChange={this.onStreamingChange}
             />
@@ -491,6 +510,16 @@ export class QueryEditor extends PureComponent<Props> {
                   tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
                   placeholder="1000"
                 />
+                <div className="gf-form">
+                  <InlineFormLabel width={8} tooltip="If checked TimeSeries, the last line of data will be applied.">
+                    Data type
+                  </InlineFormLabel>
+                  <RadioButtonGroup
+                    options={StreamingDataTypes}
+                    value={streamingDataType || StreamingDataType.TimeSeries}
+                    onChange={this.onStreamingDataTypeChange}
+                  />
+                </div>
               </>
             )}
           </div>
