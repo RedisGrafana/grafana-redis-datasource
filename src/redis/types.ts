@@ -13,21 +13,21 @@ export interface RedisQuery extends DataQuery {
      * @type {string}
      */
     type: QueryTypeValue;
-  
+
     /**
      * Query command
      *
      * @type {string}
      */
     query?: string;
-  
+
     /**
      * Field
      *
      * @type {string}
      */
     field?: string;
-  
+
     /**
      * Redis TimeSeries filter
      *
@@ -35,28 +35,28 @@ export interface RedisQuery extends DataQuery {
      * @type {string}
      */
     filter?: string;
-  
+
     /**
      * Command
      *
      * @type {string}
      */
     command?: string;
-  
+
     /**
      * Key name
      *
      * @type {string}
      */
     keyName?: string;
-  
+
     /**
      * Value label
      *
      * @type {string}
      */
     value?: string;
-  
+
     /**
      * Aggregation
      *
@@ -64,84 +64,84 @@ export interface RedisQuery extends DataQuery {
      * @type {string}
      */
     aggregation?: AggregationValue;
-  
+
     /**
      * Bucket
      *
      * @type {number}
      */
     bucket?: number;
-  
+
     /**
      * Fill
      *
      * @type {boolean}
      */
     fill?: boolean;
-  
+
     /**
      * Legend label
      *
      * @type {string}
      */
     legend?: string;
-  
+
     /**
      * Info Section
      *
      * @type {string}
      */
     section?: InfoSectionValue;
-  
+
     /**
      * Size
      *
      * @type {number}
      */
     size?: number;
-  
+
     /**
      * Support streaming
      *
      * @type {boolean}
      */
     streaming?: boolean;
-  
+
     /**
      * Streaming interval in milliseconds
      *
      * @type {number}
      */
     streamingInterval?: number;
-  
+
     /**
      * Streaming capacity
      *
      * @type {number}
      */
     streamingCapacity?: number;
-  
+
     /**
      * Cursor for SCAN command
      *
      * @type {string}
      */
     cursor?: string;
-  
+
     /**
      * Match for SCAN command
      *
      * @type {string}
      */
     match?: string;
-  
+
     /**
      * Count for SCAN command
      *
      * @type {number}
      */
     count?: number;
-  
+
     /**
      * Samples for MEMORY USAGE command
      *
@@ -162,4 +162,8 @@ export interface RedisQuery extends DataQuery {
      * @type {string}
      */
     end?: string;
+}
+
+export enum FieldName {
+  Streaming = 'streaming',
 }

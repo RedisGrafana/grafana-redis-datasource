@@ -31,74 +31,86 @@ type Props = QueryEditorProps<DataSource, RedisQuery, RedisDataSourceOptions>;
  */
 export class QueryEditor extends PureComponent<Props> {
   /**
-   * Key name change
+   * Create change handler for number field
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onKeyNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, keyName: event.target.value });
+  createNumberFieldHandler = (name: keyof RedisQuery) => (event: ChangeEvent<HTMLInputElement>) => {
+    this.props.onChange({ ...this.props.query, [name]: Number(event.target.value) });
   };
+
+  /**
+   * Create change handler for text field
+   *
+   * @param {ChangeEvent<HTMLInputElement>} event Event
+   */
+  createTextFieldHandler = (name: keyof RedisQuery) => (event: ChangeEvent<HTMLInputElement>) => {
+    this.props.onChange({ ...this.props.query, [name]: event.target.value });
+  };
+
+  /**
+   * Create change handler for textarea field
+   *
+   * @param {ChangeEvent<HTMLInputElement>} event Event
+   */
+  createTextareaFieldHandler = (name: keyof RedisQuery) => (event: ChangeEvent<HTMLTextAreaElement>) => {
+    this.props.onChange({ ...this.props.query, [name]: event.target.value });
+  };
+
+  /**
+   * Create change handler for select field
+   *
+   * @param {ChangeEvent<HTMLInputElement>} event Event
+   */
+  createSelectFieldHandler<ValueType>(name: keyof RedisQuery) {
+    return (val: SelectableValue<ValueType>) => {
+      this.props.onChange({ ...this.props.query, [name]: val.value });
+    };
+  }
+
+  /**
+   * Create change handler for switch field
+   *
+   * @param {ChangeEvent<HTMLInputElement>} event Event
+   */
+  createSwitchFieldHandler = (name: keyof RedisQuery) => (event: React.SyntheticEvent<HTMLInputElement>) => {
+    this.props.onChange({ ...this.props.query, [name]: event.currentTarget.checked });
+  };
+
+  /**
+   * Key name change
+   */
+  onKeyNameChange = this.createTextFieldHandler('keyName');
 
   /**
    * Query change
-   *
-   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onQueryChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, query: event.target.value });
-  };
+  onQueryChange = this.createTextareaFieldHandler('query');
 
   /**
    * Filter change
-   *
-   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onFilterChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, filter: event.target.value });
-  };
+  onFilterChange = this.createTextFieldHandler('filter');
 
   /**
    * Field change
-   *
-   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, field: event.target.value });
-  };
+  onFieldChange = this.createTextFieldHandler('field');
 
   /**
    * Legend change
-   *
-   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onLegendChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, legend: event.target.value });
-  };
+  onLegendChange = this.createTextFieldHandler('legend');
 
   /**
    * Value change
-   *
-   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, value: event.target.value });
-  };
+  onValueChange = this.createTextFieldHandler('value');
 
   /**
    * Command change
-   *
-   * @param val Value
    */
-  onCommandChange = (val: SelectableValue<string>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, command: val.value });
-  };
+  onCommandChange = this.createSelectFieldHandler<string>('command');
 
   /**
    * Type change
@@ -117,33 +129,73 @@ export class QueryEditor extends PureComponent<Props> {
 
   /**
    * Aggregation change
-   *
-   * @param val Value
    */
-  onAggregationTextChange = (val: SelectableValue<AggregationValue>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, aggregation: val.value });
-  };
+  onAggregationTextChange = this.createSelectFieldHandler<AggregationValue>('aggregation');
 
   /**
    * Info section change
-   *
-   * @param val Value
    */
-  onInfoSectionTextChange = (val: SelectableValue<InfoSectionValue>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, section: val.value });
-  };
+  onInfoSectionTextChange = this.createSelectFieldHandler<InfoSectionValue>('section');
 
   /**
    * Bucket change
-   *
-   * @param {ChangeEvent<HTMLInputElement>} event Event
    */
-  onBucketTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onChange, query } = this.props;
-    onChange({ ...query, bucket: Number(event.target.value) });
-  };
+  onBucketTextChange = this.createNumberFieldHandler('bucket');
+
+  /**
+   * Size change
+   */
+  onSizeTextChange = this.createNumberFieldHandler('size');
+
+  /**
+   * Count change
+   */
+  onCountTextChange = this.createNumberFieldHandler('count');
+
+  /**
+   * Samples change
+   */
+  onSamplesTextChange = this.createNumberFieldHandler('samples');
+
+  /**
+   * Cursor change
+   */
+  onCursorTextChange = this.createTextFieldHandler('cursor');
+
+  /**
+   * Match change
+   */
+  onMatchTextChange = this.createTextFieldHandler('match');
+
+  /**
+   * Start change
+   */
+  onStartTextChange = this.createTextFieldHandler('start');
+
+  /**
+   * End change
+   */
+  onEndTextChange = this.createTextFieldHandler('end');
+
+  /**
+   * Fill change
+   */
+  onFillChange = this.createSwitchFieldHandler('fill');
+
+  /**
+   * Streaming change
+   */
+  onStreamingChange = this.createSwitchFieldHandler('streaming');
+
+  /**
+   * Streaming interval change
+   */
+  onStreamingIntervalChange = this.createNumberFieldHandler('streamingInterval');
+
+  /**
+   * Streaming capacity change
+   */
+  onStreamingCapacityChange = this.createNumberFieldHandler('streamingCapacity');
 
   /**
    * Render Editor
@@ -174,7 +226,7 @@ export class QueryEditor extends PureComponent<Props> {
       streamingCapacity,
       refId,
     } = this.props.query;
-    const { onRunQuery, onChange } = this.props;
+    const { onRunQuery } = this.props;
 
     /**
      * Return
@@ -284,9 +336,7 @@ export class QueryEditor extends PureComponent<Props> {
                 inputWidth={10}
                 value={size}
                 type="number"
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange({ ...this.props.query, size: Number(event.target.value) })
-                }
+                onChange={this.onSizeTextChange}
                 label="Size"
               />
             )}
@@ -296,9 +346,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={cursor}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange({ ...this.props.query, cursor: event.target.value })
-                }
+                onChange={this.onCursorTextChange}
                 label="Cursor"
               />
             )}
@@ -308,9 +356,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={match}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange({ ...this.props.query, match: event.target.value })
-                }
+                onChange={this.onMatchTextChange}
                 placeholder="*"
                 label="Match pattern"
               />
@@ -321,9 +367,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={start}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange({ ...this.props.query, start: event.target.value })
-                }
+                onChange={this.onStartTextChange}
                 placeholder="-"
                 label="Start"
               />
@@ -334,9 +378,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={end}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange({ ...this.props.query, end: event.target.value })
-                }
+                onChange={this.onEndTextChange}
                 placeholder="+"
                 label="End"
               />
@@ -352,9 +394,7 @@ export class QueryEditor extends PureComponent<Props> {
                 inputWidth={10}
                 value={count}
                 type="number"
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange({ ...this.props.query, count: Number(event.target.value) })
-                }
+                onChange={this.onCountTextChange}
                 label="Count"
                 tooltip="Can cause latency and is not recommended to use in Production."
               />
@@ -366,9 +406,7 @@ export class QueryEditor extends PureComponent<Props> {
                 inputWidth={10}
                 value={samples}
                 type="number"
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.props.onChange({ ...this.props.query, samples: Number(event.target.value) })
-                }
+                onChange={this.onSamplesTextChange}
                 label="Samples"
                 placeholder="5"
                 tooltip="Number of sampled nested values. 0 (all values) is not supported."
@@ -418,9 +456,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelClass="width-10"
                 tooltip="If checked, the datasource will fill missing intervals."
                 checked={fill || false}
-                onChange={(event) => {
-                  onChange({ ...this.props.query, fill: event.currentTarget.checked });
-                }}
+                onChange={this.onFillChange}
               />
             )}
           </div>
@@ -433,9 +469,7 @@ export class QueryEditor extends PureComponent<Props> {
               labelClass="width-8"
               tooltip="If checked, the datasource will stream data. Only Ref A is supported. Command should return only one line of data."
               checked={streaming || false}
-              onChange={(event) => {
-                onChange({ ...this.props.query, streaming: event.currentTarget.checked });
-              }}
+              onChange={this.onStreamingChange}
             />
             {streaming && (
               <>
@@ -443,9 +477,7 @@ export class QueryEditor extends PureComponent<Props> {
                   labelWidth={8}
                   value={streamingInterval}
                   type="number"
-                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    onChange({ ...this.props.query, streamingInterval: Number(event.target.value) });
-                  }}
+                  onChange={this.onStreamingIntervalChange}
                   label="Interval"
                   tooltip="Streaming interval in milliseconds. Default is 1000ms."
                   placeholder="1000"
@@ -454,9 +486,7 @@ export class QueryEditor extends PureComponent<Props> {
                   labelWidth={8}
                   value={streamingCapacity}
                   type="number"
-                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                    onChange({ ...this.props.query, streamingCapacity: Number(event.target.value) });
-                  }}
+                  onChange={this.onStreamingCapacityChange}
                   label="Capacity"
                   tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
                   placeholder="1000"
