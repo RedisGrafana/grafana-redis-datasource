@@ -108,3 +108,5 @@ export interface RedisSecureJsonData {
    */
   tlsCACert?: string;
 }
+
+export const DefaultStreamingInterval = 1000;

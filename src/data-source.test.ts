@@ -6,11 +6,13 @@ import {
   DataSourceInstanceSettings,
   MetricFindValue,
   PluginType,
+  toDataFrame,
+  FieldType,
 } from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
 import { ClientTypeValue } from './constants';
 import { DataSource } from './data-source';
-import { QueryTypeValue, RedisQuery } from './redis';
+import { QueryTypeValue, RedisQuery, StreamingDataType } from './redis';
 import { getQuery } from './tests/utils';
 import { RedisDataSourceOptions } from './types';
 
@@ -87,19 +89,15 @@ describe('DataSource', () => {
       new Observable((subscriber) => {
         subscriber.next({
           data: [
-            {
+            toDataFrame({
               fields: [
                 {
                   name: 'get',
-                  values: {
-                    toArray() {
-                      return [1, 2, 3];
-                    },
-                  },
+                  type: FieldType.number,
+                  values: [1, 2, 3],
                 },
               ],
-              length: 1,
-            },
+            }),
           ],
         });
         subscriber.complete();
@@ -131,7 +129,15 @@ describe('DataSource', () => {
       });
     });
 
-    it('If streaming exists should get frames in interval', (done) => {
+    it('If no query should use super.query', (done) => {
+      const request = getRequest({ targets: [] });
+      dataSource.query(request).subscribe(() => {
+        expect(superQueryMock).toHaveBeenCalledWith(request);
+        done();
+      });
+    });
+
+    it('Should use TimeSeries as default streamingDataType', (done) => {
       const request = getRequest({
         targets: [
           {
@@ -151,6 +157,37 @@ describe('DataSource', () => {
           (value) => {
             value.data.forEach((item) => {
               expect(item).toBeInstanceOf(CircularDataFrame);
+            });
+          },
+          null,
+          () => {
+            done();
+          }
+        );
+    });
+
+    it('If streaming exists should get frames in interval', (done) => {
+      const request = getRequest({
+        targets: [
+          {
+            datasource: '',
+            type: QueryTypeValue.CLI,
+            refId: 'A',
+            query: '',
+            streaming: true,
+            streamingCapacity: 1,
+            streamingDataType: StreamingDataType.DataFrame,
+          },
+        ],
+      });
+      dataSource
+        .query(request)
+        .pipe(take(3))
+        .subscribe(
+          (value) => {
+            value.data.forEach((item) => {
+              expect(item).not.toBeInstanceOf(CircularDataFrame);
+              expect(item.fields).toBeDefined();
             });
           },
           null,

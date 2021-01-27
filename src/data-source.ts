@@ -2,18 +2,17 @@ import { head } from 'lodash';
 import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import {
-  CircularDataFrame,
   DataFrame,
   DataQueryRequest,
   DataQueryResponse,
   DataSourceInstanceSettings,
-  FieldType,
   MetricFindValue,
   ScopedVars,
 } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
-import { RedisQuery } from './redis';
-import { RedisDataSourceOptions } from './types';
+import { RedisQuery, StreamingDataType } from './redis';
+import { RedisDataSourceOptions, DefaultStreamingInterval } from './types';
+import { TimeSeriesFormatter, DataFrameFormatter } from './frame-formatters';
 
 /**
  * Redis Data Source
@@ -91,6 +90,14 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
     const refA = head(request.targets);
 
     /**
+     * No query
+     * Need to typescript types narrowing
+     */
+    if (!refA) {
+      return super.query(request);
+    }
+
+    /**
      * No streaming enabled
      */
     if (!refA?.streaming) {
@@ -101,63 +108,31 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
      * Streaming enabled
      */
     return new Observable<DataQueryResponse>((subscriber) => {
+      const { streamingDataType = StreamingDataType.TimeSeries } = refA;
       /**
-       * This dataframe can have values constantly added, and will never exceed the given capacity
+       * Apply frame formatted by streamingDataType
        */
-      const frame = new CircularDataFrame({
-        append: 'tail',
-        capacity: refA?.streamingCapacity || 1000,
-      });
-
-      /**
-       * Set refId and Time field
-       */
-      frame.refId = refA.refId;
-      frame.addField({ name: 'time', type: FieldType.time });
+      let frame: TimeSeriesFormatter | DataFrameFormatter = new TimeSeriesFormatter(refA);
+      if (streamingDataType === StreamingDataType.DataFrame) {
+        frame = new DataFrameFormatter();
+      }
 
       /**
        * Interval
        */
       const intervalId = setInterval(async () => {
-        let values: { [index: string]: number } = { time: Date.now() };
-
         /**
          * Run Query and filter time field out
          */
-        const fields = await super
-          .query(request)
-          .pipe(
-            switchMap$((response) => response.data),
-            map$((data: DataFrame) => data.fields.filter((field) => (field.name === 'time' ? false : true)))
-          )
-          .toPromise();
+        const data = await frame.update(super.query(request));
 
-        if (fields) {
-          /**
-           * Add fields to frame fields and return values
-           */
-          fields.map((field) =>
-            field.values.toArray().map((value) => {
-              if (frame.fields.length < fields.length + 1) {
-                frame.addField({
-                  name: field.name,
-                  type: field.type === FieldType.string && !isNaN(value) ? FieldType.number : field.type,
-                });
-              }
-              return (values[field.name] = value);
-            })
-          );
+        if (data) {
+          subscriber.next({
+            data: [data],
+            key: refA.refId,
+          });
         }
-
-        /**
-         * Add frame
-         */
-        frame.add(values);
-        subscriber.next({
-          data: [frame],
-          key: refA.refId,
-        });
-      }, refA.streamingInterval || 1000);
+      }, refA.streamingInterval || DefaultStreamingInterval);
 
       return () => {
         clearInterval(intervalId);
