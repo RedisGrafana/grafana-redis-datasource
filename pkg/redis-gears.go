@@ -34,14 +34,14 @@ type dumpregistrations struct {
  * Registration data for RG.DUMPREGISTRATIONS Radix marshaling
  */
 type registrationData struct {
-	Mode         string            `redis:"mode"`
-	NumTriggered int64             `redis:"numTriggered"`
-	NumSuccess   int64             `redis:"numSuccess"`
-	NumFailures  int64             `redis:"numFailures"`
-	NumAborted   int64             `redis:"numAborted"`
-	LastError    string            `redis:"lastError"`
-	Args         map[string]string `redis:"args"`
-	Status       string            `redis:"status"`
+	Mode         string                 `redis:"mode"`
+	NumTriggered int64                  `redis:"numTriggered"`
+	NumSuccess   int64                  `redis:"numSuccess"`
+	NumFailures  int64                  `redis:"numFailures"`
+	NumAborted   int64                  `redis:"numAborted"`
+	LastError    string                 `redis:"lastError"`
+	Args         map[string]interface{} `redis:"args"`
+	Status       string                 `redis:"status"`
 }
 
 /**
