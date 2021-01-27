@@ -163,7 +163,3 @@ export interface RedisQuery extends DataQuery {
      */
     end?: string;
 }
-
-export enum FieldName {
-  Streaming = 'streaming',
-}
