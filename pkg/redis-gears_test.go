@@ -85,7 +85,7 @@ func TestRgDumpregistrations(t *testing.T) {
 					NumFailures:  3,
 					NumAborted:   4,
 					LastError:    "some err",
-					Args:         map[string]string{"mytrigger": "trigger"},
+					Args:         map[string]interface{}{"mytrigger": "trigger"},
 				},
 				PD: "some_pd",
 			}},
