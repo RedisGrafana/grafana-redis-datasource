@@ -10,11 +10,11 @@ export enum StreamingDataType {
 
 export const StreamingDataTypes: Array<SelectableValue<StreamingDataType>> = [
   {
-    label: 'TimeSeries',
+    label: 'Time series',
     value: StreamingDataType.TimeSeries,
   },
   {
-    label: 'DataFrame',
+    label: 'Data frame',
     value: StreamingDataType.DataFrame,
   }
 ]

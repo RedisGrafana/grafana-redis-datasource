@@ -4,13 +4,15 @@ import {
   CircularDataFrame,
   DataQueryRequest,
   DataSourceInstanceSettings,
+  FieldType,
   MetricFindValue,
   PluginType,
+  toDataFrame,
 } from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
 import { ClientTypeValue } from './constants';
 import { DataSource } from './data-source';
-import { QueryTypeValue, RedisQuery } from './redis';
+import { QueryTypeValue, RedisQuery, StreamingDataType } from './redis';
 import { getQuery } from './tests/utils';
 import { RedisDataSourceOptions } from './types';
 
@@ -87,19 +89,15 @@ describe('DataSource', () => {
       new Observable((subscriber) => {
         subscriber.next({
           data: [
-            {
+            toDataFrame({
               fields: [
                 {
                   name: 'get',
-                  values: {
-                    toArray() {
-                      return [1, 2, 3];
-                    },
-                  },
+                  type: FieldType.number,
+                  values: [1, 2, 3],
                 },
               ],
-              length: 1,
-            },
+            }),
           ],
         });
         subscriber.complete();
@@ -131,7 +129,15 @@ describe('DataSource', () => {
       });
     });
 
-    it('If streaming exists should get frames in interval', (done) => {
+    it('If no query should use super.query', (done) => {
+      const request = getRequest({ targets: [] });
+      dataSource.query(request).subscribe(() => {
+        expect(superQueryMock).toHaveBeenCalledWith(request);
+        done();
+      });
+    });
+
+    it('Should use TimeSeries as default streamingDataType', (done) => {
       const request = getRequest({
         targets: [
           {
@@ -144,6 +150,10 @@ describe('DataSource', () => {
           },
         ],
       });
+
+      /**
+       * Query
+       */
       dataSource
         .query(request)
         .pipe(take(3))
@@ -151,6 +161,41 @@ describe('DataSource', () => {
           (value) => {
             value.data.forEach((item) => {
               expect(item).toBeInstanceOf(CircularDataFrame);
+            });
+          },
+          null,
+          () => {
+            done();
+          }
+        );
+    });
+
+    it('If streaming exists should get frames in interval', (done) => {
+      const request = getRequest({
+        targets: [
+          {
+            datasource: '',
+            type: QueryTypeValue.CLI,
+            refId: 'A',
+            query: '',
+            streaming: true,
+            streamingCapacity: 1,
+            streamingDataType: StreamingDataType.DataFrame,
+          },
+        ],
+      });
+
+      /**
+       * Query
+       */
+      dataSource
+        .query(request)
+        .pipe(take(3))
+        .subscribe(
+          (value) => {
+            value.data.forEach((item) => {
+              expect(item).not.toBeInstanceOf(CircularDataFrame);
+              expect(item.fields).toBeDefined();
             });
           },
           null,
@@ -167,6 +212,7 @@ describe('DataSource', () => {
   describe('applyTemplateVariables', () => {
     type KeyType = keyof RedisQuery;
     const testedFieldKeys: KeyType[] = ['keyName', 'query', 'field', 'filter', 'legend', 'value'];
+
     testedFieldKeys.forEach((fieldKey) => {
       describe(fieldKey, () => {
         it('If value is exist should replace via templateSrv', () => {
@@ -180,6 +226,7 @@ describe('DataSource', () => {
             [fieldKey]: `replaced:${value}`,
           });
         });
+
         it('If value is empty should not replace via templateSrv', () => {
           const value = '';
           const query = getQuery({ [fieldKey]: value });
@@ -239,6 +286,7 @@ describe('DataSource', () => {
             subscriber.complete();
           })
       );
+
       dataSource.metricFindQuery &&
         dataSource.metricFindQuery('123', { variable: { datasource: '123' } }).then((result: MetricFindValue[]) => {
           expect(querySpyMethod).toHaveBeenCalled();

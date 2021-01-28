@@ -1,4 +1,14 @@
 /**
+ * Default Streaming Interval
+ */
+export const DefaultStreamingInterval = 1000;
+
+/**
+ * Default Streaming Capacity
+ */
+export const DefaultStreamingCapacity = 1000;
+
+/**
  * Client Type Values
  */
 export enum ClientTypeValue {
