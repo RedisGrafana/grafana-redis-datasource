@@ -500,7 +500,7 @@ export class QueryEditor extends PureComponent<Props> {
                   placeholder="1000"
                 />
                 <div className="gf-form">
-                  <InlineFormLabel width={8} tooltip="If checked TimeSeries, the last line of data will be applied.">
+                  <InlineFormLabel width={8} tooltip="If checked Time series, the last line of data will be applied.">
                     Data type
                   </InlineFormLabel>
                   <RadioButtonGroup

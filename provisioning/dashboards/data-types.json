@@ -1821,7 +1821,8 @@
           "keyName": "queue:complete",
           "query": "",
           "refId": "A",
-          "streaming": false,
+          "streaming": true,
+          "streamingDataType": "DataFrame",
           "type": "command"
         }
       ],
@@ -2658,6 +2659,8 @@
           "command": "rg.dumpregistrations",
           "query": "",
           "refId": "A",
+          "streaming": true,
+          "streamingDataType": "DataFrame",
           "type": "gears"
         }
       ],
@@ -2718,5 +2721,5 @@
   "timezone": "",
   "title": "Redis Data Types",
   "uid": "2TKvUH-Gk",
-  "version": 3
+  "version": 1
 }
