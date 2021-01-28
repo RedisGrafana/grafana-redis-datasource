@@ -6,6 +6,9 @@ import { getQuery } from '../../tests/utils';
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
+/**
+ * Query Field
+ */
 interface QueryFieldTest {
   name: keyof RedisQuery;
   testName?: string;
@@ -29,6 +32,7 @@ describe('QueryEditor', () => {
 
   /**
    * Run tests for query fields
+   *
    * @param tests
    */
   const runQueryFieldsTest = (tests: QueryFieldTest[]) =>
@@ -67,18 +71,16 @@ describe('QueryEditor', () => {
             <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
           );
           const testedComponent = getComponent(wrapper);
+
           let newValue: any = '1234';
           if (type === 'number' || type === 'string') {
             testedComponent.simulate('change', { target: { value: newValue } });
-          }
-          if (type === 'select') {
+          } else if (type === 'select') {
             testedComponent.simulate('change', { value: newValue });
-          }
-          if (type === 'switch') {
+          } else if (type === 'switch') {
             newValue = true;
             testedComponent.simulate('change', { currentTarget: { checked: newValue } });
-          }
-          if (type === 'radioButton') {
+          } else if (type === 'radioButton') {
             testedComponent.simulate('change', newValue);
           }
           expect(onChange).toHaveBeenCalledWith({
@@ -291,7 +293,7 @@ describe('QueryEditor', () => {
         name: 'section',
         getComponent: (wrapper: ShallowComponent) =>
           wrapper.findWhere((node) => {
-            return node.prop('onChange') === wrapper.instance().onInfoSectionTextChange;
+            return node.prop('onChange') === wrapper.instance().onInfoSectionChange;
           }),
         type: 'select',
         queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
@@ -301,7 +303,7 @@ describe('QueryEditor', () => {
         name: 'aggregation',
         getComponent: (wrapper: ShallowComponent) =>
           wrapper.findWhere((node) => {
-            return node.prop('onChange') === wrapper.instance().onAggregationTextChange;
+            return node.prop('onChange') === wrapper.instance().onAggregationChange;
           }),
         type: 'select',
         queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range' },
@@ -311,7 +313,7 @@ describe('QueryEditor', () => {
         name: 'bucket',
         getComponent: (wrapper: ShallowComponent) =>
           wrapper.findWhere((node) => {
-            return node.prop('onChange') === wrapper.instance().onBucketTextChange;
+            return node.prop('onChange') === wrapper.instance().onBucketChange;
           }),
         type: 'number',
         queryWhenShown: {

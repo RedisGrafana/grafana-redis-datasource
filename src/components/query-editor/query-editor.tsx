@@ -1,7 +1,7 @@
 import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
-import { Button, InlineFormLabel, LegacyForms, Select, TextArea, RadioButtonGroup } from '@grafana/ui';
+import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, TextArea } from '@grafana/ui';
 import { DataSource } from '../../data-source';
 import {
   Aggregations,
@@ -13,8 +13,8 @@ import {
   QueryType,
   QueryTypeValue,
   RedisQuery,
-  StreamingDataTypes,
   StreamingDataType,
+  StreamingDataTypes,
 } from '../../redis';
 import { RedisDataSourceOptions } from '../../types';
 
@@ -33,7 +33,7 @@ type Props = QueryEditorProps<DataSource, RedisQuery, RedisDataSourceOptions>;
  */
 export class QueryEditor extends PureComponent<Props> {
   /**
-   * Create change handler for number field
+   * Change handler for number field
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
@@ -42,7 +42,7 @@ export class QueryEditor extends PureComponent<Props> {
   };
 
   /**
-   * Create change handler for text field
+   * Change handler for text field
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
@@ -51,7 +51,7 @@ export class QueryEditor extends PureComponent<Props> {
   };
 
   /**
-   * Create change handler for textarea field
+   * Change handler for textarea field
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
@@ -60,7 +60,7 @@ export class QueryEditor extends PureComponent<Props> {
   };
 
   /**
-   * Create change handler for select field
+   * Change handler for select field
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
@@ -71,7 +71,7 @@ export class QueryEditor extends PureComponent<Props> {
   }
 
   /**
-   * Create change handler for radio button field
+   * Change handler for radio button field
    *
    * @param {value: ValueType}
    */
@@ -82,7 +82,7 @@ export class QueryEditor extends PureComponent<Props> {
   }
 
   /**
-   * Create change handler for switch field
+   * Change handler for switch field
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
@@ -143,52 +143,52 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Aggregation change
    */
-  onAggregationTextChange = this.createSelectFieldHandler<AggregationValue>('aggregation');
+  onAggregationChange = this.createSelectFieldHandler<AggregationValue>('aggregation');
 
   /**
    * Info section change
    */
-  onInfoSectionTextChange = this.createSelectFieldHandler<InfoSectionValue>('section');
+  onInfoSectionChange = this.createSelectFieldHandler<InfoSectionValue>('section');
 
   /**
    * Bucket change
    */
-  onBucketTextChange = this.createNumberFieldHandler('bucket');
+  onBucketChange = this.createNumberFieldHandler('bucket');
 
   /**
    * Size change
    */
-  onSizeTextChange = this.createNumberFieldHandler('size');
+  onSizeChange = this.createNumberFieldHandler('size');
 
   /**
    * Count change
    */
-  onCountTextChange = this.createNumberFieldHandler('count');
+  onCountChange = this.createNumberFieldHandler('count');
 
   /**
    * Samples change
    */
-  onSamplesTextChange = this.createNumberFieldHandler('samples');
+  onSamplesChange = this.createNumberFieldHandler('samples');
 
   /**
    * Cursor change
    */
-  onCursorTextChange = this.createTextFieldHandler('cursor');
+  onCursorChange = this.createTextFieldHandler('cursor');
 
   /**
    * Match change
    */
-  onMatchTextChange = this.createTextFieldHandler('match');
+  onMatchChange = this.createTextFieldHandler('match');
 
   /**
    * Start change
    */
-  onStartTextChange = this.createTextFieldHandler('start');
+  onStartChange = this.createTextFieldHandler('start');
 
   /**
    * End change
    */
-  onEndTextChange = this.createTextFieldHandler('end');
+  onEndChange = this.createTextFieldHandler('end');
 
   /**
    * Fill change
@@ -355,19 +355,13 @@ export class QueryEditor extends PureComponent<Props> {
                 inputWidth={10}
                 value={size}
                 type="number"
-                onChange={this.onSizeTextChange}
+                onChange={this.onSizeChange}
                 label="Size"
               />
             )}
 
             {CommandParameters.cursor.includes(command) && (
-              <FormField
-                labelWidth={8}
-                inputWidth={10}
-                value={cursor}
-                onChange={this.onCursorTextChange}
-                label="Cursor"
-              />
+              <FormField labelWidth={8} inputWidth={10} value={cursor} onChange={this.onCursorChange} label="Cursor" />
             )}
 
             {CommandParameters.match.includes(command) && (
@@ -375,7 +369,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={match}
-                onChange={this.onMatchTextChange}
+                onChange={this.onMatchChange}
                 placeholder="*"
                 label="Match pattern"
               />
@@ -386,7 +380,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={start}
-                onChange={this.onStartTextChange}
+                onChange={this.onStartChange}
                 placeholder="-"
                 label="Start"
               />
@@ -397,7 +391,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 inputWidth={10}
                 value={end}
-                onChange={this.onEndTextChange}
+                onChange={this.onEndChange}
                 placeholder="+"
                 label="End"
               />
@@ -413,7 +407,7 @@ export class QueryEditor extends PureComponent<Props> {
                 inputWidth={10}
                 value={count}
                 type="number"
-                onChange={this.onCountTextChange}
+                onChange={this.onCountChange}
                 label="Count"
                 tooltip="Can cause latency and is not recommended to use in Production."
               />
@@ -425,7 +419,7 @@ export class QueryEditor extends PureComponent<Props> {
                 inputWidth={10}
                 value={samples}
                 type="number"
-                onChange={this.onSamplesTextChange}
+                onChange={this.onSamplesChange}
                 label="Samples"
                 placeholder="5"
                 tooltip="Number of sampled nested values. 0 (all values) is not supported."
@@ -437,12 +431,7 @@ export class QueryEditor extends PureComponent<Props> {
         {type === QueryTypeValue.REDIS && command && CommandParameters.section.includes(command) && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Section</InlineFormLabel>
-            <Select
-              options={InfoSections}
-              onChange={this.onInfoSectionTextChange}
-              value={section}
-              menuPlacement="bottom"
-            />
+            <Select options={InfoSections} onChange={this.onInfoSectionChange} value={section} menuPlacement="bottom" />
           </div>
         )}
 
@@ -455,7 +444,7 @@ export class QueryEditor extends PureComponent<Props> {
               `}
               options={Aggregations}
               width={30}
-              onChange={this.onAggregationTextChange}
+              onChange={this.onAggregationChange}
               value={aggregation}
               menuPlacement="bottom"
             />
@@ -464,7 +453,7 @@ export class QueryEditor extends PureComponent<Props> {
                 labelWidth={8}
                 value={bucket}
                 type="number"
-                onChange={this.onBucketTextChange}
+                onChange={this.onBucketChange}
                 label="Time Bucket"
                 tooltip="Time bucket for aggregation in milliseconds"
               />
