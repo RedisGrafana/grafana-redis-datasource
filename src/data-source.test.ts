@@ -4,10 +4,10 @@ import {
   CircularDataFrame,
   DataQueryRequest,
   DataSourceInstanceSettings,
+  FieldType,
   MetricFindValue,
   PluginType,
   toDataFrame,
-  FieldType,
 } from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
 import { ClientTypeValue } from './constants';
@@ -150,6 +150,10 @@ describe('DataSource', () => {
           },
         ],
       });
+
+      /**
+       * Query
+       */
       dataSource
         .query(request)
         .pipe(take(3))
@@ -180,6 +184,10 @@ describe('DataSource', () => {
           },
         ],
       });
+
+      /**
+       * Query
+       */
       dataSource
         .query(request)
         .pipe(take(3))
@@ -204,6 +212,7 @@ describe('DataSource', () => {
   describe('applyTemplateVariables', () => {
     type KeyType = keyof RedisQuery;
     const testedFieldKeys: KeyType[] = ['keyName', 'query', 'field', 'filter', 'legend', 'value'];
+
     testedFieldKeys.forEach((fieldKey) => {
       describe(fieldKey, () => {
         it('If value is exist should replace via templateSrv', () => {
@@ -217,6 +226,7 @@ describe('DataSource', () => {
             [fieldKey]: `replaced:${value}`,
           });
         });
+
         it('If value is empty should not replace via templateSrv', () => {
           const value = '';
           const query = getQuery({ [fieldKey]: value });
@@ -276,6 +286,7 @@ describe('DataSource', () => {
             subscriber.complete();
           })
       );
+
       dataSource.metricFindQuery &&
         dataSource.metricFindQuery('123', { variable: { datasource: '123' } }).then((result: MetricFindValue[]) => {
           expect(querySpyMethod).toHaveBeenCalled();

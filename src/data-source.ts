@@ -10,9 +10,10 @@ import {
   ScopedVars,
 } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
+import { DefaultStreamingInterval } from './constants';
+import { DataFrameFormatter, TimeSeriesFormatter } from './frame-formatters';
 import { RedisQuery, StreamingDataType } from './redis';
-import { RedisDataSourceOptions, DefaultStreamingInterval } from './types';
-import { TimeSeriesFormatter, DataFrameFormatter } from './frame-formatters';
+import { RedisDataSourceOptions } from './types';
 
 /**
  * Redis Data Source
@@ -109,6 +110,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
      */
     return new Observable<DataQueryResponse>((subscriber) => {
       const { streamingDataType = StreamingDataType.TimeSeries } = refA;
+
       /**
        * Apply frame formatted by streamingDataType
        */
@@ -122,16 +124,17 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
        */
       const intervalId = setInterval(async () => {
         /**
-         * Run Query and filter time field out
+         * Run Query
          */
         const data = await frame.update(super.query(request));
-
-        if (data) {
-          subscriber.next({
-            data: [data],
-            key: refA.refId,
-          });
+        if (!data) {
+          return;
         }
+
+        subscriber.next({
+          data: [data],
+          key: refA.refId,
+        });
       }, refA.streamingInterval || DefaultStreamingInterval);
 
       return () => {

@@ -1,10 +1,11 @@
 import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import { CircularDataFrame, DataFrame, DataQueryResponse, FieldType } from '@grafana/data';
+import { DefaultStreamingCapacity } from '../constants';
 import { RedisQuery } from '../redis';
 
 /**
- * TimeSeriesFormatter
+ * Time Series Formatter
  */
 export class TimeSeriesFormatter {
   /**
@@ -13,7 +14,8 @@ export class TimeSeriesFormatter {
   frame: CircularDataFrame;
 
   /**
-   * constructor
+   * Сonstructor
+   *
    * @param refA
    */
   constructor(refA: RedisQuery) {
@@ -22,7 +24,7 @@ export class TimeSeriesFormatter {
      */
     this.frame = new CircularDataFrame({
       append: 'tail',
-      capacity: refA?.streamingCapacity || 1000,
+      capacity: refA?.streamingCapacity || DefaultStreamingCapacity,
     });
 
     /**
@@ -33,7 +35,8 @@ export class TimeSeriesFormatter {
   }
 
   /**
-   * add new values for the frame
+   * Add new values for the frame
+   *
    * @param request
    */
   async update(request: Observable<DataQueryResponse>): Promise<CircularDataFrame> {
@@ -59,6 +62,7 @@ export class TimeSeriesFormatter {
             type: field.type,
           });
         }
+
         /**
          * Set values. If values.length > 1, should be set the last line
          */
@@ -68,6 +72,9 @@ export class TimeSeriesFormatter {
       });
     }
 
+    /**
+     * Add Values
+     */
     this.frame.add(values);
 
     return Promise.resolve(this.frame);

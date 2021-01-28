@@ -1,2 +1,2 @@
-export * from './time-series';
 export * from './data';
+export * from './time-series';

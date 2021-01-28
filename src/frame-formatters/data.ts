@@ -3,11 +3,12 @@ import { switchMap as switchMap$ } from 'rxjs/operators';
 import { DataFrame, DataQueryResponse } from '@grafana/data';
 
 /**
- * DataFrameFormatter
+ * Data Frame Formatter
  */
 export class DataFrameFormatter {
   /**
-   * update
+   * Update
+   *
    * @param request
    */
   async update(request: Observable<DataQueryResponse>): Promise<DataFrame> {

@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
 import { FieldType, toDataFrame } from '@grafana/data';
-import { TimeSeriesFormatter } from './time-series';
 import { QueryTypeValue } from '../redis';
+import { TimeSeriesFormatter } from './time-series';
 
 /**
- * TimeSeriesFormatter
+ * Time Series Formatter
  */
 describe('TimeSeriesFormatter', () => {
   it('Should add time field', async () => {
@@ -53,6 +53,7 @@ describe('TimeSeriesFormatter', () => {
       })
     );
     expect(data.length).toEqual(1);
+
     const data2 = await frame.update(
       new Observable((subscriber) => {
         subscriber.next({
@@ -124,6 +125,7 @@ describe('TimeSeriesFormatter', () => {
       })
     );
     expect(data.length).toEqual(1);
+
     const data2 = await frame.update(
       new Observable((subscriber) => {
         subscriber.next({

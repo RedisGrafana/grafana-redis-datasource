@@ -3,7 +3,7 @@ import { FieldType, toDataFrame } from '@grafana/data';
 import { DataFrameFormatter } from './data';
 
 /**
- * DataFrameFormatter
+ * Data Frame Formatter
  */
 describe('DataFrameFormatter', () => {
   it('Should return dataFrame', async () => {
