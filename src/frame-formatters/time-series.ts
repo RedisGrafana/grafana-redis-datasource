@@ -1,11 +1,10 @@
 import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import { CircularDataFrame, DataFrame, DataQueryResponse, FieldType } from '@grafana/data';
-import { DefaultStreamingCapacity } from '../constants';
 import { RedisQuery } from '../redis';
 
 /**
- * Time Series Formatter
+ * TimeSeriesFormatter
  */
 export class TimeSeriesFormatter {
   /**
@@ -14,8 +13,7 @@ export class TimeSeriesFormatter {
   frame: CircularDataFrame;
 
   /**
-   * Сonstructor
-   *
+   * constructor
    * @param refA
    */
   constructor(refA: RedisQuery) {
@@ -24,7 +22,7 @@ export class TimeSeriesFormatter {
      */
     this.frame = new CircularDataFrame({
       append: 'tail',
-      capacity: refA?.streamingCapacity || DefaultStreamingCapacity,
+      capacity: refA?.streamingCapacity || 1000,
     });
 
     /**
@@ -35,8 +33,7 @@ export class TimeSeriesFormatter {
   }
 
   /**
-   * Add new values for the frame
-   *
+   * add new values for the frame
    * @param request
    */
   async update(request: Observable<DataQueryResponse>): Promise<CircularDataFrame> {
@@ -56,25 +53,21 @@ export class TimeSeriesFormatter {
         /**
          * Add new fields if frame does not have the field
          */
+        const fieldValues = field.values.toArray();
+        const value = fieldValues[fieldValues.length - 1];
         if (!this.frame.fields.some((addedField) => addedField.name === field.name)) {
           this.frame.addField({
             name: field.name,
-            type: field.type,
+            type: field.type === FieldType.string && !isNaN(value) ? FieldType.number : field.type,
           });
         }
-
         /**
          * Set values. If values.length > 1, should be set the last line
          */
-        field.values.toArray().forEach((value) => {
-          values[field.name] = value;
-        });
+        values[field.name] = value;
       });
     }
 
-    /**
-     * Add Values
-     */
     this.frame.add(values);
 
     return Promise.resolve(this.frame);

@@ -165,4 +165,29 @@ describe('TimeSeriesFormatter', () => {
     expect(data.length).toEqual(1);
     expect(data.fields.length).toEqual(2);
   });
+
+  it('Should convert string to number if value can be converted', async () => {
+    const frame = new TimeSeriesFormatter({ refId: 'A', type: QueryTypeValue.REDIS, streamingCapacity: 10 });
+    const data = await frame.update(
+      new Observable((subscriber) => {
+        subscriber.next({
+          data: [
+            toDataFrame({
+              fields: [
+                {
+                  name: 'value',
+                  type: FieldType.string,
+                  values: ['123'],
+                },
+              ],
+            }),
+          ],
+        });
+        subscriber.complete();
+      })
+    );
+    expect(data.fields[1].name === 'value');
+    expect(data.fields[1].type === FieldType.number);
+    expect(data.fields[1].values.toArray() === [123]);
+  });
 });
