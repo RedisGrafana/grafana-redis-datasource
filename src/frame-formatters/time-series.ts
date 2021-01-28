@@ -1,10 +1,11 @@
 import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import { CircularDataFrame, DataFrame, DataQueryResponse, FieldType } from '@grafana/data';
+import { DefaultStreamingCapacity } from '../constants';
 import { RedisQuery } from '../redis';
 
 /**
- * TimeSeriesFormatter
+ * Time Series Formatter
  */
 export class TimeSeriesFormatter {
   /**
@@ -13,7 +14,8 @@ export class TimeSeriesFormatter {
   frame: CircularDataFrame;
 
   /**
-   * constructor
+   * Constructor
+   *
    * @param refA
    */
   constructor(refA: RedisQuery) {
@@ -22,7 +24,7 @@ export class TimeSeriesFormatter {
      */
     this.frame = new CircularDataFrame({
       append: 'tail',
-      capacity: refA?.streamingCapacity || 1000,
+      capacity: refA?.streamingCapacity || DefaultStreamingCapacity,
     });
 
     /**
@@ -33,11 +35,16 @@ export class TimeSeriesFormatter {
   }
 
   /**
-   * add new values for the frame
+   * Add new values for the frame
+   *
    * @param request
    */
   async update(request: Observable<DataQueryResponse>): Promise<CircularDataFrame> {
     let values: { [index: string]: number } = { time: Date.now() };
+
+    /**
+     * Fields
+     */
     const fields = await request
       .pipe(
         switchMap$((response) => response.data),
@@ -55,12 +62,14 @@ export class TimeSeriesFormatter {
          */
         const fieldValues = field.values.toArray();
         const value = fieldValues[fieldValues.length - 1];
+
         if (!this.frame.fields.some((addedField) => addedField.name === field.name)) {
           this.frame.addField({
             name: field.name,
             type: field.type === FieldType.string && !isNaN(value) ? FieldType.number : field.type,
           });
         }
+
         /**
          * Set values. If values.length > 1, should be set the last line
          */
@@ -68,6 +77,9 @@ export class TimeSeriesFormatter {
       });
     }
 
+    /**
+     * Add values
+     */
     this.frame.add(values);
 
     return Promise.resolve(this.frame);
