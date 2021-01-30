@@ -299,7 +299,9 @@ export class QueryEditor extends PureComponent<Props> {
                 value={filter}
                 onChange={this.onFilterChange}
                 label="Label Filter"
-                tooltip="Label Filter"
+                tooltip="Whenever filters need to be provided, a minimum of one l=v filter must be applied.
+                The list of possible filters:
+                https://oss.redislabs.com/redistimeseries/commands/#filtering"
               />
             )}
 
