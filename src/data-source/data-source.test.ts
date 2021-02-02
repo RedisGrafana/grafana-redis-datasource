@@ -10,11 +10,11 @@ import {
   toDataFrame,
 } from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
-import { ClientTypeValue } from './constants';
+import { ClientTypeValue, StreamingDataType } from '../constants';
+import { QueryTypeValue, RedisQuery } from '../redis';
+import { getQuery } from '../tests/utils';
+import { RedisDataSourceOptions } from '../types';
 import { DataSource } from './data-source';
-import { QueryTypeValue, RedisQuery, StreamingDataType } from './redis';
-import { getQuery } from './tests/utils';
-import { RedisDataSourceOptions } from './types';
 
 /**
  * Instance Settings

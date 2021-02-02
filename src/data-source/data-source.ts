@@ -6,14 +6,15 @@ import {
   DataQueryRequest,
   DataQueryResponse,
   DataSourceInstanceSettings,
+  LoadingState,
   MetricFindValue,
   ScopedVars,
 } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
-import { DefaultStreamingInterval } from './constants';
-import { DataFrameFormatter, TimeSeriesFormatter } from './frame-formatters';
-import { RedisQuery, StreamingDataType } from './redis';
-import { RedisDataSourceOptions } from './types';
+import { DefaultStreamingInterval, StreamingDataType } from '../constants';
+import { DataFrameFormatter, TimeSeriesFormatter } from '../frame-formatters';
+import { RedisQuery } from '../redis';
+import { RedisDataSourceOptions } from '../types';
 
 /**
  * Redis Data Source
@@ -134,6 +135,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
         subscriber.next({
           data: [data],
           key: refA.refId,
+          state: LoadingState.Streaming,
         });
       }, refA.streamingInterval || DefaultStreamingInterval);
 

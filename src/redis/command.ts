@@ -164,4 +164,5 @@ export const CommandParameters = {
   samples: ['tmscan'],
   start: ['xrange', 'xrevrange'],
   end: ['xrange', 'xrevrange'],
+  cypher: ['graph.query']
 };
