@@ -1,10 +1,22 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { QueryEditor } from './query-editor';
-import { QueryTypeValue } from '../../redis';
+import { AggregationValue, QueryTypeValue, RedisQuery } from '../../redis';
 import { getQuery } from '../../tests/utils';
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
+
+/**
+ * Query Field
+ */
+interface QueryFieldTest {
+  name: keyof RedisQuery;
+  testName?: string;
+  getComponent: (wrapper: ShallowComponent) => ShallowWrapper;
+  type: 'number' | 'string' | 'select' | 'switch' | 'radioButton';
+  queryWhenShown: RedisQuery;
+  queryWhenHidden: RedisQuery;
+}
 
 /**
  * Query Editor
@@ -17,6 +29,67 @@ describe('QueryEditor', () => {
     onRunQuery.mockReset();
     onChange.mockReset();
   });
+
+  /**
+   * Run tests for query fields
+   *
+   * @param tests
+   */
+  const runQueryFieldsTest = (tests: QueryFieldTest[]) =>
+    tests.forEach(({ name, getComponent, queryWhenShown, queryWhenHidden, type, testName = name }) => {
+      describe(testName, () => {
+        it('Should be shown', () => {
+          const query = getQuery(queryWhenShown);
+          const wrapper = shallow<QueryEditor>(
+            <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+          );
+          const testedComponent = getComponent(wrapper);
+          expect(testedComponent.exists()).toBeTruthy();
+        });
+
+        it('Should not be shown', () => {
+          const query = getQuery(queryWhenHidden);
+          const wrapper = shallow<QueryEditor>(
+            <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+          );
+          const testedComponent = getComponent(wrapper);
+          expect(testedComponent.exists()).not.toBeTruthy();
+        });
+
+        it('Should set value from query', () => {
+          const query = getQuery({ [name]: 123, ...queryWhenShown });
+          const wrapper = shallow<QueryEditor>(
+            <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+          );
+          const testedComponent = getComponent(wrapper);
+          expect(testedComponent.prop(type === 'switch' ? 'checked' : 'value')).toEqual(query[name]);
+        });
+
+        it('Should call onChange prop when value was changed', () => {
+          const query = getQuery(queryWhenShown);
+          const wrapper = shallow<QueryEditor>(
+            <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+          );
+          const testedComponent = getComponent(wrapper);
+
+          let newValue: any = '1234';
+          if (type === 'number' || type === 'string') {
+            testedComponent.simulate('change', { target: { value: newValue } });
+          } else if (type === 'select') {
+            testedComponent.simulate('change', { value: newValue });
+          } else if (type === 'switch') {
+            newValue = true;
+            testedComponent.simulate('change', { currentTarget: { checked: newValue } });
+          } else if (type === 'radioButton') {
+            testedComponent.simulate('change', newValue);
+          }
+          expect(onChange).toHaveBeenCalledWith({
+            ...query,
+            [name]: type === 'number' ? parseInt(newValue, 10) : newValue,
+          });
+        });
+      });
+    });
 
   /**
    * Query Type
@@ -56,904 +129,302 @@ describe('QueryEditor', () => {
     });
   });
 
-  /**
-   * Query
-   */
-  describe('Query', () => {
-    const getComponent = (wrapper: ShallowComponent) =>
-      wrapper.findWhere((node) => {
-        return node.prop('onChange') === wrapper.instance().onQueryChange;
-      });
-
-    it('Should be shown if type=cli', () => {
-      const query = getQuery({ type: QueryTypeValue.CLI });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedComponent = getComponent(wrapper);
-      expect(testedComponent.exists()).toBeTruthy();
-    });
-
-    it('Should not be shown if type!=cli', () => {
-      const query = getQuery({ type: QueryTypeValue.REDIS });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedComponent = getComponent(wrapper);
-      expect(testedComponent.exists()).not.toBeTruthy();
-    });
-
-    it('Should set value from query', () => {
-      const query = getQuery({ type: QueryTypeValue.CLI });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedComponent = getComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(query.query);
-    });
-
-    it('Should call onQueryChange when onChange prop was called', () => {
-      const query = getQuery({ type: QueryTypeValue.CLI });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedMethod = jest.spyOn(wrapper.instance(), 'onQueryChange');
-      wrapper.instance().forceUpdate();
-      const testedComponent = getComponent(wrapper);
-      const newValue = '123';
-      testedComponent.simulate('change', { target: { value: newValue } });
-      expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-      expect(onChange).toHaveBeenCalledWith({
-        ...query,
-        query: newValue,
-      });
-    });
-  });
-
-  /**
-   * Command
-   */
-  describe('Command', () => {
-    const getComponent = (wrapper: ShallowComponent) =>
-      wrapper.findWhere((node) => {
-        return node.prop('onChange') === wrapper.instance().onCommandChange;
-      });
-
-    it('Should be shown if type!=cli', () => {
-      const query = getQuery({ type: QueryTypeValue.REDIS });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedComponent = getComponent(wrapper);
-      expect(testedComponent.exists()).toBeTruthy();
-    });
-
-    it('Should not not be shown if type=cli', () => {
-      const query = getQuery({ type: QueryTypeValue.CLI });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedComponent = getComponent(wrapper);
-      expect(testedComponent.exists()).not.toBeTruthy();
-    });
-
-    it('Should set value from query', () => {
-      const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedComponent = getComponent(wrapper);
-      expect(testedComponent.prop('value')).toEqual(query.command);
-    });
-
-    it('Should call onCommandChange when onChange prop was called', () => {
-      const query = getQuery({ type: QueryTypeValue.REDIS });
-      const wrapper = shallow<QueryEditor>(
-        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-      );
-      const testedMethod = jest.spyOn(wrapper.instance(), 'onCommandChange');
-      wrapper.instance().forceUpdate();
-      const testedComponent = getComponent(wrapper);
-      const newValue = '123';
-      testedComponent.simulate('change', { value: newValue });
-      expect(testedMethod).toHaveBeenCalledWith({ value: newValue });
-      expect(onChange).toHaveBeenCalledWith({
-        ...query,
-        command: newValue,
-      });
-    });
-  });
+  runQueryFieldsTest([
+    {
+      name: 'query',
+      getComponent: (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.prop('onChange') === wrapper.instance().onQueryChange;
+        }),
+      type: 'string',
+      queryWhenShown: { refId: '', type: QueryTypeValue.CLI },
+      queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS },
+    },
+    {
+      name: 'command',
+      getComponent: (wrapper: ShallowComponent) =>
+        wrapper.findWhere((node) => {
+          return node.prop('onChange') === wrapper.instance().onCommandChange;
+        }),
+      type: 'select',
+      queryWhenShown: { refId: '', type: QueryTypeValue.REDIS },
+      queryWhenHidden: { refId: '', type: QueryTypeValue.CLI },
+    },
+  ]);
 
   /**
    * Command properties
    */
   describe('Command fields', () => {
-    /**
-     * Key name
-     */
-    describe('Key', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField', node.prop('label') === 'Key';
-        });
-
-      it('Should be shown when command exists in commands.key', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'get' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.key', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'gettt' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'get', keyName: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.keyName);
-      });
-
-      it('Should call onKeyChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'get' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onKeyNameChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          keyName: newValue,
-        });
-      });
-    });
-
-    /**
-     * Filter
-     */
-    describe('LabelFilter', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField', node.prop('label') === 'Label Filter';
-        });
-
-      it('Should be shown when command exists in commands.filter', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.filter', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange', filter: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.filter);
-      });
-
-      it('Should call onFilterChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onFilterChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          filter: newValue,
-        });
-      });
-    });
-
-    /**
-     * Field
-     */
-    describe('Field', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField', node.prop('label') === 'Field';
-        });
-
-      it('Should be shown when command exists in commands.field', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'hget' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.field', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'hget', field: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.field);
-      });
-
-      it('Should call onFieldChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'hget' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onFieldChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          field: newValue,
-        });
-      });
-    });
-
-    /**
-     * Legend
-     */
-    describe('Legend', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField', node.prop('label') === 'Legend';
-        });
-
-      it('Should be shown when command exists in commands.legend', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.range' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.legend', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.range', legend: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.legend);
-      });
-
-      it('Should call onLegendChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.range' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onLegendChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          legend: newValue,
-        });
-      });
-    });
-
-    /**
-     * Legend Label
-     */
-    describe('LegendLabel', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField', node.prop('label') === 'Legend Label';
-        });
-
-      it('Should be shown when command exists in commands.legendLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.legendLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange', legend: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.legend);
-      });
-
-      it('Should call onLegendChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onLegendChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          legend: newValue,
-        });
-      });
-    });
-
-    /**
-     * Value Label
-     */
-    describe('ValueLabel', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField', node.prop('label') === 'Value Label';
-        });
-
-      it('Should be shown when command exists in commands.valueLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.valueLabel', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange', value: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.value);
-      });
-
-      it('Should call onValueChange method when onChange prop was called', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'ts.mrange' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onValueChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          value: newValue,
-        });
-      });
-    });
-
-    /**
-     * Size
-     */
-    describe('Size', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField', node.prop('label') === 'Size';
-        });
-
-      it('Should be shown when command exists in commands.size', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'slowlogGet' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.size', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'slowlogGet', size: 123 });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.size);
-      });
-
-      it('Should call onChange prop when value was changed', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'slowlogGet' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          size: parseInt(newValue, 10),
-        });
-      });
-    });
-
-    /**
-     * Section
-     */
-    describe('Section', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.prop('onChange') === wrapper.instance().onInfoSectionTextChange;
-        });
-
-      it('Should be shown when command exists in commands.section', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'info' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.section', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'info', section: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.section);
-      });
-
-      it('Should call onInfoSectionTextChange method when value was changed', () => {
-        const query = getQuery({ type: QueryTypeValue.REDIS, command: 'info' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onInfoSectionTextChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { value: newValue });
-        expect(testedMethod).toHaveBeenCalledWith({ value: newValue });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          section: newValue,
-        });
-      });
-    });
-
-    /**
-     * Aggregation
-     */
-    describe('Aggregation', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.prop('onChange') === wrapper.instance().onAggregationTextChange;
-        });
-
-      it('Should be shown when command exists in commands.aggregation', () => {
-        const query = getQuery({ type: QueryTypeValue.TIMESERIES, command: 'ts.range' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when command is not exists in commands.aggregation', () => {
-        const query = getQuery({ type: QueryTypeValue.TIMESERIES, command: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ type: QueryTypeValue.TIMESERIES, command: 'ts.range', aggregation: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.aggregation);
-      });
-
-      it('Should call onAggregationTextChange method when value was changed', () => {
-        const query = getQuery({ type: QueryTypeValue.TIMESERIES, command: 'ts.range' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onAggregationTextChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = '1234';
-        testedComponent.simulate('change', { value: newValue });
-        expect(testedMethod).toHaveBeenCalledWith({ value: newValue });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          aggregation: newValue,
-        });
-      });
-    });
-
-    /**
-     * Bucket
-     */
-    describe('Bucket', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.prop('onChange') === wrapper.instance().onBucketTextChange;
-        });
-
-      it('Should be shown when command exists in commands.aggregation and aggregation value is selected', () => {
-        const query = getQuery({ type: QueryTypeValue.TIMESERIES, command: 'ts.range', aggregation: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when aggregation is empty', () => {
-        const query = getQuery({ type: QueryTypeValue.TIMESERIES, command: 'ts.range', aggregation: '' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({
+    runQueryFieldsTest([
+      {
+        name: 'keyName',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Key';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'get' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'get123' },
+      },
+      {
+        name: 'filter',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Label Filter';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange123' },
+      },
+      {
+        name: 'field',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Field';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'hget' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'hget123' },
+      },
+      {
+        name: 'legend',
+        testName: 'Legend',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Legend';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.range' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.range123' },
+      },
+      {
+        name: 'legend',
+        testName: 'Legend Label',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Legend Label';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange123' },
+      },
+      {
+        name: 'value',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Value Label';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange123' },
+      },
+      {
+        name: 'size',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Size';
+          }),
+        type: 'number',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'slowlogGet' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'slowlogGet123' },
+      },
+      {
+        name: 'cursor',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Cursor';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+      },
+      {
+        name: 'match',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Match pattern';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+      },
+      {
+        name: 'start',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Start';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange123' },
+      },
+      {
+        name: 'end',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'End';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange123' },
+      },
+      {
+        name: 'count',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Count';
+          }),
+        type: 'number',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+      },
+      {
+        name: 'samples',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Samples';
+          }),
+        type: 'number',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+      },
+      {
+        name: 'section',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onInfoSectionChange;
+          }),
+        type: 'select',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info123' },
+      },
+      {
+        name: 'aggregation',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onAggregationChange;
+          }),
+        type: 'select',
+        queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range123' },
+      },
+      {
+        name: 'bucket',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onBucketChange;
+          }),
+        type: 'number',
+        queryWhenShown: {
+          refId: '',
           type: QueryTypeValue.TIMESERIES,
           command: 'ts.range',
-          aggregation: '123',
+          aggregation: AggregationValue.AVG,
+        },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range', aggregation: undefined },
+      },
+      {
+        name: 'fill',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'Switch' && node.prop('label') === 'Fill Missing';
+          }),
+        type: 'switch',
+        queryWhenShown: {
+          refId: '',
+          type: QueryTypeValue.TIMESERIES,
+          command: 'ts.range',
+          aggregation: AggregationValue.AVG,
           bucket: 123,
-        });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.bucket);
-      });
-
-      it('Should call onBucketTextChange method when value was changed', () => {
-        const query = getQuery({ type: QueryTypeValue.TIMESERIES, command: 'ts.range', aggregation: '123' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedMethod = jest.spyOn(wrapper.instance(), 'onBucketTextChange');
-        wrapper.instance().forceUpdate();
-        const testedComponent = getComponent(wrapper);
-        const newValue = 1234;
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(testedMethod).toHaveBeenCalledWith({ target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          bucket: newValue,
-        });
-      });
-    });
-
-    /**
-     * Fill Missing
-     */
-    describe('FillMissing', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'Switch' && node.prop('label') === 'Fill Missing';
-        });
-
-      it('Should be shown when command exists in commands.aggregation and commands.fill, aggregation value is selected and bucket is filled', () => {
-        const query = getQuery({
+          fill: false,
+        },
+        queryWhenHidden: {
+          refId: '',
           type: QueryTypeValue.TIMESERIES,
           command: 'ts.range',
-          aggregation: '123',
-          bucket: 123,
-        });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when bucket is not filled', () => {
-        const query = getQuery({
-          type: QueryTypeValue.TIMESERIES,
-          command: 'ts.range',
-          aggregation: '123',
+          aggregation: AggregationValue.AVG,
           bucket: 0,
-        });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({
-          type: QueryTypeValue.TIMESERIES,
-          command: 'ts.range',
-          aggregation: '123',
-          bucket: 123,
-          fill: true,
-        });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('checked')).toEqual(query.fill);
-      });
-
-      it('Should set default value if query does not have fill value', () => {
-        const query = getQuery({
-          type: QueryTypeValue.TIMESERIES,
-          command: 'ts.range',
-          aggregation: '123',
-          bucket: 123,
-          fill: null,
-        });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('checked')).toEqual(false);
-      });
-
-      it('Should call onChange prop when value was changed', () => {
-        const query = getQuery({
-          type: QueryTypeValue.TIMESERIES,
-          command: 'ts.range',
-          aggregation: '123',
-          bucket: 123,
-          fill: true,
-        });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        const newValue = false;
-        testedComponent.simulate('change', { currentTarget: { checked: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          fill: newValue,
-        });
-      });
-    });
+        },
+      },
+    ]);
   });
 
   /**
    * Streaming options
    */
   describe('Streaming fields', () => {
-    /**
-     * Streaming enabled
-     */
-    describe('Streaming', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'Switch' && node.prop('label') === 'Streaming';
-        });
-
-      it('Should be shown when refId=A', () => {
-        const query = getQuery({ refId: 'A' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when refId!=A', () => {
-        const query = getQuery({ refId: 'B' });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ refId: 'A', streaming: true });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('checked')).toEqual(query.streaming);
-      });
-
-      it('Should call onChange prop when value was changed', () => {
-        const query = getQuery({ refId: 'A', streaming: false });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        const newValue = true;
-        testedComponent.simulate('change', { currentTarget: { checked: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          streaming: newValue,
-        });
-      });
-    });
-
-    /**
-     * Streaming interval
-     */
-    describe('Interval', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField' && node.prop('label') === 'Interval';
-        });
-
-      it('Should be shown when refId=A and streaming is checked', () => {
-        const query = getQuery({ refId: 'A', streaming: true });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when refId=A and streaming is not checked', () => {
-        const query = getQuery({ refId: 'A', streaming: false });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ refId: 'A', streaming: true, streamingInterval: 100 });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.streamingInterval);
-      });
-
-      it('Should call onChange prop when value was changed', () => {
-        const query = getQuery({ refId: 'A', streaming: true });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        const newValue = '123';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          streamingInterval: parseInt(newValue, 10),
-        });
-      });
-    });
-
-    /**
-     * Streaming capacity
-     */
-    describe('Capacity', () => {
-      const getComponent = (wrapper: ShallowComponent) =>
-        wrapper.findWhere((node) => {
-          return node.name() === 'FormField' && node.prop('label') === 'Capacity';
-        });
-
-      it('Should be shown when refId=A and streaming is checked', () => {
-        const query = getQuery({ refId: 'A', streaming: true });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).toBeTruthy();
-      });
-
-      it('Should not be shown when refId=A and streaming is not checked', () => {
-        const query = getQuery({ refId: 'A', streaming: false });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.exists()).not.toBeTruthy();
-      });
-
-      it('Should set value from query', () => {
-        const query = getQuery({ refId: 'A', streaming: true, streamingCapacity: 100 });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        expect(testedComponent.prop('value')).toEqual(query.streamingCapacity);
-      });
-
-      it('Should call onChange prop when value was changed', () => {
-        const query = getQuery({ refId: 'A', streaming: true });
-        const wrapper = shallow<QueryEditor>(
-          <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
-        );
-        const testedComponent = getComponent(wrapper);
-        const newValue = '123';
-        testedComponent.simulate('change', { target: { value: newValue } });
-        expect(onChange).toHaveBeenCalledWith({
-          ...query,
-          streamingCapacity: parseInt(newValue, 10),
-        });
-      });
-    });
+    runQueryFieldsTest([
+      {
+        name: 'streaming',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'Switch' && node.prop('label') === 'Streaming';
+          }),
+        type: 'switch',
+        queryWhenShown: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+        },
+        queryWhenHidden: {
+          refId: 'B',
+          type: QueryTypeValue.TIMESERIES,
+        },
+      },
+      {
+        name: 'streamingInterval',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Interval';
+          }),
+        type: 'number',
+        queryWhenShown: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: true,
+        },
+        queryWhenHidden: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: false,
+        },
+      },
+      {
+        name: 'streamingCapacity',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Capacity';
+          }),
+        type: 'number',
+        queryWhenShown: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: true,
+        },
+        queryWhenHidden: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: false,
+        },
+      },
+      {
+        name: 'streamingDataType',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onStreamingDataTypeChange;
+          }),
+        type: 'radioButton',
+        queryWhenShown: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: true,
+        },
+        queryWhenHidden: {
+          refId: 'A',
+          type: QueryTypeValue.TIMESERIES,
+          streaming: false,
+        },
+      },
+    ]);
   });
 });

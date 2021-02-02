@@ -86,3 +86,159 @@ func queryXInfoStream(qm queryModel, client redisClient) backend.DataResponse {
 	// Return
 	return response
 }
+
+/**
+ * XRANGE key start end [COUNT count]
+ *
+ * @see https://redis.io/commands/xrange
+ */
+func queryXRange(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Start
+	start := "-"
+	if qm.Start != "" {
+		start = qm.Start
+	}
+
+	// End
+	end := "+"
+	if qm.End != "" {
+		end = qm.End
+	}
+
+	// Arguments
+	args := []interface{}{start, end}
+	if qm.Count > 0 {
+		args = append(args, "COUNT", qm.Count)
+	}
+
+	var result []interface{}
+
+	// Execute command
+	err := client.RunFlatCmd(&result, "XRANGE", qm.Key, args...)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// Create frame
+	frame := createFrameFromRangeResponse(qm.Command, result)
+
+	// Add the frame to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return
+	return response
+}
+
+/**
+ * XREVRANGE key end start [COUNT count]
+ *
+ * @see https://redis.io/commands/xrevrange
+ */
+func queryXRevRange(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Start
+	start := "-"
+	if qm.Start != "" {
+		start = qm.Start
+	}
+
+	// End
+	end := "+"
+	if qm.End != "" {
+		end = qm.End
+	}
+
+	// Arguments
+	args := []interface{}{end, start}
+	if qm.Count > 0 {
+		args = append(args, "COUNT", qm.Count)
+	}
+
+	var result []interface{}
+
+	// Execute command
+	err := client.RunFlatCmd(&result, "XREVRANGE", qm.Key, args...)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// Create frame
+	frame := createFrameFromRangeResponse(qm.Command, result)
+
+	// Add the frame to the response
+	response.Frames = append(response.Frames, frame)
+
+	// Return
+	return response
+}
+
+/**
+ * Iterate over xrange/xrevrange result and build new Frame with required fields
+ */
+func createFrameFromRangeResponse(command string, result []interface{}) *data.Frame {
+	// Create new frame
+	frame := data.NewFrame(command)
+
+	// Create field to store entry id
+	idField := data.NewField("$streamId", nil, []string{})
+
+	// Add id field to the response
+	frame.Fields = append(frame.Fields, idField)
+
+	// Map for storing all the fields found in entries
+	fields := map[string]*data.Field{}
+
+	for _, entry := range result {
+		id := string(entry.([]interface{})[0].([]byte))
+
+		idField.Append(id)
+
+		keysFoundInCurrentEntry := map[string]bool{}
+
+		keyValuePairs := entry.([]interface{})[1].([]interface{})
+		for i := 0; i < len(keyValuePairs); i += 2 {
+			key := string(keyValuePairs[i].([]byte))
+			value := string(keyValuePairs[i+1].([]byte))
+
+			// Check if field has been already created before
+			if _, ok := fields[key]; !ok {
+				// Create new field
+				newField := data.NewField(key, nil, []string{})
+				fields[key] = newField
+
+				// Append field to frame
+				frame.Fields = append(frame.Fields, newField)
+
+				// Get the number of rows we processed previously
+				rowsCount := idField.Len() - 1
+
+				// Generate empty values for all previous rows
+				for j := 0; j < rowsCount; j++ {
+					newField.Append("")
+				}
+			}
+
+			// Insert value for current row
+			fields[key].Append(value)
+			keysFoundInCurrentEntry[key] = true
+		}
+
+		// Iterate over all keys found so far for stream
+		for key, field := range fields {
+			// Check if key exist in entry
+			if _, ok := keysFoundInCurrentEntry[key]; !ok {
+				// If key is missed in entry insert empty value
+				field.Append("")
+			}
+		}
+	}
+
+	return frame
+}

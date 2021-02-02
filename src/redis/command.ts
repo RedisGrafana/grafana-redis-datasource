@@ -1,8 +1,10 @@
+import { QueryTypeValue } from './query';
+
 /**
  * Commands
  */
 export const Commands = {
-  command: [
+  [QueryTypeValue.REDIS]: [
     {
       label: 'CLIENT LIST',
       description: 'Returns information and statistics about the client connections server',
@@ -66,8 +68,18 @@ export const Commands = {
       description: 'Returns the number of entries inside a stream',
       value: 'xlen',
     },
+    {
+      label: 'XRANGE',
+      description: 'Returns the stream entries matching a given range of IDs',
+      value: 'xrange',
+    },
+    {
+      label: 'XREVRANGE',
+      description: 'Returns the stream entries matching a given range of IDs in reverse order',
+      value: 'xrevrange',
+    },
   ],
-  timeSeries: [
+  [QueryTypeValue.TIMESERIES]: [
     {
       label: 'TS.GET',
       description: 'Returns the last sample',
@@ -90,14 +102,14 @@ export const Commands = {
     },
     { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
   ],
-  search: [
+  [QueryTypeValue.SEARCH]: [
     {
       label: 'FT.INFO',
       description: 'Returns information and statistics on the index',
       value: 'ft.info',
     },
   ],
-  gears: [
+  [QueryTypeValue.GEARS]: [
     {
       label: 'RG.DUMPREGISTRATIONS',
       description: 'Outputs the list of function registrations',
@@ -135,7 +147,9 @@ export const CommandParameters = {
     'type',
     'xinfoStream',
     'xlen',
-    'ft.info'
+    'ft.info',
+    'xrange',
+    'xrevrange'
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],
@@ -146,6 +160,9 @@ export const CommandParameters = {
   size: ['slowlogGet', 'tmscan'],
   cursor: ['tmscan'],
   match: ['tmscan'],
-  count: ['tmscan'],
-  samples: ['tmscan']
+  count: ['tmscan', 'xrange', 'xrevrange'],
+  samples: ['tmscan'],
+  start: ['xrange', 'xrevrange'],
+  end: ['xrange', 'xrevrange'],
+  cypher: ['graph.query']
 };

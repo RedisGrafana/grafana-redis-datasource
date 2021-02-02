@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -100,6 +101,204 @@ func TestQueryXInfoStream(t *testing.T) {
 
 		// Response
 		resp := queryXInfoStream(queryModel{Command: "xinfoStream", Key: "test1"}, &client)
+		require.Len(t, resp.Frames, 0)
+		require.EqualError(t, resp.Error, "some error")
+	})
+}
+
+/**
+ * XRANGE
+ */
+func TestQueryXRange(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should handle response with entries consist of different fields", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []interface{}{
+				[]interface{}{
+					[]byte("1611019111439-0"),
+					[]interface{}{
+						[]byte("key1"),
+						[]byte("value1"),
+						[]byte("key2"),
+						[]byte("value2"),
+					},
+				},
+				[]interface{}{
+					[]byte("1611019111440-0"),
+					[]interface{}{
+						[]byte("key1"),
+						[]byte("value11"),
+						[]byte("key3"),
+						[]byte("value3"),
+					},
+				},
+				[]interface{}{
+					[]byte("1611019112440-0"),
+					[]interface{}{
+						[]byte("key2"),
+						[]byte("value22"),
+						[]byte("key3"),
+						[]byte("value33"),
+					},
+				},
+				[]interface{}{
+					[]byte("1611019113440-0"),
+					[]interface{}{
+						[]byte("key4"),
+						[]byte("value4"),
+					},
+				},
+			},
+		}
+
+		// Response
+		resp := queryXRange(queryModel{Command: "xrange", Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0", Count: 4}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 5)
+
+		for i := range resp.Frames[0].Fields {
+			require.Equal(t, 4, resp.Frames[0].Fields[i].Len())
+			if i > 0 {
+				require.Equal(t, fmt.Sprintf("key%v", i), resp.Frames[0].Fields[i].Name)
+			}
+		}
+
+		// Check field values for first entry
+		require.Equal(t, "value1", resp.Frames[0].Fields[1].At(0))
+		require.Equal(t, "value2", resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, "", resp.Frames[0].Fields[3].At(0))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(0))
+
+		// Check field values for second entry
+		require.Equal(t, "value11", resp.Frames[0].Fields[1].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[2].At(1))
+		require.Equal(t, "value3", resp.Frames[0].Fields[3].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(1))
+
+		// Check field values for third entry
+		require.Equal(t, "", resp.Frames[0].Fields[1].At(2))
+		require.Equal(t, "value22", resp.Frames[0].Fields[2].At(2))
+		require.Equal(t, "value33", resp.Frames[0].Fields[3].At(2))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(2))
+
+		// Check field values for last entry
+		require.Equal(t, "", resp.Frames[0].Fields[1].At(3))
+		require.Equal(t, "", resp.Frames[0].Fields[2].At(3))
+		require.Equal(t, "", resp.Frames[0].Fields[3].At(3))
+		require.Equal(t, "value4", resp.Frames[0].Fields[4].At(3))
+	})
+
+	t.Run("should handle error", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{err: errors.New("some error")}
+
+		// Response
+		resp := queryXRange(queryModel{Command: "xrange", Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
+		require.Len(t, resp.Frames, 0)
+		require.EqualError(t, resp.Error, "some error")
+	})
+}
+
+/**
+ * XREVRANGE
+ */
+func TestQueryXRevRange(t *testing.T) {
+	t.Parallel()
+
+	t.Run("should handle response with entries consist of different fields", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []interface{}{
+				[]interface{}{
+					[]byte("1611019111500-0"),
+					[]interface{}{
+						[]byte("key1"),
+						[]byte("value1"),
+						[]byte("key2"),
+						[]byte("value2"),
+					},
+				},
+				[]interface{}{
+					[]byte("1611019111499-0"),
+					[]interface{}{
+						[]byte("key1"),
+						[]byte("value11"),
+						[]byte("key3"),
+						[]byte("value3"),
+					},
+				},
+				[]interface{}{
+					[]byte("1611019111440-0"),
+					[]interface{}{
+						[]byte("key2"),
+						[]byte("value22"),
+						[]byte("key3"),
+						[]byte("value33"),
+					},
+				},
+				[]interface{}{
+					[]byte("1611019111410-0"),
+					[]interface{}{
+						[]byte("key4"),
+						[]byte("value4"),
+					},
+				},
+			},
+		}
+
+		// Response
+		resp := queryXRevRange(queryModel{Command: "xrevrange", Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0", Count: 4}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 5)
+
+		for i := range resp.Frames[0].Fields {
+			require.Equal(t, 4, resp.Frames[0].Fields[i].Len())
+			if i > 0 {
+				require.Equal(t, fmt.Sprintf("key%v", i), resp.Frames[0].Fields[i].Name)
+			}
+		}
+
+		// Check field values for first entry
+		require.Equal(t, "value1", resp.Frames[0].Fields[1].At(0))
+		require.Equal(t, "value2", resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, "", resp.Frames[0].Fields[3].At(0))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(0))
+
+		// Check field values for second entry
+		require.Equal(t, "value11", resp.Frames[0].Fields[1].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[2].At(1))
+		require.Equal(t, "value3", resp.Frames[0].Fields[3].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(1))
+
+		// Check field values for third entry
+		require.Equal(t, "", resp.Frames[0].Fields[1].At(2))
+		require.Equal(t, "value22", resp.Frames[0].Fields[2].At(2))
+		require.Equal(t, "value33", resp.Frames[0].Fields[3].At(2))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(2))
+
+		// Check field values for last entry
+		require.Equal(t, "", resp.Frames[0].Fields[1].At(3))
+		require.Equal(t, "", resp.Frames[0].Fields[2].At(3))
+		require.Equal(t, "", resp.Frames[0].Fields[3].At(3))
+		require.Equal(t, "value4", resp.Frames[0].Fields[4].At(3))
+	})
+
+	t.Run("should handle error", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{err: errors.New("some error")}
+
+		// Response
+		resp := queryXRevRange(queryModel{Command: "xrevrange", Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.EqualError(t, resp.Error, "some error")
 	})
