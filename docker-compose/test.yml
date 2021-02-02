@@ -7,4 +7,4 @@ services:
     ports:
       - '63790:6379'
     volumes:
-      - './data:/data/:rw'
+      - '../data:/data/:rw'

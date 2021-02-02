@@ -1,3 +1,5 @@
+import { SelectableValue } from '@grafana/data';
+
 /**
  * Default Streaming Interval
  */
@@ -26,4 +28,26 @@ export const ClientType = [
   { label: 'Cluster', value: ClientTypeValue.CLUSTER },
   { label: 'Sentinel', value: ClientTypeValue.SENTINEL },
   { label: 'Socket', value: ClientTypeValue.SOCKET },
+];
+
+/**
+ * Streaming Data Type
+ */
+export enum StreamingDataType {
+  TimeSeries = 'TimeSeries',
+  DataFrame = 'DataFrame',
+}
+
+/**
+ * Streaming
+ */
+export const StreamingDataTypes: Array<SelectableValue<StreamingDataType>> = [
+  {
+    label: 'Time series',
+    value: StreamingDataType.TimeSeries,
+  },
+  {
+    label: 'Data frame',
+    value: StreamingDataType.DataFrame,
+  },
 ];
