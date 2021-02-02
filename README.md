@@ -120,10 +120,10 @@ If Redis is running as Docker container on Linux, please update host to `redis`
 
 ### Run using `docker-compose` for development
 
-Data Source have to be built following [BUILD](https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose-dev.yml` file.
+Data Source have to be built following [BUILD](https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose/dev.yml` file.
 
 ```bash
-docker-compose -f docker-compose-dev.yml up
+docker-compose -f docker-compose/dev.yml up
 ```
 
 ## Supported commands
