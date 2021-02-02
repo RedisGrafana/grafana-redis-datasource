@@ -7,11 +7,11 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - './data:/data/:rw'
+      - '../data:/data/:rw'
 
   grafana:
     container_name: grafana
-    image: grafana/grafana:7.4.0-beta1
+    image: grafana/grafana:master
     ports:
       - '3000:3000'
     environment:
@@ -24,8 +24,8 @@ services:
       # Uncomment to run in debug mode
       # - GF_LOG_LEVEL=debug
     volumes:
-      - ./dist:/var/lib/grafana/plugins/redis-datasource
-      - ./provisioning/datasources:/etc/grafana/provisioning/datasources
-      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ../dist:/var/lib/grafana/plugins/redis-datasource
+      - ../provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ../provisioning/dashboards:/etc/grafana/provisioning/dashboards
       # Uncomment to preserve Grafana configuration
       # - ./data:/var/lib/grafana

@@ -2,6 +2,7 @@ import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, TextArea } from '@grafana/ui';
+import { StreamingDataType, StreamingDataTypes } from '../../constants';
 import { DataSource } from '../../data-source';
 import {
   Aggregations,
@@ -13,8 +14,6 @@ import {
   QueryType,
   QueryTypeValue,
   RedisQuery,
-  StreamingDataType,
-  StreamingDataTypes,
 } from '../../redis';
 import { RedisDataSourceOptions } from '../../types';
 
@@ -104,6 +103,11 @@ export class QueryEditor extends PureComponent<Props> {
    * Filter change
    */
   onFilterChange = this.createTextFieldHandler('filter');
+
+  /**
+   * Cypher change
+   */
+  onCypherChange = this.createTextFieldHandler('cypher');
 
   /**
    * Field change
@@ -227,6 +231,7 @@ export class QueryEditor extends PureComponent<Props> {
       command,
       field,
       filter,
+      cypher,
       value,
       query,
       type,
@@ -302,6 +307,18 @@ export class QueryEditor extends PureComponent<Props> {
                 tooltip="Whenever filters need to be provided, a minimum of one l=v filter must be applied.
                 The list of possible filters:
                 https://oss.redislabs.com/redistimeseries/commands/#filtering"
+              />
+            )}
+
+            {CommandParameters.cypher.includes(command) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={30}
+                value={cypher}
+                onChange={this.onCypherChange}
+                label="Cypher"
+                tooltip="The syntax is based on Cypher, and only a subset of the language currently supported: \
+                https://oss.redislabs.com/redisgraph/commands/#query-language"
               />
             )}
 
