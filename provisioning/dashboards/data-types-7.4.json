@@ -3062,6 +3062,49 @@
       "timeShift": null,
       "title": "TS.MRANGE \"id=111\" Streaming",
       "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 73
+      },
+      "id": 75,
+      "panels": [],
+      "title": "RedisGraph",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 28,
+        "w": 12,
+        "x": 0,
+        "y": 74
+      },
+      "id": 77,
+      "pluginVersion": "7.5.0-11266pre",
+      "targets": [
+        {
+          "command": "graph.query",
+          "cypher": "MATCH (w:writer)-[wrote]->(b:book) return w,b",
+          "keyName": "GOT_DEMO",
+          "query": "",
+          "refId": "A",
+          "type": "graph"
+        }
+      ],
+      "title": "GOT_DEMO",
+      "type": "nodeGraph"
     }
   ],
   "refresh": false,
