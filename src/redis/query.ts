@@ -10,6 +10,7 @@ export enum QueryTypeValue {
   SEARCH = 'search',
   CLI = 'cli',
   GEARS = 'gears',
+  GRAPH = 'graph',
 }
 
 /**
@@ -25,6 +26,11 @@ export const QueryType: Array<SelectableValue<QueryTypeValue>> = [
     label: 'RedisGears',
     description: 'Dynamic framework for data processing',
     value: QueryTypeValue.GEARS,
+  },
+  {
+    label: 'RedisGraph',
+    description: 'Graph database',
+    value: QueryTypeValue.GRAPH,
   },
   {
     label: 'RediSearch',
