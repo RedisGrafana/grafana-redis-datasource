@@ -27,6 +27,7 @@
     "start:dev": "docker-compose -f docker-compose/dev.yml up",
     "start:master": "docker-compose pull && docker-compose -f docker-compose/master.yml up",
     "stop": "docker-compose down",
+    "stop:dev": "docker-compose -f docker-compose/dev.yml down",
     "test": "grafana-toolkit plugin:test --coverage",
     "test:backend": "mage cover",
     "test:integration": "mage integration",
