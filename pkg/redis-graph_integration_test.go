@@ -63,3 +63,17 @@ func TestGraphQueryIntegrationWithoutNodes(t *testing.T) {
 	require.Len(t, resp.Frames[1].Fields, 4)
 	require.Equal(t, 14, resp.Frames[1].Fields[0].Len())
 }
+
+/**
+ * GRAPH.SLOWLOG
+ */
+func TestGraphSlowlogIntegration(t *testing.T) {
+	// Client
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
+	resp := queryGraphSlowlog(queryModel{Command: "graph.slowlog", Key: "GOT_DEMO"}, &client)
+	require.Len(t, resp.Frames, 1)
+	require.Len(t, resp.Frames[0].Fields, 4)
+}

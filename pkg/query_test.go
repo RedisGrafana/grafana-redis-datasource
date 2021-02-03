@@ -47,6 +47,7 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "rg.xrange"}},
 		{queryModel{Command: "rg.xrevrange"}},
 		{queryModel{Command: "graph.query"}},
+		{queryModel{Command: "graph.slowlog"}},
 	}
 
 	// Run Tests

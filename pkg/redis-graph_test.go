@@ -8,7 +8,7 @@ import (
 )
 
 /**
- * RG.PYSTATS
+ * GRAPH.QUERY
  */
 func TestGraphQuery(t *testing.T) {
 	t.Parallel()
@@ -230,6 +230,61 @@ func TestGraphQuery(t *testing.T) {
 
 		// Response
 		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
+		require.EqualError(t, resp.Error, "error occurred")
+	})
+}
+
+/**
+ * GRAPH.SLOWLOG
+ */
+func TestGraphSlowlog(t *testing.T) {
+	t.Parallel()
+
+	/**
+	 * Success
+	 */
+	t.Run("should process command", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: [][]string{
+				{"1612352919", "GRAPH.QUERY", "MATCH (w:writer)-[wrote]->(b:book) return w,r,b", "0.929"},
+			},
+			err: nil,
+		}
+
+		// Response
+		resp := queryGraphSlowlog(queryModel{Command: "graph.slowlog", Key: "GOT_DEMO"}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 4)
+		require.Equal(t, "timestamp", resp.Frames[0].Fields[0].Name)
+		require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
+		require.Equal(t, "command", resp.Frames[0].Fields[1].Name)
+		require.Equal(t, "query", resp.Frames[0].Fields[2].Name)
+		require.Equal(t, "duration", resp.Frames[0].Fields[3].Name)
+
+		require.Equal(t, int64(1612352919), resp.Frames[0].Fields[0].At(0))
+		require.Equal(t, "GRAPH.QUERY", resp.Frames[0].Fields[1].At(0))
+		require.Equal(t, "MATCH (w:writer)-[wrote]->(b:book) return w,r,b", resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, float64(0.929), resp.Frames[0].Fields[3].At(0))
+
+	})
+
+	/**
+	 * Error
+	 */
+	t.Run("should handle error", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv:      nil,
+			batchRcv: nil,
+			err:      errors.New("error occurred")}
+
+		// Response
+		resp := queryGraphSlowlog(queryModel{Command: "graph.slowlog", Key: "GOT_DEMO"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }

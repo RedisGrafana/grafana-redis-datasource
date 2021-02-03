@@ -145,3 +145,40 @@ func findAllNodesAndEdges(input interface{}) ([]nodeEntry, []edgeEntry) {
 	}
 	return nodes, edges
 }
+
+/**
+ * GRAPH.SLOWLOG <Graph name>
+ *
+ * Returns a list containing up to 10 of the slowest queries issued against the given graph ID.
+ * @see https://oss.redislabs.com/redisgraph/commands/#graphslowlog
+ */
+func queryGraphSlowlog(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	var result [][]string
+
+	// Run command
+	err := client.RunFlatCmd(&result, "GRAPH.SLOWLOG", qm.Key)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// New Frame
+	frame := data.NewFrame("GRAPH.SLOWLOG")
+	frame.Fields = append(frame.Fields, data.NewField("timestamp", nil, []int64{}))
+	frame.Fields = append(frame.Fields, data.NewField("command", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("query", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("duration", nil, []float64{}))
+	response.Frames = append(response.Frames, frame)
+
+	for _, entry := range result {
+		time, _ := strconv.ParseInt(entry[0], 10, 64)
+		duration, _ := strconv.ParseFloat(entry[3], 64)
+		frame.AppendRow(time, entry[1], entry[2], duration)
+	}
+
+	// Return
+	return response
+}
