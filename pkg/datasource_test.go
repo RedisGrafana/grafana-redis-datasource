@@ -176,7 +176,7 @@ func TestQueryData(t *testing.T) {
 		PluginContext: backend.PluginContext{},
 		Headers:       nil,
 		Queries: []backend.DataQuery{
-			backend.DataQuery{
+			{
 				RefID:         "",
 				QueryType:     "",
 				MaxDataPoints: 100,
@@ -212,7 +212,7 @@ func TestQueryDataWithError(t *testing.T) {
 		PluginContext: backend.PluginContext{},
 		Headers:       nil,
 		Queries: []backend.DataQuery{
-			backend.DataQuery{
+			{
 				RefID:         "",
 				QueryType:     "",
 				MaxDataPoints: 100,
