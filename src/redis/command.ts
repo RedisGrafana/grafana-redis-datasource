@@ -120,6 +120,13 @@ export const Commands = {
       description: 'Returns memory usage statistics from the Python interpreter',
       value: 'rg.pystats',
     },
+  ],
+  [QueryTypeValue.GRAPH]: [
+    {
+      label: 'GRAPH.QUERY',
+      description: 'Executes the given query against a specified graph.',
+      value: 'graph.query',
+    }
   ]
 };
 
@@ -149,7 +156,8 @@ export const CommandParameters = {
     'xlen',
     'ft.info',
     'xrange',
-    'xrevrange'
+    'xrevrange',
+    'graph.query'
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],

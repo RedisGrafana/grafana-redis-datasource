@@ -61,4 +61,5 @@ type queryModel struct {
 	Requirements string `json:"requirements"`
 	Start        string `json:"start"`
 	End          string `json:"end"`
+	Cypher       string `json:"cypher"`
 }
