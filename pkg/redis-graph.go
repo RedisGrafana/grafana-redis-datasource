@@ -1,18 +1,32 @@
 package main
 
 import (
+	"strconv"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
 /**
- * Graph data for GRAPH.QUERY Radix marshaling
+ *  Represents node
  */
-// type graphData struct {
-//	ID         string                 `redis:"id"`
-//	Labels     map[string]interface{} `redis:"labels"`
-//	Properties map[string]interface{} `redis:"properties"`
-//}
+type nodeEntry struct {
+	id       string
+	title    string
+	subTitle string
+	mainStat string
+	arc__    int64
+}
+
+/**
+ *  Represents edge
+ */
+type edgeEntry struct {
+	id       string
+	source   string
+	target   string
+	mainStat string
+}
 
 /**
  * GRAPH.QUERY <Graph name> {query}
@@ -23,7 +37,7 @@ import (
 func queryGraphQuery(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
-	var result interface{}
+	var result []interface{}
 
 	// Run command
 	err := client.RunFlatCmd(&result, "GRAPH.QUERY", qm.Key, qm.Cypher)
@@ -58,23 +72,76 @@ func queryGraphQuery(qm queryModel, client redisClient) backend.DataResponse {
 	response.Frames = append(response.Frames, frameWithNodes)
 	response.Frames = append(response.Frames, frameWithEdges)
 
-	// Data
-	frameWithNodes.AppendRow("5e5aeb4a820126475cb09ccb", "Writer", "", "George R. R. Martin", int64(1))
-	frameWithNodes.AppendRow("5e5aeb4a820126475cb09ccd", "Writer", "", "Linda Antonsson", int64(1))
-	frameWithNodes.AppendRow("5e5aeb4a820126475cb09ccc", "Writer", "", "Elio Garcia", int64(1))
-	frameWithNodes.AppendRow("5e5aeadb820126475cb09cbf", "Book", "", "A Game of Thrones", int64(1))
-	frameWithNodes.AppendRow("5e5aeadb820126475cb09cc0", "Book", "", "A Clash of Kings", int64(1))
-	frameWithNodes.AppendRow("5e5aeadb820126475cb09cc9", "Book", "", "The World of Ice and Fire", int64(1))
-	frameWithNodes.AppendRow("5e5aeadb820126475cb09cc2", "Book", "", "The Hedge Knight", int64(1))
-	frameWithNodes.AppendRow("5e5aeadb820126475cb09cc3", "Book", "", "A Feast for Crows", int64(1))
+	existingNodes := map[string]bool{}
 
-	frameWithEdges.AppendRow("1", "5e5aeb4a820126475cb09ccb", "5e5aeadb820126475cb09cbf", "wrote")
-	frameWithEdges.AppendRow("2", "5e5aeb4a820126475cb09ccb", "5e5aeadb820126475cb09cc0", "wrote")
-	frameWithEdges.AppendRow("3", "5e5aeb4a820126475cb09ccb", "5e5aeadb820126475cb09cc9", "wrote")
-	frameWithEdges.AppendRow("3", "5e5aeb4a820126475cb09ccb", "5e5aeadb820126475cb09cc2", "wrote")
-	frameWithEdges.AppendRow("4", "5e5aeb4a820126475cb09ccd", "5e5aeadb820126475cb09cc9", "wrote")
-	frameWithEdges.AppendRow("5", "5e5aeb4a820126475cb09ccc", "5e5aeadb820126475cb09cc9", "wrote")
-	frameWithEdges.AppendRow("5", "5e5aeb4a820126475cb09ccb", "5e5aeadb820126475cb09cc3", "wrote")
-
+	for _, entries := range result[1].([]interface{}) {
+		nodes, edges := findAllNodesAndEdges(entries)
+		for _, node := range nodes {
+			// Add each nodeEntry only once
+			if _, ok := existingNodes[node.id]; !ok {
+				frameWithNodes.AppendRow(node.id, node.title, node.subTitle, node.mainStat, node.arc__)
+				existingNodes[node.id] = true
+			}
+		}
+		for _, edge := range edges {
+			frameWithEdges.AppendRow(edge.id, edge.source, edge.target, edge.mainStat)
+		}
+	}
 	return response
+}
+
+/** Parse array of entries and find
+ *  either Nodes https://oss.redislabs.com/redisgraph/result_structure/#nodes
+ *  or Relations https://oss.redislabs.com/redisgraph/result_structure/#relations
+ * and create corresponding nodeEntry or edgeEntry
+ **/
+func findAllNodesAndEdges(input interface{}) ([]nodeEntry, []edgeEntry) {
+
+	nodes := []nodeEntry{}
+	edges := []edgeEntry{}
+
+	if entries, ok := input.([]interface{}); ok {
+		for _, entry := range entries {
+			entryFields := entry.([]interface{})
+			// Node https://oss.redislabs.com/redisgraph/result_structure/#nodes
+			if len(entryFields) == 3 {
+				node := nodeEntry{arc__: 1}
+				idArray := entryFields[0].([]interface{})
+				node.id = strconv.FormatInt(idArray[1].(int64), 10)
+				// Assume first label will be a title if exists
+				labelsArray := entryFields[1].([]interface{})
+				labels := labelsArray[1].([]interface{})
+				if len(labels) > 0 {
+					node.title = string(labels[0].([]byte))
+				}
+				// Assume first property will be a mainStat if exists
+				propertiesArray := entryFields[2].([]interface{})
+				properties := propertiesArray[1].([]interface{})
+				if len(properties) > 0 {
+					propertyArray := properties[0].([]interface{})
+					switch propValue := propertyArray[1].(type) {
+					case []byte:
+						node.mainStat = string(propValue)
+					case int64:
+						node.mainStat = strconv.FormatInt(propValue, 10)
+					}
+				}
+				nodes = append(nodes, node)
+			}
+			// Relation https://oss.redislabs.com/redisgraph/result_structure/#relations
+			if len(entryFields) == 5 {
+				edge := edgeEntry{}
+				idArray := entryFields[0].([]interface{})
+				edge.id = strconv.FormatInt(idArray[1].(int64), 10)
+				typeArray := entryFields[1].([]interface{})
+				edge.mainStat = string(typeArray[1].([]byte))
+				srcArray := entryFields[2].([]interface{})
+				edge.source = strconv.FormatInt(srcArray[1].(int64), 10)
+				destArray := entryFields[3].([]interface{})
+				edge.target = strconv.FormatInt(destArray[1].(int64), 10)
+				edges = append(edges, edge)
+			}
+		}
+	}
+	return nodes, edges
 }
