@@ -3096,7 +3096,7 @@
       "targets": [
         {
           "command": "graph.query",
-          "cypher": "MATCH (w:writer)-[wrote]->(b:book) return w,b",
+          "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
           "keyName": "GOT_DEMO",
           "query": "",
           "refId": "A",
