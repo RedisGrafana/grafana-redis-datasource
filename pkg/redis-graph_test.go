@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -264,7 +265,7 @@ func TestGraphSlowlog(t *testing.T) {
 		require.Equal(t, "query", resp.Frames[0].Fields[2].Name)
 		require.Equal(t, "duration", resp.Frames[0].Fields[3].Name)
 
-		require.Equal(t, int64(1612352919), resp.Frames[0].Fields[0].At(0))
+		require.Equal(t, time.Unix(1612352919, 0), resp.Frames[0].Fields[0].At(0))
 		require.Equal(t, "GRAPH.QUERY", resp.Frames[0].Fields[1].At(0))
 		require.Equal(t, "MATCH (w:writer)-[wrote]->(b:book) return w,r,b", resp.Frames[0].Fields[2].At(0))
 		require.Equal(t, float64(0.929), resp.Frames[0].Fields[3].At(0))

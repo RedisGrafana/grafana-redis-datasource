@@ -126,6 +126,11 @@ export const Commands = {
       label: 'GRAPH.QUERY',
       description: 'Executes the given query against a specified graph.',
       value: 'graph.query',
+    },
+    {
+      label: 'GRAPH.SLOWLOG',
+      description: 'Returns a list containing up to 10 of the slowest queries issued against the given graph ID.',
+      value: 'graph.slowlog',
     }
   ]
 };
@@ -157,7 +162,8 @@ export const CommandParameters = {
     'ft.info',
     'xrange',
     'xrevrange',
-    'graph.query'
+    'graph.query',
+    'graph.slowlog'
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],
