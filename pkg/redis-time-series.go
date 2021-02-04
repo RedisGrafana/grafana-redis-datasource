@@ -288,6 +288,8 @@ func queryTsInfo(qm queryModel, client redisClient) backend.DataResponse {
 			frame.Fields = append(frame.Fields, field)
 		case []byte:
 			frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{string(value)}))
+		case string:
+			frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{value}))
 		case []interface{}:
 			frame = addFrameFieldsFromArray(value, frame)
 		default:
