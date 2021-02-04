@@ -3081,7 +3081,12 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "color": {},
+          "custom": {},
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
         },
         "overrides": []
       },
@@ -3105,6 +3110,107 @@
       ],
       "title": "GOT_DEMO",
       "type": "nodeGraph"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Timestamp"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 140
+              },
+              {
+                "id": "unit",
+                "value": "dateTimeFromNow"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "command"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 198
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Command"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 157
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 74
+      },
+      "id": 78,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "7.5.0-11266pre",
+      "targets": [
+        {
+          "command": "graph.slowlog",
+          "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
+          "keyName": "GOT_DEMO",
+          "query": "",
+          "refId": "A",
+          "type": "graph"
+        }
+      ],
+      "title": "GOT_DEMO",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "command": "Command",
+              "duration": "Duration",
+              "query": "Query",
+              "timestamp": "Timestamp"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": false,
