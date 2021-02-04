@@ -128,6 +128,14 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 		return queryRgPyexecute(qm, client)
 
 	/**
+	 * Redis Graph
+	 */
+	case "graph.query":
+		return queryGraphQuery(qm, client)
+	case "graph.slowlog":
+		return queryGraphSlowlog(qm, client)
+
+	/**
 	 * Default
 	 */
 	default:
