@@ -42,7 +42,12 @@ Redis Cluster and Sentinel supported since version 1.2.
 
 ### Does this Data Source support Redis modules?
 
-Data Source supports [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/). We are working on supporting additional modules.
+Data Source supports:
+
+- [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/): TS.GET, TS.INFO, TS.MRANGE, TS.QUERYINDEX, TS.RANGE
+- [RedisGears](https://oss.redislabs.com/redisgears/): RG.DUMPREGISTRATIONS, RG.PYEXECUTE, RG.PYSTATS
+- [RedisSearch](https://oss.redislabs.com/redisearch/): FT.INFO
+- [RedisGraph](https://oss.redislabs.com/redisgraph/): GRAPH.QUERY, GRAPH.SLOWLOG
 
 ### How to connect to Redis logical database
 
@@ -143,6 +148,7 @@ Template variables can query any command and use other variables as parameters.
 - [Introducing the Redis Data Source Plug-in for Grafana](https://redislabs.com/blog/introducing-the-redis-data-source-plug-in-for-grafana/)
 - [How to Use the New Redis Data Source for Grafana Plug-in](https://redislabs.com/blog/how-to-use-the-new-redis-data-source-for-grafana-plug-in/)
 - [3 Real-Life Apps Built with Redis Data Source for Grafana](https://redislabs.com/blog/3-real-life-apps-built-with-redis-data-source-for-grafana/)
+- [Real-time observability with Redis and Grafana](https://grafana.com/go/observabilitycon/real-time-observability-with-redis-and-grafana/)
 
 ## Feedback
 
