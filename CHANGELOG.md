@@ -1,11 +1,32 @@
-# 1.3.1 (In progress)
+# Change Log
+
+## 1.3.1 (2021-02-04)
 
 ### Features / Enhancements
 
 - Add Unit test for Golang Backend #119
 - Remove "Unknown command" error from response for custom panels #125
+- Update Radix to 3.7.0 and other backend dependencies #128
+- Redis client, unit-tests refactoring and new unit-tests. #129
+- Implement CLI-mode similar to Redis-cli #135
+- Added support for errorstats features coming in redis 6.2; Extended commandstats fields with failedCalls and rejectedCalls #137
+- Add command to support the panel to show the biggest keys (TMSCAN) #133
+- Add RedisGears commands (RG.PYSTATS, RG.DUMPREGISTRATIONS, RG.PYEXECUTE) #136
+- Implement XRANGE and XREVRANGE commands #148
+- Add Client Type tooltip #149
+- Refactoring Query Editor #151
+- Add handling different frame type for Streaming data source #152
+- Update tooltip for RedisTimeSeries Label Filter #155
+- Update Loading state for Streaming for Grafana 7.4 #158
+- Update Grafana SDK 0.86 to fix race conditions #160
+- Add Redis Graph module (GRAPH.QUERY, GRAPH.SLOWLOG) #157
 
-# 1.3.0 (2021-01-05)
+### Bug fixes
+
+- Experiencing memory leak in Grafana docker seemingly stemming from this plugin #116
+- All Redis Datasource timeout when one is not reachable #73
+
+## 1.3.0 (2021-01-05)
 
 ### Breaking changes
 
@@ -46,7 +67,7 @@
 - Update default configuration parameters for Data Source #111
 - Update Key to KeyName to avoid conflict in the Explore tab #112
 
-# 1.2.1 (2020-10-24)
+## 1.2.1 (2020-10-24)
 
 ### Features / Enhancements
 
@@ -63,7 +84,7 @@
 - Plugin health check failed for ARM on Linux #61
 - Timeseries data time stamp truncated to seconds #64
 
-# 1.2.0 (2020-08-26)
+## 1.2.0 (2020-08-26)
 
 ### Features / Enhancements
 
@@ -87,21 +108,21 @@
 - Fix backend lint issues #41
 - ts.mrange returns no data when label has spaces within #44
 
-# 1.1.2 (2020-07-29)
+## 1.1.2 (2020-07-29)
 
 ### Features / Enhancements
 
 - Remove developer jargon from README #30
 - Redis Datasource is Unsigned. K8S+Helm installation #29
 
-# 1.1.1 (2020-07-28)
+## 1.1.1 (2020-07-28)
 
 ### Features / Enhancements
 
 - Screenshots added to plugin.json and updated in the README
 - CHANGELOG added to display on the Plugin page
 
-# 1.1.0 (2020-07-24)
+## 1.1.0 (2020-07-24)
 
 ### Features / Enhancements
 
@@ -109,7 +130,7 @@
 - Add dashboard as a part of datasource #25
 - Add Field config units to the response #26
 
-# 1.0.0 (2020-07-13)
+## 1.0.0 (2020-07-13)
 
 ### Features / Enhancements
 
