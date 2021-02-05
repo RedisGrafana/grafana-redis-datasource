@@ -45,7 +45,7 @@ Redis Cluster and Sentinel supported since version 1.2.
 Data Source supports:
 
 - [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/): TS.GET, TS.INFO, TS.MRANGE, TS.QUERYINDEX, TS.RANGE
-- [RedisGears](https://oss.redislabs.com/redisgears/): RG.DUMPREGISTRATIONS, RG.PYSTATS
+- [RedisGears](https://oss.redislabs.com/redisgears/): RG.DUMPREGISTRATIONS, RG.PYEXECUTE, RG.PYSTATS
 - [RedisSearch](https://oss.redislabs.com/redisearch/): FT.INFO
 - [RedisGraph](https://oss.redislabs.com/redisgraph/): GRAPH.QUERY, GRAPH.SLOWLOG
 
