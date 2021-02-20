@@ -4,7 +4,7 @@
 
 ### Features / Enhancements
 
-- Update Grafana dependencies to 7.4.1
+- Update Grafana dependencies to 7.4.2
 
 ## 1.3.1 (2021-02-04)
 
