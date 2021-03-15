@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
@@ -189,38 +189,43 @@ func createFrameFromRangeResponse(command string, result []interface{}) *data.Fr
 	// Create new frame
 	frame := data.NewFrame(command)
 
+	// Create field to store entry id
+	idField := data.NewField("$streamId", nil, []string{})
+
 	// Create time field based o entry id
 	timeField := data.NewField("time", nil, []time.Time{})
 
 	// Add id field to the response
-	frame.Fields = append(frame.Fields, timeField)
+	frame.Fields = append(frame.Fields, idField, timeField)
 
-	// Create field to store entry id
-	idField := data.NewField("$streamId", nil, []string{})
+	// Set Field Config
+	frame.Fields[1].Config = &data.FieldConfig{Unit: "µs"}
 
-	// Add id field to the response
-	frame.Fields = append(frame.Fields, idField)
-
-  // Map for storing all the fields found in entries
+	// Map for storing all the fields found in entries
 	fields := map[string]*data.Field{}
 
 	for _, entry := range result {
 		id := string(entry.([]interface{})[0].([]byte))
 		idField.Append(id)
 
-    // Extract and convert time information
-    // We should safeguard that the conversion does not fail
-    // (Failure is possible in case of custom user defined ids)
-    timeStr := strings.Split(id, "-")[0]
-    unixTime, _ := strconv.ParseInt(timeStr, 10, 64)
-    ts := time.Unix(0, int64(unixTime) * int64(time.Millisecond))
-    timeField.Append(ts)
+		// Extract and convert time information
+		timeStr := strings.Split(id, "-")
+		var ts time.Time
+
+		// Check if Time extracted
+		if (len(timeStr)) > 0 {
+			unixTime, _ := strconv.ParseInt(timeStr[0], 10, 64)
+			ts = time.Unix(0, int64(unixTime)*int64(time.Millisecond))
+		}
+
+		// Add Time
+		timeField.Append(ts)
 
 		keysFoundInCurrentEntry := map[string]bool{}
 
 		keyValuePairs := entry.([]interface{})[1].([]interface{})
 		for i := 0; i < len(keyValuePairs); i += 2 {
-		key := string(keyValuePairs[i].([]byte))
+			key := string(keyValuePairs[i].([]byte))
 			value := string(keyValuePairs[i+1].([]byte))
 
 			// Check if field has been already created before

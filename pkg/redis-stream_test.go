@@ -158,38 +158,39 @@ func TestQueryXRange(t *testing.T) {
 		// Response
 		resp := queryXRange(queryModel{Command: "xrange", Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0", Count: 4}, &client)
 		require.Len(t, resp.Frames, 1)
-		require.Len(t, resp.Frames[0].Fields, 5)
+		require.Len(t, resp.Frames[0].Fields, 6)
+		require.Equal(t, "time", resp.Frames[0].Fields[1].Name)
 
 		for i := range resp.Frames[0].Fields {
 			require.Equal(t, 4, resp.Frames[0].Fields[i].Len())
-			if i > 0 {
-				require.Equal(t, fmt.Sprintf("key%v", i), resp.Frames[0].Fields[i].Name)
+			if i > 1 {
+				require.Equal(t, fmt.Sprintf("key%v", i-1), resp.Frames[0].Fields[i].Name)
 			}
 		}
 
 		// Check field values for first entry
-		require.Equal(t, "value1", resp.Frames[0].Fields[1].At(0))
-		require.Equal(t, "value2", resp.Frames[0].Fields[2].At(0))
-		require.Equal(t, "", resp.Frames[0].Fields[3].At(0))
+		require.Equal(t, "value1", resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, "value2", resp.Frames[0].Fields[3].At(0))
 		require.Equal(t, "", resp.Frames[0].Fields[4].At(0))
+		require.Equal(t, "", resp.Frames[0].Fields[5].At(0))
 
 		// Check field values for second entry
-		require.Equal(t, "value11", resp.Frames[0].Fields[1].At(1))
-		require.Equal(t, "", resp.Frames[0].Fields[2].At(1))
-		require.Equal(t, "value3", resp.Frames[0].Fields[3].At(1))
-		require.Equal(t, "", resp.Frames[0].Fields[4].At(1))
+		require.Equal(t, "value11", resp.Frames[0].Fields[2].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[3].At(1))
+		require.Equal(t, "value3", resp.Frames[0].Fields[4].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[5].At(1))
 
 		// Check field values for third entry
-		require.Equal(t, "", resp.Frames[0].Fields[1].At(2))
-		require.Equal(t, "value22", resp.Frames[0].Fields[2].At(2))
-		require.Equal(t, "value33", resp.Frames[0].Fields[3].At(2))
-		require.Equal(t, "", resp.Frames[0].Fields[4].At(2))
+		require.Equal(t, "", resp.Frames[0].Fields[2].At(2))
+		require.Equal(t, "value22", resp.Frames[0].Fields[3].At(2))
+		require.Equal(t, "value33", resp.Frames[0].Fields[4].At(2))
+		require.Equal(t, "", resp.Frames[0].Fields[5].At(2))
 
 		// Check field values for last entry
-		require.Equal(t, "", resp.Frames[0].Fields[1].At(3))
 		require.Equal(t, "", resp.Frames[0].Fields[2].At(3))
 		require.Equal(t, "", resp.Frames[0].Fields[3].At(3))
-		require.Equal(t, "value4", resp.Frames[0].Fields[4].At(3))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(3))
+		require.Equal(t, "value4", resp.Frames[0].Fields[5].At(3))
 	})
 
 	t.Run("should handle error", func(t *testing.T) {
@@ -257,38 +258,39 @@ func TestQueryXRevRange(t *testing.T) {
 		// Response
 		resp := queryXRevRange(queryModel{Command: "xrevrange", Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0", Count: 4}, &client)
 		require.Len(t, resp.Frames, 1)
-		require.Len(t, resp.Frames[0].Fields, 5)
+		require.Len(t, resp.Frames[0].Fields, 6)
+		require.Equal(t, "time", resp.Frames[0].Fields[1].Name)
 
 		for i := range resp.Frames[0].Fields {
 			require.Equal(t, 4, resp.Frames[0].Fields[i].Len())
-			if i > 0 {
-				require.Equal(t, fmt.Sprintf("key%v", i), resp.Frames[0].Fields[i].Name)
+			if i > 1 {
+				require.Equal(t, fmt.Sprintf("key%v", i-1), resp.Frames[0].Fields[i].Name)
 			}
 		}
 
 		// Check field values for first entry
-		require.Equal(t, "value1", resp.Frames[0].Fields[1].At(0))
-		require.Equal(t, "value2", resp.Frames[0].Fields[2].At(0))
-		require.Equal(t, "", resp.Frames[0].Fields[3].At(0))
+		require.Equal(t, "value1", resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, "value2", resp.Frames[0].Fields[3].At(0))
 		require.Equal(t, "", resp.Frames[0].Fields[4].At(0))
+		require.Equal(t, "", resp.Frames[0].Fields[5].At(0))
 
 		// Check field values for second entry
-		require.Equal(t, "value11", resp.Frames[0].Fields[1].At(1))
-		require.Equal(t, "", resp.Frames[0].Fields[2].At(1))
-		require.Equal(t, "value3", resp.Frames[0].Fields[3].At(1))
-		require.Equal(t, "", resp.Frames[0].Fields[4].At(1))
+		require.Equal(t, "value11", resp.Frames[0].Fields[2].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[3].At(1))
+		require.Equal(t, "value3", resp.Frames[0].Fields[4].At(1))
+		require.Equal(t, "", resp.Frames[0].Fields[5].At(1))
 
 		// Check field values for third entry
-		require.Equal(t, "", resp.Frames[0].Fields[1].At(2))
-		require.Equal(t, "value22", resp.Frames[0].Fields[2].At(2))
-		require.Equal(t, "value33", resp.Frames[0].Fields[3].At(2))
-		require.Equal(t, "", resp.Frames[0].Fields[4].At(2))
+		require.Equal(t, "", resp.Frames[0].Fields[2].At(2))
+		require.Equal(t, "value22", resp.Frames[0].Fields[3].At(2))
+		require.Equal(t, "value33", resp.Frames[0].Fields[4].At(2))
+		require.Equal(t, "", resp.Frames[0].Fields[5].At(2))
 
 		// Check field values for last entry
-		require.Equal(t, "", resp.Frames[0].Fields[1].At(3))
 		require.Equal(t, "", resp.Frames[0].Fields[2].At(3))
 		require.Equal(t, "", resp.Frames[0].Fields[3].At(3))
-		require.Equal(t, "value4", resp.Frames[0].Fields[4].At(3))
+		require.Equal(t, "", resp.Frames[0].Fields[4].At(3))
+		require.Equal(t, "value4", resp.Frames[0].Fields[5].At(3))
 	})
 
 	t.Run("should handle error", func(t *testing.T) {
