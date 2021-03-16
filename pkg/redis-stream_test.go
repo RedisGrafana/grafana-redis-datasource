@@ -124,7 +124,7 @@ func TestQueryXRange(t *testing.T) {
 						[]byte("key1"),
 						[]byte("value1"),
 						[]byte("key2"),
-						[]byte("value2"),
+						[]byte("0.01"),
 					},
 				},
 				[]interface{}{
@@ -170,25 +170,25 @@ func TestQueryXRange(t *testing.T) {
 
 		// Check field values for first entry
 		require.Equal(t, "value1", resp.Frames[0].Fields[2].At(0))
-		require.Equal(t, "value2", resp.Frames[0].Fields[3].At(0))
+		require.Equal(t, 0.01, resp.Frames[0].Fields[3].At(0))
 		require.Equal(t, "", resp.Frames[0].Fields[4].At(0))
 		require.Equal(t, 0.0, resp.Frames[0].Fields[5].At(0))
 
 		// Check field values for second entry
 		require.Equal(t, "value11", resp.Frames[0].Fields[2].At(1))
-		require.Equal(t, "", resp.Frames[0].Fields[3].At(1))
+		require.Equal(t, 0.0, resp.Frames[0].Fields[3].At(1))
 		require.Equal(t, "value3", resp.Frames[0].Fields[4].At(1))
 		require.Equal(t, 0.0, resp.Frames[0].Fields[5].At(1))
 
 		// Check field values for third entry
 		require.Equal(t, "", resp.Frames[0].Fields[2].At(2))
-		require.Equal(t, "value22", resp.Frames[0].Fields[3].At(2))
+		require.Equal(t, 0.0, resp.Frames[0].Fields[3].At(2))
 		require.Equal(t, "value33", resp.Frames[0].Fields[4].At(2))
 		require.Equal(t, 0.0, resp.Frames[0].Fields[5].At(2))
 
 		// Check field values for last entry
 		require.Equal(t, "", resp.Frames[0].Fields[2].At(3))
-		require.Equal(t, "", resp.Frames[0].Fields[3].At(3))
+		require.Equal(t, 0.0, resp.Frames[0].Fields[3].At(3))
 		require.Equal(t, "", resp.Frames[0].Fields[4].At(3))
 		require.Equal(t, 3.14, resp.Frames[0].Fields[5].At(3))
 	})
