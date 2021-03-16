@@ -193,7 +193,7 @@ func createFrameFromRangeResponse(command string, result []interface{}) *data.Fr
 	idField := data.NewField("$streamId", nil, []string{})
 
 	// Create time field based o entry id
-	timeField := data.NewField("time", nil, []time.Time{})
+	timeField := data.NewField("$time", nil, []time.Time{})
 
 	// Add id field to the response
 	frame.Fields = append(frame.Fields, idField, timeField)
@@ -226,12 +226,22 @@ func createFrameFromRangeResponse(command string, result []interface{}) *data.Fr
 		keyValuePairs := entry.([]interface{})[1].([]interface{})
 		for i := 0; i < len(keyValuePairs); i += 2 {
 			key := string(keyValuePairs[i].([]byte))
+
+			// Value
 			value := string(keyValuePairs[i+1].([]byte))
+			floatValue, err := strconv.ParseFloat(value, 64)
 
 			// Check if field has been already created before
 			if _, ok := fields[key]; !ok {
+				var newField *data.Field
+
 				// Create new field
-				newField := data.NewField(key, nil, []string{})
+				if err == nil {
+					newField = data.NewField(key, nil, []float64{})
+				} else {
+					newField = data.NewField(key, nil, []string{})
+				}
+
 				fields[key] = newField
 
 				// Append field to frame
@@ -242,12 +252,21 @@ func createFrameFromRangeResponse(command string, result []interface{}) *data.Fr
 
 				// Generate empty values for all previous rows
 				for j := 0; j < rowsCount; j++ {
+					if err == nil {
+						newField.Append(0.0)
+						continue
+					}
 					newField.Append("")
 				}
 			}
 
 			// Insert value for current row
-			fields[key].Append(value)
+			if fields[key].Type() == data.FieldTypeFloat64 {
+				fields[key].Append(floatValue)
+			} else {
+				fields[key].Append(value)
+			}
+
 			keysFoundInCurrentEntry[key] = true
 		}
 
@@ -256,6 +275,11 @@ func createFrameFromRangeResponse(command string, result []interface{}) *data.Fr
 			// Check if key exist in entry
 			if _, ok := keysFoundInCurrentEntry[key]; !ok {
 				// If key is missed in entry insert empty value
+				if field.Type() == data.FieldTypeFloat64 {
+					field.Append(0.0)
+					continue
+				}
+
 				field.Append("")
 			}
 		}
