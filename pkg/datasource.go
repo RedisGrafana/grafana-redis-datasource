@@ -194,6 +194,9 @@ func createRedisClientConfig(setting backend.DataSourceInstanceSettings) (redisC
 		if secureData["tlsClientCert"] != "" {
 			configuration.TLSClientCert = secureData["tlsClientCert"]
 		}
+		if secureData["tlsClientKey"] != "" {
+			configuration.TLSClientKey = secureData["tlsClientKey"]
+		}
 	}
 
 	return configuration, nil

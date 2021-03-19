@@ -18,6 +18,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.10 // indirect
 	github.com/mediocregopher/radix/v3 v3.7.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/oklog/run v1.1.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/prometheus/common v0.18.0 // indirect
