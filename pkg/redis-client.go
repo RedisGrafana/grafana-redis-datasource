@@ -27,6 +27,7 @@ type redisClientConfiguration struct {
 	Password       string
 	TLSCACert      string
 	TLSClientCert  string
+	TLSClientKey   string
 	SentinelName   string
 }
 
@@ -122,8 +123,8 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 			}
 
 			// Certificate and Key
-			if configuration.TLSClientCert != "" {
-				cert, err := tls.X509KeyPair([]byte(configuration.TLSClientCert), []byte(configuration.TLSClientCert))
+			if configuration.TLSClientCert != "" && configuration.TLSClientKey != "" {
+				cert, err := tls.X509KeyPair([]byte(configuration.TLSClientCert), []byte(configuration.TLSClientKey))
 				if err == nil {
 					tlsConfig.Certificates = []tls.Certificate{cert}
 				} else {
