@@ -75,7 +75,7 @@ func TestCreateRedisClientConfig(t *testing.T) {
 				Password:       "1234",
 				TLSCACert:      "BEGIN CERTIFICATE",
 				TLSClientCert:  "BEGIN CERTIFICATE",
-				TLSClientKey: 	"BEGIN RSA PRIVATE KEY",
+				TLSClientKey:   "BEGIN RSA PRIVATE KEY",
 			},
 			"",
 		},
