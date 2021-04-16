@@ -120,6 +120,11 @@ export const Commands = {
       description: 'Returns memory usage statistics from the Python interpreter',
       value: 'rg.pystats',
     },
+    {
+      label: 'RG.PYDUMPREQS',
+      description: 'Returns a list of all the python requirements available',
+      value: 'rg.pydumpreqs',
+    },
   ],
   [QueryTypeValue.GRAPH]: [
     {

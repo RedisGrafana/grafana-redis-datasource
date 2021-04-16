@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
@@ -42,6 +43,18 @@ type registrationData struct {
 	LastError    string                 `redis:"lastError"`
 	Args         map[string]interface{} `redis:"args"`
 	Status       string                 `redis:"status"`
+}
+
+/**
+ * RG.PYDUMPREQS Radix marshaling
+ */
+type pydumpreq struct {
+	GearReqVersion int64    `redis:"GearReqVersion"`
+	Name           string   `redis:"Name"`
+	IsDownloaded   string   `redis:"IsDownloaded"`
+	IsInstalled    string   `redis:"IsInstalled"`
+	CompiledOs     string   `redis:"CompiledOs"`
+	Wheels         []string `redis:"Wheels"`
 }
 
 /**
@@ -202,4 +215,44 @@ func queryRgPyexecute(qm queryModel, client redisClient) backend.DataResponse {
 		log.DefaultLogger.Error("Unexpected type received", "value", value, "type", reflect.TypeOf(value).String())
 		return response
 	}
+}
+
+/**
+ * RG.PYDUMPREQS
+ *
+ * Returns a list of all the python requirements available (with information about each requirement).
+ * @see https://oss.redislabs.com/redisgears/commands.html#rgpydumpreqs
+ */
+func queryRgPydumpReqs(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Using radix marshaling of key-value arrays to structs
+	var reqs []pydumpreq
+
+	// Run command
+	err := client.RunCmd(&reqs, "RG.PYDUMPREQS")
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// New Frame
+	frame := data.NewFrame(qm.Command)
+	response.Frames = append(response.Frames, frame)
+
+	// New Fields
+	frame.Fields = append(frame.Fields, data.NewField("GearReqVersion", nil, []int64{}))
+	frame.Fields = append(frame.Fields, data.NewField("Name", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("IsDownloaded", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("IsInstalled", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("CompiledOs", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("Wheels", nil, []string{}))
+
+	// Requirements
+	for _, req := range reqs {
+		frame.AppendRow(req.GearReqVersion, req.Name, req.IsDownloaded, req.IsInstalled, req.CompiledOs, strings.Join(req.Wheels, ", "))
+	}
+
+	return response
 }

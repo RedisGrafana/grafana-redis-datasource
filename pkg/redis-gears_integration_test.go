@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/mediocregopher/radix/v3"
 	"github.com/stretchr/testify/require"
@@ -61,8 +62,14 @@ func TestRgDumpregistrationsIntegration(t *testing.T) {
  * RG.PYEXECUTE
  */
 func TestRgPyexecuteIntegration(t *testing.T) {
-	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	// Increase timeout to 30 seconds for requirements
+	customConnFunc := func(network, addr string) (radix.Conn, error) {
+		return radix.Dial(network, addr,
+			radix.DialTimeout(30*time.Second),
+		)
+	}
+
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10, radix.PoolConnFunc(customConnFunc))
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Results
@@ -112,4 +119,27 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 		require.Len(t, resp.Frames, 0)
 		require.Error(t, resp.Error)
 	})
+}
+
+/**
+ * RG.DUMPREQS
+ */
+func TestRgDumpReqsIntegration(t *testing.T) {
+	// Client
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	client := radixV3Impl{radixClient: radixClient}
+
+	// Response
+	resp := queryRgPydumpReqs(queryModel{Command: "rg.pydumpreqs"}, &client)
+
+	require.Len(t, resp.Frames[0].Fields, 6)
+	require.Equal(t, "GearReqVersion", resp.Frames[0].Fields[0].Name)
+	require.Equal(t, "Name", resp.Frames[0].Fields[1].Name)
+	require.Equal(t, "IsDownloaded", resp.Frames[0].Fields[2].Name)
+	require.Equal(t, "IsInstalled", resp.Frames[0].Fields[3].Name)
+	require.Equal(t, "CompiledOs", resp.Frames[0].Fields[4].Name)
+	require.Equal(t, "Wheels", resp.Frames[0].Fields[5].Name)
+	for i := 0; i < len(resp.Frames[0].Fields); i++ {
+		require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
+	}
 }

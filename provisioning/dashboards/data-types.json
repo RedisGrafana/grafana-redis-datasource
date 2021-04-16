@@ -36,7 +36,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -70,7 +69,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "info",
@@ -164,7 +163,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "tmscan",
@@ -190,11 +189,6 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          },
           "unit": "decbytes"
         },
         "overrides": []
@@ -225,7 +219,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -344,7 +338,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -382,7 +375,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "info",
@@ -427,7 +420,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "decimals": 3,
           "mappings": [],
           "thresholds": {
@@ -462,7 +454,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "get",
@@ -485,7 +477,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "decimals": 3,
           "mappings": [],
           "thresholds": {
@@ -524,7 +515,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "get",
@@ -546,7 +537,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -580,7 +570,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "type",
@@ -602,7 +592,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -640,7 +629,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "llen",
@@ -663,7 +652,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -701,7 +689,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "ttl",
@@ -723,7 +711,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -761,7 +748,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "scard",
@@ -783,7 +770,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -821,7 +807,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "xlen",
@@ -843,7 +829,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -881,7 +866,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "xlen",
@@ -904,7 +889,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -942,7 +926,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "hget",
@@ -966,7 +950,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "decimals": 2,
           "mappings": [],
           "thresholds": {
@@ -1005,7 +988,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "hget",
@@ -1029,7 +1012,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "decimals": 0,
           "mappings": [],
           "thresholds": {
@@ -1068,7 +1050,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "hlen",
@@ -1092,7 +1074,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "decimals": 0,
           "mappings": [],
           "thresholds": {
@@ -1127,7 +1108,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "hgetall",
@@ -1151,7 +1132,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "decimals": 0,
           "mappings": [],
           "thresholds": {
@@ -1186,7 +1166,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "hmget",
@@ -1210,13 +1190,7 @@
       "datasource": null,
       "description": "",
       "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1245,7 +1219,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1341,7 +1315,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "hkeys",
@@ -1366,13 +1340,7 @@
       "datasource": null,
       "description": "",
       "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1401,7 +1369,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1499,7 +1467,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "smembers",
@@ -1566,7 +1534,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "xinfoStream",
@@ -1589,13 +1557,7 @@
       "dashes": false,
       "datasource": null,
       "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -1624,7 +1586,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1743,7 +1705,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "xrange",
@@ -1798,7 +1760,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "xrange",
@@ -1868,7 +1830,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "ft.info",
@@ -1943,11 +1905,6 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          },
           "unit": "short"
         },
         "overrides": []
@@ -1979,7 +1936,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2106,11 +2063,6 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          },
           "unit": "decbytes"
         },
         "overrides": []
@@ -2142,7 +2094,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2282,7 +2234,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -2317,7 +2268,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "rg.pystats",
@@ -2340,11 +2291,6 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          },
           "unit": "decbytes"
         },
         "overrides": []
@@ -2378,7 +2324,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2600,7 +2546,7 @@
         ]
       },
       "gridPos": {
-        "h": 9,
+        "h": 5,
         "w": 16,
         "x": 8,
         "y": 50
@@ -2610,7 +2556,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "rg.dumpregistrations",
@@ -2629,6 +2575,268 @@
           "id": "organize",
           "options": {
             "excludeByName": {
+              "PD": true,
+              "desc": true,
+              "id": true
+            },
+            "indexByName": {
+              "PD": 4,
+              "args": 1,
+              "desc": 3,
+              "id": 2,
+              "lastError": 10,
+              "mode": 5,
+              "numAborted": 9,
+              "numFailures": 8,
+              "numSuccess": 7,
+              "numTriggered": 6,
+              "reader": 0,
+              "status": 11
+            },
+            "renameByName": {
+              "args": "Args",
+              "lastError": "Last Error",
+              "mode": "Mode",
+              "numAborted": "Aborted",
+              "numFailures": "Failures",
+              "numSuccess": "Success",
+              "numTriggered": "Triggered",
+              "reader": "Reader",
+              "status": "Status"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 176
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PD"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 242
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Triggered"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Mode"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 92
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Success"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 88
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Failures"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 84
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Aborted"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 89
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last Error"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 99
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 94
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reader"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 154
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IsInstalled"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 102
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "IsDownloaded"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 119
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 155
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CompiledOs"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 167
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 16,
+        "x": 8,
+        "y": 55
+      },
+      "id": 74,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "7.5.3",
+      "targets": [
+        {
+          "command": "rg.pydumpreqs",
+          "query": "",
+          "refId": "A",
+          "streaming": true,
+          "streamingDataType": "DataFrame",
+          "type": "gears"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Requirements",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "GearReqVersion": true,
               "PD": true,
               "desc": true,
               "id": true
@@ -2729,7 +2937,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "ts.info",
@@ -2773,13 +2981,7 @@
       "dashes": false,
       "datasource": null,
       "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -2808,7 +3010,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2911,7 +3113,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -2949,7 +3150,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "ts.get",
@@ -2976,7 +3177,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -3006,7 +3206,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "",
@@ -3029,13 +3229,7 @@
       "dashes": false,
       "datasource": null,
       "fieldConfig": {
-        "defaults": {
-          "custom": {},
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
-        },
+        "defaults": {},
         "overrides": []
       },
       "fill": 1,
@@ -3064,7 +3258,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -3136,7 +3330,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -3174,7 +3367,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.0-11266pre",
+      "pluginVersion": "7.5.3",
       "targets": [
         {
           "command": "ts.mrange",
@@ -3210,5 +3403,5 @@
   "timezone": "",
   "title": "Redis Data Types",
   "uid": "2TKvUH-Gk",
-  "version": 3
+  "version": 2
 }
