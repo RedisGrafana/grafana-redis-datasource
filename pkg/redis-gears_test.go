@@ -301,7 +301,7 @@ func TestRgPyDumpReqs(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryRgPystats(queryModel{Command: "rg.pydumpreqs"}, &client)
+		resp := queryRgPydumpReqs(queryModel{Command: "rg.pydumpreqs"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
