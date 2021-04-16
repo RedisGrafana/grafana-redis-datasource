@@ -123,6 +123,8 @@ func assignReceiver(to interface{}, from interface{}) {
 		*(to.(*xinfo)) = from.(xinfo)
 	case *[]dumpregistrations:
 		*(to.(*[]dumpregistrations)) = from.([]dumpregistrations)
+	case *[]pydumpreq:
+		*(to.(*[]pydumpreq)) = from.([]pydumpreq)
 	case interface{}:
 		switch from.(type) {
 		case int:
