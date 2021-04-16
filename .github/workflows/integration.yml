@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request
 
-  workflow_dispatch
+  workflow_dispatch:
   
 jobs:
   build:
