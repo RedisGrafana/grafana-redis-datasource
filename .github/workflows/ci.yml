@@ -73,6 +73,12 @@ jobs:
           version: latest
           args: buildAll
 
+      - name: Run integration tests
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: integration
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:

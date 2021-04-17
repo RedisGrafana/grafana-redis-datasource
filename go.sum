@@ -16,8 +16,8 @@ github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRF
 github.com/alecthomas/units v0.0.0-20190717042225-c3de453c63f4/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/alecthomas/units v0.0.0-20190924025748-f65c72e2690d/go.mod h1:rBZYJk541a8SKzHPHnH3zbiI+7dagKZ0cgpgrD7Fyho=
 github.com/apache/arrow/go/arrow v0.0.0-20210223225224-5bea62493d91/go.mod h1:c9sxoIT3YgLxH4UhLOCKaBlEojuMhVYpk4Ntv3opUTQ=
-github.com/apache/arrow/go/arrow v0.0.0-20210417142526-fdd6ab11a71d h1:tnyNG74Ff4N6Ta6BD1GPNf0W0DPt1nDfPzmeMWUO9eU=
-github.com/apache/arrow/go/arrow v0.0.0-20210417142526-fdd6ab11a71d/go.mod h1:xenUfLXrUOOOhfxdCv8YxTQS0nwZyGeSbyyHoTrA3Pc=
+github.com/apache/arrow/go/arrow v0.0.0-20210417201503-ade457f92228 h1:Fq+c3a8ZDQi/8ljnVdyL2k//abZuEMvU+R/QeDnpe/s=
+github.com/apache/arrow/go/arrow v0.0.0-20210417201503-ade457f92228/go.mod h1:xenUfLXrUOOOhfxdCv8YxTQS0nwZyGeSbyyHoTrA3Pc=
 github.com/apache/thrift v0.12.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
 github.com/apache/thrift v0.13.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=

@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	bitbucket.org/creachadair/shell v0.0.6
-	github.com/apache/arrow/go/arrow v0.0.0-20210417142526-fdd6ab11a71d // indirect
+	github.com/apache/arrow/go/arrow v0.0.0-20210417201503-ade457f92228 // indirect
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/google/flatbuffers v1.12.0 // indirect
 	github.com/grafana/grafana-plugin-sdk-go v0.92.0
