@@ -25,7 +25,6 @@ services:
       # - GF_LOG_LEVEL=debug
     volumes:
       - ../dist:/var/lib/grafana/plugins/redis-datasource
-      - ../provisioning/datasources:/etc/grafana/provisioning/datasources
-      - ../provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ../provisioning:/etc/grafana/provisioning
       # Uncomment to preserve Grafana configuration
       # - ./data:/var/lib/grafana
