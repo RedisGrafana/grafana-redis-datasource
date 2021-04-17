@@ -18,5 +18,4 @@ data
 dist
 img
 .idea
-redis
 vendor

@@ -29,7 +29,11 @@ export const Commands = {
     { label: 'HGETALL', description: 'Returns all fields and values of the hash stored at key', value: 'hgetall' },
     { label: 'HKEYS', description: 'Returns all field names in the hash stored at key', value: 'hkeys' },
     { label: 'HLEN', description: 'Returns the number of fields contained in the hash stored at key', value: 'hlen' },
-    { label: 'HMGET', description: 'Returns the values associated with the specified fields in the hash stored at key', value: 'hmget' },
+    {
+      label: 'HMGET',
+      description: 'Returns the values associated with the specified fields in the hash stored at key',
+      value: 'hmget',
+    },
     { label: 'INFO', description: 'Returns information and statistics about the server', value: 'info' },
     { label: 'LLEN', description: 'Returns the length of the list stored at key', value: 'llen' },
     {
@@ -57,7 +61,7 @@ export const Commands = {
       label: 'TYPE',
       description: 'Returns the string representation of the type of the value stored at key',
       value: 'type',
-    },    
+    },
     {
       label: 'XINFO STREAM',
       description: 'Returns general information about the stream stored at the specified key',
@@ -136,8 +140,8 @@ export const Commands = {
       label: 'GRAPH.SLOWLOG',
       description: 'Returns a list containing up to 10 of the slowest queries issued against the given graph ID.',
       value: 'graph.slowlog',
-    }
-  ]
+    },
+  ],
 };
 
 /**
@@ -145,7 +149,7 @@ export const Commands = {
  */
 export const CommandParameters = {
   aggregation: ['ts.range', 'ts.mrange'],
-  field: ['hget','hmget'],
+  field: ['hget', 'hmget'],
   filter: ['ts.mrange', 'ts.queryindex'],
   keyName: [
     'get',
@@ -168,7 +172,7 @@ export const CommandParameters = {
     'xrange',
     'xrevrange',
     'graph.query',
-    'graph.slowlog'
+    'graph.slowlog',
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],
@@ -183,5 +187,5 @@ export const CommandParameters = {
   samples: ['tmscan'],
   start: ['xrange', 'xrevrange'],
   end: ['xrange', 'xrevrange'],
-  cypher: ['graph.query']
+  cypher: ['graph.query'],
 };

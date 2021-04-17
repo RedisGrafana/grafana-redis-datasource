@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import { CircularDataFrame, DataFrame, DataQueryResponse, FieldType } from '@grafana/data';
-import { DefaultStreamingCapacity } from '../constants';
-import { RedisQuery } from '../redis';
+import { DefaultStreamingCapacity } from '../../constants';
+import { RedisQuery } from '../../redis';
 
 /**
  * Time Series Formatter
