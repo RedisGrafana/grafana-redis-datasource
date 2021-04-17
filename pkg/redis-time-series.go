@@ -92,7 +92,7 @@ func queryTsMRange(from int64, to int64, qm queryModel, client redisClient) back
 
 	// Check if filter is valid
 	if !ok {
-		response.Error = fmt.Errorf("Filter is not valid")
+		response.Error = fmt.Errorf("filter is not valid")
 		return response
 	}
 
@@ -316,7 +316,7 @@ func queryTsQueryIndex(qm queryModel, client redisClient) backend.DataResponse {
 
 	// Check if filter is valid
 	if !ok {
-		response.Error = fmt.Errorf("Filter is not valid")
+		response.Error = fmt.Errorf("filter is not valid")
 		return response
 	}
 

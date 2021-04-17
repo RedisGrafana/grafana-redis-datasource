@@ -39,7 +39,7 @@ func TestExecuteCustomQuery(t *testing.T) {
 			"should handle error if invalid command string",
 			queryModel{Query: "lastsave \""},
 			nil,
-			errors.New("Query is not valid"),
+			errors.New("query is not valid"),
 		},
 		{
 			"should handle error",
@@ -114,7 +114,7 @@ func TestParseInterfaceValue(t *testing.T) {
 
 		expected := []string{"str", "str2", "42"}
 		result, response := parseInterfaceValue(input, inputResponse)
-		require.EqualError(t, response.Error, "Unsupported array return type", "Should return error")
+		require.EqualError(t, response.Error, "unsupported array return type", "Should return error")
 		require.Equal(t, expected, result, "Should contain results before unsupported parameter")
 	})
 
@@ -301,7 +301,7 @@ func TestQueryCustomCommand(t *testing.T) {
 			1,
 			nil,
 			nil,
-			"Wrong command",
+			"wrong command",
 		},
 		{
 			"should return error on int32 value (unsupported)",
@@ -311,7 +311,7 @@ func TestQueryCustomCommand(t *testing.T) {
 			1,
 			nil,
 			nil,
-			"Unsupported return type",
+			"unsupported return type",
 		},
 		{
 			"should fail with empty command",
@@ -321,7 +321,7 @@ func TestQueryCustomCommand(t *testing.T) {
 			0,
 			nil,
 			nil,
-			"Command is empty",
+			"command is empty",
 		},
 		{
 			"should handle error",

@@ -142,7 +142,7 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient) bac
 	 */
 	default:
 		response := backend.DataResponse{}
-		log.DefaultLogger.Error("Query", "Command", qm.Command)
+		log.DefaultLogger.Debug("Query", "Command", qm.Command)
 		return response
 	}
 }

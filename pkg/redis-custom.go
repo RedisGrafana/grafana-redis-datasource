@@ -29,7 +29,7 @@ func executeCustomQuery(qm queryModel, client redisClient) (interface{}, error) 
 
 	// Check if query is valid
 	if !ok {
-		err = fmt.Errorf("Query is not valid")
+		err = fmt.Errorf("query is not valid")
 		return result, err
 	}
 
@@ -81,7 +81,7 @@ func parseInterfaceValue(value []interface{}, response backend.DataResponse) ([]
 
 			values = append(values, parsedValues...)
 		default:
-			response.Error = fmt.Errorf("Unsupported array return type")
+			response.Error = fmt.Errorf("unsupported array return type")
 			return values, response
 		}
 	}
@@ -97,7 +97,7 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 
 	// Query is empty
 	if qm.Query == "" {
-		response.Error = fmt.Errorf("Command is empty")
+		response.Error = fmt.Errorf("command is empty")
 		return response
 	}
 
@@ -187,9 +187,9 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 				data.NewFrame(qm.Key,
 					data.NewField("Value", nil, values)))
 		case nil:
-			response.Error = fmt.Errorf("Wrong command")
+			response.Error = fmt.Errorf("wrong command")
 		default:
-			response.Error = fmt.Errorf("Unsupported return type")
+			response.Error = fmt.Errorf("unsupported return type")
 		}
 	}
 	// Return Response
