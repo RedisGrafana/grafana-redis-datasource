@@ -82,7 +82,7 @@ func queryHMGet(qm queryModel, client redisClient) backend.DataResponse {
 
 	// Check if filter is valid
 	if !ok {
-		response.Error = fmt.Errorf("Field is not valid")
+		response.Error = fmt.Errorf("field is not valid")
 		return response
 	}
 

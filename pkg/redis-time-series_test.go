@@ -370,7 +370,7 @@ func TestQueryTsMRange(t *testing.T) {
 			nil,
 			"",
 			"",
-			"Filter is not valid",
+			"filter is not valid",
 			nil,
 		},
 		{
@@ -582,7 +582,7 @@ func TestQueryTsQueryIndex(t *testing.T) {
 			0,
 			0,
 			nil,
-			errors.New("Filter is not valid"),
+			errors.New("filter is not valid"),
 		},
 		{
 			"should process receiver error",
