@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { FieldType, toDataFrame } from '@grafana/data';
-import { QueryTypeValue } from '../redis';
+import { QueryTypeValue } from '../../redis';
 import { TimeSeriesFormatter } from './time-series';
 
 /**

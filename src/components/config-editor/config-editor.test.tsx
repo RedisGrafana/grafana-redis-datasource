@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
+import React from 'react';
 import { DataSourceSettings } from '@grafana/data';
 import { RadioButtonGroup } from '@grafana/ui';
 import { ClientTypeValue } from '../../constants';
@@ -26,6 +26,7 @@ const getOptions = ({
   id: 1,
   orgId: 2,
   name: '',
+  typeName: '',
   typeLogoUrl: '',
   type: '',
   access: '',

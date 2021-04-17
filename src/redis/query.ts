@@ -1,6 +1,5 @@
 import { SelectableValue } from '@grafana/data';
 
-
 /**
  * Query Type Values
  */
