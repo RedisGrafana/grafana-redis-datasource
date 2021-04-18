@@ -3,7 +3,6 @@
 ![Dashboard](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/redis-dashboard.png)
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-orange)](https://www.grafana.com)
-[![Radix](https://img.shields.io/badge/Radix-powered-darkblue)](https://github.com/mediocregopher/radix)
 [![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-darkgreen)](https://redislabs.com/redis-enterprise/)
 [![Redis Data Source](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Data%20Source&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-datasource)](https://grafana.com/grafana/plugins/redis-datasource)
 [![Redis Application plug-in](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Application%20plug-in&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-app)](https://grafana.com/grafana/plugins/redis-app)
@@ -16,7 +15,6 @@
 - [**Introduction**](#introduction)
 - [**Getting Started**](#getting-started)
 - [**Supported commands**](#supported-commands)
-- [**Template variables**](#template-variables)
 - [**Learn more**](#learn-more)
 - [**Feedback**](#feedback)
 - [**Contributing**](#contributing)
@@ -24,46 +22,17 @@
 
 ## Introduction
 
-### What is the Redis Data Source for Grafana?
+The Redis Data Source for Grafana is a plug-in that allows users to connect to any Redis database On-Premises or in the Cloud. It provides an out-of-the-box predefined dashboards, but also lets you build customized dashboards to easily monitor Redis and application data.
 
-The Redis Data Source for Grafana is a plug-in that allows users to connect to the Redis database and build dashboards in Grafana to easily monitor Redis and application data. It provides an out-of-the-box predefined dashboard, but also lets you build customized dashboards tuned to your specific needs.
+### Requirements
 
-### What Grafana version is supported?
+Only **Grafana 7.1+** with a new Backend plug-in platform supports Redis plug-ins.
 
-Grafana 7.1 and later with a new plug-in platform supported.
+### Redis Application plug-in
 
-### Does this Data Source require anything special configured on the Redis databases?
-
-Data Source can connect to any Redis database. No special configuration is required.
-
-### Does this Data Source support [Redis Cluster](https://redis.io/topics/cluster-tutorial) and [Sentinel](https://redis.io/topics/sentinel)?
-
-Redis Cluster and Sentinel supported since version 1.2.
-
-### Does this Data Source support Redis modules?
-
-Data Source supports:
-
-- [RedisTimeSeries](https://oss.redislabs.com/redistimeseries/): TS.GET, TS.INFO, TS.MRANGE, TS.QUERYINDEX, TS.RANGE
-- [RedisGears](https://oss.redislabs.com/redisgears/): RG.DUMPREGISTRATIONS, RG.PYEXECUTE, RG.PYSTATS
-- [RedisSearch](https://oss.redislabs.com/redisearch/): FT.INFO
-- [RedisGraph](https://oss.redislabs.com/redisgraph/): GRAPH.QUERY, GRAPH.SLOWLOG
-
-### How to connect to Redis logical database
-
-Please use `/db-number` or `?db=db-number` in the Data Source URL to specify the database number as defined in the [Schema](https://www.iana.org/assignments/uri-schemes/prov/redis).
-
-```
-redis://redis-server:6379/0
-```
-
-### How to build Data Source
-
-To learn how to build Redis Data Source from scratch and register in new or existing Grafana please take a look at [BUILD](https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/BUILD.md) instructions.
+You can add as many data sources as you want to support multiple Redis databases. [Redis Application plug-in](https://grafana.com/grafana/plugins/redis-app) helps to manage multiple Redis Data Sources and provides Custom panels.
 
 ## Getting Started
-
-### Install using `grafana-cli`
 
 Use the `grafana-cli` tool to install from the commandline:
 
@@ -71,77 +40,25 @@ Use the `grafana-cli` tool to install from the commandline:
 grafana-cli plugins install redis-datasource
 ```
 
-### Run using `docker`
+For Docker instructions and installation without Internet access follow [Quickstart](https://redisgrafana.github.io/quickstart/) page.
 
-```bash
-docker run -d -p 3000:3000 --name=grafana -e "GF_INSTALL_PLUGINS=redis-datasource" grafana/grafana
-```
+### Configuration
 
-### Run using `docker-compose`
-
-Project provides `docker-compose.yml` to start Redis with all Redis Labs modules and Grafana.
-
-```bash
-docker-compose up
-```
-
-Open Grafana in your browser and configure Redis Data Source. You can add as many data sources as you want to support multiple Redis databases.
+Data Source allows to connect to Redis using TCP port, Unix socket, Cluster, Sentinel and supports SSL/TLS authentication. For detailed information take a look at [Configuration](https://redisgrafana.github.io/redis-datasource/configuration/) page.
 
 ![Datasource](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/datasource.png)
 
-There are certain settings that can be configured based on your own setup:
+### Development
 
-- Grafana port
-- Data Source URL
+[Developing Redis Data Source](https://redisgrafana.github.io/development/redis-datasource/) page provides instructions on how to build data source.
 
-#### Configure Grafana port in `docker-compose.yml`
-
-If standard port 3000 is occupied by another application update the port to bind Grafana to
-
-```
-    ports:
-      - '3000:3000'
-```
-
-#### Configure Data Source URL in `provisioning/datasources/redis.yaml`
-
-If Redis is running and listening on localhost:6379 no changes are required
-
-```
-    url: redis://localhost:6379
-```
-
-If Redis is running as Docker container on MacOS, please update host to `host.docker.internal`
-
-```
-    url: redis://host.docker.internal:6379
-```
-
-If Redis is running as Docker container on Linux, please update host to `redis`
-
-```
-    url: redis://redis:6379
-```
-
-### Run using `docker-compose` for development
-
-Data Source have to be built following [BUILD](https://github.com/RedisGrafana/grafana-redis-datasource/blob/master/BUILD.md) instructions before starting using `docker-compose/dev.yml` file.
-
-```bash
-docker-compose -f docker-compose/dev.yml up
-```
+Interested in the latest features and updates? Start nightly built [Docker image for Redis Application plug-in](https://redisgrafana.github.io/development/images/), which includes Redis Data Source.
 
 ## Supported commands
 
-Data Source supports various Redis commands using custom components and provides a unified interface to query any command.
+List of all supported commands and how to use them with examples you can find in the [Commands](https://redisgrafana.github.io/redis-datasource/commands/) section.
 
 ![Query](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/query.png)
-
-## Template variables
-
-Template variables can query any command and use other variables as parameters.
-
-![Variables](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/variables.png)
 
 ## Learn more
 
