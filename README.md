@@ -15,7 +15,6 @@
 - [**Introduction**](#introduction)
 - [**Getting Started**](#getting-started)
 - [**Supported commands**](#supported-commands)
-- [**Redis Application plug-in**](#redis-application-plug-in)
 - [**Learn more**](#learn-more)
 - [**Feedback**](#feedback)
 - [**Contributing**](#contributing)
@@ -28,6 +27,10 @@ The Redis Data Source for Grafana is a plug-in that allows users to connect to a
 ### Requirements
 
 Only **Grafana 7.1+** with a new Backend plug-in platform supports Redis plug-ins.
+
+### Redis Application plug-in
+
+You can add as many data sources as you want to support multiple Redis databases. [Redis Application plug-in](https://grafana.com/grafana/plugins/redis-app) helps to manage multiple Redis Data Sources and provides Custom panels.
 
 ## Getting Started
 
@@ -56,10 +59,6 @@ Interested in the latest features and updates? Start nightly built [Docker image
 List of all supported commands and how to use them with examples you can find in the [Commands](https://redisgrafana.github.io/redis-datasource/commands/) section.
 
 ![Query](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/query.png)
-
-## Redis Application plug-in
-
-You can add as many data sources as you want to support multiple Redis databases. [Redis Application plug-in](https://grafana.com/grafana/plugins/redis-app) helps to manage multiple Redis Data Sources and provides Custom panels.
 
 ## Learn more
 
