@@ -1,10 +1,21 @@
 # Change Log
 
-## 1.4.0 (IN PROGRESS)
+## 1.4.0 (2021-05-08)
 
 ### Features / Enhancements
 
-- Update Grafana dependencies to 7.5.4
+- Update Grafana SDK 0.88 and other backend dependencies (#170)
+- Add $time field for Streams XRANGE (#175)
+- Add RG.PYDUMPREQS command and integration test fix (#183)
+- Add Integration tests to CI (#184)
+- Upgrade Grafana dependencies to 7.5.4 (#185)
+- Update Dashboard to 7.5.4 and add data source variable (#186)
+- Update backend dependencies and linting issues (#187)
+- Update Documentation (#188)
+
+### Bug fixes
+
+- Tls client certificates not working (#177)
 
 ## 1.3.1 (2021-02-04)
 
