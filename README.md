@@ -3,9 +3,9 @@
 ![Dashboard](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/redis-dashboard.png)
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-orange)](https://www.grafana.com)
-[![Redis Enterprise](https://img.shields.io/badge/Redis%20Enterprise-supported-darkgreen)](https://redislabs.com/redis-enterprise/)
 [![Redis Data Source](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Data%20Source&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-datasource)](https://grafana.com/grafana/plugins/redis-datasource)
 [![Redis Application plug-in](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Application%20plug-in&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-app)](https://grafana.com/grafana/plugins/redis-app)
+[![Redis Explorer plug-in](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Explorer%20plug-in&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-explorer-app)](https://grafana.com/grafana/plugins/redis-explorer-app)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RedisGrafana/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisGrafana/grafana-redis-datasource)
 ![CI](https://github.com/RedisGrafana/grafana-redis-datasource/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/RedisGrafana/grafana-redis-datasource/branch/master/graph/badge.svg?token=YX7995RPCF)](https://codecov.io/gh/RedisGrafana/grafana-redis-datasource)
@@ -32,6 +32,10 @@ Only **Grafana 7.1+** with a new Backend plug-in platform supports Redis plug-in
 ### Redis Application plug-in
 
 You can add as many data sources as you want to support multiple Redis databases. [Redis Application plug-in](https://grafana.com/grafana/plugins/redis-app) helps manage various Redis Data Sources and provides Custom panels.
+
+### Redis Explorer plug-in
+
+[The Redis Explorer plug-in](https://grafana.com/grafana/plugins/redis-explorer-app) connects to Redis Enterprise software clusters using REST API. It provides application pages to add Redis Data Sources for managed databases and dashboards to see cluster configuration.
 
 ## Getting Started
 
