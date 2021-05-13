@@ -63,7 +63,7 @@ func queryHGet(qm queryModel, client redisClient) backend.DataResponse {
 	}
 
 	// Add the frames to the response
-	response.Frames = append(response.Frames, createFrameValue(qm.Field, value))
+	response.Frames = append(response.Frames, createFrameValue(qm.Field, value, qm.Field))
 
 	// Return
 	return response

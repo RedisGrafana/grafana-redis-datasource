@@ -23,7 +23,7 @@ func TestCreateFrameValue(t *testing.T) {
 		tt := tt
 		t.Run(tt.value, func(t *testing.T) {
 			t.Parallel()
-			frame := createFrameValue("keyName", tt.value)
+			frame := createFrameValue("keyName", tt.value, "Value")
 			field := frame.Fields[0].At(0)
 			require.Equal(t, tt.expected, field, "Unexpected conversation")
 		})

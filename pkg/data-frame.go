@@ -13,14 +13,14 @@ import (
  * @param {string} key Key
  * @param {string} value Value
  */
-func createFrameValue(key string, value string) *data.Frame {
+func createFrameValue(key string, value string, field string) *data.Frame {
 	frame := data.NewFrame(key)
 
 	// Parse Float
 	if floatValue, err := strconv.ParseFloat(value, 64); err == nil {
-		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []float64{floatValue}))
+		frame.Fields = append(frame.Fields, data.NewField(field, nil, []float64{floatValue}))
 	} else {
-		frame.Fields = append(frame.Fields, data.NewField("Value", nil, []string{value}))
+		frame.Fields = append(frame.Fields, data.NewField(field, nil, []string{value}))
 	}
 
 	// Return
