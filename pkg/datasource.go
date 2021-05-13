@@ -4,11 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
+	"bitbucket.org/creachadair/shell"
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/datasource"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
+	"github.com/grafana/grafana-plugin-sdk-go/data"
 )
 
 /**
@@ -26,6 +29,18 @@ func newDatasource() datasource.ServeOpts {
 		QueryDataHandler:   ds,
 		CheckHealthHandler: ds,
 	}
+}
+
+/**
+* Find element in the slice
+ */
+func Find(slice []string, val string) (int, bool) {
+	for i, item := range slice {
+		if item == val {
+			return i, true
+		}
+	}
+	return -1, false
 }
 
 /**
@@ -47,10 +62,67 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 
 	// Loop over queries and execute them individually
 	for _, q := range req.Queries {
-		res := query(ctx, q, client)
+		var qm queryModel
+
+		// Unmarshal the json into our queryModel
+		err := json.Unmarshal(q.JSON, &qm)
+		log.DefaultLogger.Debug("QueryData", "JSON", q.JSON)
+
+		// Error
+		if err != nil {
+			resp := backend.DataResponse{}
+			resp.Error = err
+			response.Responses[q.RefID] = resp
+			continue
+		}
+
+		resp := query(ctx, q, client, qm)
+
+		// Add Time for Streaming and filter fields
+		if qm.Streaming && qm.StreamingDataType != "DataFrame" {
+			for _, frame := range resp.Frames {
+				timeValues := []time.Time{}
+
+				len, _ := frame.RowLen()
+				if len > 0 {
+					for j := 0; j < len; j++ {
+						timeValues = append(timeValues, time.Now())
+					}
+				}
+
+				// Filter Fields for Alerting and traffic optimization
+				if qm.Field != "" {
+					// Split Field to array
+					fields, ok := shell.Split(qm.Field)
+
+					// Check if filter is valid
+					if !ok {
+						resp := backend.DataResponse{}
+						resp.Error = fmt.Errorf("field is not valid")
+						response.Responses[q.RefID] = resp
+						continue
+					}
+
+					filterFields := []*data.Field{}
+
+					// Filter fields
+					for _, field := range frame.Fields {
+						_, found := Find(fields, field.Name)
+
+						if !found {
+							continue
+						}
+						filterFields = append(filterFields, field)
+					}
+					frame.Fields = append([]*data.Field{data.NewField("#time", nil, timeValues)}, filterFields...)
+				} else {
+					frame.Fields = append([]*data.Field{data.NewField("#time", nil, timeValues)}, frame.Fields...)
+				}
+			}
+		}
 
 		// save the response in a hashmap based on with RefID as identifier
-		response.Responses[q.RefID] = res
+		response.Responses[q.RefID] = resp
 	}
 
 	return response, nil

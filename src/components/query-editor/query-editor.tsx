@@ -490,47 +490,65 @@ export class QueryEditor extends PureComponent<Props> {
         )}
 
         {refId === 'A' && (
-          <div className="gf-form">
-            <Switch
-              label="Streaming"
-              labelClass="width-8"
-              tooltip="If checked, the datasource will stream data. Only Ref A is supported."
-              checked={streaming || false}
-              onChange={this.onStreamingChange}
-            />
-            {streaming && (
-              <>
-                <FormField
-                  labelWidth={8}
-                  value={streamingInterval}
-                  type="number"
-                  onChange={this.onStreamingIntervalChange}
-                  label="Interval"
-                  tooltip="Streaming interval in milliseconds. Default is 1000ms."
-                  placeholder="1000"
-                />
-                <FormField
-                  labelWidth={8}
-                  value={streamingCapacity}
-                  type="number"
-                  onChange={this.onStreamingCapacityChange}
-                  label="Capacity"
-                  tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
-                  placeholder="1000"
-                />
-                <div className="gf-form">
-                  <InlineFormLabel width={8} tooltip="If checked Time series, the last line of data will be applied.">
-                    Data type
-                  </InlineFormLabel>
-                  <RadioButtonGroup
-                    options={StreamingDataTypes}
-                    value={streamingDataType || StreamingDataType.TimeSeries}
-                    onChange={this.onStreamingDataTypeChange}
+          <>
+            <div className="gf-form">
+              <Switch
+                label="Streaming"
+                labelClass="width-8"
+                tooltip="If checked, the datasource will stream data. Only Ref A is supported."
+                checked={streaming || false}
+                onChange={this.onStreamingChange}
+              />
+              {streaming && (
+                <>
+                  <FormField
+                    labelWidth={8}
+                    value={streamingInterval}
+                    type="number"
+                    onChange={this.onStreamingIntervalChange}
+                    label="Interval"
+                    tooltip="Streaming interval in milliseconds. Default is 1000ms."
+                    placeholder="1000"
                   />
-                </div>
-              </>
+                  <FormField
+                    labelWidth={8}
+                    value={streamingCapacity}
+                    type="number"
+                    onChange={this.onStreamingCapacityChange}
+                    label="Capacity"
+                    tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
+                    placeholder="1000"
+                  />
+                </>
+              )}
+            </div>
+
+            {streaming && (
+              <div className="gf-form">
+                <InlineFormLabel width={8} tooltip="If checked Time series, the last line of data will be applied.">
+                  Data type
+                </InlineFormLabel>
+                <RadioButtonGroup
+                  options={StreamingDataTypes}
+                  value={streamingDataType || StreamingDataType.TimeSeries}
+                  onChange={this.onStreamingDataTypeChange}
+                />
+                {streamingDataType !== StreamingDataType.DataFrame && (
+                  <FormField
+                    className={css`
+                      margin-left: 5px;
+                    `}
+                    labelWidth={8}
+                    inputWidth={30}
+                    value={field}
+                    tooltip="Specify field for Alerting and return from backend"
+                    onChange={this.onFieldChange}
+                    label="Filter Field"
+                  />
+                )}
+              </div>
             )}
-          </div>
+          </>
         )}
 
         <Button onClick={onRunQuery}>Run</Button>

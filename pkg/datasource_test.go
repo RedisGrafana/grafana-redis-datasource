@@ -228,6 +228,37 @@ func TestQueryDataWithError(t *testing.T) {
 }
 
 /**
+ * Query Data with Marshalling Error
+ */
+func TestQueryDataWithMarshallingError(t *testing.T) {
+	// Client
+	client := &testClient{rcv: "3.14", err: nil}
+	im := fakeInstanceManager{}
+	ds := redisDatasource{&im}
+
+	// Instance
+	is := instanceSettings{client}
+	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// Query
+	resp, _ := ds.QueryData(context.TODO(), &backend.QueryDataRequest{
+		PluginContext: backend.PluginContext{},
+		Headers:       nil,
+		Queries: []backend.DataQuery{
+			{
+				RefID:         "A",
+				QueryType:     "",
+				MaxDataPoints: 100,
+				Interval:      10,
+				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
+				JSON:          []byte{31, 17, 45},
+			},
+		},
+	})
+	require.EqualError(t, resp.Responses["A"].Error, "invalid character '\\x1f' looking for beginning of value", "Should return marshalling error")
+}
+
+/**
  * Check Health
  */
 func TestCheckHealth(t *testing.T) {

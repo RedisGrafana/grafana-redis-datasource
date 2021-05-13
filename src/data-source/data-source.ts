@@ -115,9 +115,11 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
       /**
        * Apply frame formatted by streamingDataType
        */
-      let frame: TimeSeriesFormatter | DataFrameFormatter = new TimeSeriesFormatter(refA);
+      let frame: TimeSeriesFormatter | DataFrameFormatter;
       if (streamingDataType === StreamingDataType.DataFrame) {
         frame = new DataFrameFormatter();
+      } else {
+        frame = new TimeSeriesFormatter(refA);
       }
 
       /**

@@ -7,31 +7,6 @@ import { TimeSeriesFormatter } from './time-series';
  * Time Series Formatter
  */
 describe('TimeSeriesFormatter', () => {
-  it('Should add time field', async () => {
-    const frame = new TimeSeriesFormatter({ refId: 'A', type: QueryTypeValue.REDIS, streamingCapacity: 10 });
-    const data = await frame.update(
-      new Observable((subscriber) => {
-        subscriber.next({
-          data: [
-            toDataFrame({
-              fields: [
-                {
-                  name: 'value',
-                  type: FieldType.string,
-                  values: ['hello'],
-                },
-              ],
-            }),
-          ],
-        });
-        subscriber.complete();
-      })
-    );
-    expect(data.fields[0].name === 'time');
-    expect(data.fields[1].name === 'value');
-    expect(data.fields[1].values.toArray() === ['hello']);
-  });
-
   it('Should keep previous values', async () => {
     const frame = new TimeSeriesFormatter({ refId: 'A', type: QueryTypeValue.REDIS });
     const data = await frame.update(
@@ -73,35 +48,7 @@ describe('TimeSeriesFormatter', () => {
       })
     );
     expect(data2.length).toEqual(2);
-    expect(data2.fields[1].values.toArray()).toEqual(['hello', 'world']);
-  });
-
-  it('Should filter time field if there is in response', async () => {
-    const frame = new TimeSeriesFormatter({ refId: 'A', type: QueryTypeValue.REDIS });
-    const data = await frame.update(
-      new Observable((subscriber) => {
-        subscriber.next({
-          data: [
-            toDataFrame({
-              fields: [
-                {
-                  name: 'time',
-                  type: FieldType.time,
-                  values: ['123'],
-                },
-                {
-                  name: 'value',
-                  type: FieldType.string,
-                  values: ['hello'],
-                },
-              ],
-            }),
-          ],
-        });
-        subscriber.complete();
-      })
-    );
-    expect(data.fields[0].values.toArray()).not.toEqual(['123']);
+    expect(data2.fields[0].values.toArray()).toEqual(['hello', 'world']);
   });
 
   it('If no fields, should work correctly', async () => {
@@ -163,7 +110,7 @@ describe('TimeSeriesFormatter', () => {
       })
     );
     expect(data.length).toEqual(1);
-    expect(data.fields.length).toEqual(2);
+    expect(data.fields.length).toEqual(1);
   });
 
   it('Should convert string to number if value can be converted', async () => {
@@ -186,8 +133,8 @@ describe('TimeSeriesFormatter', () => {
         subscriber.complete();
       })
     );
-    expect(data.fields[1].name === 'value');
-    expect(data.fields[1].type === FieldType.number);
-    expect(data.fields[1].values.toArray() === [123]);
+    expect(data.fields[0].name === 'value');
+    expect(data.fields[0].type === FieldType.number);
+    expect(data.fields[0].values.toArray() === [123]);
   });
 });

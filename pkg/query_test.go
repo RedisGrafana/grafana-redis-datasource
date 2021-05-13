@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -59,7 +58,6 @@ func TestQuery(t *testing.T) {
 
 			// Client
 			client := testClient{rcv: nil, err: nil}
-			var marshaled, _ = json.Marshal(tt.qm)
 
 			// Response
 			response := query(context.TODO(), backend.DataQuery{
@@ -68,8 +66,7 @@ func TestQuery(t *testing.T) {
 				MaxDataPoints: 100,
 				Interval:      10,
 				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
-				JSON:          marshaled,
-			}, &client)
+			}, &client, tt.qm)
 			require.NoError(t, response.Error, "Should not return error")
 		})
 	}
@@ -80,7 +77,7 @@ func TestQuery(t *testing.T) {
 
 		// Client
 		client := testClient{rcv: []interface{}{}, err: nil}
-		var marshaled, _ = json.Marshal(queryModel{Query: "Test"})
+		qm := queryModel{Query: "Test"}
 
 		// Response
 		response := query(context.TODO(), backend.DataQuery{
@@ -89,8 +86,7 @@ func TestQuery(t *testing.T) {
 			MaxDataPoints: 100,
 			Interval:      10,
 			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
-			JSON:          marshaled,
-		}, &client)
+		}, &client, qm)
 		require.NoError(t, response.Error, "Should not return error")
 	})
 }
@@ -101,32 +97,13 @@ func TestQuery(t *testing.T) {
 func TestQueryWithErrors(t *testing.T) {
 	t.Parallel()
 
-	t.Run("Marshalling failure", func(t *testing.T) {
-		t.Parallel()
-
-		// Client
-		client := testClient{rcv: nil, err: nil}
-
-		// Response
-		response := query(context.TODO(), backend.DataQuery{
-			RefID:         "",
-			QueryType:     "",
-			MaxDataPoints: 100,
-			Interval:      10,
-			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
-			JSON:          []byte{31, 17, 45},
-		}, &client)
-
-		require.EqualError(t, response.Error, "invalid character '\\x1f' looking for beginning of value", "Should return marshalling error")
-	})
-
 	// Unknown command
 	t.Run("Unknown command failure", func(t *testing.T) {
 		t.Parallel()
 
 		// Client
 		client := testClient{rcv: nil, err: nil}
-		var marshaled, _ = json.Marshal(queryModel{Command: "unknown"})
+		qm := queryModel{Command: "unknown"}
 
 		// Response
 		response := query(context.TODO(), backend.DataQuery{
@@ -135,8 +112,7 @@ func TestQueryWithErrors(t *testing.T) {
 			MaxDataPoints: 100,
 			Interval:      10,
 			TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
-			JSON:          marshaled,
-		}, &client)
+		}, &client, qm)
 
 		require.NoError(t, response.Error, "Should not return error")
 	})

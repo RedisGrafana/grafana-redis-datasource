@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
-import { CircularDataFrame, DataFrame, DataQueryResponse, FieldType } from '@grafana/data';
+import { CircularDataFrame, DataFrame, DataQueryResponse, Field, FieldType } from '@grafana/data';
 import { DefaultStreamingCapacity } from '../../constants';
 import { RedisQuery } from '../../redis';
 
@@ -16,22 +16,21 @@ export class TimeSeriesFormatter {
   /**
    * Constructor
    *
-   * @param refA
+   * @param ref
    */
-  constructor(refA: RedisQuery) {
+  constructor(ref: RedisQuery) {
     /**
      * This dataframe can have values constantly added, and will never exceed the given capacity
      */
     this.frame = new CircularDataFrame({
       append: 'tail',
-      capacity: refA?.streamingCapacity || DefaultStreamingCapacity,
+      capacity: ref?.streamingCapacity || DefaultStreamingCapacity,
     });
 
     /**
-     * Set refId and Time field
+     * Set refId
      */
-    this.frame.refId = refA?.refId;
-    this.frame.addField({ name: 'time', type: FieldType.time });
+    this.frame.refId = ref?.refId;
   }
 
   /**
@@ -40,7 +39,7 @@ export class TimeSeriesFormatter {
    * @param request
    */
   async update(request: Observable<DataQueryResponse>): Promise<CircularDataFrame> {
-    let values: { [index: string]: number } = { time: Date.now() };
+    let values: { [index: string]: number } = {};
 
     /**
      * Fields
@@ -48,7 +47,7 @@ export class TimeSeriesFormatter {
     const fields = await request
       .pipe(
         switchMap$((response) => response.data),
-        map$((data: DataFrame) => data.fields.filter((field) => (field.name === 'time' ? false : true)))
+        map$((data: DataFrame) => data.fields)
       )
       .toPromise();
 
@@ -56,7 +55,7 @@ export class TimeSeriesFormatter {
       /**
        * Add fields to frame fields and return values
        */
-      fields.forEach((field) => {
+      fields.forEach((field: Field) => {
         /**
          * Add new fields if frame does not have the field
          */
@@ -78,10 +77,9 @@ export class TimeSeriesFormatter {
     }
 
     /**
-     * Add values
+     * Add values and return
      */
     this.frame.add(values);
-
     return Promise.resolve(this.frame);
   }
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -13,20 +12,7 @@ import (
 /**
  * Query commands
  */
-func query(ctx context.Context, query backend.DataQuery, client redisClient) backend.DataResponse {
-	var qm queryModel
-
-	// Unmarshal the json into our queryModel
-	err := json.Unmarshal(query.JSON, &qm)
-	log.DefaultLogger.Debug("QueryData", "JSON", query.JSON)
-
-	// Error
-	if err != nil {
-		response := backend.DataResponse{}
-		response.Error = err
-		return response
-	}
-
+func query(ctx context.Context, query backend.DataQuery, client redisClient, qm queryModel) backend.DataResponse {
 	// From and To
 	from := query.TimeRange.From.UnixNano() / 1000000
 	to := query.TimeRange.To.UnixNano() / 1000000
