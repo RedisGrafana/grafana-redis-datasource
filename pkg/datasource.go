@@ -76,6 +76,7 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 			continue
 		}
 
+		// Execute query
 		resp := query(ctx, q, client, qm)
 
 		// Add Time for Streaming and filter fields

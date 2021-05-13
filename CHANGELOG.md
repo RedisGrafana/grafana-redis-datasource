@@ -2,6 +2,15 @@
 
 ## 1.5.0 (IN PROGRESS)
 
+### Breaking changes
+
+- HGET returns field with values named as requested field instead of "Value" similar to HMGET and HGETALL.
+- Adding of the `time` field for Streaming moved from Frontend to Backend. Field's name renamed to "#time" to avoid confusion with returned fields.
+
+### Features / Enhancements
+
+- Alerting for Grafana-Redis-Datasource #166
+
 ## 1.4.0 (2021-05-08)
 
 ### Features / Enhancements
