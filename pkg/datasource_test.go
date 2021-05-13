@@ -314,3 +314,176 @@ func TestCheckHealthWithErrorFromClient(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, result.Status, backend.HealthStatusError)
 }
+
+/**
+ * Test Streaming TimeSeries
+ */
+func TestStreamingTimeSeries(t *testing.T) {
+	// Data Source
+	client := &testClient{rcv: "# Server\nredis_version:6.0.1\nredis_git_sha1:00000000\nredis_git_dirty:0\nredis_build_id:e02d1d807e41d65\nredis_mode:standalone\nos:Linux 5.10.25-linuxkit x86_64", err: nil}
+	im := fakeInstanceManager{}
+	ds := redisDatasource{&im}
+
+	// Instance
+	is := instanceSettings{client}
+	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// INFO
+	dm := queryModel{Command: "info", Section: "server", Streaming: true}
+	marshaled, _ := json.Marshal(dm)
+
+	// Response
+	response, err := ds.QueryData(context.TODO(), &backend.QueryDataRequest{
+		PluginContext: backend.PluginContext{},
+		Headers:       nil,
+		Queries: []backend.DataQuery{
+			{
+				RefID:         "A",
+				QueryType:     "",
+				MaxDataPoints: 100,
+				Interval:      10,
+				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
+				JSON:          marshaled,
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Len(t, response.Responses, 1)
+	require.Len(t, response.Responses["A"].Frames, 1)
+
+	frame := response.Responses["A"].Frames[0]
+	require.Len(t, frame.Fields, 7)
+	require.Equal(t, 1, frame.Fields[0].Len())
+	require.Equal(t, "#time", frame.Fields[0].Name)
+	require.LessOrEqual(t, time.Now().Unix(), frame.Fields[0].At(0).(time.Time).Unix())
+	require.Equal(t, "redis_version", frame.Fields[1].Name)
+	require.LessOrEqual(t, "6.0.1", frame.Fields[1].At(0))
+}
+
+/**
+ * Test Streaming TimeSeries with Field
+ */
+func TestStreamingTimeSeriesWithField(t *testing.T) {
+	// Data Source
+	client := &testClient{rcv: "3.14", err: nil}
+	im := fakeInstanceManager{}
+	ds := redisDatasource{&im}
+
+	// Instance
+	is := instanceSettings{client}
+	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// HGET
+	dm := queryModel{Command: "hget", Key: "test1", Field: "key1", Streaming: true}
+	marshaled, _ := json.Marshal(dm)
+
+	// Response
+	response, err := ds.QueryData(context.TODO(), &backend.QueryDataRequest{
+		PluginContext: backend.PluginContext{},
+		Headers:       nil,
+		Queries: []backend.DataQuery{
+			{
+				RefID:         "A",
+				QueryType:     "",
+				MaxDataPoints: 100,
+				Interval:      10,
+				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
+				JSON:          marshaled,
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Len(t, response.Responses, 1)
+	require.Len(t, response.Responses["A"].Frames, 1)
+
+	frame := response.Responses["A"].Frames[0]
+	require.Len(t, frame.Fields, 2)
+	require.Equal(t, 1, frame.Fields[0].Len())
+	require.Equal(t, "#time", frame.Fields[0].Name)
+	require.LessOrEqual(t, time.Now().Unix(), frame.Fields[0].At(0).(time.Time).Unix())
+	require.Equal(t, "key1", frame.Fields[1].Name)
+	require.Equal(t, 3.14, frame.Fields[1].At(0))
+}
+
+/**
+ * Test Streaming TimeSeries with Error Field
+ */
+func TestStreamingTimeSeriesWithErrorField(t *testing.T) {
+	// Data Source
+	client := &testClient{rcv: "3.14", err: nil}
+	im := fakeInstanceManager{}
+	ds := redisDatasource{&im}
+
+	// Instance
+	is := instanceSettings{client}
+	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// INFO
+	dm := queryModel{Command: "info", Field: "\"", Streaming: true}
+	marshaled, _ := json.Marshal(dm)
+
+	// Response
+	response, err := ds.QueryData(context.TODO(), &backend.QueryDataRequest{
+		PluginContext: backend.PluginContext{},
+		Headers:       nil,
+		Queries: []backend.DataQuery{
+			{
+				RefID:         "A",
+				QueryType:     "",
+				MaxDataPoints: 100,
+				Interval:      10,
+				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
+				JSON:          marshaled,
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Len(t, response.Responses, 1)
+	require.Len(t, response.Responses["A"].Frames, 1)
+
+	error := response.Responses["A"].Error
+	require.EqualError(t, error, "field is not valid")
+}
+
+/**
+ * Test Streaming TimeSeries with wrong Field
+ */
+func TestStreamingTimeSeriesWithWrongField(t *testing.T) {
+	// Data Source
+	client := &testClient{rcv: "# Server\nredis_version:6.0.1\nredis_git_sha1:00000000\nredis_git_dirty:0\nredis_build_id:e02d1d807e41d65\nredis_mode:standalone\nos:Linux 5.10.25-linuxkit x86_64", err: nil}
+	im := fakeInstanceManager{}
+	ds := redisDatasource{&im}
+
+	// Instance
+	is := instanceSettings{client}
+	im.On("Get", mock.Anything).Return(&is, nil)
+
+	// INFO
+	dm := queryModel{Command: "info", Section: "server", Field: "key1", Streaming: true}
+	marshaled, _ := json.Marshal(dm)
+
+	// Response
+	response, err := ds.QueryData(context.TODO(), &backend.QueryDataRequest{
+		PluginContext: backend.PluginContext{},
+		Headers:       nil,
+		Queries: []backend.DataQuery{
+			{
+				RefID:         "A",
+				QueryType:     "",
+				MaxDataPoints: 100,
+				Interval:      10,
+				TimeRange:     backend.TimeRange{From: time.Now(), To: time.Now()},
+				JSON:          marshaled,
+			},
+		},
+	})
+	require.NoError(t, err)
+	require.Len(t, response.Responses, 1)
+	require.Len(t, response.Responses["A"].Frames, 1)
+
+	frame := response.Responses["A"].Frames[0]
+	require.Len(t, frame.Fields, 1)
+	require.Equal(t, 1, frame.Fields[0].Len())
+	require.Equal(t, "#time", frame.Fields[0].Name)
+	require.LessOrEqual(t, time.Now().Unix(), frame.Fields[0].At(0).(time.Time).Unix())
+}

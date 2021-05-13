@@ -97,9 +97,7 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 
 					// Check if filter is valid
 					if !ok {
-						resp := backend.DataResponse{}
 						resp.Error = fmt.Errorf("field is not valid")
-						response.Responses[q.RefID] = resp
 						continue
 					}
 

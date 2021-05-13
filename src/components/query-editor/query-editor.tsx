@@ -541,7 +541,7 @@ export class QueryEditor extends PureComponent<Props> {
                     labelWidth={8}
                     inputWidth={30}
                     value={field}
-                    tooltip="Specify field for Alerting and return from backend"
+                    tooltip="Specify field(s) to return from backend. Required for Alerting to trigger on specific fields."
                     onChange={this.onFieldChange}
                     label="Filter Field"
                   />

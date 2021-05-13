@@ -156,7 +156,7 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 
 			// Parse float if only one value
 			if len(values) == 1 {
-				response.Frames = append(response.Frames, createFrameValue(qm.Key, values[0]))
+				response.Frames = append(response.Frames, createFrameValue(qm.Key, values[0], "Value"))
 				break
 			}
 
@@ -166,7 +166,7 @@ func queryCustomCommand(qm queryModel, client redisClient) backend.DataResponse 
 					data.NewField("Value", nil, values)))
 		case string:
 			// Add Frame
-			response.Frames = append(response.Frames, createFrameValue(qm.Key, result))
+			response.Frames = append(response.Frames, createFrameValue(qm.Key, result, "Value"))
 		case []interface{}:
 			var values []string
 

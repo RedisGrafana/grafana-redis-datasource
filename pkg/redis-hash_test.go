@@ -86,6 +86,7 @@ func TestQueryHGet(t *testing.T) {
 		rowsPerField int
 		value        interface{}
 		err          error
+		field        string
 	}{
 		{
 			"should handle simple string",
@@ -95,6 +96,7 @@ func TestQueryHGet(t *testing.T) {
 			1,
 			"value1",
 			nil,
+			"field1",
 		},
 		{
 			"should handle string with underlying float64 value",
@@ -104,6 +106,7 @@ func TestQueryHGet(t *testing.T) {
 			1,
 			3.14,
 			nil,
+			"key1",
 		},
 		{
 			"should handle error",
@@ -113,6 +116,7 @@ func TestQueryHGet(t *testing.T) {
 			0,
 			nil,
 			errors.New("error occurred"),
+			"",
 		},
 	}
 
@@ -132,6 +136,7 @@ func TestQueryHGet(t *testing.T) {
 				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created ")
 				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
 				require.Equal(t, tt.value, response.Frames[0].Fields[0].At(0), "Invalid value contained in frame")
+				require.Equal(t, tt.field, response.Frames[0].Fields[0].Name, "Invalid field name contained in frame")
 
 			}
 		})

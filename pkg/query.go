@@ -170,7 +170,7 @@ func queryKeyCommand(qm queryModel, client redisClient) backend.DataResponse {
 	}
 
 	// Add the frames to the response
-	response.Frames = append(response.Frames, createFrameValue(qm.Key, value))
+	response.Frames = append(response.Frames, createFrameValue(qm.Key, value, "Value"))
 
 	// Return Response
 	return response
