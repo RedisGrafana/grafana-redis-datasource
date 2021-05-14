@@ -143,13 +143,10 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 		}
 
 		// Authentication
-		if configuration.Password != "" {
-			// If ACL enabled
-			if configuration.ACL {
-				opts = append(opts, radix.DialAuthUser(configuration.User, configuration.Password))
-			} else {
-				opts = append(opts, radix.DialAuthPass(configuration.Password))
-			}
+		if configuration.ACL {
+			opts = append(opts, radix.DialAuthUser(configuration.User, configuration.Password))
+		} else if configuration.Password != "" {
+			opts = append(opts, radix.DialAuthPass(configuration.Password))
 		}
 
 		return radix.Dial(network, addr, opts...)
@@ -177,13 +174,10 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 			}
 
 			// Authentication
-			if configuration.SentinelPassword != "" {
-				// If ACL enabled
-				if configuration.SentinelACL {
-					opts = append(opts, radix.DialAuthUser(configuration.SentinelUser, configuration.SentinelPassword))
-				} else {
-					opts = append(opts, radix.DialAuthPass(configuration.SentinelPassword))
-				}
+			if configuration.SentinelACL {
+				opts = append(opts, radix.DialAuthUser(configuration.SentinelUser, configuration.SentinelPassword))
+			} else if configuration.SentinelPassword != "" {
+				opts = append(opts, radix.DialAuthPass(configuration.SentinelPassword))
 			}
 
 			return radix.Dial(network, addr, opts...)

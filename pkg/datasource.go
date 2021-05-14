@@ -251,6 +251,8 @@ func createRedisClientConfig(setting backend.DataSourceInstanceSettings) (redisC
 		Client:         jsonData.Client,
 		SentinelName:   jsonData.SentinelName,
 		User:           jsonData.User,
+		SentinelUser:   jsonData.SentinelUser,
+		SentinelACL:    jsonData.SentinelACL,
 	}
 
 	// Secured Data
