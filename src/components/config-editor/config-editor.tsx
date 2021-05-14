@@ -84,8 +84,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
       ...options,
       secureJsonData: { ...options.secureJsonData, sentinelPassword: event.target.value },
     });
-    console.log(options.secureJsonData);
-    console.log(event.target.value);
   };
 
   /**
@@ -308,7 +306,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             </div>
             <div className="gf-form">
               <Switch
-                label="ACL"
+                label="Sentinel ACL"
                 labelClass="width-10"
                 tooltip="Allows certain connections to be limited in terms of the commands that can be executed and the keys that can be accessed"
                 checked={jsonData.sentinelAcl || false}
@@ -320,7 +318,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
               {jsonData.sentinelAcl && (
                 <FormField
-                  label="Username"
+                  label="Sentinel Username"
                   labelWidth={10}
                   inputWidth={10}
                   value={jsonData.sentinelUser}
@@ -339,7 +337,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
               <SecretFormField
                 isConfigured={(secureJsonFields && secureJsonFields.sentinelPassword) as boolean}
                 value={secureJsonData.sentinelPassword || ''}
-                label="Password"
+                label="Sentinel Password"
                 placeholder="Sentinel password"
                 labelWidth={10}
                 inputWidth={20}

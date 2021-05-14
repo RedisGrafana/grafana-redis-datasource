@@ -227,6 +227,184 @@ describe('ConfigEditor', () => {
   });
 
   /**
+   * Sentinel ACL
+   */
+  describe('Sentinel ACL', () => {
+    const getTestedComponent = (wrapper: ShallowComponent) =>
+      wrapper.findWhere((node) => {
+        return node.name() === 'Switch' && node.prop('label') === 'Sentinel ACL';
+      });
+
+    it('If client is not sentinel should not be shown', () => {
+      const options = getOptions();
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.exists()).not.toBeTruthy();
+    });
+
+    it('If client is sentinel should pass acl value', () => {
+      const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL, sentinelAcl: true } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.exists()).toBeTruthy();
+      expect(testedComponent.prop('checked')).toEqual(options.jsonData.sentinelAcl);
+    });
+
+    it('If client is sentinel should pass default value if user value is empty', () => {
+      const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL, sentinelAcl: null } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.prop('checked')).toEqual(false);
+    });
+
+    it('If client is sentinel Should call onOptionsChange when value was changed', () => {
+      const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL, sentinelAcl: true } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      const newValue = false;
+      testedComponent.simulate('change', { currentTarget: { checked: newValue } });
+      expect(onOptionsChange).toHaveBeenCalledWith({
+        ...options,
+        jsonData: {
+          ...options.jsonData,
+          sentinelAcl: newValue,
+        },
+      });
+    });
+  });
+
+  /**
+   * Sentinel Username for Authentication when ACL enabled
+   */
+  describe('Sentinel Username', () => {
+    const getTestedComponent = (wrapper: ShallowComponent) =>
+      wrapper.findWhere((node) => {
+        return node.name() === 'FormField' && node.prop('label') === 'Sentinel Username';
+      });
+
+    it('If client is not sentinel should not be shown', () => {
+      const options = getOptions();
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.exists()).not.toBeTruthy();
+    });
+
+    it('If client is sentinel and acl checked should be shown', () => {
+      const options = getOptions({
+        jsonData: { client: ClientTypeValue.SENTINEL, sentinelAcl: true, sentinelUser: 'My user' },
+      });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.exists()).toBeTruthy();
+      expect(testedComponent.prop('value')).toEqual(options.jsonData.sentinelUser);
+    });
+
+    it('If client is sentinel and acl not checked should not be shown', () => {
+      const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL, sentinelAcl: false } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.exists()).not.toBeTruthy();
+    });
+
+    it('If client is sentinel should call onOptionsChange when value was changed', () => {
+      const options = getOptions({
+        jsonData: { client: ClientTypeValue.SENTINEL, sentinelAcl: true, sentinelUser: 'admin' },
+      });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      const newValue = 'guest';
+      testedComponent.simulate('change', { target: { value: newValue } });
+      expect(onOptionsChange).toHaveBeenCalledWith({
+        ...options,
+        jsonData: {
+          ...options.jsonData,
+          sentinelUser: newValue,
+        },
+      });
+    });
+  });
+
+  /**
+   * Sentinel Password
+   */
+  describe('Sentinel Password', () => {
+    const getTestedComponent = (wrapper: ShallowComponent) =>
+      wrapper.findWhere((node) => {
+        return node.name() === 'SecretFormField' && node.prop('label') === 'Sentinel Password';
+      });
+
+    it('If client is not sentinel should not be shown', () => {
+      const options = getOptions();
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.exists()).not.toBeTruthy();
+    });
+
+    it('If client is sentinel should pass password value', () => {
+      const options = getOptions({
+        jsonData: { client: ClientTypeValue.SENTINEL },
+        secureJsonData: { sentinelPassword: '123' },
+      });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.prop('value')).toEqual(options.secureJsonData?.sentinelPassword);
+    });
+
+    it('If client is sentinel should call onSentinelResetPassword method when calls onReset prop', () => {
+      const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const onResetPasswordMethod = jest.spyOn(wrapper.instance(), 'onSentinelResetPassword');
+      wrapper.instance().forceUpdate();
+
+      const testedComponent = getTestedComponent(wrapper);
+      testedComponent.simulate('reset');
+      expect(onResetPasswordMethod).toHaveBeenCalledTimes(1);
+      expect(onOptionsChange).toHaveBeenCalledWith({
+        ...options,
+        secureJsonData: {
+          ...options.secureJsonData,
+          sentinelPassword: '',
+        },
+        secureJsonFields: {
+          ...options.secureJsonFields,
+          sentinelPassword: false,
+        },
+      });
+    });
+
+    it('If client is sentinel should call onSentinelPasswordChange method when calls onChange prop', () => {
+      const options = getOptions({ jsonData: { client: ClientTypeValue.SENTINEL } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const onPasswordChangeMethod = jest.spyOn(wrapper.instance(), 'onSentinelPasswordChange');
+      wrapper.instance().forceUpdate();
+
+      const testedComponent = getTestedComponent(wrapper);
+      const newValue = '123';
+      testedComponent.simulate('change', { target: { value: newValue } });
+      expect(onPasswordChangeMethod).toHaveBeenCalledWith({ target: { value: newValue } });
+      expect(onOptionsChange).toHaveBeenCalledWith({
+        ...options,
+        secureJsonData: {
+          ...options.secureJsonData,
+          sentinelPassword: newValue,
+        },
+      });
+    });
+  });
+
+  /**
    * Username for Authentication when ACL enabled
    */
   describe('Username', () => {
@@ -292,6 +470,7 @@ describe('ConfigEditor', () => {
       const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
       const onResetPasswordMethod = jest.spyOn(wrapper.instance(), 'onResetPassword');
       wrapper.instance().forceUpdate();
+
       const testedComponent = getTestedComponent(wrapper);
       testedComponent.simulate('reset');
       expect(onResetPasswordMethod).toHaveBeenCalledTimes(1);
@@ -314,6 +493,7 @@ describe('ConfigEditor', () => {
       const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
       const onPasswordChangeMethod = jest.spyOn(wrapper.instance(), 'onPasswordChange');
       wrapper.instance().forceUpdate();
+
       const testedComponent = getTestedComponent(wrapper);
       const newValue = '123';
       testedComponent.simulate('change', { target: { value: newValue } });
