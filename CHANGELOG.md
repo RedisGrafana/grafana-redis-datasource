@@ -10,6 +10,7 @@
 ### Features / Enhancements
 
 - Alerting for Grafana-Redis-Datasource #166
+- Add support for Sentinel ACL User and Password authentication separate from Redis #197
 
 ## 1.4.0 (2021-05-08)
 

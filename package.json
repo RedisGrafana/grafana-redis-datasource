@@ -1,5 +1,5 @@
 {
-  "author": "Redis Labs",
+  "author": "RedisGrafana",
   "description": "Redis Data Source for Grafana",
   "devDependencies": {
     "@grafana/data": "7.5.4",
@@ -35,5 +35,5 @@
     "upgrade": "yarn upgrade --latest",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
-  "version": "1.4.0"
+  "version": "1.5.0"
 }

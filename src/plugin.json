@@ -22,15 +22,15 @@
   ],
   "info": {
     "author": {
-      "name": "Redis Labs",
-      "url": "https://oss.redislabs.com"
+      "name": "RedisGrafana",
+      "url": "https://redisgrafana.github.io"
     },
-    "description": "Redis Data Source",
+    "description": "Allows to connect to any Redis database On-Premises or in the Cloud.",
     "keywords": ["redis", "timeseries", "backend", "plugin"],
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/RedisGrafana/grafana-redis-datasource"
+        "url": "https://redisgrafana.github.io"
       },
       {
         "name": "License",
