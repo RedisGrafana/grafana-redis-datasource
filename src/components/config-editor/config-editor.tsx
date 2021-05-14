@@ -64,7 +64,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
   };
 
   /**
-   * Password Secure field (only sent to the backend)
+   * Password Secure field (only sent to the backend) for Redis
    *
    * @param {ChangeEvent<HTMLInputElement>} event Event
    */
@@ -74,7 +74,20 @@ export class ConfigEditor extends PureComponent<Props, State> {
   };
 
   /**
-   * Password Reset
+   * Password Secure field (only sent to the backend) for Sentinel
+   *
+   * @param {ChangeEvent<HTMLInputElement>} event Event
+   */
+  onSentinelPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonData: { ...options.secureJsonData, sentinelPassword: event.target.value },
+    });
+  };
+
+  /**
+   * Password Reset for Redis
    */
   onResetPassword = () => {
     const { onOptionsChange, options } = this.props;
@@ -82,6 +95,18 @@ export class ConfigEditor extends PureComponent<Props, State> {
       ...options,
       secureJsonFields: { ...options.secureJsonFields, password: false },
       secureJsonData: { ...options.secureJsonData, password: '' },
+    });
+  };
+
+  /**
+   * Password Reset for Sentinel
+   */
+  onSentinelResetPassword = () => {
+    const { onOptionsChange, options } = this.props;
+    onOptionsChange({
+      ...options,
+      secureJsonFields: { ...options.secureJsonFields, sentinelPassword: false },
+      secureJsonData: { ...options.secureJsonData, sentinelPassword: '' },
     });
   };
 
@@ -193,21 +218,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
           />
         </div>
 
-        {jsonData.client === ClientTypeValue.SENTINEL && (
-          <div className="gf-form">
-            <FormField
-              label="Master Name"
-              labelWidth={10}
-              inputWidth={10}
-              value={jsonData.sentinelName}
-              tooltip="Provide Master Name to connect to."
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                onOptionsChange({ ...options, jsonData: { ...options.jsonData, sentinelName: event.target.value } });
-              }}
-            />
-          </div>
-        )}
-
         <div className="gf-form">
           <FormField
             label="Address"
@@ -277,6 +287,67 @@ export class ConfigEditor extends PureComponent<Props, State> {
             whether implicit pipelining is enabled or not."
           />
         </div>
+
+        {jsonData.client === ClientTypeValue.SENTINEL && (
+          <>
+            <br />
+            <h3 className="page-heading">Sentinel</h3>
+            <div className="gf-form">
+              <FormField
+                label="Master Name"
+                labelWidth={10}
+                inputWidth={10}
+                value={jsonData.sentinelName}
+                tooltip="Provide Master Name to connect to."
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  onOptionsChange({ ...options, jsonData: { ...options.jsonData, sentinelName: event.target.value } });
+                }}
+              />
+            </div>
+            <div className="gf-form">
+              <Switch
+                label="Sentinel ACL"
+                labelClass="width-10"
+                tooltip="Allows certain connections to be limited in terms of the commands that can be executed and the keys that can be accessed"
+                checked={jsonData.sentinelAcl || false}
+                onChange={(event) => {
+                  const jsonData = { ...options.jsonData, sentinelAcl: event.currentTarget.checked };
+                  onOptionsChange({ ...options, jsonData });
+                }}
+              />
+
+              {jsonData.sentinelAcl && (
+                <FormField
+                  label="Sentinel Username"
+                  labelWidth={10}
+                  inputWidth={10}
+                  value={jsonData.sentinelUser}
+                  tooltip="Provide ACL Username to authenticate."
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                    onOptionsChange({
+                      ...options,
+                      jsonData: { ...options.jsonData, sentinelUser: event.target.value },
+                    });
+                  }}
+                />
+              )}
+            </div>
+
+            <div className="gf-form">
+              <SecretFormField
+                isConfigured={(secureJsonFields && secureJsonFields.sentinelPassword) as boolean}
+                value={secureJsonData.sentinelPassword || ''}
+                label="Sentinel Password"
+                placeholder="Sentinel password"
+                labelWidth={10}
+                inputWidth={20}
+                tooltip="When specified AUTH command will be used to authenticate with the provided password."
+                onReset={this.onSentinelResetPassword}
+                onChange={this.onSentinelPasswordChange}
+              />
+            </div>
+          </>
+        )}
 
         <br />
         <h3 className="page-heading">Advanced settings</h3>

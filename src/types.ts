@@ -74,6 +74,20 @@ export interface RedisDataSourceOptions extends DataSourceJsonData {
    * @type {string}
    */
   user: string;
+
+  /**
+   * ACL enabled for Sentinel
+   *
+   * @type {boolean}
+   */
+  sentinelAcl: boolean;
+
+  /**
+   * ACL Username for Sentinel
+   *
+   * @type {string}
+   */
+  sentinelUser: string;
 }
 
 /**
@@ -86,6 +100,13 @@ export interface RedisSecureJsonData {
    * @type {string}
    */
   password?: string;
+
+  /**
+   * Sentinel password
+   *
+   * @type {string}
+   */
+  sentinelPassword?: string;
 
   /**
    * TLS Client Certificate

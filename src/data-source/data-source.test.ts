@@ -41,6 +41,8 @@ const getInstanceSettings = (overrideSettings: object = {}): DataSourceInstanceS
     tlsSkipVerify: false,
     client: ClientTypeValue.CLUSTER,
     sentinelName: '',
+    sentinelUser: '',
+    sentinelAcl: false,
     acl: false,
     user: '',
   },
