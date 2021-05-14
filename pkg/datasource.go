@@ -259,6 +259,10 @@ func createRedisClientConfig(setting backend.DataSourceInstanceSettings) (redisC
 		if secureData["password"] != "" {
 			configuration.Password = secureData["password"]
 		}
+		if secureData["sentinelPassword"] != "" {
+			configuration.SentinelPassword = secureData["sentinelPassword"]
+		}
+
 		if secureData["tlsCACert"] != "" {
 			configuration.TLSCACert = secureData["tlsCACert"]
 		}

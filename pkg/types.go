@@ -32,6 +32,8 @@ type dataModel struct {
 	SentinelName   string `json:"sentinelName"`
 	ACL            bool   `json:"acl"`
 	User           string `json:"user"`
+	SentinelACL    bool   `json:"sentinelAcl"`
+	SentinelUser   string `json:"sentinelUser"`
 }
 
 /*

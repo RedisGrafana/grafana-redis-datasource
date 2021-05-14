@@ -14,21 +14,24 @@ import (
  * Configuration Data Model for redisClient
  */
 type redisClientConfiguration struct {
-	URL            string
-	Client         string
-	Timeout        int
-	PoolSize       int
-	PingInterval   int
-	PipelineWindow int
-	ACL            bool
-	TLSAuth        bool
-	TLSSkipVerify  bool
-	User           string
-	Password       string
-	TLSCACert      string
-	TLSClientCert  string
-	TLSClientKey   string
-	SentinelName   string
+	URL              string
+	Client           string
+	Timeout          int
+	PoolSize         int
+	PingInterval     int
+	PipelineWindow   int
+	ACL              bool
+	TLSAuth          bool
+	TLSSkipVerify    bool
+	User             string
+	Password         string
+	TLSCACert        string
+	TLSClientCert    string
+	TLSClientKey     string
+	SentinelName     string
+	SentinelPassword string
+	SentinelACL      bool
+	SentinelUser     string
 }
 
 /**
@@ -86,15 +89,58 @@ func (client *radixV3Impl) Close() error {
 	return client.radixClient.Close()
 }
 
+// Get connection options based on the provided configuration
+func getConnOpts(configuration redisClientConfiguration) ([]radix.DialOpt, error) {
+	var err error
+	opts := []radix.DialOpt{radix.DialTimeout(time.Duration(configuration.Timeout) * time.Second)}
+
+	// TLS Authentication is not required
+	if !configuration.TLSAuth {
+		return opts, err
+	}
+
+	// TLS Config
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: configuration.TLSSkipVerify,
+	}
+
+	// Certification Authority
+	if configuration.TLSCACert != "" {
+		caPool := x509.NewCertPool()
+		ok := caPool.AppendCertsFromPEM([]byte(configuration.TLSCACert))
+		if ok {
+			tlsConfig.RootCAs = caPool
+		}
+	}
+
+	// Certificate and Key
+	if configuration.TLSClientCert != "" && configuration.TLSClientKey != "" {
+		cert, err := tls.X509KeyPair([]byte(configuration.TLSClientCert), []byte(configuration.TLSClientKey))
+		if err == nil {
+			tlsConfig.Certificates = []tls.Certificate{cert}
+		} else {
+			log.DefaultLogger.Error("X509KeyPair", "Error", err)
+			return nil, err
+		}
+	}
+
+	// Add TLS Config
+	return append(opts, radix.DialUseTLS(tlsConfig)), err
+}
+
 // creates new radixV3Impl implementation of redisClient interface
 func newRadixV3Client(configuration redisClientConfiguration) (redisClient, error) {
 	var radixClient radixClient
-
 	var err error
 
-	// Set up connection
+	// Set up Redis connection
 	connFunc := func(network, addr string) (radix.Conn, error) {
-		opts := []radix.DialOpt{radix.DialTimeout(time.Duration(configuration.Timeout) * time.Second)}
+		opts, err := getConnOpts(configuration)
+
+		// Return if certificate failed
+		if err != nil {
+			return nil, err
+		}
 
 		// Authentication
 		if configuration.Password != "" {
@@ -104,37 +150,6 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 			} else {
 				opts = append(opts, radix.DialAuthPass(configuration.Password))
 			}
-		}
-
-		// TLS Authentication
-		if configuration.TLSAuth {
-			// TLS Config
-			tlsConfig := &tls.Config{
-				InsecureSkipVerify: configuration.TLSSkipVerify,
-			}
-
-			// Certification Authority
-			if configuration.TLSCACert != "" {
-				caPool := x509.NewCertPool()
-				ok := caPool.AppendCertsFromPEM([]byte(configuration.TLSCACert))
-				if ok {
-					tlsConfig.RootCAs = caPool
-				}
-			}
-
-			// Certificate and Key
-			if configuration.TLSClientCert != "" && configuration.TLSClientKey != "" {
-				cert, err := tls.X509KeyPair([]byte(configuration.TLSClientCert), []byte(configuration.TLSClientKey))
-				if err == nil {
-					tlsConfig.Certificates = []tls.Certificate{cert}
-				} else {
-					log.DefaultLogger.Error("X509KeyPair", "Error", err)
-					return nil, err
-				}
-			}
-
-			// Add TLS Config
-			opts = append(opts, radix.DialUseTLS(tlsConfig))
 		}
 
 		return radix.Dial(network, addr, opts...)
@@ -152,7 +167,29 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 	case "cluster":
 		radixClient, err = radix.NewCluster(strings.Split(configuration.URL, ","), radix.ClusterPoolFunc(poolFunc))
 	case "sentinel":
-		radixClient, err = radix.NewSentinel(configuration.SentinelName, strings.Split(configuration.URL, ","), radix.SentinelConnFunc(connFunc),
+		// Set up Sentinel connection
+		sentinelConnFunc := func(network, addr string) (radix.Conn, error) {
+			opts, err := getConnOpts(configuration)
+
+			// Return if certificate failed
+			if err != nil {
+				return nil, err
+			}
+
+			// Authentication
+			if configuration.SentinelPassword != "" {
+				// If ACL enabled
+				if configuration.SentinelACL {
+					opts = append(opts, radix.DialAuthUser(configuration.SentinelUser, configuration.SentinelPassword))
+				} else {
+					opts = append(opts, radix.DialAuthPass(configuration.SentinelPassword))
+				}
+			}
+
+			return radix.Dial(network, addr, opts...)
+		}
+
+		radixClient, err = radix.NewSentinel(configuration.SentinelName, strings.Split(configuration.URL, ","), radix.SentinelConnFunc(sentinelConnFunc),
 			radix.SentinelPoolFunc(poolFunc))
 	case "socket":
 		radixClient, err = poolFunc("unix", configuration.URL)
