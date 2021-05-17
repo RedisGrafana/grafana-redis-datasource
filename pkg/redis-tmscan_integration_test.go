@@ -107,7 +107,7 @@ func TestTMScanIntegrationWithMatched(t *testing.T) {
 
 	for key, value := range keys {
 		require.Equal(t, types[key], resp.Frames[0].Fields[1].At(value), "Invalid type returned")
-		require.Equal(t, memory[key], resp.Frames[0].Fields[2].At(value), "Invalid memory size returned")
+		require.LessOrEqual(t, memory[key], resp.Frames[0].Fields[2].At(value), "Invalid memory size returned")
 	}
 }
 
