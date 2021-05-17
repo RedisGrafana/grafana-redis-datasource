@@ -76,7 +76,7 @@ func queryGraphQuery(qm queryModel, client redisClient) backend.DataResponse {
 
 		// Skip empty data lines
 		entries := dataEntries.([]interface{})
-		if len(entries) <= 0 {
+		if len(entries) == 0 {
 			continue
 		}
 
@@ -129,7 +129,7 @@ func queryGraphQuery(qm queryModel, client redisClient) backend.DataResponse {
 				continue
 			}
 
-			frameWithMeta.AppendRow(fields[0], fields[1])
+			frameWithMeta.AppendRow(fields[0], strings.TrimSpace(fields[1]))
 		}
 	}
 
@@ -152,14 +152,8 @@ func findAllNodesAndEdges(input interface{}) ([]models.NodeEntry, []models.EdgeE
 	edges := []models.EdgeEntry{}
 	dataEntries := []interface{}{}
 
-	// Should return interface
-	entries, ok := input.([]interface{})
-	if !ok {
-		return nodes, edges, dataEntries
-	}
-
 	// Parse entries
-	for _, entry := range entries {
+	for _, entry := range input.([]interface{}) {
 		switch e := entry.(type) {
 		case []interface{}:
 			props := []string{}
