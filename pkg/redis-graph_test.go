@@ -23,7 +23,11 @@ func TestGraphQuery(t *testing.T) {
 		// Client
 		client := testClient{
 			rcv: []interface{}{
-				nil,
+				[]interface{}{
+					[]byte("w"),
+					[]byte("r"),
+					[]byte("b"),
+				},
 				[]interface{}{
 					// nodes + relations
 					// Entry 1
@@ -181,14 +185,17 @@ func TestGraphQuery(t *testing.T) {
 						},
 					},
 				},
-				nil,
+				[]interface{}{
+					[]byte("Cached execution: 1"),
+					[]byte("Query internal execution time: 0.402967 milliseconds"),
+				},
 			},
 			err: nil,
 		}
 
 		// Response
 		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
-		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames, 4)
 		require.Len(t, resp.Frames[0].Fields, 5)
 		require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
 		require.Equal(t, "333", resp.Frames[0].Fields[0].At(0))

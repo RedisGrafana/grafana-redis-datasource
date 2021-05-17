@@ -107,7 +107,7 @@ export class QueryEditor extends PureComponent<Props> {
   /**
    * Cypher change
    */
-  onCypherChange = this.createTextFieldHandler('cypher');
+  onCypherChange = this.createTextareaFieldHandler('cypher');
 
   /**
    * Field change
@@ -310,18 +310,6 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.cypher.includes(command) && (
-              <FormField
-                labelWidth={8}
-                inputWidth={30}
-                value={cypher}
-                onChange={this.onCypherChange}
-                label="Cypher"
-                tooltip="The syntax is based on Cypher, and only a subset of the language currently supported: \
-                https://oss.redislabs.com/redisgraph/commands/#query-language"
-              />
-            )}
-
             {CommandParameters.field.includes(command) && (
               <FormField labelWidth={8} inputWidth={30} value={field} onChange={this.onFieldChange} label="Field" />
             )}
@@ -415,6 +403,19 @@ export class QueryEditor extends PureComponent<Props> {
                 label="End"
               />
             )}
+          </div>
+        )}
+
+        {command && CommandParameters.cypher.includes(command) && (
+          <div className="gf-form">
+            <InlineFormLabel
+              tooltip="The syntax is based on Cypher, and only a subset of the language currently supported: \
+                https://oss.redislabs.com/redisgraph/commands/#query-language"
+              width={8}
+            >
+              Cypher
+            </InlineFormLabel>
+            <TextArea css="" value={cypher} className="gf-form-input" onChange={this.onCypherChange} />
           </div>
         )}
 

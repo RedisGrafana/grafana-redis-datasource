@@ -23,6 +23,7 @@
     "build:backend": "mage -v lint && mage cover && mage -v",
     "dev": "grafana-toolkit plugin:dev",
     "format": "prettier --write \"**\"",
+    "restart:docker:plugin": "docker exec -it grafana pkill -f redis-datasource",
     "sign": "grafana-toolkit plugin:sign",
     "start": "docker-compose pull && docker-compose up",
     "start:dev": "docker-compose -f docker-compose/dev.yml pull && docker-compose -f docker-compose/dev.yml up",
