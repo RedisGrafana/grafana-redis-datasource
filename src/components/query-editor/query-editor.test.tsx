@@ -13,7 +13,7 @@ interface QueryFieldTest {
   name: keyof RedisQuery;
   testName?: string;
   getComponent: (wrapper: ShallowComponent) => ShallowWrapper;
-  type: 'number' | 'string' | 'select' | 'switch' | 'radioButton' | 'textarea';
+  type: 'number' | 'string' | 'select' | 'switch' | 'radioButton';
   queryWhenShown: RedisQuery;
   queryWhenHidden: RedisQuery;
 }
@@ -225,9 +225,9 @@ describe('QueryEditor', () => {
           wrapper.findWhere((node) => {
             return node.prop('onChange') === wrapper.instance().onCypherChange;
           }),
-        type: 'textarea',
-        queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range123' },
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: 'graph.query' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.GRAPH, command: 'graph.query123' },
       },
       {
         name: 'size',
