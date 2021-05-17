@@ -20,7 +20,7 @@ func TestGraphQueryIntegration(t *testing.T) {
 
 	// Response
 	resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
-	require.Len(t, resp.Frames, 2)
+	require.Len(t, resp.Frames, 4)
 	require.Len(t, resp.Frames[0].Fields, 5)
 	require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
 	require.Equal(t, "title", resp.Frames[0].Fields[1].Name)
@@ -43,11 +43,11 @@ func TestGraphQueryIntegrationWithoutRelations(t *testing.T) {
 
 	// Response
 	resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[wrote]->(b:book) return w,b"}, &client)
-	require.Len(t, resp.Frames, 2)
+	require.Len(t, resp.Frames, 3)
 	require.Len(t, resp.Frames[0].Fields, 5)
 	require.Equal(t, 15, resp.Frames[0].Fields[0].Len())
-	require.Len(t, resp.Frames[1].Fields, 4)
-	require.Equal(t, 0, resp.Frames[1].Fields[0].Len())
+	require.Len(t, resp.Frames[1].Fields, 2)
+	require.Equal(t, 14, resp.Frames[1].Fields[0].Len())
 }
 
 func TestGraphQueryIntegrationWithoutNodes(t *testing.T) {
@@ -57,10 +57,10 @@ func TestGraphQueryIntegrationWithoutNodes(t *testing.T) {
 
 	// Response
 	resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return r"}, &client)
-	require.Len(t, resp.Frames, 2)
-	require.Len(t, resp.Frames[0].Fields, 5)
-	require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
-	require.Len(t, resp.Frames[1].Fields, 4)
+	require.Len(t, resp.Frames, 3)
+	require.Len(t, resp.Frames[0].Fields, 4)
+	require.Equal(t, 14, resp.Frames[0].Fields[0].Len())
+	require.Len(t, resp.Frames[1].Fields, 1)
 	require.Equal(t, 14, resp.Frames[1].Fields[0].Len())
 }
 

@@ -1,8 +1,8 @@
-import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { QueryEditor } from './query-editor';
+import React from 'react';
 import { AggregationValue, QueryTypeValue, RedisQuery } from '../../redis';
 import { getQuery } from '../../tests/utils';
+import { QueryEditor } from './query-editor';
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
@@ -218,6 +218,16 @@ describe('QueryEditor', () => {
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange' },
         queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange123' },
+      },
+      {
+        name: 'cypher',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onCypherChange;
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: 'graph.query' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.GRAPH, command: 'graph.query123' },
       },
       {
         name: 'size',

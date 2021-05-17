@@ -23,6 +23,7 @@
     "build:backend": "mage -v lint && mage cover && mage -v",
     "dev": "grafana-toolkit plugin:dev",
     "format": "prettier --write \"**\"",
+    "restart:docker:plugin": "docker exec -it grafana pkill -f redis-datasource",
     "sign": "grafana-toolkit plugin:sign",
     "start": "docker-compose pull && docker-compose up",
     "start:dev": "docker-compose -f docker-compose/dev.yml pull && docker-compose -f docker-compose/dev.yml up",
@@ -31,6 +32,7 @@
     "stop:dev": "docker-compose -f docker-compose/dev.yml down",
     "test": "grafana-toolkit plugin:test --coverage",
     "test:backend": "mage cover",
+    "test:backend:single": "go test ./pkg/... -v -run TestGraphQuery",
     "test:integration": "mage integration",
     "upgrade": "yarn upgrade --latest",
     "watch": "grafana-toolkit plugin:dev --watch"

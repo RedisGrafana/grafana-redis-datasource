@@ -15,7 +15,7 @@ func TestGraphQuery(t *testing.T) {
 	t.Parallel()
 
 	/**
-	 * Success
+	 * Results with Nodes and Edges
 	 */
 	t.Run("should process command", func(t *testing.T) {
 		t.Parallel()
@@ -23,7 +23,11 @@ func TestGraphQuery(t *testing.T) {
 		// Client
 		client := testClient{
 			rcv: []interface{}{
-				nil,
+				[]interface{}{
+					[]byte("w"),
+					[]byte("r"),
+					[]byte("b"),
+				},
 				[]interface{}{
 					// nodes + relations
 					// Entry 1
@@ -176,19 +180,23 @@ func TestGraphQuery(t *testing.T) {
 								[]byte("properties"),
 								[]interface{}{
 									[]interface{}{[]byte("relation"), []byte("author")},
+									[]interface{}{[]byte("count"), int64(10)},
 								},
 							},
 						},
 					},
 				},
-				nil,
+				[]interface{}{
+					[]byte("Cached execution: 1"),
+					[]byte("Query internal execution time: 0.402967 milliseconds"),
+				},
 			},
 			err: nil,
 		}
 
 		// Response
 		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
-		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames, 4)
 		require.Len(t, resp.Frames[0].Fields, 5)
 		require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
 		require.Equal(t, "333", resp.Frames[0].Fields[0].At(0))
@@ -215,6 +223,98 @@ func TestGraphQuery(t *testing.T) {
 		require.Equal(t, "mainStat", resp.Frames[1].Fields[3].Name)
 		require.Equal(t, 2, resp.Frames[1].Fields[0].Len())
 
+	})
+
+	/**
+	 * Results with data only
+	 */
+	t.Run("should process command with data", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []interface{}{
+				[]interface{}{
+					[]byte("r.name"),
+					[]byte("t.name"),
+					[]byte("t.gp"),
+					[]byte("t.float"),
+				},
+				[]interface{}{
+					// Entry 1
+					[]interface{}{
+						[]byte("Green Den"),
+						[]byte("27 semiprecious stones"),
+						int64(225),
+						float64(3.14),
+					},
+					// Entry 2
+					[]interface{}{
+						[]byte("Green Warren"),
+						[]byte("sack of coins"),
+						int64(500),
+						float64(15),
+					},
+				},
+				[]interface{}{
+					[]byte("Cached execution: 0"),
+					[]byte("Query internal execution time: 0.524894 milliseconds"),
+					[]byte("Should skip this line"),
+				},
+			},
+			err: nil,
+		}
+
+		// Response
+		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "dungeon", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp, t.float"}, &client)
+		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames[0].Fields, 4)
+
+		// Data
+		require.Equal(t, "r.name", resp.Frames[0].Fields[0].Name)
+		require.Equal(t, "Green Den", resp.Frames[0].Fields[0].At(0))
+		require.Equal(t, "t.gp", resp.Frames[0].Fields[2].Name)
+		require.Equal(t, int64(225), resp.Frames[0].Fields[2].At(0))
+		require.Equal(t, "t.float", resp.Frames[0].Fields[3].Name)
+		require.Equal(t, float64(3.14), resp.Frames[0].Fields[3].At(0))
+		require.Equal(t, 2, resp.Frames[0].Fields[0].Len())
+
+		// Meta
+		require.Equal(t, "data", resp.Frames[1].Fields[0].Name)
+		require.Equal(t, "Cached execution", resp.Frames[1].Fields[0].At(0))
+		require.Equal(t, "value", resp.Frames[1].Fields[1].Name)
+		require.Equal(t, "0", resp.Frames[1].Fields[1].At(0))
+		require.Equal(t, 2, resp.Frames[1].Fields[0].Len())
+	})
+
+	/**
+	 * Results with no data
+	 */
+	t.Run("should process command with data", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []interface{}{
+				[]interface{}{
+					[]byte("r.name"),
+					[]byte("t.name"),
+					[]byte("t.gp"),
+					[]byte("t.float"),
+				},
+				[]interface{}{[]interface{}{}},
+				[]interface{}{
+					[]byte("Cached execution: 0"),
+					[]byte("Query internal execution time: 0.524894 milliseconds"),
+				},
+			},
+			err: nil,
+		}
+
+		// Response
+		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "dungeon", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp, t.float"}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 2)
 	})
 
 	/**
