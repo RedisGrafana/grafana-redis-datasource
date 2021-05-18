@@ -59,6 +59,8 @@ func addFrameFieldsFromArray(values []interface{}, frame *data.Frame) *data.Fram
 			frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{value}))
 		case int64:
 			frame.Fields = append(frame.Fields, data.NewField(key, nil, []int64{v}))
+		case float64:
+			frame.Fields = append(frame.Fields, data.NewField(key, nil, []float64{v}))
 		default:
 			log.DefaultLogger.Error("addFrameFieldsFromArray", "Conversion Error", "Unsupported Value type")
 		}

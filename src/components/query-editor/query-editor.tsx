@@ -1,5 +1,6 @@
 import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
+import { RedisGraph } from 'redis/graph';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, TextArea } from '@grafana/ui';
 import { StreamingDataType, StreamingDataTypes } from '../../constants';
@@ -406,7 +407,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {command && CommandParameters.cypher.includes(command) && (
+        {command && CommandParameters.cypher.includes(command as RedisGraph) && (
           <div className="gf-form">
             <InlineFormLabel
               tooltip="The syntax is based on Cypher, and only a subset of the language currently supported: \

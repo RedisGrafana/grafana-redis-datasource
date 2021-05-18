@@ -8,6 +8,7 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/mediocregopher/radix/v3/resp/resp2"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -46,10 +47,11 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: "rg.pydumpreqs"}},
 		{queryModel{Command: "xrange"}},
 		{queryModel{Command: "xrevrange"}},
-		{queryModel{Command: "graph.query"}},
-		{queryModel{Command: "graph.slowlog"}},
-		{queryModel{Command: "graph.explain"}},
-		{queryModel{Command: "graph.profile"}},
+		{queryModel{Command: models.GraphConfig}},
+		{queryModel{Command: models.GraphExplain}},
+		{queryModel{Command: models.GraphProfile}},
+		{queryModel{Command: models.GraphQuery}},
+		{queryModel{Command: models.GraphSlowlog}},
 	}
 
 	// Run Tests

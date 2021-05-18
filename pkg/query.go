@@ -7,6 +7,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/mediocregopher/radix/v3/resp/resp2"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 )
 
 /**
@@ -118,14 +119,16 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	/**
 	 * Redis Graph
 	 */
-	case "graph.query":
+	case models.GraphQuery:
 		return queryGraphQuery(qm, client)
-	case "graph.slowlog":
+	case models.GraphSlowlog:
 		return queryGraphSlowlog(qm, client)
-	case "graph.explain":
+	case models.GraphExplain:
 		return queryGraphExplain(qm, client)
-	case "graph.profile":
+	case models.GraphProfile:
 		return queryGraphProfile(qm, client)
+	case models.GraphConfig:
+		return queryGraphConfig(qm, client)
 
 	/**
 	 * Default
