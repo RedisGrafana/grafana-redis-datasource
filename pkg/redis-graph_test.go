@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -195,7 +196,7 @@ func TestGraphQuery(t *testing.T) {
 		}
 
 		// Response
-		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
+		resp := queryGraphQuery(queryModel{Command: models.GraphQuery, Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
 		require.Len(t, resp.Frames, 4)
 		require.Len(t, resp.Frames[0].Fields, 5)
 		require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
@@ -266,7 +267,7 @@ func TestGraphQuery(t *testing.T) {
 		}
 
 		// Response
-		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "dungeon", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp, t.float"}, &client)
+		resp := queryGraphQuery(queryModel{Command: models.GraphQuery, Key: "dungeon", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp, t.float"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 4)
 
@@ -312,7 +313,7 @@ func TestGraphQuery(t *testing.T) {
 		}
 
 		// Response
-		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "dungeon", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp, t.float"}, &client)
+		resp := queryGraphQuery(queryModel{Command: models.GraphQuery, Key: "dungeon", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp, t.float"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 2)
 	})
@@ -330,7 +331,7 @@ func TestGraphQuery(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
+		resp := queryGraphQuery(queryModel{Command: models.GraphQuery, Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
@@ -356,7 +357,7 @@ func TestGraphSlowlog(t *testing.T) {
 		}
 
 		// Response
-		resp := queryGraphSlowlog(queryModel{Command: "graph.slowlog", Key: "GOT_DEMO"}, &client)
+		resp := queryGraphSlowlog(queryModel{Command: models.GraphSlowlog, Key: "GOT_DEMO"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 4)
 		require.Equal(t, "timestamp", resp.Frames[0].Fields[0].Name)
@@ -385,7 +386,7 @@ func TestGraphSlowlog(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryGraphSlowlog(queryModel{Command: "graph.slowlog", Key: "GOT_DEMO"}, &client)
+		resp := queryGraphSlowlog(queryModel{Command: models.GraphSlowlog, Key: "GOT_DEMO"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
@@ -411,7 +412,7 @@ func TestGraphExplain(t *testing.T) {
 		}
 
 		// Response
-		resp := queryGraphExplain(queryModel{Command: "graph.explain", Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
+		resp := queryGraphExplain(queryModel{Command: models.GraphExplain, Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "execution plan", resp.Frames[0].Fields[0].Name)
@@ -431,7 +432,7 @@ func TestGraphExplain(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryGraphExplain(queryModel{Command: "graph.explain", Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
+		resp := queryGraphExplain(queryModel{Command: models.GraphExplain, Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
@@ -460,7 +461,7 @@ func TestGraphProfile(t *testing.T) {
 		}
 
 		// Response
-		resp := queryGraphProfile(queryModel{Command: "graph.profile", Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
+		resp := queryGraphProfile(queryModel{Command: models.GraphProfile, Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, "operation", resp.Frames[0].Fields[0].Name)
@@ -485,7 +486,57 @@ func TestGraphProfile(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryGraphProfile(queryModel{Command: "graph.explain", Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
+		resp := queryGraphProfile(queryModel{Command: models.GraphProfile, Key: "GOT_DEMO", Cypher: "MATCH (r:Room)-[:CONTAINS]->(t:Treasure) RETURN r.name, t.name, t.gp"}, &client)
+		require.EqualError(t, resp.Error, "error occurred")
+	})
+}
+
+/**
+ * GRAPH.CONFIG
+ */
+func TestGraphConfig(t *testing.T) {
+	t.Parallel()
+
+	/**
+	 * Success
+	 */
+	t.Run("should process command", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []interface{}{
+				[]interface{}{[]byte("CACHE_SIZE"), int64(25)},
+				[]interface{}{[]byte("ASYNC_DELETE"), int64(1)},
+				[]interface{}{[]byte("THREAD_COUNT"), float64(3.14)},
+			},
+			err: nil,
+		}
+
+		// Response
+		resp := queryGraphConfig(queryModel{Command: models.GraphConfig}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 3)
+		require.Equal(t, "CACHE_SIZE", resp.Frames[0].Fields[0].Name)
+		require.Equal(t, int64(25), resp.Frames[0].Fields[0].At(0))
+		require.Equal(t, "THREAD_COUNT", resp.Frames[0].Fields[2].Name)
+		require.Equal(t, float64(3.14), resp.Frames[0].Fields[2].At(0))
+	})
+
+	/**
+	 * Error
+	 */
+	t.Run("should handle error", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv:      nil,
+			batchRcv: nil,
+			err:      errors.New("error occurred")}
+
+		// Response
+		resp := queryGraphConfig(queryModel{Command: models.GraphConfig}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }

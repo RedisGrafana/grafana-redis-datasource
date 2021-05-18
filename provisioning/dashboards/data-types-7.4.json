@@ -3465,7 +3465,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 7,
         "w": 12,
         "x": 12,
         "y": 81
@@ -3517,10 +3517,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 7,
         "w": 12,
         "x": 12,
-        "y": 91
+        "y": 88
       },
       "id": 82,
       "options": {
@@ -3538,6 +3538,58 @@
         }
       ],
       "title": "Profile",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 95
+      },
+      "id": 83,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "command": "graph.config",
+          "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
+          "keyName": "GOT_DEMO",
+          "query": "",
+          "refId": "A",
+          "type": "graph"
+        }
+      ],
+      "title": "Config",
       "type": "table"
     }
   ],

@@ -1,5 +1,6 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
+import { RedisGraph } from 'redis/graph';
 import { AggregationValue, QueryTypeValue, RedisQuery } from '../../redis';
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './query-editor';
@@ -226,8 +227,8 @@ describe('QueryEditor', () => {
             return node.prop('onChange') === wrapper.instance().onCypherChange;
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: 'graph.query' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.GRAPH, command: 'graph.query123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: RedisGraph.QUERY },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.GRAPH, command: 'info' },
       },
       {
         name: 'size',

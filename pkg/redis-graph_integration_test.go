@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/mediocregopher/radix/v3"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +20,7 @@ func TestGraphQueryIntegration(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
+	resp := queryGraphQuery(queryModel{Command: models.GraphQuery, Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b"}, &client)
 	require.Len(t, resp.Frames, 4)
 	require.Len(t, resp.Frames[0].Fields, 5)
 	require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
@@ -42,7 +43,7 @@ func TestGraphQueryIntegrationWithoutRelations(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[wrote]->(b:book) return w,b"}, &client)
+	resp := queryGraphQuery(queryModel{Command: models.GraphQuery, Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[wrote]->(b:book) return w,b"}, &client)
 	require.Len(t, resp.Frames, 3)
 	require.Len(t, resp.Frames[0].Fields, 5)
 	require.Equal(t, 15, resp.Frames[0].Fields[0].Len())
@@ -56,7 +57,7 @@ func TestGraphQueryIntegrationWithoutNodes(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryGraphQuery(queryModel{Command: "graph.query", Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return r"}, &client)
+	resp := queryGraphQuery(queryModel{Command: models.GraphQuery, Key: "GOT_DEMO", Cypher: "MATCH (w:writer)-[r:wrote]->(b:book) return r"}, &client)
 	require.Len(t, resp.Frames, 3)
 	require.Len(t, resp.Frames[0].Fields, 4)
 	require.Equal(t, 14, resp.Frames[0].Fields[0].Len())
@@ -73,7 +74,7 @@ func TestGraphSlowlogIntegration(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryGraphSlowlog(queryModel{Command: "graph.slowlog", Key: "GOT_DEMO"}, &client)
+	resp := queryGraphSlowlog(queryModel{Command: models.GraphSlowlog, Key: "GOT_DEMO"}, &client)
 	require.Len(t, resp.Frames, 1)
 	require.Len(t, resp.Frames[0].Fields, 4)
 }

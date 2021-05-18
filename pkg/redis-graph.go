@@ -20,7 +20,6 @@ import (
  */
 func queryGraphQuery(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
-
 	var result []interface{}
 
 	// Run command
@@ -199,7 +198,7 @@ func findAllNodesAndEdges(input interface{}) ([]models.NodeEntry, []models.EdgeE
 					}
 
 					// Add property
-					propString := fmt.Sprintf("\"%s\"=\"%s\"", propertyArray[0], value)
+					propString := fmt.Sprintf("%s: %s", propertyArray[0], value)
 					props = append(props, propString)
 				}
 
@@ -244,7 +243,7 @@ func findAllNodesAndEdges(input interface{}) ([]models.NodeEntry, []models.EdgeE
 					}
 
 					// Add property
-					propString := fmt.Sprintf("\"%s\"=\"%s\"", propertyArray[0], value)
+					propString := fmt.Sprintf("%s: %s", propertyArray[0], value)
 					props = append(props, propString)
 				}
 
@@ -271,7 +270,6 @@ func findAllNodesAndEdges(input interface{}) ([]models.NodeEntry, []models.EdgeE
  */
 func queryGraphSlowlog(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
-
 	var result [][]string
 
 	// Run command
@@ -312,7 +310,6 @@ func queryGraphSlowlog(qm queryModel, client redisClient) backend.DataResponse {
  */
 func queryGraphExplain(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
-
 	var result []string
 
 	// Run command
@@ -345,7 +342,6 @@ func queryGraphExplain(qm queryModel, client redisClient) backend.DataResponse {
  */
 func queryGraphProfile(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
-
 	var result []string
 
 	// Run command
@@ -382,6 +378,33 @@ func queryGraphProfile(qm queryModel, client redisClient) backend.DataResponse {
 
 		frame.AppendRow(operation, records, duration)
 	}
+
+	// Return
+	return response
+}
+
+/**
+ * GRAPH.CONFIG <Graph name> {cypher}
+ *
+ * Retrieves or updates a RedisGraph configuration.
+ * @see https://oss.redislabs.com/redisgraph/commands/#graphconfig
+ */
+func queryGraphConfig(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+	var result []interface{}
+
+	// Run command
+	err := client.RunFlatCmd(&result, qm.Command, "GET", "*")
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// New Frame
+	frame := data.NewFrame(qm.Command)
+	frame = addFrameFieldsFromArray(result, frame)
+	response.Frames = append(response.Frames, frame)
 
 	// Return
 	return response

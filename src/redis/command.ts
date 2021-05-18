@@ -1,3 +1,4 @@
+import { RedisGraph, RedisGraphCommands } from './graph';
 import { QueryTypeValue } from './query';
 
 /**
@@ -130,29 +131,7 @@ export const Commands = {
       value: 'rg.pydumpreqs',
     },
   ],
-  [QueryTypeValue.GRAPH]: [
-    {
-      label: 'GRAPH.EXPLAIN',
-      description: 'Constructs a query execution plan but does not run it',
-      value: 'graph.explain',
-    },
-    {
-      label: 'GRAPH.QUERY',
-      description: 'Executes the given query against a specified graph',
-      value: 'graph.query',
-    },
-    {
-      label: 'GRAPH.PROFILE',
-      description:
-        "Executes a query and produces an execution plan augmented with metrics for each operation's execution",
-      value: 'graph.profile',
-    },
-    {
-      label: 'GRAPH.SLOWLOG',
-      description: 'Returns a list containing up to 10 of the slowest queries issued against the given graph ID',
-      value: 'graph.slowlog',
-    },
-  ],
+  [QueryTypeValue.GRAPH]: RedisGraphCommands,
 };
 
 /**
@@ -182,10 +161,10 @@ export const CommandParameters = {
     'ft.info',
     'xrange',
     'xrevrange',
-    'graph.query',
-    'graph.slowlog',
-    'graph.explain',
-    'graph.profile',
+    RedisGraph.QUERY,
+    RedisGraph.SLOWLOG,
+    RedisGraph.EXPLAIN,
+    RedisGraph.PROFILE,
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],
@@ -200,5 +179,5 @@ export const CommandParameters = {
   samples: ['tmscan'],
   start: ['xrange', 'xrevrange'],
   end: ['xrange', 'xrevrange'],
-  cypher: ['graph.explain', 'graph.query', 'graph.profile'],
+  cypher: [RedisGraph.EXPLAIN, RedisGraph.QUERY, RedisGraph.PROFILE],
 };
