@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -21,7 +22,7 @@ func TestRgPystats(t *testing.T) {
 
 		// Client
 		client := testClient{
-			rcv: pystats{
+			rcv: models.PyStats{
 				TotalAllocated: int64(11),
 				PeakAllocated:  int64(12),
 				CurrAllocated:  int64(13),
@@ -30,7 +31,7 @@ func TestRgPystats(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgPystats(queryModel{Command: "rg.pystats"}, &client)
+		resp := queryRgPystats(queryModel{Command: models.GearsPyStats}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, int64(11), resp.Frames[0].Fields[0].At(0))
@@ -55,7 +56,7 @@ func TestRgPystats(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryRgPystats(queryModel{Command: "rg.pystats"}, &client)
+		resp := queryRgPystats(queryModel{Command: models.GearsPyStats}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
@@ -74,11 +75,11 @@ func TestRgDumpregistrations(t *testing.T) {
 
 		// Client
 		client := testClient{
-			rcv: []dumpregistrations{{
+			rcv: []models.DumpRegistrations{{
 				ID:     "123",
 				Reader: "reader",
 				Desc:   "desc",
-				RegistrationData: registrationData{
+				RegistrationData: models.RegistrationData{
 					Mode:         "async",
 					NumTriggered: 1,
 					NumSuccess:   2,
@@ -93,7 +94,7 @@ func TestRgDumpregistrations(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgDumpregistrations(queryModel{Command: "rg.dumpregistrations"}, &client)
+		resp := queryRgDumpregistrations(queryModel{Command: models.GearsDumpRegistrations}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 12)
 		require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
@@ -133,7 +134,7 @@ func TestRgDumpregistrations(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryRgDumpregistrations(queryModel{Command: "rg.dumpregistrations"}, &client)
+		resp := queryRgDumpregistrations(queryModel{Command: models.GearsDumpRegistrations}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
@@ -157,7 +158,7 @@ func TestRgPyexecute(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GB().run()"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "results", resp.Frames[0].Name)
@@ -183,7 +184,7 @@ func TestRgPyexecute(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()", Unblocking: true, Requirements: "numpy"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GB().run()", Unblocking: true, Requirements: "numpy"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "operationId", resp.Frames[0].Name)
@@ -213,7 +214,7 @@ func TestRgPyexecute(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GB().run()"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "results", resp.Frames[0].Name)
@@ -242,7 +243,7 @@ func TestRgPyexecute(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GB().run()"}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }
@@ -261,7 +262,7 @@ func TestRgPyDumpReqs(t *testing.T) {
 
 		// Client
 		client := testClient{
-			rcv: []pydumpreq{{
+			rcv: []models.PyDumpReq{{
 				GearReqVersion: 1,
 				Name:           "pandas",
 				IsDownloaded:   "yes",
@@ -273,7 +274,7 @@ func TestRgPyDumpReqs(t *testing.T) {
 		}
 
 		// Response
-		resp := queryRgPydumpReqs(queryModel{Command: "rg.pydumpreqs"}, &client)
+		resp := queryRgPydumpReqs(queryModel{Command: models.GearsPyDumpReqs}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 6)
 		require.Equal(t, int64(1), resp.Frames[0].Fields[0].At(0))
@@ -301,7 +302,7 @@ func TestRgPyDumpReqs(t *testing.T) {
 			err:      errors.New("error occurred")}
 
 		// Response
-		resp := queryRgPydumpReqs(queryModel{Command: "rg.pydumpreqs"}, &client)
+		resp := queryRgPydumpReqs(queryModel{Command: models.GearsPyDumpReqs}, &client)
 		require.EqualError(t, resp.Error, "error occurred")
 	})
 }

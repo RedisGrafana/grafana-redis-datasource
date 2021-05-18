@@ -39,15 +39,15 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	/**
 	 * Redis Timeseries
 	 */
-	case "ts.get":
+	case models.TimeSeriesGet:
 		return queryTsGet(qm, client)
-	case "ts.info":
+	case models.TimeSeriesInfo:
 		return queryTsInfo(qm, client)
-	case "ts.queryindex":
+	case models.TimeSeriesQueryIndex:
 		return queryTsQueryIndex(qm, client)
-	case "ts.range":
+	case models.TimeSeriesRange:
 		return queryTsRange(from, to, qm, client)
-	case "ts.mrange":
+	case models.TimeSeriesMRange:
 		return queryTsMRange(from, to, qm, client)
 
 	/**
@@ -107,13 +107,13 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	/**
 	 * Redis Gears
 	 */
-	case "rg.pystats":
+	case models.GearsPyStats:
 		return queryRgPystats(qm, client)
-	case "rg.dumpregistrations":
+	case models.GearsDumpRegistrations:
 		return queryRgDumpregistrations(qm, client)
-	case "rg.pyexecute":
+	case models.GearsPyExecute:
 		return queryRgPyexecute(qm, client)
-	case "rg.pydumpreqs":
+	case models.GearsPyDumpReqs:
 		return queryRgPydumpReqs(qm, client)
 
 	/**

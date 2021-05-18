@@ -1,13 +1,15 @@
 package models
 
 /**
- * Commands
+ * RedisGraph Commands
  */
-const GraphConfig = "graph.config"
-const GraphExplain = "graph.explain"
-const GraphProfile = "graph.profile"
-const GraphQuery = "graph.query"
-const GraphSlowlog = "graph.slowlog"
+const (
+	GraphConfig  = "graph.config"
+	GraphExplain = "graph.explain"
+	GraphProfile = "graph.profile"
+	GraphQuery   = "graph.query"
+	GraphSlowlog = "graph.slowlog"
+)
 
 /**
  *  Represents node
