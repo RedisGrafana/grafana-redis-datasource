@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -297,6 +298,89 @@ func queryGraphSlowlog(qm queryModel, client redisClient) backend.DataResponse {
 		timestamp, _ := strconv.ParseInt(entry[0], 10, 64)
 		duration, _ := strconv.ParseFloat(entry[3], 64)
 		frame.AppendRow(time.Unix(timestamp, 0), entry[1], entry[2], duration)
+	}
+
+	// Return
+	return response
+}
+
+/**
+ * GRAPH.EXPLAIN <Graph name> {cypher}
+ *
+ * Constructs a query execution plan but does not run it. Inspect this execution plan to better understand how your query will get executed.
+ * @see https://oss.redislabs.com/redisgraph/commands/#graphexplain
+ */
+func queryGraphExplain(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	var result []string
+
+	// Run command
+	err := client.RunFlatCmd(&result, qm.Command, qm.Key, qm.Cypher)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// New Frame
+	frame := data.NewFrame(qm.Command)
+	frame.Fields = append(frame.Fields, data.NewField("execution plan", nil, []string{}))
+	response.Frames = append(response.Frames, frame)
+
+	// Entries
+	for _, entry := range result {
+		frame.AppendRow(entry)
+	}
+
+	// Return
+	return response
+}
+
+/**
+ * GRAPH.PROFILE <Graph name> {cypher}
+ *
+ * Executes a query and produces an execution plan augmented with metrics for each operation's execution.
+ * @see https://oss.redislabs.com/redisgraph/commands/#graphprofile
+ */
+func queryGraphProfile(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	var result []string
+
+	// Run command
+	err := client.RunFlatCmd(&result, qm.Command, qm.Key, qm.Cypher)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// New Frame
+	frame := data.NewFrame(qm.Command)
+	frame.Fields = append(frame.Fields, data.NewField("operation", nil, []string{}))
+	frame.Fields = append(frame.Fields, data.NewField("records", nil, []int64{}))
+	frame.Fields = append(frame.Fields, data.NewField("execution", nil, []float64{}))
+	response.Frames = append(response.Frames, frame)
+
+	// Set Field Config
+	frame.Fields[2].Config = &data.FieldConfig{Unit: "ms"}
+
+	// Operations
+	re, _ := regexp.Compile(`Records produced: (\d+), Execution time: (.+) ms`)
+	for _, r := range result {
+		match := re.FindStringSubmatch(r)
+
+		// Can't find match
+		if len(match) < 3 {
+			continue
+		}
+
+		operation := strings.Trim(strings.Replace(r, match[0], "", -1), "| ")
+		records, _ := strconv.ParseInt(match[1], 10, 64)
+		duration, _ := strconv.ParseFloat(match[2], 64)
+
+		frame.AppendRow(operation, records, duration)
 	}
 
 	// Return

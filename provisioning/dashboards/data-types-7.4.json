@@ -69,7 +69,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "info",
@@ -163,7 +163,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "tmscan",
@@ -362,7 +362,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "info",
@@ -441,7 +441,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "get",
@@ -502,7 +502,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "get",
@@ -557,7 +557,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "type",
@@ -616,7 +616,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "llen",
@@ -676,7 +676,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "ttl",
@@ -735,7 +735,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "scard",
@@ -794,7 +794,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "xlen",
@@ -853,7 +853,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "xlen",
@@ -913,7 +913,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "hget",
@@ -975,7 +975,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "hget",
@@ -1037,7 +1037,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "hlen",
@@ -1095,7 +1095,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "hgetall",
@@ -1153,7 +1153,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "hmget",
@@ -1287,7 +1287,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "hkeys",
@@ -1424,7 +1424,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "smembers",
@@ -1491,7 +1491,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "xinfoStream",
@@ -1645,7 +1645,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "xrange",
@@ -1700,7 +1700,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "xrange",
@@ -1770,7 +1770,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "ft.info",
@@ -1875,7 +1875,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1973,7 +1973,6 @@
       },
       "yaxes": [
         {
-          "$$hashKey": "object:507",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -1982,7 +1981,6 @@
           "show": true
         },
         {
-          "$$hashKey": "object:508",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -2035,7 +2033,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2209,7 +2207,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "rg.pystats",
@@ -2265,7 +2263,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2497,7 +2495,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "rg.dumpregistrations",
@@ -2758,7 +2756,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "rg.pydumpreqs",
@@ -2878,7 +2876,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "ts.info",
@@ -3075,7 +3073,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "ts.get",
@@ -3131,7 +3129,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "",
@@ -3276,7 +3274,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "ts.mrange",
@@ -3409,7 +3407,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "7.5.6",
       "targets": [
         {
           "command": "graph.slowlog",
@@ -3437,6 +3435,110 @@
         }
       ],
       "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 81
+      },
+      "id": 81,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "command": "graph.explain",
+          "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
+          "keyName": "GOT_DEMO",
+          "query": "",
+          "refId": "A",
+          "type": "graph"
+        }
+      ],
+      "title": "Explain",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 91
+      },
+      "id": 82,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.5.6",
+      "targets": [
+        {
+          "command": "graph.profile",
+          "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
+          "keyName": "GOT_DEMO",
+          "query": "",
+          "refId": "A",
+          "type": "graph"
+        }
+      ],
+      "title": "Profile",
+      "type": "table"
     }
   ],
   "refresh": false,
@@ -3454,5 +3556,5 @@
   "timezone": "",
   "title": "Redis Data Types 7.4",
   "uid": "2TKvUH-G2",
-  "version": 1
+  "version": 2
 }

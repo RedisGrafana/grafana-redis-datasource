@@ -132,13 +132,24 @@ export const Commands = {
   ],
   [QueryTypeValue.GRAPH]: [
     {
+      label: 'GRAPH.EXPLAIN',
+      description: 'Constructs a query execution plan but does not run it',
+      value: 'graph.explain',
+    },
+    {
       label: 'GRAPH.QUERY',
-      description: 'Executes the given query against a specified graph.',
+      description: 'Executes the given query against a specified graph',
       value: 'graph.query',
     },
     {
+      label: 'GRAPH.PROFILE',
+      description:
+        "Executes a query and produces an execution plan augmented with metrics for each operation's execution",
+      value: 'graph.profile',
+    },
+    {
       label: 'GRAPH.SLOWLOG',
-      description: 'Returns a list containing up to 10 of the slowest queries issued against the given graph ID.',
+      description: 'Returns a list containing up to 10 of the slowest queries issued against the given graph ID',
       value: 'graph.slowlog',
     },
   ],
@@ -173,6 +184,8 @@ export const CommandParameters = {
     'xrevrange',
     'graph.query',
     'graph.slowlog',
+    'graph.explain',
+    'graph.profile',
   ],
   legend: ['ts.range'],
   legendLabel: ['ts.mrange'],
@@ -187,5 +200,5 @@ export const CommandParameters = {
   samples: ['tmscan'],
   start: ['xrange', 'xrevrange'],
   end: ['xrange', 'xrevrange'],
-  cypher: ['graph.query'],
+  cypher: ['graph.explain', 'graph.query', 'graph.profile'],
 };
