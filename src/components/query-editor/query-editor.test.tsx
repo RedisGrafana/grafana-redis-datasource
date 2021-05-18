@@ -1,7 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { RedisGraph } from 'redis/graph';
-import { AggregationValue, QueryTypeValue, RedisQuery } from '../../redis';
+import { AggregationValue, QueryTypeValue, RedisQuery, RedisTimeSeries } from '../../redis';
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './query-editor';
 
@@ -175,8 +175,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Label Filter';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.MRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
       },
       {
         name: 'field',
@@ -196,8 +196,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Legend';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.range' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.range123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.RANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
       },
       {
         name: 'legend',
@@ -207,8 +207,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Legend Label';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.MRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
       },
       {
         name: 'value',
@@ -217,8 +217,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Value Label';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'ts.mrange123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.MRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
       },
       {
         name: 'cypher',
@@ -317,8 +317,8 @@ describe('QueryEditor', () => {
             return node.prop('onChange') === wrapper.instance().onAggregationChange;
           }),
         type: 'select',
-        queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: RedisTimeSeries.RANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'info' },
       },
       {
         name: 'bucket',
@@ -330,10 +330,15 @@ describe('QueryEditor', () => {
         queryWhenShown: {
           refId: '',
           type: QueryTypeValue.TIMESERIES,
-          command: 'ts.range',
+          command: RedisTimeSeries.RANGE,
           aggregation: AggregationValue.AVG,
         },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'ts.range', aggregation: undefined },
+        queryWhenHidden: {
+          refId: '',
+          type: QueryTypeValue.TIMESERIES,
+          command: RedisTimeSeries.RANGE,
+          aggregation: undefined,
+        },
       },
       {
         name: 'fill',
@@ -345,7 +350,7 @@ describe('QueryEditor', () => {
         queryWhenShown: {
           refId: '',
           type: QueryTypeValue.TIMESERIES,
-          command: 'ts.range',
+          command: RedisTimeSeries.RANGE,
           aggregation: AggregationValue.AVG,
           bucket: 123,
           fill: false,
@@ -353,7 +358,7 @@ describe('QueryEditor', () => {
         queryWhenHidden: {
           refId: '',
           type: QueryTypeValue.TIMESERIES,
-          command: 'ts.range',
+          command: RedisTimeSeries.RANGE,
           aggregation: AggregationValue.AVG,
           bucket: 0,
         },

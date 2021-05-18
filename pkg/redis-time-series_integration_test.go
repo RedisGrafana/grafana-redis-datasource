@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/mediocregopher/radix/v3"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +20,7 @@ func TestTSInfoIntegration(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryTsInfo(queryModel{Command: "ts.info", Key: "test:timeseries2"}, &client)
+	resp := queryTsInfo(queryModel{Command: models.TimeSeriesInfo, Key: "test:timeseries2"}, &client)
 	require.Len(t, resp.Frames, 1)
 	require.Len(t, resp.Frames[0].Fields, 12)
 }

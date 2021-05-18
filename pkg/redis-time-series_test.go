@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -23,7 +24,7 @@ func TestQueryTsRange(t *testing.T) {
 	}{
 		{
 			"should process receiver without aggregation and legend provided",
-			queryModel{Command: "ts.range", Key: "test1"},
+			queryModel{Command: models.TimeSeriesRange, Key: "test1"},
 			[][]string{
 				{"1548149180000", "26.199999999999999"},
 				{"1548149195000", "27.399999999999999"},
@@ -45,7 +46,7 @@ func TestQueryTsRange(t *testing.T) {
 		},
 		{
 			"should process receiver with aggregation and legend",
-			queryModel{Command: "ts.range", Aggregation: "avg", Bucket: 5000, Key: "test1", Legend: "Legend"},
+			queryModel{Command: models.TimeSeriesRange, Aggregation: "avg", Bucket: 5000, Key: "test1", Legend: "Legend"},
 			[][]string{
 				{"1548149180000", "26.199999999999999"},
 				{"1548149185000", "27.399999999999999"},
@@ -67,7 +68,7 @@ func TestQueryTsRange(t *testing.T) {
 		},
 		{
 			"should process receiver with fill",
-			queryModel{Command: "ts.range", Bucket: 5000, Key: "test1", Fill: true},
+			queryModel{Command: models.TimeSeriesRange, Bucket: 5000, Key: "test1", Fill: true},
 			[][]string{
 				{"1548149180000", "26.199999999999999"},
 				{"1548149195000", "27.399999999999999"},
@@ -89,7 +90,7 @@ func TestQueryTsRange(t *testing.T) {
 		},
 		{
 			"should process receiver error",
-			queryModel{Command: "ts.range", Key: "test1"},
+			queryModel{Command: models.TimeSeriesRange, Key: "test1"},
 			nil,
 			0,
 			0,
@@ -146,7 +147,7 @@ func TestQueryTsMRange(t *testing.T) {
 	}{
 		{
 			"should process receiver without aggregation and legend provided but with labels",
-			queryModel{Command: "ts.mrange", Key: "test1", Filter: "area_id=32 sensor_id!=1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Filter: "area_id=32 sensor_id!=1"},
 			[]interface{}{
 				[]interface{}{
 					[]byte("temperature:2:32"),
@@ -190,7 +191,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should process receiver with aggregation and legend",
-			queryModel{Command: "ts.mrange", Key: "test1", Aggregation: "avg", Legend: "Legend", Bucket: 5000, Filter: "area_id=32 sensor_id!=1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Aggregation: "avg", Legend: "Legend", Bucket: 5000, Filter: "area_id=32 sensor_id!=1"},
 			[]interface{}{
 				[]interface{}{
 					[]byte("temperature:2:32"),
@@ -221,7 +222,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should process receiver with labels specified in legend",
-			queryModel{Command: "ts.mrange", Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
 			[]interface{}{
 				[]interface{}{
 					[]byte("temperature:2:32"),
@@ -243,7 +244,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should process receiver with value field existed in labels",
-			queryModel{Command: "ts.mrange", Key: "test1", Value: "sensor_id", Filter: "area_id=32 sensor_id!=1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Value: "sensor_id", Filter: "area_id=32 sensor_id!=1"},
 			[]interface{}{
 				[]interface{}{
 					[]byte("temperature:2:32"),
@@ -266,7 +267,7 @@ func TestQueryTsMRange(t *testing.T) {
 
 		{
 			"should process receiver with []byte field instead of int",
-			queryModel{Command: "ts.mrange", Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
 			[]interface{}{
 				[]interface{}{
 					[]byte("temperature:2:32"),
@@ -291,7 +292,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should process receiver with string field instead of int",
-			queryModel{Command: "ts.mrange", Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
 			[]interface{}{
 				[]interface{}{
 					[]byte("temperature:2:32"),
@@ -316,7 +317,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should process receiver with Fill",
-			queryModel{Command: "ts.mrange", Key: "test1", Fill: true, Bucket: 5000, Filter: "area_id=32 sensor_id!=1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Fill: true, Bucket: 5000, Filter: "area_id=32 sensor_id!=1"},
 			[]interface{}{
 				[]interface{}{
 					[]byte("temperature:2:32"),
@@ -347,7 +348,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should return error if result is string",
-			queryModel{Command: "ts.mrange", Key: "test1", Filter: "filter"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Filter: "filter"},
 			interface{}("someString"),
 			0,
 			0,
@@ -361,7 +362,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should return error on bad filter",
-			queryModel{Command: "ts.mrange", Key: "test1", Filter: "\""},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Filter: "\""},
 			nil,
 			0,
 			0,
@@ -375,7 +376,7 @@ func TestQueryTsMRange(t *testing.T) {
 		},
 		{
 			"should process receiver error",
-			queryModel{Command: "ts.mrange", Key: "test1"},
+			queryModel{Command: models.TimeSeriesMRange, Key: "test1"},
 			nil,
 			0,
 			0,
@@ -427,7 +428,7 @@ func TestQueryTsGet(t *testing.T) {
 	}{
 		{
 			"should process receiver without aggregation and legend provided",
-			queryModel{Command: "ts.get", Key: "test1"},
+			queryModel{Command: models.TimeSeriesGet, Key: "test1"},
 			[]string{"1548149180000", "26.199999999999999"},
 			2,
 			1,
@@ -439,7 +440,7 @@ func TestQueryTsGet(t *testing.T) {
 		},
 		{
 			"should process receiver error",
-			queryModel{Command: "ts.range", Key: "test1"},
+			queryModel{Command: models.TimeSeriesRange, Key: "test1"},
 			nil,
 
 			0,
@@ -486,7 +487,7 @@ func TestQueryTsInfo(t *testing.T) {
 	}{
 		{
 			"should process receiver",
-			queryModel{Command: "ts.queryindex", Filter: "test1"},
+			queryModel{Command: models.TimeSeriesQueryIndex, Filter: "test1"},
 			map[string]interface{}{
 				"totalSamples":    int64(100),
 				"memoryUsage":     int64(4184),
@@ -513,7 +514,7 @@ func TestQueryTsInfo(t *testing.T) {
 		},
 		{
 			"should process receiver error",
-			queryModel{Command: "ts.info", Filter: "test1"},
+			queryModel{Command: models.TimeSeriesInfo, Filter: "test1"},
 			nil,
 
 			0,
@@ -564,7 +565,7 @@ func TestQueryTsQueryIndex(t *testing.T) {
 	}{
 		{
 			"should process receiver without aggregation and legend provided",
-			queryModel{Command: "ts.queryindex", Filter: "sensor_id=2"},
+			queryModel{Command: models.TimeSeriesQueryIndex, Filter: "sensor_id=2"},
 			[]string{"temperature:2:32", "temperature:2:33"},
 			1,
 			2,
@@ -576,7 +577,7 @@ func TestQueryTsQueryIndex(t *testing.T) {
 		},
 		{
 			"should process error on bad filter",
-			queryModel{Command: "ts.queryindex", Filter: "\""},
+			queryModel{Command: models.TimeSeriesQueryIndex, Filter: "\""},
 			nil,
 
 			0,
@@ -586,7 +587,7 @@ func TestQueryTsQueryIndex(t *testing.T) {
 		},
 		{
 			"should process receiver error",
-			queryModel{Command: "ts.range", Filter: "test1"},
+			queryModel{Command: models.TimeSeriesRange, Filter: "test1"},
 			nil,
 
 			0,

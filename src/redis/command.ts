@@ -1,5 +1,7 @@
+import { RedisGearsCommands } from './gears';
 import { RedisGraph, RedisGraphCommands } from './graph';
 import { QueryTypeValue } from './query';
+import { RedisTimeSeries, RedisTimeSeriesCommands } from './time-series';
 
 /**
  * Commands
@@ -84,29 +86,7 @@ export const Commands = {
       value: 'xrevrange',
     },
   ],
-  [QueryTypeValue.TIMESERIES]: [
-    {
-      label: 'TS.GET',
-      description: 'Returns the last sample',
-      value: 'ts.get',
-    },
-    {
-      label: 'TS.INFO',
-      description: 'Returns information and statistics on the time-series',
-      value: 'ts.info',
-    },
-    {
-      label: 'TS.MRANGE',
-      description: 'Query a timestamp range across multiple time-series by filters',
-      value: 'ts.mrange',
-    },
-    {
-      label: 'TS.QUERYINDEX',
-      description: 'Query all the keys matching the filter list',
-      value: 'ts.queryindex',
-    },
-    { label: 'TS.RANGE', description: 'Query a range', value: 'ts.range' },
-  ],
+  [QueryTypeValue.TIMESERIES]: RedisTimeSeriesCommands,
   [QueryTypeValue.SEARCH]: [
     {
       label: 'FT.INFO',
@@ -114,23 +94,7 @@ export const Commands = {
       value: 'ft.info',
     },
   ],
-  [QueryTypeValue.GEARS]: [
-    {
-      label: 'RG.DUMPREGISTRATIONS',
-      description: 'Outputs the list of function registrations',
-      value: 'rg.dumpregistrations',
-    },
-    {
-      label: 'RG.PYSTATS',
-      description: 'Returns memory usage statistics from the Python interpreter',
-      value: 'rg.pystats',
-    },
-    {
-      label: 'RG.PYDUMPREQS',
-      description: 'Returns a list of all the python requirements available',
-      value: 'rg.pydumpreqs',
-    },
-  ],
+  [QueryTypeValue.GEARS]: RedisGearsCommands,
   [QueryTypeValue.GRAPH]: RedisGraphCommands,
 };
 
@@ -138,9 +102,9 @@ export const Commands = {
  * Input for Commands
  */
 export const CommandParameters = {
-  aggregation: ['ts.range', 'ts.mrange'],
+  aggregation: [RedisTimeSeries.RANGE, RedisTimeSeries.MRANGE],
   field: ['hget', 'hmget'],
-  filter: ['ts.mrange', 'ts.queryindex'],
+  filter: [RedisTimeSeries.MRANGE, RedisTimeSeries.QUERYINDEX],
   keyName: [
     'get',
     'hget',
@@ -151,9 +115,9 @@ export const CommandParameters = {
     'llen',
     'scard',
     'smembers',
-    'ts.range',
-    'ts.get',
-    'ts.info',
+    RedisTimeSeries.RANGE,
+    RedisTimeSeries.GET,
+    RedisTimeSeries.INFO,
     'ttl',
     'type',
     'xinfoStream',
@@ -166,12 +130,12 @@ export const CommandParameters = {
     RedisGraph.EXPLAIN,
     RedisGraph.PROFILE,
   ],
-  legend: ['ts.range'],
-  legendLabel: ['ts.mrange'],
+  legend: [RedisTimeSeries.RANGE],
+  legendLabel: [RedisTimeSeries.MRANGE],
   section: ['info'],
-  value: ['ts.range'],
-  valueLabel: ['ts.mrange'],
-  fill: ['ts.range', 'ts.mrange'],
+  value: [RedisTimeSeries.RANGE],
+  valueLabel: [RedisTimeSeries.MRANGE],
+  fill: [RedisTimeSeries.RANGE, RedisTimeSeries.MRANGE],
   size: ['slowlogGet', 'tmscan'],
   cursor: ['tmscan'],
   match: ['tmscan'],

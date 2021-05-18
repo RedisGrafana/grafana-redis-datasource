@@ -1,6 +1,44 @@
 import { SelectableValue } from '@grafana/data';
 
 /**
+ * Supported Commands
+ */
+export enum RedisTimeSeries {
+  GET = 'ts.get',
+  INFO = 'ts.info',
+  MRANGE = 'ts.mrange',
+  QUERYINDEX = 'ts.queryindex',
+  RANGE = 'ts.range',
+}
+
+/**
+ * Commands List
+ */
+export const RedisTimeSeriesCommands = [
+  {
+    label: RedisTimeSeries.GET.toUpperCase(),
+    description: 'Returns the last sample',
+    value: RedisTimeSeries.GET,
+  },
+  {
+    label: RedisTimeSeries.INFO.toUpperCase(),
+    description: 'Returns information and statistics on the time-series',
+    value: RedisTimeSeries.INFO,
+  },
+  {
+    label: RedisTimeSeries.MRANGE.toUpperCase(),
+    description: 'Query a timestamp range across multiple time-series by filters',
+    value: RedisTimeSeries.MRANGE,
+  },
+  {
+    label: RedisTimeSeries.QUERYINDEX.toUpperCase(),
+    description: 'Query all the keys matching the filter list',
+    value: RedisTimeSeries.QUERYINDEX,
+  },
+  { label: RedisTimeSeries.RANGE.toUpperCase(), description: 'Query a range', value: RedisTimeSeries.RANGE },
+];
+
+/**
  * Aggregation Values
  */
 export enum AggregationValue {

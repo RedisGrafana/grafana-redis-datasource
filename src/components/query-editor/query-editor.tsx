@@ -15,6 +15,7 @@ import {
   QueryType,
   QueryTypeValue,
   RedisQuery,
+  RedisTimeSeries,
 } from '../../redis';
 import { RedisDataSourceOptions } from '../../types';
 
@@ -298,7 +299,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.filter.includes(command) && (
+            {CommandParameters.filter.includes(command as RedisTimeSeries) && (
               <FormField
                 labelWidth={8}
                 inputWidth={30}
@@ -315,7 +316,7 @@ export class QueryEditor extends PureComponent<Props> {
               <FormField labelWidth={8} inputWidth={30} value={field} onChange={this.onFieldChange} label="Field" />
             )}
 
-            {CommandParameters.legend.includes(command) && (
+            {CommandParameters.legend.includes(command as RedisTimeSeries) && (
               <FormField
                 labelWidth={8}
                 inputWidth={20}
@@ -326,7 +327,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.value.includes(command) && (
+            {CommandParameters.value.includes(command as RedisTimeSeries) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -337,7 +338,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.legendLabel.includes(command) && (
+            {CommandParameters.legendLabel.includes(command as RedisTimeSeries) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -347,7 +348,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.valueLabel.includes(command) && (
+            {CommandParameters.valueLabel.includes(command as RedisTimeSeries) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -456,40 +457,42 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {type === QueryTypeValue.TIMESERIES && command && CommandParameters.aggregation.includes(command) && (
-          <div className="gf-form">
-            <InlineFormLabel width={8}>Aggregation</InlineFormLabel>
-            <Select
-              className={css`
-                margin-right: 5px;
-              `}
-              options={Aggregations}
-              width={30}
-              onChange={this.onAggregationChange}
-              value={aggregation}
-              menuPlacement="bottom"
-            />
-            {aggregation && (
-              <FormField
-                labelWidth={8}
-                value={bucket}
-                type="number"
-                onChange={this.onBucketChange}
-                label="Time Bucket"
-                tooltip="Time bucket for aggregation in milliseconds"
+        {type === QueryTypeValue.TIMESERIES &&
+          command &&
+          CommandParameters.aggregation.includes(command as RedisTimeSeries) && (
+            <div className="gf-form">
+              <InlineFormLabel width={8}>Aggregation</InlineFormLabel>
+              <Select
+                className={css`
+                  margin-right: 5px;
+                `}
+                options={Aggregations}
+                width={30}
+                onChange={this.onAggregationChange}
+                value={aggregation}
+                menuPlacement="bottom"
               />
-            )}
-            {aggregation && bucket && CommandParameters.fill.includes(command) && (
-              <Switch
-                label="Fill Missing"
-                labelClass="width-10"
-                tooltip="If checked, the datasource will fill missing intervals."
-                checked={fill || false}
-                onChange={this.onFillChange}
-              />
-            )}
-          </div>
-        )}
+              {aggregation && (
+                <FormField
+                  labelWidth={8}
+                  value={bucket}
+                  type="number"
+                  onChange={this.onBucketChange}
+                  label="Time Bucket"
+                  tooltip="Time bucket for aggregation in milliseconds"
+                />
+              )}
+              {aggregation && bucket && CommandParameters.fill.includes(command as RedisTimeSeries) && (
+                <Switch
+                  label="Fill Missing"
+                  labelClass="width-10"
+                  tooltip="If checked, the datasource will fill missing intervals."
+                  checked={fill || false}
+                  onChange={this.onFillChange}
+                />
+              )}
+            </div>
+          )}
 
         {refId === 'A' && (
           <>

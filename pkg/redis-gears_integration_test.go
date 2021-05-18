@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/mediocregopher/radix/v3"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,7 +21,7 @@ func TestRgPystatsIntegration(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryRgPystats(queryModel{Command: "rg.pystats"}, &client)
+	resp := queryRgPystats(queryModel{Command: models.GearsPyStats}, &client)
 	require.Len(t, resp.Frames, 1)
 	require.Len(t, resp.Frames[0].Fields, 3)
 	require.IsType(t, int64(0), resp.Frames[0].Fields[0].At(0))
@@ -40,7 +41,7 @@ func TestRgDumpregistrationsIntegration(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryRgDumpregistrations(queryModel{Command: "rg.dumpregistrations"}, &client)
+	resp := queryRgDumpregistrations(queryModel{Command: models.GearsDumpRegistrations}, &client)
 	require.Len(t, resp.Frames[0].Fields, 12)
 	require.Equal(t, "id", resp.Frames[0].Fields[0].Name)
 	require.Equal(t, "reader", resp.Frames[0].Fields[1].Name)
@@ -74,7 +75,7 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 
 	// Results
 	t.Run("Test command with full response", func(t *testing.T) {
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB().run()"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GB().run()"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "results", resp.Frames[0].Name)
@@ -89,7 +90,7 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 
 	// UNBLOCKING and REQUIREMENTS
 	t.Run("Test command with UNBLOCKING and REQUIREMENTS", func(t *testing.T) {
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GearsBuilder(reader=\"KeysReader\").run()", Unblocking: true, Requirements: "numpy"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GearsBuilder(reader=\"KeysReader\").run()", Unblocking: true, Requirements: "numpy"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "operationId", resp.Frames[0].Name)
@@ -100,7 +101,7 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 
 	// OK
 	t.Run("Test command with full OK string", func(t *testing.T) {
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "GB('CommandReader')"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GB('CommandReader')"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 1)
 		require.Equal(t, "results", resp.Frames[0].Name)
@@ -115,7 +116,7 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 
 	// Error
 	t.Run("Test command with error", func(t *testing.T) {
-		resp := queryRgPyexecute(queryModel{Command: "rg.pyexecute", Key: "some key"}, &client)
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "some key"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.Error(t, resp.Error)
 	})
@@ -130,7 +131,7 @@ func TestRgDumpReqsIntegration(t *testing.T) {
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
-	resp := queryRgPydumpReqs(queryModel{Command: "rg.pydumpreqs"}, &client)
+	resp := queryRgPydumpReqs(queryModel{Command: models.GearsPyDumpReqs}, &client)
 
 	require.Len(t, resp.Frames[0].Fields, 6)
 	require.Equal(t, "GearReqVersion", resp.Frames[0].Fields[0].Name)

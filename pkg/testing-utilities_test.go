@@ -5,6 +5,7 @@ import (
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/instancemgmt"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -117,14 +118,14 @@ func assignReceiver(to interface{}, from interface{}) {
 		*(to.(*map[string]interface{})) = from.(map[string]interface{})
 	case *string:
 		*(to.(*string)) = from.(string)
-	case *pystats:
-		*(to.(*pystats)) = from.(pystats)
+	case *models.PyStats:
+		*(to.(*models.PyStats)) = from.(models.PyStats)
 	case *xinfo:
 		*(to.(*xinfo)) = from.(xinfo)
-	case *[]dumpregistrations:
-		*(to.(*[]dumpregistrations)) = from.([]dumpregistrations)
-	case *[]pydumpreq:
-		*(to.(*[]pydumpreq)) = from.([]pydumpreq)
+	case *[]models.DumpRegistrations:
+		*(to.(*[]models.DumpRegistrations)) = from.([]models.DumpRegistrations)
+	case *[]models.PyDumpReq:
+		*(to.(*[]models.PyDumpReq)) = from.([]models.PyDumpReq)
 	case interface{}:
 		switch from.(type) {
 		case int:
