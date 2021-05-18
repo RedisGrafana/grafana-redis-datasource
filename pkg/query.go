@@ -122,6 +122,10 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 		return queryGraphQuery(qm, client)
 	case "graph.slowlog":
 		return queryGraphSlowlog(qm, client)
+	case "graph.explain":
+		return queryGraphExplain(qm, client)
+	case "graph.profile":
+		return queryGraphProfile(qm, client)
 
 	/**
 	 * Default
