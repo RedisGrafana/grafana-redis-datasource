@@ -231,6 +231,27 @@ func TestRgPyexecute(t *testing.T) {
 	})
 
 	/**
+	 * Unexpected Type Error
+	 */
+	t.Run("should handle unexpected type error", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv:      0,
+			batchRcv: nil,
+			err:      nil,
+		}
+
+		// Response
+		resp := queryRgPyexecute(queryModel{Command: models.GearsPyExecute, Key: "GB().run()"}, &client)
+		require.Len(t, resp.Frames, 2)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, 0, resp.Frames[0].Fields[0].Len())
+		require.Equal(t, 0, resp.Frames[1].Fields[0].Len())
+	})
+
+	/**
 	 * Error
 	 */
 	t.Run("should handle error", func(t *testing.T) {
