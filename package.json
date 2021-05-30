@@ -2,13 +2,13 @@
   "author": "RedisGrafana",
   "description": "Redis Data Source for Grafana",
   "devDependencies": {
-    "@grafana/data": "7.5.4",
-    "@grafana/runtime": "7.5.4",
-    "@grafana/toolkit": "7.5.4",
-    "@grafana/ui": "7.5.4",
+    "@grafana/data": "7.5.7",
+    "@grafana/runtime": "7.5.7",
+    "@grafana/toolkit": "7.5.7",
+    "@grafana/ui": "7.5.7",
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/lodash": "4.14.168",
+    "@types/lodash": "4.14.170",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "rxjs": "6.6.3"
