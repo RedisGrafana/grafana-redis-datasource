@@ -17,13 +17,13 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.5.4"
+      "version": "7.5.7"
     },
     {
       "type": "datasource",
       "id": "redis-datasource",
       "name": "Redis",
-      "version": "1.4.0"
+      "version": "1.5.0"
     },
     {
       "type": "panel",
@@ -56,7 +56,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1618668752383,
+  "iteration": 1622401681126,
   "links": [
     {
       "icon": "external link",
@@ -138,7 +138,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "info",
@@ -210,7 +210,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "panelId": 24,
@@ -341,7 +341,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "info",
@@ -425,7 +425,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "info",
@@ -489,7 +489,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "info",
@@ -551,7 +551,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "panelId": 19,
@@ -611,7 +611,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "query": "dbsize",
@@ -662,7 +662,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "panelId": 24,
@@ -733,7 +733,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "panelId": 24,
@@ -804,7 +804,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "panelId": 8,
@@ -932,7 +932,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "clientList",
@@ -1085,7 +1085,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "info",
@@ -1210,7 +1210,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "slowlogGet",
@@ -1298,7 +1298,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "clusterInfo",
@@ -1359,7 +1359,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "info",
@@ -1421,7 +1421,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "panelId": 60,
@@ -1571,7 +1571,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.4",
+      "pluginVersion": "7.5.7",
       "targets": [
         {
           "command": "clusterNodes",
@@ -1644,5 +1644,5 @@
   "timezone": "",
   "title": "Redis",
   "uid": "RpSjVqWMz",
-  "version": 5
+  "version": 1
 }
