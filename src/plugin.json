@@ -18,6 +18,11 @@
       "name": "Redis Streaming",
       "path": "dashboards/redis-streaming.json",
       "type": "dashboard"
+    },
+    {
+      "name": "Redis Streaming v8",
+      "path": "dashboards/redis-streaming-v8.json",
+      "type": "dashboard"
     }
   ],
   "info": {
