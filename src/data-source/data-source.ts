@@ -48,16 +48,19 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
      * Run Query
      */
     return this.query({
-      targets: [{ datasource: options.variable.datasource, query: query }],
+      targets: [{ refId: 'A', datasource: options.variable.datasource, query: query }],
     } as DataQueryRequest<RedisQuery>)
       .pipe(
         switchMap$((response) => response.data),
         switchMap$((data: DataFrame) => data.fields),
-        map$((field) =>
-          field.values.toArray().map((value) => {
-            return { text: value };
-          })
-        )
+        map$((field) => {
+          const values: MetricFindValue[] = [];
+          field.values.toArray().forEach((value) => {
+            values.push({ text: value });
+          });
+
+          return values;
+        })
       )
       .toPromise();
   }

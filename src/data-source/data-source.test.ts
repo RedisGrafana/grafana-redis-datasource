@@ -298,6 +298,39 @@ describe('DataSource', () => {
     });
   });
 
+  it('Should call query method with numbers', (done) => {
+    const querySpyMethod = jest.spyOn(dataSource, 'query').mockImplementation(
+      () =>
+        new Observable((subscriber) => {
+          subscriber.next({
+            data: [
+              {
+                fields: [
+                  {
+                    name: 'get',
+                    values: {
+                      toArray() {
+                        return new Float64Array([21, 31]);
+                      },
+                    },
+                  },
+                ],
+                length: 1,
+              },
+            ],
+          });
+          subscriber.complete();
+        })
+    );
+
+    dataSource.metricFindQuery &&
+      dataSource.metricFindQuery('123', { variable: { datasource: '123' } }).then((result: MetricFindValue[]) => {
+        expect(querySpyMethod).toHaveBeenCalled();
+        expect(result).toEqual([{ text: 21 }, { text: 31 }]);
+        done();
+      });
+  });
+
   afterAll(() => {
     superQueryMock.mockReset();
     setTemplateSrv(null as any);
