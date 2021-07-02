@@ -22,6 +22,7 @@ func TestQuery(t *testing.T) {
 		qm queryModel
 	}{
 		{queryModel{Command: models.TimeSeriesGet}},
+		{queryModel{Command: models.TimeSeriesMGet}},
 		{queryModel{Command: models.TimeSeriesInfo}},
 		{queryModel{Command: models.TimeSeriesQueryIndex}},
 		{queryModel{Command: models.TimeSeriesRange}},
