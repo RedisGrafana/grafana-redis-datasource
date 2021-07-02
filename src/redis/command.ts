@@ -104,7 +104,7 @@ export const Commands = {
 export const CommandParameters = {
   aggregation: [RedisTimeSeries.RANGE, RedisTimeSeries.MRANGE],
   field: ['hget', 'hmget'],
-  filter: [RedisTimeSeries.MRANGE, RedisTimeSeries.QUERYINDEX],
+  filter: [RedisTimeSeries.MRANGE, RedisTimeSeries.QUERYINDEX, RedisTimeSeries.MGET],
   keyName: [
     'get',
     'hget',
@@ -131,10 +131,10 @@ export const CommandParameters = {
     RedisGraph.PROFILE,
   ],
   legend: [RedisTimeSeries.RANGE],
-  legendLabel: [RedisTimeSeries.MRANGE],
+  legendLabel: [RedisTimeSeries.MRANGE, RedisTimeSeries.MGET],
   section: ['info'],
   value: [RedisTimeSeries.RANGE],
-  valueLabel: [RedisTimeSeries.MRANGE],
+  valueLabel: [RedisTimeSeries.MRANGE, RedisTimeSeries.MGET],
   fill: [RedisTimeSeries.RANGE, RedisTimeSeries.MRANGE],
   size: ['slowlogGet', 'tmscan'],
   cursor: ['tmscan'],

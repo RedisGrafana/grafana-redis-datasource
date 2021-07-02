@@ -30,7 +30,7 @@
       "name": "RedisGrafana",
       "url": "https://redisgrafana.github.io"
     },
-    "description": "Allows to connect to any Redis database On-Premises or in the Cloud.",
+    "description": "Allows to connect to any Redis database On-Premises and in the Cloud.",
     "keywords": ["redis", "timeseries", "backend", "plugin"],
     "links": [
       {

@@ -6,6 +6,7 @@ import { SelectableValue } from '@grafana/data';
 export enum RedisTimeSeries {
   GET = 'ts.get',
   INFO = 'ts.info',
+  MGET = 'ts.mget',
   MRANGE = 'ts.mrange',
   QUERYINDEX = 'ts.queryindex',
   RANGE = 'ts.range',
@@ -24,6 +25,11 @@ export const RedisTimeSeriesCommands = [
     label: RedisTimeSeries.INFO.toUpperCase(),
     description: 'Returns information and statistics on the time-series',
     value: RedisTimeSeries.INFO,
+  },
+  {
+    label: RedisTimeSeries.MGET.toUpperCase(),
+    description: 'Returns the last samples matching the specific filter',
+    value: RedisTimeSeries.MGET,
   },
   {
     label: RedisTimeSeries.MRANGE.toUpperCase(),

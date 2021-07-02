@@ -5,6 +5,7 @@ package models
  */
 const (
 	TimeSeriesGet        = "ts.get"
+	TimeSeriesMGet       = "ts.mget"
 	TimeSeriesInfo       = "ts.info"
 	TimeSeriesQueryIndex = "ts.queryindex"
 	TimeSeriesRange      = "ts.range"

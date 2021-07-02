@@ -41,6 +41,8 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	 */
 	case models.TimeSeriesGet:
 		return queryTsGet(qm, client)
+	case models.TimeSeriesMGet:
+		return queryTsMGet(qm, client)
 	case models.TimeSeriesInfo:
 		return queryTsInfo(qm, client)
 	case models.TimeSeriesQueryIndex:

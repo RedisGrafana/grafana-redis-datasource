@@ -620,3 +620,184 @@ func TestQueryTsQueryIndex(t *testing.T) {
 		})
 	}
 }
+
+func TestQueryTsMGet(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name                    string
+		qm                      queryModel
+		rcv                     interface{}
+		fieldsCount             int
+		rowsPerField            int
+		valuesToCheckInResponse []valueToCheckInResponse
+		expectedFrameName       string
+		expectedValueFieldName  string
+		expectedError           string
+		err                     error
+	}{
+		{
+			"should process receiver and legend provided but with labels",
+			queryModel{Command: models.TimeSeriesMGet, Filter: "area_id=32 sensor_id!=1"},
+			[]interface{}{
+				[]interface{}{
+					[]byte("temperature:2:32"),
+					[]interface{}{[]interface{}{[]byte("sensor_id"), []byte("2")}, []interface{}{[]byte("area_id"), []byte("32")}},
+					[]interface{}{int64(1548149180000), []byte("26.199999999999999")},
+				},
+				[]interface{}{
+					[]byte("temperature:3:32"),
+					[]interface{}{},
+					[]interface{}{int64(1548149180000), []byte("26.7")},
+				},
+			},
+			2,
+			1,
+			[]valueToCheckInResponse{
+				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: time.Unix(0, 1548149180000*int64(time.Millisecond))},
+				{frameIndex: 0, fieldIndex: 1, rowIndex: 0, value: 26.2},
+			},
+			"temperature:2:32",
+			"",
+			"",
+			nil,
+		},
+		{
+			"should process receiver with labels specified in legend",
+			queryModel{Command: models.TimeSeriesMGet, Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
+			[]interface{}{
+				[]interface{}{
+					[]byte("temperature:2:32"),
+					[]interface{}{[]interface{}{[]byte("sensor_id"), []byte("2")}, []interface{}{[]byte("area_id"), []byte("32")}},
+					[]interface{}{int64(1548149210000), []byte("20")},
+				},
+			},
+			2,
+			1,
+			nil,
+			"32",
+			"",
+			"",
+			nil,
+		},
+		{
+			"should process receiver with value field existed in labels",
+			queryModel{Command: models.TimeSeriesMGet, Key: "test1", Value: "sensor_id", Filter: "area_id=32 sensor_id!=1"},
+			[]interface{}{
+				[]interface{}{
+					[]byte("temperature:2:32"),
+					[]interface{}{[]interface{}{[]byte("sensor_id"), []byte("2")}, []interface{}{[]byte("area_id"), []byte("32")}},
+					[]interface{}{int64(1548149210000), []byte("20")},
+				},
+			},
+			2,
+			1,
+			nil,
+			"temperature:2:32",
+			"2",
+			"",
+			nil,
+		},
+		{
+			"should process receiver with []byte field instead of int",
+			queryModel{Command: models.TimeSeriesMGet, Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
+			[]interface{}{
+				[]interface{}{
+					[]byte("temperature:2:32"),
+					[]interface{}{[]interface{}{[]byte("sensor_id"), []byte("2")}, []interface{}{[]byte("area_id"), []byte("32")}},
+					[]interface{}{[]byte("1548149180000"), []byte("26.199999999999999")},
+				},
+			},
+			2,
+			1,
+			[]valueToCheckInResponse{
+				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: time.Unix(0, 1548149180000*int64(time.Millisecond))},
+				{frameIndex: 0, fieldIndex: 1, rowIndex: 0, value: 26.2},
+			},
+			"32",
+			"",
+			"",
+			nil,
+		},
+		{
+			"should process receiver with string field instead of int",
+			queryModel{Command: models.TimeSeriesMGet, Key: "test1", Legend: "area_id", Filter: "area_id=32 sensor_id!=1"},
+			[]interface{}{
+				[]interface{}{
+					[]byte("temperature:2:32"),
+					[]interface{}{[]interface{}{[]byte("sensor_id"), []byte("2")}, []interface{}{[]byte("area_id"), []byte("32")}},
+					[]interface{}{[]byte("1548149180000"), "26.199999999999999"},
+				},
+			},
+			2,
+			1,
+			[]valueToCheckInResponse{
+				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: time.Unix(0, 1548149180000*int64(time.Millisecond))},
+				{frameIndex: 0, fieldIndex: 1, rowIndex: 0, value: 26.2},
+			},
+			"32",
+			"",
+			"",
+			nil,
+		},
+		{
+			"should return error if result is string",
+			queryModel{Command: models.TimeSeriesMGet, Filter: "filter"},
+			interface{}("someString"),
+			0,
+			0,
+			nil,
+			"",
+			"",
+			"someString",
+			nil,
+		},
+		{
+			"should return error on bad filter",
+			queryModel{Command: models.TimeSeriesMGet, Key: "test1", Filter: "\""},
+			nil,
+			0,
+			0,
+			nil,
+			"",
+			"",
+			"filter is not valid",
+			nil,
+		},
+		{
+			"should process receiver error",
+			queryModel{Command: models.TimeSeriesMGet, Key: "test1"},
+			nil,
+			0,
+			0,
+			nil,
+			"",
+			"",
+			"error occurred",
+			errors.New("error occurred"),
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			client := testClient{rcv: tt.rcv, err: tt.err}
+			response := queryTsMGet(tt.qm, &client)
+			if tt.expectedError != "" {
+				require.EqualError(t, response.Error, tt.expectedError, "Should set error to response if failed")
+				require.Nil(t, response.Frames, "No frames should be created if failed")
+			} else {
+				require.Equal(t, tt.expectedFrameName, response.Frames[0].Name, "Invalid frame name")
+				require.Len(t, response.Frames[0].Fields, tt.fieldsCount, "Invalid number of fields created ")
+				require.Equal(t, tt.rowsPerField, response.Frames[0].Fields[0].Len(), "Invalid number of values in field vectors")
+				require.Equal(t, tt.expectedValueFieldName, response.Frames[0].Fields[1].Name, "Invalid field name")
+
+				if tt.valuesToCheckInResponse != nil {
+					for _, value := range tt.valuesToCheckInResponse {
+						require.Equalf(t, value.value, response.Frames[value.frameIndex].Fields[value.fieldIndex].At(value.rowIndex), "Invalid value at Frame[%v]:Field[%v]:Row[%v]", value.frameIndex, value.fieldIndex, value.rowIndex)
+					}
+				}
+			}
+		})
+	}
+}
