@@ -339,3 +339,114 @@ func queryTsQueryIndex(qm queryModel, client redisClient) backend.DataResponse {
 	// Return
 	return response
 }
+
+/**
+ * TS.MGET [WITHLABELS] FILTER filter...
+ *
+ * @see https://oss.redislabs.com/redistimeseries/commands/#tsmget
+ */
+func queryTsMGet(qm queryModel, client redisClient) backend.DataResponse {
+	response := backend.DataResponse{}
+
+	// Split Filter to array
+	filter, ok := shell.Split(qm.Filter)
+
+	// Check if filter is valid
+	if !ok {
+		response.Error = fmt.Errorf("filter is not valid")
+		return response
+	}
+
+	// Execute command
+	var result interface{}
+	err := client.RunFlatCmd(&result, qm.Command, "WITHLABELS", "FILTER", filter)
+
+	// Check error
+	if err != nil {
+		return errorHandler(response, err)
+	}
+
+	// Check results
+	switch result := result.(type) {
+	case string:
+		response.Error = fmt.Errorf(result)
+		return response
+	default:
+	}
+
+	// Parse Time-Series data
+	for _, innerArray := range result.([]interface{}) {
+		tsArrReply := innerArray.([]interface{})
+
+		// Labels
+		labelsRaw := tsArrReply[1].([]interface{})
+		labels := make(map[string]string, len(labelsRaw))
+
+		// Parse Labels
+		for _, labelRaw := range labelsRaw {
+			kvPair := labelRaw.([]interface{})
+			k := string(kvPair[0].([]byte))
+			v := string(kvPair[1].([]byte))
+			labels[k] = v
+		}
+
+		// Use Time-series's name as Legend if Legend label is not specified
+		legend := string(tsArrReply[0].([]byte))
+		if qm.Legend != "" {
+			legend = labels[qm.Legend]
+		}
+
+		// Use value's label if specified
+		value := ""
+		if qm.Value != "" {
+			value = labels[qm.Value]
+		}
+
+		// Create Frame
+		frame := data.NewFrame(legend,
+			data.NewField("time", nil, []time.Time{}))
+
+		// Return labels if legend is not specified
+		if qm.Legend != "" {
+			frame.Fields = append(frame.Fields,
+				data.NewField(value, nil, []float64{}),
+			)
+		} else {
+			frame.Fields = append(frame.Fields,
+				data.NewField(value, labels, []float64{}),
+			)
+		}
+
+		// Values
+		kvPair := tsArrReply[2].([]interface{})
+		var k int64
+		var v float64
+
+		// Key
+		switch kvPair[0].(type) {
+		case []byte:
+			k, _ = strconv.ParseInt(string(kvPair[0].([]byte)), 10, 64)
+		default:
+			k = kvPair[0].(int64)
+		}
+
+		ts := time.Unix(0, k*int64(time.Millisecond))
+
+		// Value
+		switch kvPair[1].(type) {
+		case []byte:
+			v, _ = strconv.ParseFloat(string(kvPair[1].([]byte)), 64)
+		default:
+			v, _ = strconv.ParseFloat(kvPair[1].(string), 64)
+		}
+
+		// Append Row to Frame
+		frame.AppendRow(ts, v)
+
+		// add the frames to the response
+		response.Frames = append(response.Frames, frame)
+	}
+
+	// Return Response
+	return response
+}
