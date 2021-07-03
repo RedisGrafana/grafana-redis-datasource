@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -47,7 +48,7 @@ func TestQueryXInfoStream(t *testing.T) {
 		}
 
 		// Response
-		resp := queryXInfoStream(queryModel{Command: "xinfoStream", Key: "test1"}, &client)
+		resp := queryXInfoStream(queryModel{Command: models.XInfoStream, Key: "test1"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 9)
 		require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
@@ -86,7 +87,7 @@ func TestQueryXInfoStream(t *testing.T) {
 		}}
 
 		// Response
-		resp := queryXInfoStream(queryModel{Command: "xinfoStream", Key: "test1"}, &client)
+		resp := queryXInfoStream(queryModel{Command: models.XInfoStream, Key: "test1"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 5)
 		require.Equal(t, 1, resp.Frames[0].Fields[0].Len())
@@ -100,7 +101,7 @@ func TestQueryXInfoStream(t *testing.T) {
 		client := testClient{err: errors.New("some error")}
 
 		// Response
-		resp := queryXInfoStream(queryModel{Command: "xinfoStream", Key: "test1"}, &client)
+		resp := queryXInfoStream(queryModel{Command: models.XInfoStream, Key: "test1"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.EqualError(t, resp.Error, "some error")
 	})
@@ -156,7 +157,7 @@ func TestQueryXRange(t *testing.T) {
 		}
 
 		// Response
-		resp := queryXRange(queryModel{Command: "xrange", Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0", Count: 4}, &client)
+		resp := queryXRange(queryModel{Command: models.XRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0", Count: 4}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 6)
 		require.Equal(t, "$time", resp.Frames[0].Fields[1].Name)
@@ -200,7 +201,7 @@ func TestQueryXRange(t *testing.T) {
 		client := testClient{err: errors.New("some error")}
 
 		// Response
-		resp := queryXRange(queryModel{Command: "xrange", Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
+		resp := queryXRange(queryModel{Command: models.XRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.EqualError(t, resp.Error, "some error")
 	})
@@ -256,7 +257,7 @@ func TestQueryXRevRange(t *testing.T) {
 		}
 
 		// Response
-		resp := queryXRevRange(queryModel{Command: "xrevrange", Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0", Count: 4}, &client)
+		resp := queryXRevRange(queryModel{Command: models.XRevRange, Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0", Count: 4}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 6)
 		require.Equal(t, "$time", resp.Frames[0].Fields[1].Name)
@@ -300,7 +301,7 @@ func TestQueryXRevRange(t *testing.T) {
 		client := testClient{err: errors.New("some error")}
 
 		// Response
-		resp := queryXRevRange(queryModel{Command: "xrevrange", Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
+		resp := queryXRevRange(queryModel{Command: models.XRevRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.EqualError(t, resp.Error, "some error")
 	})

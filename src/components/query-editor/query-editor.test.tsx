@@ -1,7 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { RedisGraph } from 'redis/graph';
-import { AggregationValue, QueryTypeValue, RedisQuery, RedisTimeSeries } from '../../redis';
+import { AggregationValue, QueryTypeValue, Redis, RedisQuery, RedisTimeSeries } from '../../redis';
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './query-editor';
 
@@ -165,8 +165,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Key';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'get' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'get123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.GET },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'filter',
@@ -176,7 +176,7 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.MRANGE },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'field',
@@ -185,8 +185,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Field';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'hget' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'hget123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.HGET },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'legend',
@@ -197,7 +197,7 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.RANGE },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'legend',
@@ -208,7 +208,7 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.MRANGE },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'value',
@@ -218,7 +218,7 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisTimeSeries.MRANGE },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'cypher',
@@ -228,7 +228,7 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: RedisGraph.QUERY },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.GRAPH, command: 'info' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.GRAPH, command: Redis.INFO },
       },
       {
         name: 'size',
@@ -237,8 +237,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Size';
           }),
         type: 'number',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'slowlogGet' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'slowlogGet123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.SLOWLOG_GET },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'cursor',
@@ -247,8 +247,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Cursor';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.TMSCAN },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'match',
@@ -257,8 +257,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Match pattern';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.TMSCAN },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'start',
@@ -267,8 +267,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Start';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.XRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'end',
@@ -277,8 +277,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'End';
           }),
         type: 'string',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'xrange123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.XRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'count',
@@ -287,8 +287,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Count';
           }),
         type: 'number',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.TMSCAN },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'samples',
@@ -297,8 +297,8 @@ describe('QueryEditor', () => {
             return node.name() === 'FormField' && node.prop('label') === 'Samples';
           }),
         type: 'number',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'tmscan123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.TMSCAN },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'section',
@@ -307,8 +307,8 @@ describe('QueryEditor', () => {
             return node.prop('onChange') === wrapper.instance().onInfoSectionChange;
           }),
         type: 'select',
-        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: 'info' },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: 'info123' },
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.GET },
       },
       {
         name: 'aggregation',
@@ -318,7 +318,7 @@ describe('QueryEditor', () => {
           }),
         type: 'select',
         queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: RedisTimeSeries.RANGE },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: 'info' },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: Redis.INFO },
       },
       {
         name: 'bucket',

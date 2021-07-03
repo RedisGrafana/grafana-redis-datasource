@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,7 +25,7 @@ func TestQueryHGetAll(t *testing.T) {
 	}{
 		{
 			"should handle default array of strings",
-			queryModel{Command: "hgetall", Key: "test1"},
+			queryModel{Command: models.HGetAll, Key: "test1"},
 			[]string{"key1", "value1", "key2", "2", "key3", "3.14"},
 			3,
 			1,
@@ -37,7 +38,7 @@ func TestQueryHGetAll(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: "hgetall"},
+			queryModel{Command: models.HGetAll},
 			nil,
 			0,
 			0,
@@ -90,7 +91,7 @@ func TestQueryHGet(t *testing.T) {
 	}{
 		{
 			"should handle simple string",
-			queryModel{Command: "hget", Key: "test1", Field: "field1"},
+			queryModel{Command: models.HGet, Key: "test1", Field: "field1"},
 			"value1",
 			1,
 			1,
@@ -100,7 +101,7 @@ func TestQueryHGet(t *testing.T) {
 		},
 		{
 			"should handle string with underlying float64 value",
-			queryModel{Command: "hget", Key: "test1", Field: "key1"},
+			queryModel{Command: models.HGet, Key: "test1", Field: "key1"},
 			"3.14",
 			1,
 			1,
@@ -110,7 +111,7 @@ func TestQueryHGet(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: "hget"},
+			queryModel{Command: models.HGet},
 			nil,
 			0,
 			0,
@@ -161,7 +162,7 @@ func TestQueryHMGet(t *testing.T) {
 	}{
 		{
 			"should handle 3 fields with different underlying types",
-			queryModel{Command: "hmget", Key: "test1", Field: "field1 field2 field3"},
+			queryModel{Command: models.HMGet, Key: "test1", Field: "field1 field2 field3"},
 			[]string{"value1", "2", "3.14"},
 			3,
 			1,
@@ -175,7 +176,7 @@ func TestQueryHMGet(t *testing.T) {
 		},
 		{
 			"should handle Field string parsing error and create no fields",
-			queryModel{Command: "hmget", Key: "test1", Field: "field1 field2\"field3"},
+			queryModel{Command: models.HMGet, Key: "test1", Field: "field1 field2\"field3"},
 			nil,
 			0,
 			0,
@@ -185,7 +186,7 @@ func TestQueryHMGet(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: "hmget"},
+			queryModel{Command: models.HMGet},
 			nil,
 			0,
 			0,

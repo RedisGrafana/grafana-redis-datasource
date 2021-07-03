@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,7 +25,7 @@ func TestQueryFtInfo(t *testing.T) {
 	}{
 		{
 			"should parse default bulk string",
-			queryModel{Command: "ft.info", Key: "wik{0}"},
+			queryModel{Command: models.SearchInfo, Key: "wik{0}"},
 			map[string]interface{}{
 				"index_name":    []byte("wikipedia"),
 				"index_options": []interface{}{},

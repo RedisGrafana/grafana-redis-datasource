@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,7 +25,7 @@ func TestQueryClusterInfo(t *testing.T) {
 	}{
 		{
 			"should parse clusterInfo bulk string",
-			queryModel{Command: "clusterInfo"},
+			queryModel{Command: models.ClusterInfo},
 			"cluster_state:ok\r\ncluster_slots_assigned:16384\r\ncluster_slots_ok:16384\r\ncluster_slots_pfail:0\r\ncluster_slots_fail:0\r\ncluster_known_nodes:6\r\ncluster_size:3\r\ncluster_current_epoch:6\r\ncluster_my_epoch:2\r\ncluster_stats_messages_sent:1483972\r\ncluster_stats_messages_received:1483968",
 			11,
 			1,
@@ -37,7 +38,7 @@ func TestQueryClusterInfo(t *testing.T) {
 		},
 		{
 			"should parse string and ignore non-pairing param",
-			queryModel{Command: "clusterInfo"},
+			queryModel{Command: models.ClusterInfo},
 			"cluster_state:ok\r\ncluster_slots_assigned\r\ncluster_slots_ok:16384\r\ncluster_slots_pfail:0\r\ncluster_slots_fail:0\r\ncluster_known_nodes:6\r\ncluster_size:3\r\ncluster_current_epoch:6\r\ncluster_my_epoch:2\r\ncluster_stats_messages_sent:1483972\r\ncluster_stats_messages_received:1483968",
 			10,
 			1,
@@ -46,7 +47,7 @@ func TestQueryClusterInfo(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: "info"},
+			queryModel{Command: models.Info},
 			nil,
 			0,
 			0,
@@ -102,7 +103,7 @@ func TestQueryClusterNodes(t *testing.T) {
 	}{
 		{
 			"should parse clusterNodes bulk string",
-			queryModel{Command: "clusterNodes"},
+			queryModel{Command: models.ClusterNodes},
 			"07c37dfeb235213a872192d90877d0cd55635b91 127.0.0.1:30004@31004 slave e7d1eecce10fd6bb5eb35b9f99a514335d9ba9ca 1609783649927 1426238317239 4 connected\r\n67ed2db8d677e59ec4a4cefb06858cf2a1a89fa1 127.0.0.1:30002@31002 master - 0 1426238316232 2 connected 5461-10922\r\n292f8b365bb7edb5e285caf0b7e6ddc7265d2f4f 127.0.0.1:30003@31003 master - 0 1426238318243 3 connected 10923-16383\r\n6ec23923021cf3ffec47632106199cb7f496ce01 127.0.0.1:30005@31005 slave 67ed2db8d677e59ec4a4cefb06858cf2a1a89fa1 0 1426238316232 5 connected\r\n824fe116063bc5fcf9f4ffd895bc17aee7731ac3 127.0.0.1:30006@31006 slave 292f8b365bb7edb5e285caf0b7e6ddc7265d2f4f 0 1426238317741 6 connected\r\ne7d1eecce10fd6bb5eb35b9f99a514335d9ba9ca 127.0.0.1:30001@31001 myself,master - 0 0 1 connected 0-5460",
 			9,
 			6,
@@ -118,7 +119,7 @@ func TestQueryClusterNodes(t *testing.T) {
 		},
 		{
 			"should handle string with invalid number of values",
-			queryModel{Command: "clusterNodes"},
+			queryModel{Command: models.ClusterNodes},
 			"07c37dfeb235213a872192d90877d0cd55635b91 127.0.0.1:30004@31004 e7d1eecce10fd6bb5eb35b9f99a514335d9ba9ca 1609783649927 1426238317239 4 connected",
 			9,
 			0,
@@ -127,7 +128,7 @@ func TestQueryClusterNodes(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: "clusterNodes"},
+			queryModel{Command: models.ClusterNodes},
 			nil,
 			0,
 			0,
