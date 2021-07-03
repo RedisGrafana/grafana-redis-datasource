@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,7 +25,7 @@ func TestQuerySMembers(t *testing.T) {
 	}{
 		{
 			"should handle default array of strings",
-			queryModel{Command: "smembers", Key: "test1"},
+			queryModel{Command: models.SMembers, Key: "test1"},
 			[]string{"value1", "2", "3.14"},
 			1,
 			3,

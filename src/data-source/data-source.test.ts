@@ -182,7 +182,7 @@ describe('DataSource', () => {
             query: '',
             streaming: true,
             streamingCapacity: 1,
-            streamingDataType: StreamingDataType.DataFrame,
+            streamingDataType: StreamingDataType.DATAFRAME,
           },
         ],
       });

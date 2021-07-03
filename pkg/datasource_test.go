@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
@@ -211,7 +212,7 @@ func TestQueryData(t *testing.T) {
 	im.On("Get", mock.Anything).Return(&is, nil)
 
 	// HGET
-	dm := queryModel{Command: "hget", Key: "test1", Field: "key1"}
+	dm := queryModel{Command: models.HGet, Key: "test1", Field: "key1"}
 	marshaled, _ := json.Marshal(dm)
 
 	// Response
@@ -247,7 +248,7 @@ func TestQueryDataWithError(t *testing.T) {
 	im.On("Get", mock.Anything).Return(&is, errors.New("some_err"))
 
 	// HGET
-	dm := queryModel{Command: "hget", Key: "test1", Field: "key1"}
+	dm := queryModel{Command: models.HGet, Key: "test1", Field: "key1"}
 	marshaled, _ := json.Marshal(dm)
 
 	// Query
@@ -370,7 +371,7 @@ func TestStreamingTimeSeries(t *testing.T) {
 	im.On("Get", mock.Anything).Return(&is, nil)
 
 	// INFO
-	dm := queryModel{Command: "info", Section: "server", Streaming: true}
+	dm := queryModel{Command: models.Info, Section: "server", Streaming: true}
 	marshaled, _ := json.Marshal(dm)
 
 	// Response
@@ -415,7 +416,7 @@ func TestStreamingTimeSeriesWithField(t *testing.T) {
 	im.On("Get", mock.Anything).Return(&is, nil)
 
 	// HGET
-	dm := queryModel{Command: "hget", Key: "test1", Field: "key1", Streaming: true}
+	dm := queryModel{Command: models.HGet, Key: "test1", Field: "key1", Streaming: true}
 	marshaled, _ := json.Marshal(dm)
 
 	// Response
@@ -460,7 +461,7 @@ func TestStreamingTimeSeriesWithErrorField(t *testing.T) {
 	im.On("Get", mock.Anything).Return(&is, nil)
 
 	// INFO
-	dm := queryModel{Command: "info", Field: "\"", Streaming: true}
+	dm := queryModel{Command: models.Info, Field: "\"", Streaming: true}
 	marshaled, _ := json.Marshal(dm)
 
 	// Response
@@ -500,7 +501,7 @@ func TestStreamingTimeSeriesWithWrongField(t *testing.T) {
 	im.On("Get", mock.Anything).Return(&is, nil)
 
 	// INFO
-	dm := queryModel{Command: "info", Section: "server", Field: "key1", Streaming: true}
+	dm := queryModel{Command: models.Info, Section: "server", Field: "key1", Streaming: true}
 	marshaled, _ := json.Marshal(dm)
 
 	// Response

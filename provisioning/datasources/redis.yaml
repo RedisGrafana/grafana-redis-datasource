@@ -5,6 +5,7 @@ datasources:
     type: redis-datasource
     access: proxy
     orgId: 1
+    isDefault: true
     version: 1
     url: redis://host.docker.internal:6379
     jsonData:

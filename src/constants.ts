@@ -34,8 +34,8 @@ export const ClientType = [
  * Streaming Data Type
  */
 export enum StreamingDataType {
-  TimeSeries = 'TimeSeries',
-  DataFrame = 'DataFrame',
+  TIMESERIES = 'TimeSeries',
+  DATAFRAME = 'DataFrame',
 }
 
 /**
@@ -44,10 +44,10 @@ export enum StreamingDataType {
 export const StreamingDataTypes: Array<SelectableValue<StreamingDataType>> = [
   {
     label: 'Time series',
-    value: StreamingDataType.TimeSeries,
+    value: StreamingDataType.TIMESERIES,
   },
   {
     label: 'Data frame',
-    value: StreamingDataType.DataFrame,
+    value: StreamingDataType.DATAFRAME,
   },
 ];

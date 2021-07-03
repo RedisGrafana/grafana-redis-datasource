@@ -14,6 +14,7 @@ import {
   InfoSectionValue,
   QueryType,
   QueryTypeValue,
+  Redis,
   RedisQuery,
   RedisTimeSeries,
 } from '../../redis';
@@ -288,7 +289,7 @@ export class QueryEditor extends PureComponent<Props> {
 
         {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
-            {CommandParameters.keyName.includes(command) && (
+            {CommandParameters.keyName.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
                 inputWidth={30}
@@ -312,7 +313,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.field.includes(command) && (
+            {CommandParameters.field.includes(command as Redis) && (
               <FormField labelWidth={8} inputWidth={30} value={field} onChange={this.onFieldChange} label="Field" />
             )}
 
@@ -358,7 +359,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.size.includes(command) && (
+            {CommandParameters.size.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -369,11 +370,11 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.cursor.includes(command) && (
+            {CommandParameters.cursor.includes(command as Redis) && (
               <FormField labelWidth={8} inputWidth={10} value={cursor} onChange={this.onCursorChange} label="Cursor" />
             )}
 
-            {CommandParameters.match.includes(command) && (
+            {CommandParameters.match.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -384,7 +385,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.start.includes(command) && (
+            {CommandParameters.start.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -395,7 +396,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.end.includes(command) && (
+            {CommandParameters.end.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -423,7 +424,7 @@ export class QueryEditor extends PureComponent<Props> {
 
         {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
-            {CommandParameters.count.includes(command) && (
+            {CommandParameters.count.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -435,7 +436,7 @@ export class QueryEditor extends PureComponent<Props> {
               />
             )}
 
-            {CommandParameters.samples.includes(command) && (
+            {CommandParameters.samples.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
                 inputWidth={10}
@@ -450,7 +451,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
-        {type === QueryTypeValue.REDIS && command && CommandParameters.section.includes(command) && (
+        {type === QueryTypeValue.REDIS && command && CommandParameters.section.includes(command as Redis) && (
           <div className="gf-form">
             <InlineFormLabel width={8}>Section</InlineFormLabel>
             <Select options={InfoSections} onChange={this.onInfoSectionChange} value={section} menuPlacement="bottom" />
@@ -535,10 +536,10 @@ export class QueryEditor extends PureComponent<Props> {
                 </InlineFormLabel>
                 <RadioButtonGroup
                   options={StreamingDataTypes}
-                  value={streamingDataType || StreamingDataType.TimeSeries}
+                  value={streamingDataType || StreamingDataType.TIMESERIES}
                   onChange={this.onStreamingDataTypeChange}
                 />
-                {streamingDataType !== StreamingDataType.DataFrame && (
+                {streamingDataType !== StreamingDataType.DATAFRAME && (
                   <FormField
                     className={css`
                       margin-left: 5px;

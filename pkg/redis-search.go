@@ -6,6 +6,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 )
 
 /**
@@ -41,14 +42,9 @@ func queryFtInfo(qm queryModel, client redisClient) backend.DataResponse {
 			if floatValue, err := strconv.ParseFloat(string(value), 64); err == nil {
 				field := data.NewField(key, nil, []float64{floatValue})
 
-				// Field Units
-				config := map[string]string{"inverted_sz_mb": "decmbytes", "offset_vectors_sz_mb": "decmbytes",
-					"doc_table_size_mb": "decmbytes", "sortable_values_size_mb": "decmbytes",
-					"key_table_size_mb": "decmbytes", "percent_indexed": "percentunit"}
-
 				// Set unit
-				if config[key] != "" {
-					field.Config = &data.FieldConfig{Unit: config[key]}
+				if models.SearchInfoConfig[key] != "" {
+					field.Config = &data.FieldConfig{Unit: models.SearchInfoConfig[key]}
 				}
 
 				frame.Fields = append(frame.Fields, field)
@@ -59,7 +55,7 @@ func queryFtInfo(qm queryModel, client redisClient) backend.DataResponse {
 			frame.Fields = append(frame.Fields, data.NewField(key, nil, []string{string(value)}))
 		case []interface{}:
 		default:
-			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Value type")
+			log.DefaultLogger.Error(models.SearchInfo, "Conversion Error", "Unsupported Value type")
 		}
 	}
 

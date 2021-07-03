@@ -9,6 +9,7 @@ import (
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
 	"github.com/grafana/grafana-plugin-sdk-go/data"
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 )
 
 /**
@@ -293,7 +294,7 @@ func queryTsInfo(qm queryModel, client redisClient) backend.DataResponse {
 		case []interface{}:
 			frame = addFrameFieldsFromArray(value, frame)
 		default:
-			log.DefaultLogger.Error("queryTsInfo", "Conversion Error", "Unsupported Value type")
+			log.DefaultLogger.Error(models.TimeSeriesInfo, "Conversion Error", "Unsupported Value type")
 		}
 	}
 	// Add the frame to the response

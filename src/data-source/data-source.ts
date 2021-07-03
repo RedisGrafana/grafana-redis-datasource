@@ -113,13 +113,13 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
      * Streaming enabled
      */
     return new Observable<DataQueryResponse>((subscriber) => {
-      const { streamingDataType = StreamingDataType.TimeSeries } = refA;
+      const { streamingDataType = StreamingDataType.TIMESERIES } = refA;
 
       /**
        * Apply frame formatted by streamingDataType
        */
       let frame: TimeSeriesFormatter | DataFrameFormatter;
-      if (streamingDataType === StreamingDataType.DataFrame) {
+      if (streamingDataType === StreamingDataType.DATAFRAME) {
         frame = new DataFrameFormatter();
       } else {
         frame = new TimeSeriesFormatter(refA);

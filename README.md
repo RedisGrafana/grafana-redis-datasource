@@ -4,8 +4,8 @@
 
 [![Grafana 7](https://img.shields.io/badge/Grafana-7-orange)](https://www.grafana.com)
 [![Redis Data Source](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Data%20Source&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-datasource)](https://grafana.com/grafana/plugins/redis-datasource)
-[![Redis Application plug-in](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Application%20plug-in&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-app)](https://grafana.com/grafana/plugins/redis-app)
-[![Redis Explorer plug-in](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Explorer%20plug-in&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-explorer-app)](https://grafana.com/grafana/plugins/redis-explorer-app)
+[![Redis Application plugin](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Application%20plugin&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-app)](https://grafana.com/grafana/plugins/redis-app)
+[![Redis Explorer plugin](https://img.shields.io/badge/dynamic/json?color=blue&label=Redis%20Explorer%20plugin&query=%24.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fredis-explorer-app)](https://grafana.com/grafana/plugins/redis-explorer-app)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RedisGrafana/grafana-redis-datasource)](https://goreportcard.com/report/github.com/RedisGrafana/grafana-redis-datasource)
 ![CI](https://github.com/RedisGrafana/grafana-redis-datasource/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/RedisGrafana/grafana-redis-datasource/branch/master/graph/badge.svg?token=YX7995RPCF)](https://codecov.io/gh/RedisGrafana/grafana-redis-datasource)
@@ -23,19 +23,19 @@
 
 ## Introduction
 
-The Redis Data Source for Grafana is a plug-in that allows users to connect to any Redis database On-Premises or in the Cloud. It provides out-of-the-box predefined dashboards and lets you build customized dashboards to monitor Redis and application data.
+The Redis Data Source for Grafana is a plugin that allows users to connect to any Redis database On-Premises or in the Cloud. It provides out-of-the-box predefined dashboards and lets you build customized dashboards to monitor Redis and application data.
 
 ### Requirements
 
-Only **Grafana 7.1+** with a new Backend plug-in platform supports Redis plug-ins.
+Only **Grafana 7.1+** with a new Backend plugin platform supports Redis plugins.
 
-### Redis Application plug-in
+### Redis Application plugin
 
-You can add as many data sources as you want to support multiple Redis databases. [Redis Application plug-in](https://grafana.com/grafana/plugins/redis-app) helps manage various Redis Data Sources and provides Custom panels.
+You can add as many data sources as you want to support multiple Redis databases. [Redis Application plugin](https://grafana.com/grafana/plugins/redis-app) helps manage various Redis Data Sources and provides Custom panels.
 
-### Redis Explorer plug-in
+### Redis Explorer plugin
 
-[The Redis Explorer plug-in](https://grafana.com/grafana/plugins/redis-explorer-app) connects to Redis Enterprise software clusters using REST API. It provides application pages to add Redis Data Sources for managed databases and dashboards to see cluster configuration.
+[The Redis Explorer plugin](https://grafana.com/grafana/plugins/redis-explorer-app) connects to Redis Enterprise software clusters using REST API. It provides application pages to add Redis Data Sources for managed databases and dashboards to see cluster configuration.
 
 ## Getting Started
 
@@ -55,7 +55,7 @@ Data Source allows to connect to Redis using TCP port, Unix socket, Cluster, Sen
 
 ## Documentation
 
-Please take a look at the [Documentation](https://redisgrafana.github.io/redis-datasource/overview/) to learn more about plug-in and features.
+Please take a look at the [Documentation](https://redisgrafana.github.io/redis-datasource/overview/) to learn more about plugin and features.
 
 ### Supported commands
 
@@ -67,7 +67,7 @@ List of all supported commands and how to use them with examples you can find in
 
 [Developing Redis Data Source](https://redisgrafana.github.io/development/redis-datasource/) page provides instructions on building the data source.
 
-Are you interested in the latest features and updates? Start nightly built [Docker image for Redis Application plug-in](https://redisgrafana.github.io/development/images/), including Redis Data Source.
+Are you interested in the latest features and updates? Start nightly built [Docker image for Redis Application plugin](https://redisgrafana.github.io/development/images/), including Redis Data Source.
 
 ## Feedback
 

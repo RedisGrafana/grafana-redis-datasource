@@ -55,55 +55,55 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	/**
 	 * Hash, Set, etc.
 	 */
-	case "hgetall":
+	case models.HGetAll:
 		return queryHGetAll(qm, client)
-	case "hget":
+	case models.HGet:
 		return queryHGet(qm, client)
-	case "hmget":
+	case models.HMGet:
 		return queryHMGet(qm, client)
-	case "smembers", "hkeys":
+	case models.SMembers, models.HKeys:
 		return querySMembers(qm, client)
-	case "type", "get", "ttl", "hlen", "xlen", "llen", "scard":
+	case models.Type, models.Get, models.TTL, models.HLen, models.XLen, models.LLen, models.SCard:
 		return queryKeyCommand(qm, client)
 
 	/**
 	 * Info
 	 */
-	case "info":
+	case models.Info:
 		return queryInfo(qm, client)
-	case "clientList":
+	case models.ClientList:
 		return queryClientList(qm, client)
-	case "slowlogGet":
+	case models.SlowlogGet:
 		return querySlowlogGet(qm, client)
 
 	/**
 	 * Streams
 	 */
-	case "xinfoStream":
+	case models.XInfoStream:
 		return queryXInfoStream(qm, client)
-	case "xrange":
+	case models.XRange:
 		return queryXRange(qm, client)
-	case "xrevrange":
+	case models.XRevRange:
 		return queryXRevRange(qm, client)
 
 	/**
 	 * Cluster
 	 */
-	case "clusterInfo":
+	case models.ClusterInfo:
 		return queryClusterInfo(qm, client)
-	case "clusterNodes":
+	case models.ClusterNodes:
 		return queryClusterNodes(qm, client)
 
 	/**
 	 * RediSearch
 	 */
-	case "ft.info":
+	case models.SearchInfo:
 		return queryFtInfo(qm, client)
 
 	/**
 	 * Custom commands
 	 */
-	case "tmscan":
+	case models.TMScan:
 		return queryTMScan(qm, client)
 
 	/**

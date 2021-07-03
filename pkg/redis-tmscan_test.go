@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -52,7 +53,7 @@ func TestQueryTMScan(t *testing.T) {
 		}
 
 		// Response
-		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100, Cursor: "0", Samples: 10}, &client)
+		resp := queryTMScan(queryModel{Command: models.TMScan, Match: "test:*", Count: 100, Cursor: "0", Samples: 10}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Len(t, resp.Frames[1].Fields, 2)
@@ -122,7 +123,7 @@ func TestQueryTMScan(t *testing.T) {
 		}
 
 		// Response
-		resp := queryTMScan(queryModel{Command: "tmscan", Size: 2, Count: 10, Cursor: "0"}, &client)
+		resp := queryTMScan(queryModel{Command: models.TMScan, Size: 2, Count: 10, Cursor: "0"}, &client)
 		require.Len(t, resp.Frames, 2)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Len(t, resp.Frames[1].Fields, 2)
@@ -156,7 +157,7 @@ func TestQueryTMScan(t *testing.T) {
 			err:      errors.New("error when call cursor")}
 
 		// Error
-		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
+		resp := queryTMScan(queryModel{Command: models.TMScan, Match: "test:*", Count: 100}, &client)
 		require.EqualError(t, resp.Error, "error when call cursor")
 	})
 
@@ -200,7 +201,7 @@ func TestQueryTMScan(t *testing.T) {
 		}
 
 		// Response
-		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
+		resp := queryTMScan(queryModel{Command: models.TMScan, Match: "test:*", Count: 100}, &client)
 		require.EqualError(t, resp.Error, "error when batch types")
 	})
 
@@ -244,7 +245,7 @@ func TestQueryTMScan(t *testing.T) {
 		}
 
 		// Response
-		resp := queryTMScan(queryModel{Command: "tmscan", Match: "test:*", Count: 100}, &client)
+		resp := queryTMScan(queryModel{Command: models.TMScan, Match: "test:*", Count: 100}, &client)
 		require.EqualError(t, resp.Error, "error when batch memory")
 	})
 }
