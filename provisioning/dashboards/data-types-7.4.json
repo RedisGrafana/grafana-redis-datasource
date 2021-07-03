@@ -15,6 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
+  "id": 1,
+  "iteration": 1625331946199,
   "links": [],
   "panels": [
     {
@@ -30,7 +32,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -69,7 +71,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "info",
@@ -95,7 +97,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -103,6 +105,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -163,7 +166,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "tmscan",
@@ -182,7 +185,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -198,7 +201,8 @@
             "hideFrom": {
               "graph": false,
               "legend": false,
-              "tooltip": false
+              "tooltip": false,
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineStyle": {
@@ -210,7 +214,14 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "min": 0,
@@ -245,7 +256,7 @@
           "displayMode": "list",
           "placement": "bottom"
         },
-        "tooltipOptions": {
+        "tooltip": {
           "mode": "multi"
         }
       },
@@ -319,7 +330,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -362,7 +373,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "info",
@@ -400,7 +411,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "Should return 'test'",
       "fieldConfig": {
         "defaults": {
@@ -441,7 +452,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "get",
@@ -457,7 +468,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "Should return 1.234",
       "fieldConfig": {
         "defaults": {
@@ -502,7 +513,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "get",
@@ -518,7 +529,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -557,7 +568,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "type",
@@ -573,7 +584,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -616,7 +627,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "llen",
@@ -633,7 +644,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -676,7 +687,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "ttl",
@@ -692,7 +703,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -735,7 +746,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "scard",
@@ -751,7 +762,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -794,7 +805,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "xlen",
@@ -810,7 +821,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -853,7 +864,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "xlen",
@@ -869,7 +880,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "Should return 100",
       "fieldConfig": {
         "defaults": {
@@ -913,7 +924,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "hget",
@@ -930,7 +941,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -975,7 +986,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "hget",
@@ -992,7 +1003,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -1037,7 +1048,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "hlen",
@@ -1054,7 +1065,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1095,7 +1106,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "hgetall",
@@ -1112,7 +1123,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1153,7 +1164,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "hmget",
@@ -1170,7 +1181,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1187,7 +1198,8 @@
             "hideFrom": {
               "graph": false,
               "legend": false,
-              "tooltip": false
+              "tooltip": false,
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -1196,7 +1208,14 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -1230,7 +1249,7 @@
           "displayMode": "list",
           "placement": "bottom"
         },
-        "tooltipOptions": {
+        "tooltip": {
           "mode": "single"
         }
       },
@@ -1252,7 +1271,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -1261,6 +1280,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "decimals": 0,
@@ -1287,7 +1307,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "hkeys",
@@ -1305,7 +1325,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1322,7 +1342,8 @@
             "hideFrom": {
               "graph": false,
               "legend": false,
-              "tooltip": false
+              "tooltip": false,
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -1331,7 +1352,14 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -1365,7 +1393,7 @@
           "displayMode": "list",
           "placement": "bottom"
         },
-        "tooltipOptions": {
+        "tooltip": {
           "mode": "single"
         }
       },
@@ -1387,7 +1415,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1395,6 +1423,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -1424,7 +1453,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "smembers",
@@ -1454,7 +1483,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1462,6 +1491,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -1491,7 +1521,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "xinfoStream",
@@ -1508,7 +1538,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1524,7 +1554,8 @@
             "hideFrom": {
               "graph": false,
               "legend": false,
-              "tooltip": false
+              "tooltip": false,
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -1533,7 +1564,14 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -1567,7 +1605,7 @@
           "displayMode": "list",
           "placement": "bottom"
         },
-        "tooltipOptions": {
+        "tooltip": {
           "mode": "single"
         }
       },
@@ -1608,7 +1646,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1616,6 +1654,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -1645,7 +1684,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "xrange",
@@ -1663,7 +1702,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1671,6 +1710,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -1700,7 +1740,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "xrange",
@@ -1733,7 +1773,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1741,6 +1781,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -1770,7 +1811,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "ft.info",
@@ -1842,7 +1883,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -1875,7 +1916,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1999,7 +2040,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "unit": "decbytes"
@@ -2033,7 +2074,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2167,7 +2208,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2207,7 +2248,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "rg.pystats",
@@ -2227,7 +2268,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "unit": "decbytes"
@@ -2263,7 +2304,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2336,7 +2377,7 @@
       }
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2344,6 +2385,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -2495,7 +2537,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "rg.dumpregistrations",
@@ -2549,7 +2591,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2557,6 +2599,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -2756,7 +2799,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "rg.pydumpreqs",
@@ -2825,7 +2868,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2833,6 +2876,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -2876,7 +2920,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "ts.info",
@@ -2914,7 +2958,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2930,7 +2974,8 @@
             "hideFrom": {
               "graph": false,
               "legend": false,
-              "tooltip": false
+              "tooltip": false,
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -2939,7 +2984,14 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "min": 0,
@@ -2974,7 +3026,7 @@
           "displayMode": "list",
           "placement": "bottom"
         },
-        "tooltipOptions": {
+        "tooltip": {
           "mode": "single"
         }
       },
@@ -3030,7 +3082,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3073,7 +3125,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "ts.get",
@@ -3094,7 +3146,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3129,7 +3181,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "",
@@ -3146,7 +3198,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3162,7 +3214,8 @@
             "hideFrom": {
               "graph": false,
               "legend": false,
-              "tooltip": false
+              "tooltip": false,
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -3171,7 +3224,14 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": true
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "min": 0,
@@ -3206,7 +3266,7 @@
           "displayMode": "list",
           "placement": "bottom"
         },
-        "tooltipOptions": {
+        "tooltip": {
           "mode": "single"
         }
       },
@@ -3231,7 +3291,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3274,7 +3334,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "ts.mrange",
@@ -3295,13 +3355,172 @@
       "type": "stat"
     },
     {
+      "datasource": "${redis}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "graph": false,
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 73
+      },
+      "id": 84,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.0-11266pre",
+      "targets": [
+        {
+          "command": "ts.mrange",
+          "filter": "sensor=888",
+          "keyName": "test:timeseries2",
+          "legend": "id",
+          "query": "",
+          "refId": "A",
+          "streaming": true,
+          "streamingDataType": "DataFrame",
+          "type": "timeSeries",
+          "value": "sensor"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "TS.MRANGE sensor=888 Streaming",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "${redis}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 73
+      },
+      "id": 85,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "command": "ts.mget",
+          "filter": "id=(111,123)",
+          "keyName": "test:timeseries2",
+          "legend": "",
+          "query": "",
+          "refId": "A",
+          "streaming": false,
+          "streamingDataType": "TimeSeries",
+          "type": "timeSeries",
+          "value": ""
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "TS.MGET id=(111,123)",
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 73
+        "y": 80
       },
       "id": 75,
       "panels": [],
@@ -3309,16 +3528,12 @@
       "type": "row"
     },
     {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
+      "datasource": "${redis}",
       "gridPos": {
         "h": 28,
         "w": 12,
         "x": 0,
-        "y": 74
+        "y": 81
       },
       "id": 77,
       "pluginVersion": "7.5.0-11266pre",
@@ -3336,7 +3551,7 @@
       "type": "nodeGraph"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3400,14 +3615,14 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 74
+        "y": 81
       },
       "id": 78,
       "options": {
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "graph.slowlog",
@@ -3418,7 +3633,7 @@
           "type": "graph"
         }
       ],
-      "title": "GOT_DEMO",
+      "title": "Graph SlowLog",
       "transformations": [
         {
           "id": "organize",
@@ -3437,7 +3652,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3445,58 +3660,7 @@
           },
           "custom": {
             "align": null,
-            "filterable": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 81
-      },
-      "id": 81,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "7.5.6",
-      "targets": [
-        {
-          "command": "graph.explain",
-          "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
-          "keyName": "GOT_DEMO",
-          "query": "",
-          "refId": "A",
-          "type": "graph"
-        }
-      ],
-      "title": "Explain",
-      "type": "table"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -3522,14 +3686,14 @@
         "x": 12,
         "y": 88
       },
-      "id": 82,
+      "id": 81,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
-          "command": "graph.profile",
+          "command": "graph.explain",
           "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
           "keyName": "GOT_DEMO",
           "query": "",
@@ -3537,11 +3701,11 @@
           "type": "graph"
         }
       ],
-      "title": "Profile",
+      "title": "Explain",
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "${redis}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3549,6 +3713,7 @@
           },
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -3574,11 +3739,64 @@
         "x": 12,
         "y": 95
       },
+      "id": 82,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.0.4",
+      "targets": [
+        {
+          "command": "graph.profile",
+          "cypher": "MATCH (w:writer)-[r:wrote]->(b:book) return w,r,b",
+          "keyName": "GOT_DEMO",
+          "query": "",
+          "refId": "A",
+          "type": "graph"
+        }
+      ],
+      "title": "Profile",
+      "type": "table"
+    },
+    {
+      "datasource": "${redis}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 102
+      },
       "id": 83,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "command": "graph.config",
@@ -3594,11 +3812,56 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 27,
+  "schemaVersion": 30,
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Redis",
+          "value": "Redis"
+        },
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Redis",
+        "multi": false,
+        "name": "redis",
+        "options": [],
+        "query": "redis-datasource",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "50",
+          "value": "50"
+        },
+        "datasource": "${redis}",
+        "definition": "smembers test:set",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Set",
+        "multi": false,
+        "name": "set",
+        "options": [],
+        "query": "smembers test:set",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
   },
   "time": {
     "from": "now-5m",
@@ -3606,7 +3869,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Redis Data Types 7.4",
+  "title": "Redis Data Types v8",
   "uid": "2TKvUH-G2",
   "version": 2
 }
