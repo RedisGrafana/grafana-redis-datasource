@@ -5,12 +5,25 @@
 ### Breaking changes
 
 - HGET returns field with values named as requested field instead of "Value" similar to HMGET and HGETALL.
-- Adding of the `time` field for Streaming moved from Frontend to Backend. Field's name renamed to "#time" to avoid confusion with returned fields.
+- Streaming field `time` moved from Frontend to Backend. Field's name renamed to "#time" to avoid confusion with returned fields.
 
 ### Features / Enhancements
 
+- Add Redis Explorer to README and minor docker updates (#195)
 - Alerting for Grafana-Redis-Datasource #166
 - Add support for Sentinel ACL User and Password authentication separate from Redis #197
+- Add Support for RedisGraph query nodes count (#199)
+- Add GRAPH.EXPLAIN and GRAPH.PROFILE commands (#200)
+- Add GRAPH.CONFIG and RedisGraph refactoring (#201)
+- Refactor RedisTimeSeries and RedisGears commands (#202)
+- Upgrade Grafana 7.5.7 and backend dependencies (#203)
+- Add Streaming dashboard for v8 and update #time streaming field (#204)
+- Add TS.MGET command (#209)
+- Refactor Redis commands (#210)
+
+### Bug fixes
+
+- Fix NaN for variables (#206)
 
 ## 1.4.0 (2021-05-08)
 
