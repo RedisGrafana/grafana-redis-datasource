@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.5.0 (IN PROGRESS)
+## 1.5.0 (2021-07-06)
 
 ### Breaking changes
 
