@@ -2,8 +2,8 @@
   "alerting": true,
   "backend": true,
   "dependencies": {
-    "grafanaDependency": ">=7.1.0",
-    "grafanaVersion": "7.x.x",
+    "grafanaDependency": ">=8.0.0",
+    "grafanaVersion": "8.x.x",
     "plugins": []
   },
   "executable": "redis-datasource",
@@ -12,11 +12,6 @@
     {
       "name": "Redis Overview",
       "path": "dashboards/redis.json",
-      "type": "dashboard"
-    },
-    {
-      "name": "Redis Streaming",
-      "path": "dashboards/redis-streaming.json",
       "type": "dashboard"
     },
     {

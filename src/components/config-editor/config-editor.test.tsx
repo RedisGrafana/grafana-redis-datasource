@@ -31,6 +31,7 @@ const getOptions = ({
   type: '',
   access: '',
   url: '',
+  uid: '',
   password: '',
   user: '',
   database: '',
