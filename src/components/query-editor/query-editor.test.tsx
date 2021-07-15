@@ -130,6 +130,42 @@ describe('QueryEditor', () => {
     });
   });
 
+  /**
+   * Streaming
+   */
+  describe('Streaming', () => {
+    const getComponent = (wrapper: ShallowComponent) =>
+      wrapper.findWhere((node) => {
+        return node.name() === 'Switch' && node.prop('label') === 'Streaming';
+      });
+
+    it('Should set value from query', () => {
+      const query = getQuery({ streaming: true });
+      const wrapper = shallow<QueryEditor>(
+        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+      );
+      const testedComponent = getComponent(wrapper);
+      expect(testedComponent.prop('checked')).toEqual(true);
+    });
+
+    it('Should call onStreamingChange when onChange prop was called', () => {
+      const query = getQuery({ streaming: true });
+      const wrapper = shallow<QueryEditor>(
+        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+      );
+      const testedMethod = jest.spyOn(wrapper.instance(), 'onStreamingChange');
+      wrapper.instance().forceUpdate();
+      const testedComponent = getComponent(wrapper);
+      const newValue = true;
+      testedComponent.simulate('change', { currentTarget: { checked: newValue } });
+      expect(testedMethod).toHaveBeenCalledWith({ currentTarget: { checked: newValue } });
+      expect(onChange).toHaveBeenCalledWith({
+        ...query,
+        streaming: newValue,
+      });
+    });
+  });
+
   runQueryFieldsTest([
     {
       name: 'query',
@@ -371,22 +407,6 @@ describe('QueryEditor', () => {
    */
   describe('Streaming fields', () => {
     runQueryFieldsTest([
-      {
-        name: 'streaming',
-        getComponent: (wrapper: ShallowComponent) =>
-          wrapper.findWhere((node) => {
-            return node.name() === 'Switch' && node.prop('label') === 'Streaming';
-          }),
-        type: 'switch',
-        queryWhenShown: {
-          refId: 'A',
-          type: QueryTypeValue.TIMESERIES,
-        },
-        queryWhenHidden: {
-          refId: 'B',
-          type: QueryTypeValue.TIMESERIES,
-        },
-      },
       {
         name: 'streamingInterval',
         getComponent: (wrapper: ShallowComponent) =>

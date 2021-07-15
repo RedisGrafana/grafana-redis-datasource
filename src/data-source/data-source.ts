@@ -1,4 +1,3 @@
-import { head } from 'lodash';
 import { Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import {
@@ -12,8 +11,8 @@ import {
 } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
 import { DefaultStreamingInterval, StreamingDataType } from '../constants';
-import { DataFrameFormatter, TimeSeriesFormatter } from '../frame-formatters';
 import { RedisQuery } from '../redis';
+import { TimeSeriesStreaming } from '../time-series';
 import { RedisDataSourceOptions } from '../types';
 
 /**
@@ -92,20 +91,19 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
    * Override query to support streaming
    */
   query(request: DataQueryRequest<RedisQuery>): Observable<DataQueryResponse> {
-    const refA = head(request.targets);
-
     /**
      * No query
      * Need to typescript types narrowing
      */
-    if (!refA) {
+    if (!request.targets.length) {
       return super.query(request);
     }
 
     /**
      * No streaming enabled
      */
-    if (!refA?.streaming) {
+    const streaming = request.targets.filter((target) => target.streaming);
+    if (!streaming.length) {
       return super.query(request);
     }
 
@@ -113,36 +111,41 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
      * Streaming enabled
      */
     return new Observable<DataQueryResponse>((subscriber) => {
-      const { streamingDataType = StreamingDataType.TIMESERIES } = refA;
+      const frames: { [id: string]: TimeSeriesStreaming } = {};
+      request.targets.forEach((target) => {
+        /**
+         * Time-series frame
+         */
+        if (target.streamingDataType !== StreamingDataType.DATAFRAME) {
+          frames[target.refId] = new TimeSeriesStreaming(target);
+        }
+      });
 
       /**
-       * Apply frame formatted by streamingDataType
+       * Get minimum Streaming Interval
        */
-      let frame: TimeSeriesFormatter | DataFrameFormatter;
-      if (streamingDataType === StreamingDataType.DATAFRAME) {
-        frame = new DataFrameFormatter();
-      } else {
-        frame = new TimeSeriesFormatter(refA);
-      }
+      const streamingInterval = request.targets.map((target) =>
+        target.streamingInterval ? target.streamingInterval : DefaultStreamingInterval
+      );
 
       /**
        * Interval
        */
       const intervalId = setInterval(async () => {
-        /**
-         * Run Query
-         */
-        const data = await frame.update(super.query(request));
-        if (!data) {
-          return;
-        }
+        const response = await super.query(request).toPromise();
 
-        subscriber.next({
-          data: [data],
-          key: refA.refId,
-          state: LoadingState.Streaming,
+        response.data.forEach(async (frame) => {
+          if (frames[frame.refId]) {
+            frame = await frames[frame.refId].update(frame.fields);
+          }
+
+          subscriber.next({
+            data: [frame],
+            key: frame.refId,
+            state: LoadingState.Streaming,
+          });
         });
-      }, refA.streamingInterval || DefaultStreamingInterval);
+      }, Math.min(...streamingInterval));
 
       return () => {
         clearInterval(intervalId);
