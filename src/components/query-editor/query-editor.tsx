@@ -251,7 +251,6 @@ export class QueryEditor extends PureComponent<Props> {
       streamingInterval,
       streamingCapacity,
       streamingDataType,
-      refId,
     } = this.props.query;
     const { onRunQuery } = this.props;
 
@@ -495,66 +494,62 @@ export class QueryEditor extends PureComponent<Props> {
             </div>
           )}
 
-        {refId === 'A' && (
-          <>
-            <div className="gf-form">
-              <Switch
-                label="Streaming"
-                labelClass="width-8"
-                tooltip="If checked, the datasource will stream data. Only Ref A is supported."
-                checked={streaming || false}
-                onChange={this.onStreamingChange}
+        <div className="gf-form">
+          <Switch
+            label="Streaming"
+            labelClass="width-8"
+            tooltip="If checked, the datasource will stream data."
+            checked={streaming || false}
+            onChange={this.onStreamingChange}
+          />
+          {streaming && (
+            <>
+              <FormField
+                labelWidth={8}
+                value={streamingInterval}
+                type="number"
+                onChange={this.onStreamingIntervalChange}
+                label="Interval"
+                tooltip="Streaming interval in milliseconds. Default is 1000ms. For multiple Streaming targets minimum value will be taken."
+                placeholder="1000"
               />
-              {streaming && (
-                <>
-                  <FormField
-                    labelWidth={8}
-                    value={streamingInterval}
-                    type="number"
-                    onChange={this.onStreamingIntervalChange}
-                    label="Interval"
-                    tooltip="Streaming interval in milliseconds. Default is 1000ms."
-                    placeholder="1000"
-                  />
-                  <FormField
-                    labelWidth={8}
-                    value={streamingCapacity}
-                    type="number"
-                    onChange={this.onStreamingCapacityChange}
-                    label="Capacity"
-                    tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
-                    placeholder="1000"
-                  />
-                </>
-              )}
-            </div>
+              <FormField
+                labelWidth={8}
+                value={streamingCapacity}
+                type="number"
+                onChange={this.onStreamingCapacityChange}
+                label="Capacity"
+                tooltip="Values will be constantly added and will never exceed the given capacity. Default is 1000."
+                placeholder="1000"
+              />
+            </>
+          )}
+        </div>
 
-            {streaming && (
-              <div className="gf-form">
-                <InlineFormLabel width={8} tooltip="If checked Time series, the last line of data will be applied.">
-                  Data type
-                </InlineFormLabel>
-                <RadioButtonGroup
-                  options={StreamingDataTypes}
-                  value={streamingDataType || StreamingDataType.TIMESERIES}
-                  onChange={this.onStreamingDataTypeChange}
-                />
-                {streamingDataType !== StreamingDataType.DATAFRAME && (
-                  <FormField
-                    className={css`
-                      margin-left: 5px;
-                    `}
-                    labelWidth={8}
-                    inputWidth={30}
-                    value={field}
-                    tooltip="Specify field(s) to return from backend. Required for Alerting to trigger on specific fields."
-                    onChange={this.onFieldChange}
-                    label="Filter Field"
-                  />
-                )}
-              </div>
+        {streaming && (
+          <div className="gf-form">
+            <InlineFormLabel width={8} tooltip="If checked Time series, the last line of data will be applied.">
+              Data type
+            </InlineFormLabel>
+            <RadioButtonGroup
+              options={StreamingDataTypes}
+              value={streamingDataType || StreamingDataType.TIMESERIES}
+              onChange={this.onStreamingDataTypeChange}
+            />
+            {streamingDataType !== StreamingDataType.DATAFRAME && (
+              <FormField
+                className={css`
+                  margin-left: 5px;
+                `}
+                labelWidth={8}
+                inputWidth={30}
+                value={field}
+                tooltip="Specify field(s) to return from backend. Required for Alerting to trigger on specific fields."
+                onChange={this.onFieldChange}
+                label="Filter Field"
+              />
             )}
-          </>
+          </div>
         )}
 
         <Button onClick={onRunQuery}>Run</Button>

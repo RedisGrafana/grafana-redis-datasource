@@ -92,6 +92,7 @@ describe('DataSource', () => {
         subscriber.next({
           data: [
             toDataFrame({
+              refId: 'A',
               fields: [
                 {
                   name: 'get',
@@ -149,6 +150,7 @@ describe('DataSource', () => {
             query: '',
             streaming: true,
             streamingCapacity: 1,
+            streamingInterval: 1,
           },
         ],
       });
