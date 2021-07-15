@@ -27,7 +27,8 @@ The Redis Data Source for Grafana is a plugin that allows users to connect to an
 
 ### Requirements
 
-Only **Grafana 7.1+** with a new Backend plugin platform supports Redis plugins.
+- **Grafana 8.0+** is required for Redis Data Source 2.X.
+- **Grafana 7.1+** is required for Redis Data Source 1.X.
 
 ### Redis Application plugin
 
