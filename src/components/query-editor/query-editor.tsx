@@ -1,6 +1,6 @@
-import { css } from 'emotion';
 import React, { ChangeEvent, PureComponent } from 'react';
 import { RedisGraph } from 'redis/graph';
+import { css } from '@emotion/css';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, TextArea } from '@grafana/ui';
 import { StreamingDataType, StreamingDataTypes } from '../../constants';

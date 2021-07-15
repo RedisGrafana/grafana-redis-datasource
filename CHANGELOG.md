@@ -1,5 +1,15 @@
 # Change Log
 
+## 2.0.0 (IN PROGRESS)
+
+### Breaking changes
+
+- Supports Grafana 8.0+, for Grafana 7.X use version 1.5.0
+
+### Features / Enhancements
+
+- Upgrade to Grafana 8.0.6 (#212)
+
 ## 1.5.0 (2021-07-06)
 
 ### Breaking changes

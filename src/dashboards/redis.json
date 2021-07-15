@@ -17,7 +17,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.5.7"
+      "version": "8.0.6"
     },
     {
       "type": "datasource",
@@ -56,7 +56,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1622401681126,
+  "iteration": 1626313328879,
   "links": [
     {
       "icon": "external link",
@@ -79,6 +79,10 @@
     {
       "collapsed": false,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -138,7 +142,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "info",
@@ -210,7 +214,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "panelId": 24,
@@ -341,7 +345,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "info",
@@ -425,7 +429,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "info",
@@ -489,7 +493,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "info",
@@ -551,7 +555,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "panelId": 19,
@@ -611,7 +615,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "query": "dbsize",
@@ -662,7 +666,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "panelId": 24,
@@ -733,7 +737,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "panelId": 24,
@@ -804,7 +808,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "panelId": 8,
@@ -829,6 +833,10 @@
     {
       "collapsed": false,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -932,7 +940,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "clientList",
@@ -1085,7 +1093,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "info",
@@ -1124,16 +1132,7 @@
             "displayMode": "color-text",
             "filterable": false
           },
-          "mappings": [
-            {
-              "from": "",
-              "id": 0,
-              "operator": "",
-              "text": "",
-              "to": "",
-              "type": 1
-            }
-          ],
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1210,7 +1209,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "slowlogGet",
@@ -1250,6 +1249,10 @@
     {
       "collapsed": false,
       "datasource": "$redis",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1298,7 +1301,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "clusterInfo",
@@ -1359,7 +1362,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "info",
@@ -1421,7 +1424,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "panelId": 60,
@@ -1459,6 +1462,7 @@
         "defaults": {
           "custom": {
             "align": null,
+            "displayMode": "auto",
             "filterable": false
           },
           "mappings": [],
@@ -1571,7 +1575,7 @@
           }
         ]
       },
-      "pluginVersion": "7.5.7",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "command": "clusterNodes",
@@ -1606,7 +1610,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 27,
+  "schemaVersion": 30,
   "style": "dark",
   "tags": ["redis"],
   "templating": {
