@@ -23,7 +23,7 @@
 
 ## Introduction
 
-The Redis Data Source for Grafana is a plugin that allows users to connect to any Redis database On-Premises or in the Cloud. It provides out-of-the-box predefined dashboards and lets you build customized dashboards to monitor Redis and application data.
+The Redis Data Source for Grafana is a plugin that allows users to connect to any Redis database On-Premises and in the Cloud. It provides out-of-the-box predefined dashboards and lets you build customized dashboards to monitor Redis and application data.
 
 ### Requirements
 
