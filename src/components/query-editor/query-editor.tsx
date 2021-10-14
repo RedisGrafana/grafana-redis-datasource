@@ -275,7 +275,7 @@ export class QueryEditor extends PureComponent<Props> {
           {type === QueryTypeValue.CLI && (
             <>
               <InlineFormLabel width={8}>Command</InlineFormLabel>
-              <TextArea css="" value={query} className="gf-form-input" onChange={this.onQueryChange} />
+              <TextArea value={query} className="gf-form-input" onChange={this.onQueryChange} />
             </>
           )}
           {type && type !== QueryTypeValue.CLI && (
@@ -417,7 +417,7 @@ export class QueryEditor extends PureComponent<Props> {
             >
               Cypher
             </InlineFormLabel>
-            <TextArea css="" value={cypher} className="gf-form-input" onChange={this.onCypherChange} />
+            <TextArea value={cypher} className="gf-form-input" onChange={this.onCypherChange} />
           </div>
         )}
 

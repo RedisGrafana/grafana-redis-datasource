@@ -25,6 +25,13 @@
 
 The Redis Data Source for Grafana is a plugin that allows users to connect to any Redis database On-Premises and in the Cloud. It provides out-of-the-box predefined dashboards and lets you build customized dashboards to monitor Redis and application data.
 
+## Demo
+
+Demo is available on [demo.volkovlabs.io](https://demo.volkovlabs.io):
+
+- [Redis Overview dashboard](https://demo.volkovlabs.io/d/TgibHBv7z/redis-overview?orgId=1&refresh=1h)
+- [Projects](https://demo.volkovlabs.io)
+
 ### Requirements
 
 - **Grafana 8.0+** is required for Redis Data Source 2.X.
