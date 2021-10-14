@@ -11,7 +11,7 @@
     "@types/lodash": "4.14.175",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
-    "rxjs": "6.6.3",
+    "rxjs": "7.3.0",
     "tslib": "^2.3.1"
   },
   "engines": {

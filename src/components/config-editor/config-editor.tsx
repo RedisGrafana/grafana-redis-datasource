@@ -430,7 +430,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
               ) : (
                 <div className="gf-form gf-form--grow">
                   <TextArea
-                    css=""
                     rows={7}
                     className="gf-form-input gf-form-textarea"
                     placeholder="Begins with -----BEGIN CERTIFICATE-----"
@@ -451,7 +450,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
                   </Button>
                 ) : (
                   <TextArea
-                    css=""
                     rows={7}
                     className="gf-form-input gf-form-textarea"
                     placeholder="Begins with -----BEGIN PRIVATE KEY-----"
@@ -472,7 +470,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
               ) : (
                 <div className="gf-form gf-form--grow">
                   <TextArea
-                    css=""
                     rows={7}
                     className="gf-form-input gf-form-textarea"
                     placeholder="Begins with -----BEGIN CERTIFICATE-----"

@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { map as map$, switchMap as switchMap$ } from 'rxjs/operators';
 import {
   DataFrame,
@@ -46,10 +46,10 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
     /**
      * Run Query
      */
-    return this.query({
-      targets: [{ refId: 'A', datasource: options.variable.datasource, query: query }],
-    } as DataQueryRequest<RedisQuery>)
-      .pipe(
+    return lastValueFrom(
+      this.query({
+        targets: [{ refId: 'A', datasource: options.variable.datasource, query: query }],
+      } as DataQueryRequest<RedisQuery>).pipe(
         switchMap$((response) => response.data),
         switchMap$((data: DataFrame) => data.fields),
         map$((field) => {
@@ -61,7 +61,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
           return values;
         })
       )
-      .toPromise();
+    );
   }
 
   /**
@@ -132,7 +132,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
        * Interval
        */
       const intervalId = setInterval(async () => {
-        const response = await super.query(request).toPromise();
+        const response = await lastValueFrom(super.query(request));
 
         response.data.forEach(async (frame) => {
           if (frames[frame.refId]) {

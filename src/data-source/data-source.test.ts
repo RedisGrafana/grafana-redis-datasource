@@ -24,6 +24,7 @@ const getInstanceSettings = (overrideSettings: object = {}): DataSourceInstanceS
   id: 1,
   type: '',
   name: '',
+  access: 'direct',
   meta: {
     id: '',
     name: '',
