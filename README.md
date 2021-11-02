@@ -11,16 +11,6 @@
 [![codecov](https://codecov.io/gh/RedisGrafana/grafana-redis-datasource/branch/master/graph/badge.svg?token=YX7995RPCF)](https://codecov.io/gh/RedisGrafana/grafana-redis-datasource)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/RedisGrafana/grafana-redis-datasource.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/RedisGrafana/grafana-redis-datasource/context:javascript)
 
-## Summary
-
-- [**Introduction**](#introduction)
-- [**Getting Started**](#getting-started)
-- [**Documentation**](#documentation)
-- [**Development**](#development)
-- [**Feedback**](#feedback)
-- [**Contributing**](#contributing)
-- [**License**](#license)
-
 ## Introduction
 
 The Redis Data Source for Grafana is a plugin that allows users to connect to any Redis database On-Premises and in the Cloud. It provides out-of-the-box predefined dashboards and lets you build customized dashboards to monitor Redis and application data.
