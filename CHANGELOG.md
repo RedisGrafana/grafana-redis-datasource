@@ -12,7 +12,8 @@
 - Allow multiple Streaming queries per panel (#213)
 - Update Grafana SDK 0.110 (#214)
 - Update to Grafana 8.1.4 (#217)
-- Update to Grafana 8.2.1
+- Update to Grafana 8.2.1 (#220)
+- Update to Grafana 8.2.2
 
 ## 1.5.0 (2021-07-06)
 
