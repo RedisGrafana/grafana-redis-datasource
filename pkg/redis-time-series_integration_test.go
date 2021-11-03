@@ -16,7 +16,7 @@ import (
  */
 func TestTSInfoIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response

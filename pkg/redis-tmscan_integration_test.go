@@ -35,7 +35,7 @@ var memory = map[string]int64{
  */
 func TestTMScanIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
@@ -62,7 +62,7 @@ func TestTMScanIntegration(t *testing.T) {
  */
 func TestTMScanIntegrationWithNoMatched(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
@@ -83,7 +83,7 @@ func TestTMScanIntegrationWithNoMatched(t *testing.T) {
  */
 func TestTMScanIntegrationWithMatched(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
@@ -115,7 +115,7 @@ func TestTMScanIntegrationWithMatched(t *testing.T) {
  * TMSCAN with Samples count
  */
 func TestTMScanIntegrationWithSamples(t *testing.T) {
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 
 	// Client
 	client := radixV3Impl{radixClient: radixClient}
@@ -138,7 +138,7 @@ func TestTMScanIntegrationWithSamples(t *testing.T) {
  */
 func TestTMScanIntegrationWithSize(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response

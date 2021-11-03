@@ -82,9 +82,9 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	case models.XInfoStream:
 		return queryXInfoStream(qm, client)
 	case models.XRange:
-		return queryXRange(qm, client)
+		return queryXRange(from, to, qm, client)
 	case models.XRevRange:
-		return queryXRevRange(qm, client)
+		return queryXRevRange(from, to, qm, client)
 
 	/**
 	 * Cluster

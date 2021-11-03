@@ -16,7 +16,7 @@ import (
  */
 func TestGraphQueryIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
@@ -39,7 +39,7 @@ func TestGraphQueryIntegration(t *testing.T) {
 
 func TestGraphQueryIntegrationWithoutRelations(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
@@ -53,7 +53,7 @@ func TestGraphQueryIntegrationWithoutRelations(t *testing.T) {
 
 func TestGraphQueryIntegrationWithoutNodes(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
