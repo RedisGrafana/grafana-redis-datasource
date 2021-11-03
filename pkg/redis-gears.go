@@ -206,7 +206,27 @@ func queryRgPydumpReqs(qm queryModel, client redisClient) backend.DataResponse {
 
 	// Requirements
 	for _, req := range reqs {
-		frame.AppendRow(req.GearReqVersion, req.Name, req.IsDownloaded, req.IsInstalled, req.CompiledOs, strings.Join(req.Wheels, ", "))
+		var wheels string
+
+		// Parse wheels
+		switch value := req.Wheels.(type) {
+		case []byte:
+			wheels = string(value)
+		case []string:
+			wheels = strings.Join(value, ", ")
+		case []interface{}:
+			var values []string
+			for _, entry := range value {
+				values = append(values, string(entry.([]byte)))
+			}
+
+			wheels = strings.Join(values, ", ")
+		default:
+			log.DefaultLogger.Error("Unexpected type received", "value", value, "type", reflect.TypeOf(value).String())
+			return response
+		}
+
+		frame.AppendRow(req.GearReqVersion, req.Name, req.IsDownloaded, req.IsInstalled, req.CompiledOs, wheels)
 	}
 
 	return response

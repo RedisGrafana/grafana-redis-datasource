@@ -48,10 +48,10 @@ type RegistrationData struct {
  * RG.PYDUMPREQS Radix marshaling
  */
 type PyDumpReq struct {
-	GearReqVersion int64    `redis:"GearReqVersion"`
-	Name           string   `redis:"Name"`
-	IsDownloaded   string   `redis:"IsDownloaded"`
-	IsInstalled    string   `redis:"IsInstalled"`
-	CompiledOs     string   `redis:"CompiledOs"`
-	Wheels         []string `redis:"Wheels"`
+	GearReqVersion int64       `redis:"GearReqVersion"`
+	Name           string      `redis:"Name"`
+	IsDownloaded   string      `redis:"IsDownloaded"`
+	IsInstalled    string      `redis:"IsInstalled"`
+	CompiledOs     string      `redis:"CompiledOs"`
+	Wheels         interface{} `redis:"Wheels"`
 }

@@ -13,7 +13,11 @@
 - Update Grafana SDK 0.110 (#214)
 - Update to Grafana 8.1.4 (#217)
 - Update to Grafana 8.2.1 (#220)
-- Update to Grafana 8.2.2
+- Update to Grafana 8.2.2 (#223)
+
+### Bug fixes
+
+- Fix RedisGears rg.dumpreqs command when Requirement was not yet downloaded so wheels are not available
 
 ## 1.5.0 (2021-07-06)
 
