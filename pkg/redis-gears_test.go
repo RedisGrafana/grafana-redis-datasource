@@ -354,12 +354,7 @@ func TestRgPyDumpReqs(t *testing.T) {
 		// Client
 		client := testClient{
 			rcv: []models.PyDumpReq{{
-				GearReqVersion: 1,
-				Name:           "pandas",
-				IsDownloaded:   "yes",
-				IsInstalled:    "yes",
-				CompiledOs:     "linux-buster-x64",
-				Wheels:         []byte("Requirement was not yet downloaded so wheels are not available"),
+				Wheels: []byte("Requirement was not yet downloaded so wheels are not available"),
 			}},
 			err: nil,
 		}
@@ -368,16 +363,27 @@ func TestRgPyDumpReqs(t *testing.T) {
 		resp := queryRgPydumpReqs(queryModel{Command: models.GearsPyDumpReqs}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 6)
-		require.Equal(t, int64(1), resp.Frames[0].Fields[0].At(0))
-		require.Equal(t, string("pandas"), resp.Frames[0].Fields[1].At(0))
-		require.Equal(t, string("yes"), resp.Frames[0].Fields[2].At(0))
-		require.Equal(t, string("yes"), resp.Frames[0].Fields[3].At(0))
-		require.Equal(t, "GearReqVersion", resp.Frames[0].Fields[0].Name)
-		require.Equal(t, "Name", resp.Frames[0].Fields[1].Name)
-		require.Equal(t, "IsDownloaded", resp.Frames[0].Fields[2].Name)
-		require.Equal(t, "IsInstalled", resp.Frames[0].Fields[3].Name)
-		require.Equal(t, "CompiledOs", resp.Frames[0].Fields[4].Name)
-		require.Equal(t, "Wheels", resp.Frames[0].Fields[5].Name)
+		require.Equal(t, string("Requirement was not yet downloaded so wheels are not available"), resp.Frames[0].Fields[5].At(0))
+	})
+
+	/**
+	 * Error type
+	 */
+	t.Run("should process requirements with wrong type", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: []models.PyDumpReq{{
+				Wheels: 5,
+			}},
+			err: nil,
+		}
+
+		// Response
+		resp := queryRgPydumpReqs(queryModel{Command: models.GearsPyDumpReqs}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Equal(t, string("Can't parse output"), resp.Frames[0].Fields[5].At(0))
 	})
 
 	/**

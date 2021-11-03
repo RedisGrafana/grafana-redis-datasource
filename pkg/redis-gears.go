@@ -223,7 +223,7 @@ func queryRgPydumpReqs(qm queryModel, client redisClient) backend.DataResponse {
 			wheels = strings.Join(values, ", ")
 		default:
 			log.DefaultLogger.Error("Unexpected type received", "value", value, "type", reflect.TypeOf(value).String())
-			return response
+			wheels = "Can't parse output"
 		}
 
 		frame.AppendRow(req.GearReqVersion, req.Name, req.IsDownloaded, req.IsInstalled, req.CompiledOs, wheels)
