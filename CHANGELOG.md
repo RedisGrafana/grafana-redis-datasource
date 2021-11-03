@@ -5,6 +5,7 @@
 ### Breaking changes
 
 - Supports Grafana 8.0+, for Grafana 7.X use version 1.5.0
+- XRANGE command based on the selected time range if Start/End is not specified. Use '-' as Start and '+' as end to display all results.
 
 ### Features / Enhancements
 
@@ -14,6 +15,7 @@
 - Update to Grafana 8.1.4 (#217)
 - Update to Grafana 8.2.1 (#220)
 - Update to Grafana 8.2.2 (#223)
+- Use Time-range for XRANGE filtering #176
 
 ### Bug fixes
 
