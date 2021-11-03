@@ -383,28 +383,6 @@ export class QueryEditor extends PureComponent<Props> {
                 label="Match pattern"
               />
             )}
-
-            {CommandParameters.start.includes(command as Redis) && (
-              <FormField
-                labelWidth={8}
-                inputWidth={10}
-                value={start}
-                onChange={this.onStartChange}
-                placeholder="-"
-                label="Start"
-              />
-            )}
-
-            {CommandParameters.end.includes(command as Redis) && (
-              <FormField
-                labelWidth={8}
-                inputWidth={10}
-                value={end}
-                onChange={this.onEndChange}
-                placeholder="+"
-                label="End"
-              />
-            )}
           </div>
         )}
 
@@ -423,6 +401,30 @@ export class QueryEditor extends PureComponent<Props> {
 
         {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
+            {CommandParameters.start.includes(command as Redis) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={start}
+                onChange={this.onStartChange}
+                placeholder="time range"
+                label="Start"
+                tooltip="Based on the selected time range, if not specified"
+              />
+            )}
+
+            {CommandParameters.end.includes(command as Redis) && (
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={end}
+                onChange={this.onEndChange}
+                placeholder="time range"
+                label="End"
+                tooltip="Based on the selected time range, if not specified"
+              />
+            )}
+
             {CommandParameters.count.includes(command as Redis) && (
               <FormField
                 labelWidth={8}
@@ -431,7 +433,6 @@ export class QueryEditor extends PureComponent<Props> {
                 type="number"
                 onChange={this.onCountChange}
                 label="Count"
-                tooltip="Can cause latency and is not recommended to use in Production."
               />
             )}
 

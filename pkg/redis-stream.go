@@ -95,17 +95,17 @@ func queryXInfoStream(qm queryModel, client redisClient) backend.DataResponse {
  *
  * @see https://redis.io/commands/xrange
  */
-func queryXRange(qm queryModel, client redisClient) backend.DataResponse {
+func queryXRange(from int64, to int64, qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Start
-	start := "-"
+	start := fmt.Sprint(from) + "-0"
 	if qm.Start != "" {
 		start = qm.Start
 	}
 
 	// End
-	end := "+"
+	end := fmt.Sprint(to) + "-0"
 	if qm.End != "" {
 		end = qm.End
 	}
@@ -141,17 +141,17 @@ func queryXRange(qm queryModel, client redisClient) backend.DataResponse {
  *
  * @see https://redis.io/commands/xrevrange
  */
-func queryXRevRange(qm queryModel, client redisClient) backend.DataResponse {
+func queryXRevRange(from int64, to int64, qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
 
 	// Start
-	start := "-"
+	start := fmt.Sprint(from) + "-0"
 	if qm.Start != "" {
 		start = qm.Start
 	}
 
 	// End
-	end := "+"
+	end := fmt.Sprint(to) + "-0"
 	if qm.End != "" {
 		end = qm.End
 	}

@@ -15,7 +15,7 @@ import (
  */
 func TestXInfoStreamIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Customers
@@ -41,11 +41,11 @@ func TestXInfoStreamIntegration(t *testing.T) {
 
 func TestXRangeStreamIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	t.Run("query stream queue:customers", func(t *testing.T) {
-		resp := queryXRange(queryModel{Key: "queue:customers"}, &client)
+		resp := queryXRange(1611019111439, 1611019111985, queryModel{Key: "queue:customers"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, "$streamId", resp.Frames[0].Fields[0].Name)
@@ -55,7 +55,7 @@ func TestXRangeStreamIntegration(t *testing.T) {
 	})
 
 	t.Run("query stream queue:customers with COUNT", func(t *testing.T) {
-		resp := queryXRange(queryModel{Key: "queue:customers", Count: 3}, &client)
+		resp := queryXRange(1611019111439, 1611019111985, queryModel{Key: "queue:customers", Count: 3}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, "$streamId", resp.Frames[0].Fields[0].Name)
@@ -65,7 +65,7 @@ func TestXRangeStreamIntegration(t *testing.T) {
 	})
 
 	t.Run("query stream queue:customers with start and end", func(t *testing.T) {
-		resp := queryXRange(queryModel{Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
+		resp := queryXRange(0, 0, queryModel{Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, "$streamId", resp.Frames[0].Fields[0].Name)
@@ -83,11 +83,11 @@ func TestXRangeStreamIntegration(t *testing.T) {
 
 func TestXRevRangeStreamIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	t.Run("query stream queue:customers", func(t *testing.T) {
-		resp := queryXRange(queryModel{Key: "queue:customers"}, &client)
+		resp := queryXRange(1611019111439, 1611019111985, queryModel{Key: "queue:customers"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, "$streamId", resp.Frames[0].Fields[0].Name)
@@ -97,7 +97,7 @@ func TestXRevRangeStreamIntegration(t *testing.T) {
 	})
 
 	t.Run("query stream queue:customers with COUNT", func(t *testing.T) {
-		resp := queryXRevRange(queryModel{Key: "queue:customers", Count: 3}, &client)
+		resp := queryXRevRange(1611019111439, 1611019111985, queryModel{Key: "queue:customers", Count: 3}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, "$streamId", resp.Frames[0].Fields[0].Name)
@@ -108,7 +108,7 @@ func TestXRevRangeStreamIntegration(t *testing.T) {
 	})
 
 	t.Run("query stream queue:customers with start and end", func(t *testing.T) {
-		resp := queryXRevRange(queryModel{Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0"}, &client)
+		resp := queryXRevRange(0, 0, queryModel{Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0"}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 3)
 		require.Equal(t, "$streamId", resp.Frames[0].Fields[0].Name)

@@ -17,7 +17,7 @@ import (
  */
 func TestRgPystatsIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
@@ -37,7 +37,7 @@ func TestRgPystatsIntegration(t *testing.T) {
  */
 func TestRgDumpregistrationsIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response
@@ -70,7 +70,7 @@ func TestRgPyexecuteIntegration(t *testing.T) {
 		)
 	}
 
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10, radix.PoolConnFunc(customConnFunc))
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10, radix.PoolConnFunc(customConnFunc))
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Results
@@ -127,7 +127,7 @@ func TestRgPyexecuteIntegration(t *testing.T) {
  */
 func TestRgDumpReqsIntegration(t *testing.T) {
 	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
 
 	// Response

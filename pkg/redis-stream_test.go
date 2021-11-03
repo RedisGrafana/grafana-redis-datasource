@@ -157,7 +157,7 @@ func TestQueryXRange(t *testing.T) {
 		}
 
 		// Response
-		resp := queryXRange(queryModel{Command: models.XRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0", Count: 4}, &client)
+		resp := queryXRange(0, 0, queryModel{Command: models.XRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0", Count: 4}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 6)
 		require.Equal(t, "$time", resp.Frames[0].Fields[1].Name)
@@ -201,7 +201,7 @@ func TestQueryXRange(t *testing.T) {
 		client := testClient{err: errors.New("some error")}
 
 		// Response
-		resp := queryXRange(queryModel{Command: models.XRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
+		resp := queryXRange(0, 0, queryModel{Command: models.XRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.EqualError(t, resp.Error, "some error")
 	})
@@ -257,7 +257,7 @@ func TestQueryXRevRange(t *testing.T) {
 		}
 
 		// Response
-		resp := queryXRevRange(queryModel{Command: models.XRevRange, Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0", Count: 4}, &client)
+		resp := queryXRevRange(0, 0, queryModel{Command: models.XRevRange, Key: "queue:customers", End: "1611019111985-0", Start: "1611019111439-0", Count: 4}, &client)
 		require.Len(t, resp.Frames, 1)
 		require.Len(t, resp.Frames[0].Fields, 6)
 		require.Equal(t, "$time", resp.Frames[0].Fields[1].Name)
@@ -301,7 +301,7 @@ func TestQueryXRevRange(t *testing.T) {
 		client := testClient{err: errors.New("some error")}
 
 		// Response
-		resp := queryXRevRange(queryModel{Command: models.XRevRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
+		resp := queryXRevRange(0, 0, queryModel{Command: models.XRevRange, Key: "queue:customers", Start: "1611019111439-0", End: "1611019111985-0"}, &client)
 		require.Len(t, resp.Frames, 0)
 		require.EqualError(t, resp.Error, "some error")
 	})
