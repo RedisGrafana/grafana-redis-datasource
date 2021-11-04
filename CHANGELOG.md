@@ -15,7 +15,9 @@
 - Update to Grafana 8.1.4 (#217)
 - Update to Grafana 8.2.1 (#220)
 - Update to Grafana 8.2.2 (#223)
-- Use Time-range for XRANGE filtering #176
+- Use Time-range for XRANGE filtering (#176)
+- Disable Command-line interface in the Query Editor (#226)
+- Support of ZRANGE command (#182)
 
 ### Bug fixes
 

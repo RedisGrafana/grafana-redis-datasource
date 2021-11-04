@@ -53,6 +53,7 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: models.GraphProfile}},
 		{queryModel{Command: models.GraphQuery}},
 		{queryModel{Command: models.GraphSlowlog}},
+		{queryModel{Command: models.ZRange}},
 	}
 
 	// Run Tests

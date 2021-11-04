@@ -356,6 +356,26 @@ describe('QueryEditor', () => {
         queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
+        name: 'min',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Minimum';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.ZRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'max',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Maximum';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.ZRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
         name: 'count',
         getComponent: (wrapper: ShallowComponent) =>
           wrapper.findWhere((node) => {
@@ -393,7 +413,17 @@ describe('QueryEditor', () => {
           }),
         type: 'select',
         queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: RedisTimeSeries.RANGE },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.TIMESERIES, command: Redis.INFO },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'zrangeQuery',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onZRangeQueryChange;
+          }),
+        type: 'select',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.ZRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'bucket',

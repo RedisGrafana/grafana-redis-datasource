@@ -1,3 +1,4 @@
+import { ZRangeQueryValue } from 'redis';
 import { DataQuery } from '@grafana/data';
 import { StreamingDataType } from '../constants';
 import { InfoSectionValue } from './info';
@@ -62,9 +63,17 @@ export interface RedisQuery extends DataQuery {
    * Aggregation
    *
    * @see https://oss.redislabs.com/redistimeseries/commands/#aggregation-compaction-downsampling
-   * @type {string}
+   * @type {AggregationValue}
    */
   aggregation?: AggregationValue;
+
+  /**
+   * ZRANGE Query
+   *
+   * @see https://redis.io/commands/zrange
+   * @type {ZRangeQueryValue}
+   */
+  zrangeQuery?: ZRangeQueryValue;
 
   /**
    * Bucket
@@ -169,6 +178,20 @@ export interface RedisQuery extends DataQuery {
    * @type {string}
    */
   end?: string;
+
+  /**
+   * Minimum for ZSet
+   *
+   * @type {string}
+   */
+  min?: string;
+
+  /**
+   * Maximum for ZSet
+   *
+   * @type {string}
+   */
+  max?: string;
 
   /**
    * Cypher

@@ -1,3 +1,5 @@
+import { SelectableValue } from '@grafana/data';
+
 /**
  * Supported Commands
  */
@@ -19,6 +21,7 @@ export enum Redis {
   SMEMBERS = 'smembers',
   TTL = 'ttl',
   TYPE = 'type',
+  ZRANGE = 'zrange',
   XINFO_STREAM = 'xinfoStream',
   XLEN = 'xlen',
   XRANGE = 'xrange',
@@ -111,6 +114,11 @@ export const RedisCommands = [
     value: Redis.TYPE,
   },
   {
+    label: Redis.ZRANGE.toUpperCase(),
+    description: 'Returns the specified range of elements in the sorted set at key',
+    value: Redis.ZRANGE,
+  },
+  {
     label: 'XINFO STREAM',
     description: 'Returns general information about the stream stored at the specified key',
     value: Redis.XINFO_STREAM,
@@ -129,5 +137,31 @@ export const RedisCommands = [
     label: Redis.XREVRANGE.toUpperCase(),
     description: 'Returns the stream entries matching a given range of IDs in reverse order',
     value: Redis.XREVRANGE,
+  },
+];
+
+/**
+ * ZRANGE Query Values
+ */
+export enum ZRangeQueryValue {
+  BYINDEX = '',
+  BYSCORE = 'BYSCORE',
+  BYLEX = 'BYLEX',
+}
+
+/**
+ * Aggregations
+ */
+export const ZRangeQuery: Array<SelectableValue<ZRangeQueryValue>> = [
+  {
+    label: 'Index range',
+    description:
+      'The <min> and <max> arguments represent zero-based indexes, where 0 is the first element, 1 is the next element, and so on.',
+    value: ZRangeQueryValue.BYINDEX,
+  },
+  {
+    label: 'Score range',
+    description: 'Returns the range of elements from the sorted set having scores equal or between <min> and <max>',
+    value: ZRangeQueryValue.BYSCORE,
   },
 ];

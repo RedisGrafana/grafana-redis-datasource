@@ -19,6 +19,8 @@ import {
   Redis,
   RedisQuery,
   RedisTimeSeries,
+  ZRangeQuery,
+  ZRangeQueryValue,
 } from '../../redis';
 import { RedisDataSourceOptions } from '../../types';
 
@@ -155,6 +157,11 @@ export class QueryEditor extends PureComponent<Props> {
   onAggregationChange = this.createSelectFieldHandler<AggregationValue>('aggregation');
 
   /**
+   * ZRANGE Query change
+   */
+  onZRangeQueryChange = this.createSelectFieldHandler<ZRangeQueryValue>('zrangeQuery');
+
+  /**
    * Info section change
    */
   onInfoSectionChange = this.createSelectFieldHandler<InfoSectionValue>('section');
@@ -200,6 +207,16 @@ export class QueryEditor extends PureComponent<Props> {
   onEndChange = this.createTextFieldHandler('end');
 
   /**
+   * Min change
+   */
+  onMinChange = this.createTextFieldHandler('min');
+
+  /**
+   * Max change
+   */
+  onMaxChange = this.createTextFieldHandler('max');
+
+  /**
    * Fill change
    */
   onFillChange = this.createSwitchFieldHandler('fill');
@@ -231,6 +248,7 @@ export class QueryEditor extends PureComponent<Props> {
     const {
       keyName,
       aggregation,
+      zrangeQuery,
       bucket,
       legend,
       command,
@@ -249,6 +267,8 @@ export class QueryEditor extends PureComponent<Props> {
       samples,
       start,
       end,
+      min,
+      max,
       streaming,
       streamingInterval,
       streamingCapacity,
@@ -407,6 +427,22 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         )}
 
+        {type === QueryTypeValue.REDIS && command && CommandParameters.zrangeQuery.includes(command as Redis) && (
+          <div className="gf-form">
+            <InlineFormLabel width={8}>Range Query</InlineFormLabel>
+            <Select
+              className={css`
+                margin-right: 5px;
+              `}
+              options={ZRangeQuery}
+              width={30}
+              onChange={this.onZRangeQueryChange}
+              value={zrangeQuery}
+              menuPlacement="bottom"
+            />
+          </div>
+        )}
+
         {type !== QueryTypeValue.CLI && command && (
           <div className="gf-form">
             {CommandParameters.start.includes(command as Redis) && (
@@ -431,6 +467,14 @@ export class QueryEditor extends PureComponent<Props> {
                 label="End"
                 tooltip="Based on the selected time range, if not specified"
               />
+            )}
+
+            {CommandParameters.min.includes(command as Redis) && (
+              <FormField labelWidth={8} inputWidth={10} value={min} onChange={this.onMinChange} label="Minimum" />
+            )}
+
+            {CommandParameters.max.includes(command as Redis) && (
+              <FormField labelWidth={8} inputWidth={10} value={max} onChange={this.onMaxChange} label="Maximum" />
             )}
 
             {CommandParameters.count.includes(command as Redis) && (
