@@ -1,6 +1,10 @@
-name: CI
+name: Integration
 
-on: [push, pull_request]
+on:
+  schedule:
+    - cron: '0 1 * * *' # run at 1 AM UTC
+
+  workflow_dispatch:
   
 jobs:
   build:
@@ -73,11 +77,8 @@ jobs:
           version: latest
           args: buildAll
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+      - name: Run integration tests
+        uses: magefile/mage-action@v1
         with:
-          directory: ./coverage/
-          files: ./coverage/lcov.info,./coverage/backend.txt
-          env_vars: OS,PYTHON
-          fail_ci_if_error: true
-          path_to_write_report: ./coverage/codecov_report.txt
+          version: latest
+          args: integration
