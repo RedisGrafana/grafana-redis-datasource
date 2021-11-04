@@ -41,9 +41,13 @@ export const QueryType: Array<SelectableValue<QueryTypeValue>> = [
     description: 'Time Series data structure',
     value: QueryTypeValue.TIMESERIES,
   },
-  {
-    label: 'Command-line interface (CLI)',
-    description: 'Be mindful, not all commands are supported',
-    value: QueryTypeValue.CLI,
-  },
 ];
+
+/**
+ * Query Type for Command-line interface
+ */
+export const QueryTypeCli: SelectableValue<QueryTypeValue> = {
+  label: 'Command-line interface (CLI)',
+  description: 'Be mindful, not all commands are supported',
+  value: QueryTypeValue.CLI,
+};

@@ -69,6 +69,13 @@ export interface RedisDataSourceOptions extends DataSourceJsonData {
   acl: boolean;
 
   /**
+   * CLI disabled
+   *
+   * @type {boolean}
+   */
+  cliDisabled: boolean;
+
+  /**
    * ACL Username
    *
    * @type {string}

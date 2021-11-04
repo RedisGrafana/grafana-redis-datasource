@@ -1,11 +1,32 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { RedisGraph } from 'redis/graph';
-import { AggregationValue, QueryTypeValue, Redis, RedisQuery, RedisTimeSeries } from '../../redis';
+import { SelectableValue } from '@grafana/data';
+import { AggregationValue, QueryTypeCli, QueryTypeValue, Redis, RedisQuery, RedisTimeSeries } from '../../redis';
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './query-editor';
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
+
+/**
+ * Data Source
+ */
+const dataSourceMock = {
+  name: 'datasource',
+};
+const dataSourceInstanceSettingsMock = {
+  jsonData: { cliDisabled: false },
+};
+
+const dataSourceSrvGetMock = jest.fn().mockImplementation(() => Promise.resolve(dataSourceMock));
+const dataSourceSrvGetInstanceSettingsMock = jest.fn().mockImplementation(() => dataSourceInstanceSettingsMock);
+
+jest.mock('@grafana/runtime', () => ({
+  getDataSourceSrv: () => ({
+    get: dataSourceSrvGetMock,
+    getInstanceSettings: dataSourceSrvGetInstanceSettingsMock,
+  }),
+}));
 
 /**
  * Query Field
@@ -101,13 +122,31 @@ describe('QueryEditor', () => {
         return node.prop('onChange') === wrapper.instance().onTypeChange;
       });
 
-    it('Should set value from query', () => {
+    it('Should set value from query to CLI', () => {
       const query = getQuery({ type: QueryTypeValue.CLI });
       const wrapper = shallow<QueryEditor>(
         <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
       );
       const testedComponent = getComponent(wrapper);
       expect(testedComponent.prop('value')).toEqual(query.type);
+      const cli = testedComponent
+        .prop('options')
+        .filter((o: SelectableValue<QueryTypeValue>) => o.value === QueryTypeValue.CLI);
+      expect(cli).toEqual([QueryTypeCli]);
+    });
+
+    it('CLI should not be seen if disabled', () => {
+      dataSourceInstanceSettingsMock.jsonData.cliDisabled = true;
+      const query = getQuery({ type: QueryTypeValue.REDIS });
+      const wrapper = shallow<QueryEditor>(
+        <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+      );
+      const testedComponent = getComponent(wrapper);
+      expect(testedComponent.prop('value')).toEqual(query.type);
+      const cli = testedComponent
+        .prop('options')
+        .filter((o: SelectableValue<QueryTypeValue>) => o.value === QueryTypeValue.CLI);
+      expect(cli).toEqual([]);
     });
 
     it('Should call onTypeChange when onChange prop was called', () => {
