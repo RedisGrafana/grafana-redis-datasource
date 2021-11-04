@@ -2,6 +2,7 @@ import React, { ChangeEvent, PureComponent } from 'react';
 import { RedisGraph } from 'redis/graph';
 import { css } from '@emotion/css';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
+import { getDataSourceSrv } from '@grafana/runtime';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, TextArea } from '@grafana/ui';
 import { StreamingDataType, StreamingDataTypes } from '../../constants';
 import { DataSource } from '../../data-source';
@@ -13,6 +14,7 @@ import {
   InfoSections,
   InfoSectionValue,
   QueryType,
+  QueryTypeCli,
   QueryTypeValue,
   Redis,
   RedisQuery,
@@ -252,7 +254,13 @@ export class QueryEditor extends PureComponent<Props> {
       streamingCapacity,
       streamingDataType,
     } = this.props.query;
-    const { onRunQuery } = this.props;
+    const { onRunQuery, datasource } = this.props;
+
+    /**
+     * Check if CLI disabled
+     */
+    const jsonData = getDataSourceSrv().getInstanceSettings(datasource.uid)?.jsonData as RedisDataSourceOptions;
+    const cliDisabled = jsonData?.cliDisabled;
 
     /**
      * Return
@@ -266,7 +274,7 @@ export class QueryEditor extends PureComponent<Props> {
               margin-right: 5px;
             `}
             width={40}
-            options={QueryType}
+            options={cliDisabled ? QueryType : [...QueryType, QueryTypeCli]}
             menuPlacement="bottom"
             value={type}
             onChange={this.onTypeChange}

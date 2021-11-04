@@ -45,6 +45,7 @@ const getInstanceSettings = (overrideSettings: object = {}): DataSourceInstanceS
     sentinelUser: '',
     sentinelAcl: false,
     acl: false,
+    cliDisabled: false,
     user: '',
   },
 });

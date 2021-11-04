@@ -55,6 +55,7 @@ const getOptions = ({
     sentinelAcl: false,
     sentinelUser: '',
     acl: false,
+    cliDisabled: false,
     user: '',
     ...jsonData,
   },
@@ -222,6 +223,48 @@ describe('ConfigEditor', () => {
         jsonData: {
           ...options.jsonData,
           acl: newValue,
+        },
+      });
+    });
+  });
+
+  /**
+   * Disable CLI
+   */
+  describe('CLI', () => {
+    const getTestedComponent = (wrapper: ShallowComponent) =>
+      wrapper.findWhere((node) => {
+        return node.name() === 'Switch' && node.prop('label') === 'Disable CLI';
+      });
+
+    it('Should pass cliDisabled value', () => {
+      const options = getOptions({ jsonData: { cliDisable: true } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.prop('checked')).toEqual(options.jsonData.cliDisabled);
+    });
+
+    it('Should pass default value if user value is empty', () => {
+      const options = getOptions({ jsonData: { cliDisabled: null } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      expect(testedComponent.prop('checked')).toEqual(false);
+    });
+
+    it('Should call onOptionsChange when value was changed', () => {
+      const options = getOptions({ jsonData: { cliDisabled: true } });
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      const testedComponent = getTestedComponent(wrapper);
+      const newValue = false;
+      testedComponent.simulate('change', { currentTarget: { checked: newValue } });
+      expect(onOptionsChange).toHaveBeenCalledWith({
+        ...options,
+        jsonData: {
+          ...options.jsonData,
+          cliDisabled: newValue,
         },
       });
     });

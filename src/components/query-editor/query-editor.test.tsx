@@ -8,6 +8,28 @@ import { QueryEditor } from './query-editor';
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
 /**
+ * Data Source
+ */
+const dataSourceMock = {
+  name: 'datasource',
+};
+const dataSourceInstanceSettingsMock = {
+  jsonData: { cliDisabled: true },
+};
+
+const dataSourceSrvGetMock = jest.fn().mockImplementation(() => Promise.resolve(dataSourceMock));
+const dataSourceSrvGetInstanceSettingsMock = jest
+  .fn()
+  .mockImplementation(() => Promise.resolve(dataSourceInstanceSettingsMock));
+
+jest.mock('@grafana/runtime', () => ({
+  getDataSourceSrv: () => ({
+    get: dataSourceSrvGetMock,
+    getInstanceSettings: dataSourceSrvGetInstanceSettingsMock,
+  }),
+}));
+
+/**
  * Query Field
  */
 interface QueryFieldTest {

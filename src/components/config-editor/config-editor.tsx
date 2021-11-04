@@ -386,6 +386,16 @@ export class ConfigEditor extends PureComponent<Props, State> {
             tooltip="Sets the duration in microseconds after which internal pipelines will be flushed.
             If window is zero then implicit pipelining will be disabled."
           />
+          <Switch
+            label="Disable CLI"
+            labelClass="width-10"
+            tooltip="Disable Command-Line interface in the Query Editor"
+            checked={jsonData.cliDisabled || false}
+            onChange={(event) => {
+              const jsonData = { ...options.jsonData, cliDisabled: event.currentTarget.checked };
+              onOptionsChange({ ...options, jsonData });
+            }}
+          />
         </div>
 
         <br />
