@@ -65,4 +65,7 @@ type queryModel struct {
 	Start             string `json:"start"`
 	End               string `json:"end"`
 	Cypher            string `json:"cypher"`
+	Min               string `json:"min"`
+	Max               string `json:"max"`
+	ZRangeQuery       string `json:"zrangeQuery"`
 }

@@ -47,6 +47,7 @@ export const CommandParameters = {
     RedisGraph.SLOWLOG,
     RedisGraph.EXPLAIN,
     RedisGraph.PROFILE,
+    Redis.ZRANGE,
   ],
   legend: [RedisTimeSeries.RANGE],
   legendLabel: [RedisTimeSeries.MRANGE, RedisTimeSeries.MGET],
@@ -59,7 +60,10 @@ export const CommandParameters = {
   match: [Redis.TMSCAN],
   count: [Redis.TMSCAN, Redis.XRANGE, Redis.XREVRANGE],
   samples: [Redis.TMSCAN],
+  min: [Redis.ZRANGE],
+  max: [Redis.ZRANGE],
   start: [Redis.XRANGE, Redis.XREVRANGE],
   end: [Redis.XRANGE, Redis.XREVRANGE],
   cypher: [RedisGraph.EXPLAIN, RedisGraph.QUERY, RedisGraph.PROFILE],
+  zrangeQuery: [Redis.ZRANGE],
 };

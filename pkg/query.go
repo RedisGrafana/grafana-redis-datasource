@@ -65,6 +65,8 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 		return querySMembers(qm, client)
 	case models.Type, models.Get, models.TTL, models.HLen, models.XLen, models.LLen, models.SCard:
 		return queryKeyCommand(qm, client)
+	case models.ZRange:
+		return queryZRange(qm, client)
 
 	/**
 	 * Info

@@ -33,7 +33,7 @@
     "stop:dev": "docker-compose -f docker-compose/dev.yml down",
     "test": "grafana-toolkit plugin:test --coverage",
     "test:backend": "mage cover",
-    "test:backend:single": "go test ./pkg/... -v -run TestGraphQuery",
+    "test:backend:single": "go test ./pkg/... -v -run TestQueryZRange",
     "test:integration": "mage integration",
     "upgrade": "yarn upgrade --latest",
     "watch": "grafana-toolkit plugin:dev --watch"

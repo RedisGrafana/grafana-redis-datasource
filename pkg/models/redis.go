@@ -20,6 +20,7 @@ const (
 	SMembers     = "smembers"
 	TTL          = "ttl"
 	Type         = "type"
+	ZRange       = "zrange"
 	XInfoStream  = "xinfoStream"
 	XLen         = "xlen"
 	XRange       = "xrange"
