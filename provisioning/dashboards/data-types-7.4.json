@@ -19,11 +19,12 @@
     ]
   },
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1632162309413,
+  "iteration": 1636053280806,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "datasource": null,
@@ -77,7 +78,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -172,7 +173,7 @@
           }
         ]
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "tmscan",
@@ -379,7 +380,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -458,7 +459,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "get",
@@ -519,7 +520,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "get",
@@ -574,7 +575,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "type",
@@ -633,7 +634,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "llen",
@@ -693,7 +694,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "ttl",
@@ -752,7 +753,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "scard",
@@ -811,7 +812,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "xlen",
@@ -870,7 +871,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "xlen",
@@ -930,7 +931,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "hget",
@@ -992,7 +993,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "hget",
@@ -1054,7 +1055,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "hlen",
@@ -1112,7 +1113,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "hgetall",
@@ -1170,7 +1171,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "hmget",
@@ -1243,7 +1244,7 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 6,
+        "w": 10,
         "x": 0,
         "y": 15
       },
@@ -1275,60 +1276,6 @@
       "timeShift": null,
       "title": "HGET test:hash - test1 Streaming",
       "type": "timeseries"
-    },
-    {
-      "datasource": "${redis}",
-      "description": "Parsing Float",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": null,
-            "displayMode": "auto",
-            "filterable": false
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-blue",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 6,
-        "x": 6,
-        "y": 15
-      },
-      "id": 13,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.1.4",
-      "targets": [
-        {
-          "command": "hkeys",
-          "field": "test4",
-          "keyName": "test:hash",
-          "query": "",
-          "refId": "A",
-          "streaming": false,
-          "type": "command"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "HKEYS test:hash",
-      "type": "table"
     },
     {
       "datasource": "${redis}",
@@ -1388,7 +1335,7 @@
       "gridPos": {
         "h": 7,
         "w": 7,
-        "x": 12,
+        "x": 10,
         "y": 15
       },
       "id": 16,
@@ -1451,15 +1398,15 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 5,
-        "x": 19,
+        "w": 7,
+        "x": 17,
         "y": 15
       },
       "id": 31,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "smembers",
@@ -1475,13 +1422,128 @@
       "type": "table"
     },
     {
+      "datasource": "${redis}",
+      "description": "Parsing Float",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 0,
+        "y": 22
+      },
+      "id": 13,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "command": "hkeys",
+          "field": "test4",
+          "keyName": "test:hash",
+          "query": "",
+          "refId": "A",
+          "streaming": false,
+          "type": "command"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "HKEYS test:hash",
+      "type": "table"
+    },
+    {
+      "datasource": "Redis",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 14,
+        "x": 10,
+        "y": 22
+      },
+      "id": 87,
+      "options": {
+        "displayLabels": ["name", "value"],
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "none"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "command": "zrange",
+          "end": "-1",
+          "keyName": "test:zset",
+          "max": "+inf",
+          "min": "-inf",
+          "query": "",
+          "refId": "A",
+          "start": "0",
+          "streaming": false,
+          "streamingDataType": "DataFrame",
+          "type": "command",
+          "zrangeQuery": "BYSCORE"
+        }
+      ],
+      "title": "ZRANGE test:zset",
+      "type": "piechart"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 32
       },
       "id": 60,
       "panels": [],
@@ -1521,13 +1583,13 @@
         "h": 6,
         "w": 19,
         "x": 0,
-        "y": 23
+        "y": 33
       },
       "id": 57,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "xinfoStream",
@@ -1601,7 +1663,7 @@
         "h": 6,
         "w": 5,
         "x": 19,
-        "y": 23
+        "y": 33
       },
       "id": 58,
       "options": {
@@ -1684,20 +1746,22 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 29
+        "y": 39
       },
       "id": 61,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "xrange",
           "count": 100,
+          "end": "+",
           "keyName": "test:stream",
           "query": "",
           "refId": "A",
+          "start": "-",
           "streaming": false,
           "type": "command"
         }
@@ -1740,20 +1804,22 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 29
+        "y": 39
       },
       "id": 62,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "xrange",
           "count": 10,
+          "end": "+",
           "keyName": "queue:complete",
           "query": "",
           "refId": "A",
+          "start": "-",
           "streaming": true,
           "streamingDataType": "DataFrame",
           "type": "command"
@@ -1771,7 +1837,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 46
       },
       "id": 39,
       "panels": [],
@@ -1811,13 +1877,13 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 47
       },
       "id": 41,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "ft.info",
@@ -1902,7 +1968,7 @@
         "h": 9,
         "w": 11,
         "x": 0,
-        "y": 40
+        "y": 50
       },
       "hiddenSeries": false,
       "id": 44,
@@ -1922,7 +1988,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2059,7 +2125,7 @@
         "h": 9,
         "w": 13,
         "x": 11,
-        "y": 40
+        "y": 50
       },
       "hiddenSeries": false,
       "id": 42,
@@ -2080,7 +2146,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2206,7 +2272,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 59
       },
       "id": 50,
       "panels": [],
@@ -2238,7 +2304,7 @@
         "h": 9,
         "w": 2,
         "x": 0,
-        "y": 50
+        "y": 60
       },
       "id": 53,
       "options": {
@@ -2254,7 +2320,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "rg.pystats",
@@ -2287,7 +2353,7 @@
         "h": 9,
         "w": 6,
         "x": 2,
-        "y": 50
+        "y": 60
       },
       "hiddenSeries": false,
       "id": 54,
@@ -2310,7 +2376,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2536,14 +2602,14 @@
         "h": 5,
         "w": 16,
         "x": 8,
-        "y": 50
+        "y": 60
       },
       "id": 56,
       "options": {
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "rg.dumpregistrations",
@@ -2798,14 +2864,14 @@
         "h": 4,
         "w": 16,
         "x": 8,
-        "y": 55
+        "y": 65
       },
       "id": 80,
       "options": {
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "rg.pydumpreqs",
@@ -2866,7 +2932,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 69
       },
       "id": 64,
       "panels": [],
@@ -2919,14 +2985,14 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 60
+        "y": 70
       },
       "id": 66,
       "options": {
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "ts.info",
@@ -3022,7 +3088,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 60
+        "y": 70
       },
       "id": 72,
       "options": {
@@ -3115,7 +3181,7 @@
         "h": 3,
         "w": 4,
         "x": 0,
-        "y": 66
+        "y": 76
       },
       "id": 69,
       "options": {
@@ -3131,7 +3197,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "ts.get",
@@ -3171,7 +3237,7 @@
         "h": 7,
         "w": 8,
         "x": 4,
-        "y": 66
+        "y": 76
       },
       "id": 71,
       "options": {
@@ -3187,7 +3253,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "",
@@ -3262,7 +3328,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 66
+        "y": 76
       },
       "id": 70,
       "options": {
@@ -3324,7 +3390,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 69
+        "y": 79
       },
       "id": 73,
       "options": {
@@ -3340,7 +3406,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "ts.mrange",
@@ -3419,7 +3485,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 73
+        "y": 83
       },
       "id": 84,
       "options": {
@@ -3483,7 +3549,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 73
+        "y": 83
       },
       "id": 85,
       "options": {
@@ -3499,7 +3565,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "ts.mget",
@@ -3526,7 +3592,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 80
+        "y": 90
       },
       "id": 75,
       "panels": [],
@@ -3539,7 +3605,7 @@
         "h": 28,
         "w": 12,
         "x": 0,
-        "y": 81
+        "y": 91
       },
       "id": 77,
       "pluginVersion": "7.5.0-11266pre",
@@ -3621,14 +3687,14 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 81
+        "y": 91
       },
       "id": 78,
       "options": {
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "graph.slowlog",
@@ -3690,13 +3756,13 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 88
+        "y": 98
       },
       "id": 81,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "graph.explain",
@@ -3743,13 +3809,13 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 95
+        "y": 105
       },
       "id": 82,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "graph.profile",
@@ -3796,13 +3862,13 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 102
+        "y": 112
       },
       "id": 83,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "graph.config",
@@ -3818,7 +3884,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 30,
+  "schemaVersion": 31,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -3875,7 +3941,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Redis Data Types v8",
+  "title": "Redis Data Types",
   "uid": "2TKvUH-G2",
   "version": 1
 }
