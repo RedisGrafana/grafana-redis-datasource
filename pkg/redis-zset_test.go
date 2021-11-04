@@ -39,11 +39,11 @@ func TestQueryZRange(t *testing.T) {
 		{
 			"should handle default array of strings",
 			queryModel{Command: models.ZRange, Key: "test:zset", ZRangeQuery: "BYSCORE", Min: "-inf", Max: "+inf"},
-			[]string{"member1", "10", "member2", "2", "member3", "15"},
+			[]string{"member1", "test", "member2", "2", "member3", "15"},
 			3,
 			1,
 			[]valueToCheckInResponse{
-				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: float64(10)},
+				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: "test"},
 				{frameIndex: 0, fieldIndex: 1, rowIndex: 0, value: float64(2)},
 				{frameIndex: 0, fieldIndex: 2, rowIndex: 0, value: float64(15)},
 			},
@@ -51,7 +51,7 @@ func TestQueryZRange(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: models.HGetAll},
+			queryModel{Command: models.ZRange},
 			nil,
 			0,
 			0,
@@ -67,7 +67,7 @@ func TestQueryZRange(t *testing.T) {
 			t.Parallel()
 
 			client := testClient{rcv: tt.rcv, err: tt.err}
-			response := queryHGetAll(tt.qm, &client)
+			response := queryZRange(tt.qm, &client)
 			if tt.err != nil {
 				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
 				require.Nil(t, response.Frames, "No frames should be created if failed")
