@@ -84,6 +84,8 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
       filter: query.filter ? templateSrv.replace(query.filter, scopedVars) : '',
       legend: query.legend ? templateSrv.replace(query.legend, scopedVars) : '',
       value: query.value ? templateSrv.replace(query.value, scopedVars) : '',
+      path: query.path ? templateSrv.replace(query.path, scopedVars) : '',
+      cypher: query.cypher ? templateSrv.replace(query.cypher, scopedVars) : '',
     };
   }
 

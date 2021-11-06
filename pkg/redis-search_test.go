@@ -133,7 +133,7 @@ func TestQueryFtInfo(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: "info"},
+			queryModel{Command: models.SearchInfo},
 			nil,
 			0,
 			0,

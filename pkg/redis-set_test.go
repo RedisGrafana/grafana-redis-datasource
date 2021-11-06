@@ -38,7 +38,7 @@ func TestQuerySMembers(t *testing.T) {
 		},
 		{
 			"should handle error",
-			queryModel{Command: "smembers"},
+			queryModel{Command: models.SMembers},
 			nil,
 			0,
 			0,

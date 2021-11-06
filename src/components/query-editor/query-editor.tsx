@@ -17,6 +17,7 @@ import {
   QueryTypeCli,
   QueryTypeValue,
   Redis,
+  RedisJson,
   RedisQuery,
   RedisTimeSeries,
   ZRangeQuery,
@@ -115,6 +116,11 @@ export class QueryEditor extends PureComponent<Props> {
    * Cypher change
    */
   onCypherChange = this.createTextareaFieldHandler('cypher');
+
+  /**
+   * Path change
+   */
+  onPathChange = this.createTextareaFieldHandler('path');
 
   /**
    * Field change
@@ -255,6 +261,7 @@ export class QueryEditor extends PureComponent<Props> {
       field,
       filter,
       cypher,
+      path,
       value,
       query,
       type,
@@ -424,6 +431,18 @@ export class QueryEditor extends PureComponent<Props> {
               Cypher
             </InlineFormLabel>
             <TextArea value={cypher} className="gf-form-input" onChange={this.onCypherChange} />
+          </div>
+        )}
+
+        {command && CommandParameters.path.includes(command as RedisJson) && (
+          <div className="gf-form">
+            <InlineFormLabel
+              tooltip="RedisJSON's syntax is a subset of common best practices and resembles JSONPath not by accident."
+              width={8}
+            >
+              Path
+            </InlineFormLabel>
+            <TextArea value={path} className="gf-form-input" onChange={this.onPathChange} />
           </div>
         )}
 

@@ -135,6 +135,16 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 		return queryGraphConfig(qm, client)
 
 	/**
+	 * Redis JSON
+	 */
+	case models.JsonGet:
+		return queryJsonGet(qm, client)
+	case models.JsonObjKeys:
+		return queryJsonObjKeys(qm, client)
+	case models.JsonObjLen, models.JsonArrLen, models.JsonType:
+		return queryJsonObjLen(qm, client)
+
+	/**
 	 * Default
 	 */
 	default:

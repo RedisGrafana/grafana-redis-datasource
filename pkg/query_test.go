@@ -54,6 +54,11 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: models.GraphQuery}},
 		{queryModel{Command: models.GraphSlowlog}},
 		{queryModel{Command: models.ZRange}},
+		{queryModel{Command: models.JsonGet}},
+		{queryModel{Command: models.JsonArrLen}},
+		{queryModel{Command: models.JsonObjKeys}},
+		{queryModel{Command: models.JsonObjLen}},
+		{queryModel{Command: models.JsonType}},
 	}
 
 	// Run Tests

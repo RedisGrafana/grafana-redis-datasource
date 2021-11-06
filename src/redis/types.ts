@@ -199,4 +199,11 @@ export interface RedisQuery extends DataQuery {
    * @type {string}
    */
   cypher?: string;
+
+  /**
+   * Path
+   *
+   * @type {string}
+   */
+  path?: string;
 }
