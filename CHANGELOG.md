@@ -1,6 +1,6 @@
 # Change Log
 
-## 2.0.0 (IN PROGRESS)
+## 2.0.0 (2021-11-06)
 
 ### Breaking changes
 
@@ -18,9 +18,9 @@
 - Use Time-range for XRANGE filtering (#176)
 - Disable Command-line interface in the Query Editor (#226)
 - Support of ZRANGE command (#182)
-- Upgrade Grafana 8.2.3 and backend dependencies
-- Support fetching from RedisJSON datasource (JSON.GET, JSON.TYPE, JSON.ARRLEN, JSON.OBJLEN, JSON.OBJKEYS)
-- Redis Enterprise introduced new field calls_master in commandstats
+- Upgrade Grafana 8.2.3 and backend dependencies (#228)
+- Support fetching from RedisJSON datasource (JSON.GET, JSON.TYPE, JSON.ARRLEN, JSON.OBJLEN, JSON.OBJKEYS) (#229)
+- Redis Enterprise introduced new field calls_master in commandstats (#232)
 
 ### Bug fixes
 
