@@ -35,16 +35,14 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 
 	// Command stats
 	if qm.Section == "commandstats" {
-		// Not Streaming
-		if !qm.Streaming {
-			frame.Fields = append(frame.Fields, data.NewField("Command", nil, []string{}),
-				data.NewField("Calls", nil, []int64{}),
-				data.NewField("Usec", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
-				data.NewField("Usec_per_call", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}))
-		}
-
-		// Redis 6.2 new fields
-		alreadyIncludedErrorStats := false
+		frame.Fields = append(frame.Fields, data.NewField("Command", nil, []string{}),
+			data.NewField("Calls", nil, []float64{}),
+			data.NewField("Usec", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
+			data.NewField("Usec_per_call", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
+			data.NewField("RejectedCalls", nil, []float64{}),
+			data.NewField("FailedCalls", nil, []float64{}),
+			data.NewField("CallsMaster", nil, []float64{}),
+		)
 
 		// Parse lines
 		for _, line := range lines {
@@ -56,78 +54,18 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 
 			// Stats
 			stats := strings.Split(fields[1], ",")
+			values := map[string]float64{}
 
-			if len(stats) < 3 {
-				continue
-			}
-
-			// Parse Stats
-			calls := strings.Split(stats[0], "=")
-			usec := strings.Split(stats[1], "=")
-			usecPerCall := strings.Split(stats[2], "=")
-
-			// Redis 6.2
-			var failedCalls = make([]string, 0)
-			var rejectedCalls = make([]string, 0)
-			if len(stats) > 3 {
-				rejectedCalls = strings.Split(stats[3], "=")
-				failedCalls = strings.Split(stats[4], "=")
-
-				// Add new Fields
-				if !alreadyIncludedErrorStats && !qm.Streaming {
-					frame.Fields = append(frame.Fields,
-						data.NewField("RejectedCalls", nil, []int64{}),
-						data.NewField("FailedCalls", nil, []int64{}))
-				}
-
-				alreadyIncludedErrorStats = true
-			}
-
-			var callsValue int64
-			var rejectedCallsValue int64
-			var failedCallsValue int64
-			var usecValue float64
-			var usecPerCallValue float64
-
-			// Parse Calls
-			if len(calls) == 2 {
-				callsValue, _ = strconv.ParseInt(calls[1], 10, 64)
-			}
-
-			// Parse rejectedCalls
-			if len(rejectedCalls) == 2 {
-				rejectedCallsValue, _ = strconv.ParseInt(rejectedCalls[1], 10, 64)
-			}
-
-			// Parse failedCalls
-			if len(failedCalls) == 2 {
-				failedCallsValue, _ = strconv.ParseInt(failedCalls[1], 10, 64)
-			}
-
-			// Parse Usec
-			if len(usec) == 2 {
-				usecValue, _ = strconv.ParseFloat(usec[1], 64)
-			}
-
-			// Parse Usec per Call
-			if len(usecPerCall) == 2 {
-				usecPerCallValue, _ = strconv.ParseFloat(usecPerCall[1], 64)
+			for _, stat := range stats {
+				value := strings.Split(stat, "=")
+				values[value[0]], _ = strconv.ParseFloat(value[1], 64)
 			}
 
 			// Command name
 			cmd := strings.Replace(fields[0], "cmdstat_", "", 1)
 
-			// Streaming
-			if qm.Streaming {
-				frame.Fields = append(frame.Fields, data.NewField(cmd+"", nil, []int64{callsValue}))
-			} else {
-				// Add Command
-				if len(stats) > 3 {
-					frame.AppendRow(cmd, callsValue, usecValue, usecPerCallValue, rejectedCallsValue, failedCallsValue)
-				} else {
-					frame.AppendRow(cmd, callsValue, usecValue, usecPerCallValue)
-				}
-			}
+			// Add Command
+			frame.AppendRow(cmd, values["calls"], values["usec"], values["usec_per_call"], values["rejected_calls"], values["failed_calls"], values["calls_master"])
 		}
 
 		// Add the frames to the response
