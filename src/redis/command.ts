@@ -1,5 +1,6 @@
 import { RedisGearsCommands } from './gears';
 import { RedisGraph, RedisGraphCommands } from './graph';
+import { RedisJson, RedisJsonCommands } from './json';
 import { QueryTypeValue } from './query';
 import { Redis, RedisCommands } from './redis';
 import { RediSearch, RediSearchCommands } from './search';
@@ -14,6 +15,7 @@ export const Commands = {
   [QueryTypeValue.SEARCH]: RediSearchCommands,
   [QueryTypeValue.GEARS]: RedisGearsCommands,
   [QueryTypeValue.GRAPH]: RedisGraphCommands,
+  [QueryTypeValue.JSON]: RedisJsonCommands,
 };
 
 /**
@@ -48,6 +50,11 @@ export const CommandParameters = {
     RedisGraph.EXPLAIN,
     RedisGraph.PROFILE,
     Redis.ZRANGE,
+    RedisJson.TYPE,
+    RedisJson.GET,
+    RedisJson.OBJKEYS,
+    RedisJson.OBJLEN,
+    RedisJson.ARRLEN,
   ],
   legend: [RedisTimeSeries.RANGE],
   legendLabel: [RedisTimeSeries.MRANGE, RedisTimeSeries.MGET],
@@ -66,4 +73,5 @@ export const CommandParameters = {
   end: [Redis.XRANGE, Redis.XREVRANGE],
   cypher: [RedisGraph.EXPLAIN, RedisGraph.QUERY, RedisGraph.PROFILE],
   zrangeQuery: [Redis.ZRANGE],
+  path: [RedisJson.TYPE, RedisJson.OBJKEYS, RedisJson.GET, RedisJson.OBJLEN, RedisJson.ARRLEN],
 };

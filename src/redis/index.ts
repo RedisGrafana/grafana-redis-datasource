@@ -6,3 +6,4 @@ export * from './query';
 export * from './redis';
 export * from './time-series';
 export * from './types';
+export * from './json';

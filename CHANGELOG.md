@@ -18,6 +18,7 @@
 - Use Time-range for XRANGE filtering (#176)
 - Disable Command-line interface in the Query Editor (#226)
 - Support of ZRANGE command (#182)
+- Support fetching from RedisJSON datasource (JSON.GET, JSON.TYPE, JSON.ARRLEN, JSON.OBJLEN, JSON.OBJKEYS)
 
 ### Bug fixes
 

@@ -2,7 +2,15 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { RedisGraph } from 'redis/graph';
 import { SelectableValue } from '@grafana/data';
-import { AggregationValue, QueryTypeCli, QueryTypeValue, Redis, RedisQuery, RedisTimeSeries } from '../../redis';
+import {
+  AggregationValue,
+  QueryTypeCli,
+  QueryTypeValue,
+  Redis,
+  RedisJson,
+  RedisQuery,
+  RedisTimeSeries,
+} from '../../redis';
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './query-editor';
 
@@ -303,7 +311,17 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: RedisGraph.QUERY },
-        queryWhenHidden: { refId: '', type: QueryTypeValue.GRAPH, command: Redis.INFO },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'path',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onPathChange;
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.JSON, command: RedisJson.GET },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
         name: 'size',

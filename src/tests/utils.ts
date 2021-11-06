@@ -10,6 +10,8 @@ export const getQuery = (overrideQuery: object = {}): RedisQuery => ({
   legend: '',
   command: '',
   field: '',
+  path: '',
+  cypher: '',
   filter: '',
   value: '',
   query: '',
