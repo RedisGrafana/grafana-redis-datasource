@@ -104,8 +104,6 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 				frame.Fields = append(frame.Fields, data.NewField(i, nil, []string{v}))
 			case bool:
 				frame.Fields = append(frame.Fields, data.NewField(i, nil, []bool{v}))
-			case int64:
-				frame.Fields = append(frame.Fields, data.NewField(i, nil, []int64{v}))
 			case float64:
 				frame.Fields = append(frame.Fields, data.NewField(i, nil, []float64{v}))
 			default:
@@ -131,7 +129,7 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 
 						// Generate empty values for all previous rows
 						for j := 0; j < rowscount-1; j++ {
-							fields[i].Append("")
+							fields[i].Append(false)
 						}
 					}
 
@@ -146,20 +144,6 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 						// Generate empty values for all previous rows
 						for j := 0; j < rowscount-1; j++ {
 							fields[i].Append("")
-						}
-					}
-
-					// Insert value for current row
-					fields[i].Append(v)
-					keysFoundInCurrentEntry[i] = true
-				case int64:
-					if _, ok := fields[i]; !ok {
-						fields[i] = data.NewField(i, nil, []int64{})
-						frame.Fields = append(frame.Fields, fields[i])
-
-						// Generate empty values for all previous rows
-						for j := 0; j < rowscount-1; j++ {
-							fields[i].Append(0)
 						}
 					}
 
@@ -196,11 +180,6 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 
 					if field.Type() == data.FieldTypeBool {
 						field.Append(false)
-						continue
-					}
-
-					if field.Type() == data.FieldTypeInt64 {
-						field.Append(0)
 						continue
 					}
 

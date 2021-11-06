@@ -221,13 +221,13 @@ func TestQueryJsonGet(t *testing.T) {
 
 		// Client
 		client := testClient{
-			rcv: "[{\"timestamp\":1559174400,\"key1\":\"test\",\"key2\":3.3,\"key4\":true},{\"key1\":\"test\",\"key2\":3.3},{\"key1\":\"test\"},{\"key2\":3.3}]",
+			rcv: "[{\"timestamp\":4,\"key1\":\"test\",\"key2\":3.3,\"key4\":true},{\"key1\":\"test\",\"key2\":3.3},{\"string\":\"test\"},{\"key2\":3.3},{\"true\":false}]",
 		}
 
 		// Response
 		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "."}, &client)
 		require.Len(t, resp.Frames, 1)
-		require.Len(t, resp.Frames[0].Fields, 4)
+		require.Len(t, resp.Frames[0].Fields, 6)
 	})
 
 	t.Run("should handle unmarshall error", func(t *testing.T) {
