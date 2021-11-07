@@ -17,13 +17,13 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.0.6"
+      "version": "8.2.3"
     },
     {
       "type": "datasource",
       "id": "redis-datasource",
       "name": "Redis",
-      "version": "1.5.0"
+      "version": "2.0.0"
     },
     {
       "type": "panel",
@@ -47,16 +47,23 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "description": "Redis Dashboard",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1626313328879,
+  "iteration": 1636225729803,
   "links": [
     {
       "icon": "external link",
@@ -75,14 +82,11 @@
       "url": "https://redis.io/"
     }
   ],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
       "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -142,7 +146,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -214,7 +218,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "panelId": 24,
@@ -345,7 +349,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -429,7 +433,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -493,7 +497,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -555,7 +559,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "panelId": 19,
@@ -615,7 +619,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "query": "dbsize",
@@ -666,7 +670,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "panelId": 24,
@@ -737,7 +741,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "panelId": 24,
@@ -808,7 +812,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "panelId": 8,
@@ -833,10 +837,6 @@
     {
       "collapsed": false,
       "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -940,7 +940,7 @@
           }
         ]
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "clientList",
@@ -1093,7 +1093,7 @@
           }
         ]
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -1209,7 +1209,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "slowlogGet",
@@ -1249,10 +1249,6 @@
     {
       "collapsed": false,
       "datasource": "$redis",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1301,7 +1297,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "clusterInfo",
@@ -1362,7 +1358,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "info",
@@ -1424,7 +1420,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "panelId": 60,
@@ -1575,7 +1571,7 @@
           }
         ]
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
           "command": "clusterNodes",
@@ -1610,7 +1606,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 30,
+  "schemaVersion": 31,
   "style": "dark",
   "tags": ["redis"],
   "templating": {
