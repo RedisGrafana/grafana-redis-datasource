@@ -24,7 +24,8 @@
 
 ### Bug fixes
 
-- Fix RedisGears rg.dumpreqs command when Requirement was not yet downloaded so wheels are not available
+- Fix RedisGears rg.dumpreqs command when Requirement was not yet downloaded so wheels are not available (#219)
+- SCARD does not show a key field any more (#233)
 
 ## 1.5.0 (2021-07-06)
 
