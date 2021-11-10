@@ -91,7 +91,7 @@ export const RedisCommands = [
   {
     label: Redis.SCARD.toUpperCase(),
     description: 'Returns the set cardinality (number of elements) of the set stored at key',
-    value: Redis.SCARD.toUpperCase(),
+    value: Redis.SCARD,
   },
   {
     label: 'SLOWLOG GET',
