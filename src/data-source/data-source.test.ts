@@ -75,7 +75,6 @@ const getRequest = (overrideRequest: OverrideRequest = {}): DataQueryRequest<Red
     ? overrideRequest.targets
     : [
         {
-          datasource: '',
           type: QueryTypeValue.CLI,
           refId: 'A',
           query: '',
@@ -146,7 +145,6 @@ describe('DataSource', () => {
       const request = getRequest({
         targets: [
           {
-            datasource: '',
             type: QueryTypeValue.CLI,
             refId: 'A',
             query: '',
@@ -180,7 +178,6 @@ describe('DataSource', () => {
       const request = getRequest({
         targets: [
           {
-            datasource: '',
             type: QueryTypeValue.CLI,
             refId: 'A',
             query: '',
