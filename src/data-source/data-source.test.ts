@@ -257,10 +257,10 @@ describe('DataSource', () => {
         });
     });
 
-    it('If options.variables.datasource is empty should return empty array', (done) => {
+    it('If options.variables.datasource is null (default) should return empty array', (done) => {
       dataSource.metricFindQuery &&
-        dataSource.metricFindQuery('123', { variable: { datasource: '' } }).then((result: MetricFindValue[]) => {
-          expect(result).toEqual([]);
+        dataSource.metricFindQuery('123', { variable: { datasource: null } }).then((result: MetricFindValue[]) => {
+          expect(result.length).toEqual(3);
           done();
         });
     });
