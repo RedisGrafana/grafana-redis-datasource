@@ -20,14 +20,13 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1636220199236,
+  "id": 1,
+  "iteration": 1638717483531,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -39,7 +38,9 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -78,7 +79,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "info",
@@ -88,8 +89,6 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "INFO Server - Redis Version",
       "transformations": [
         {
@@ -104,14 +103,15 @@
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -165,6 +165,11 @@
       },
       "id": 45,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -173,7 +178,7 @@
           }
         ]
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "tmscan",
@@ -185,14 +190,14 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Scan with Type and Memory Usage",
       "transformations": [],
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -278,8 +283,6 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Used Memory - Streaming",
       "transformations": [
         {
@@ -337,7 +340,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -380,7 +385,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "info",
@@ -390,8 +395,6 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "INFO Cluster",
       "transformations": [
         {
@@ -406,7 +409,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -418,7 +420,9 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "Should return 'test'",
       "fieldConfig": {
         "defaults": {
@@ -459,7 +463,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "get",
@@ -469,13 +473,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "GET test:string",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "Should return 1.234",
       "fieldConfig": {
         "defaults": {
@@ -520,7 +524,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "get",
@@ -530,13 +534,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "GET test:float",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -575,7 +579,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "type",
@@ -585,13 +589,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TYPE test:list",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -634,7 +638,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "llen",
@@ -645,13 +649,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "LLEN test:list",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -694,7 +698,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "ttl",
@@ -704,13 +708,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TTL test:set",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -753,7 +757,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "scard",
@@ -763,13 +767,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "SCARD test:set",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -812,7 +816,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "xlen",
@@ -822,13 +826,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "XLEN queue:complete",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -871,7 +875,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "xlen",
@@ -881,13 +885,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "XLEN queue:customers",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "Should return 100",
       "fieldConfig": {
         "defaults": {
@@ -931,7 +935,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "hget",
@@ -942,13 +946,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HGET test:hash - test1",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -993,7 +997,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "hget",
@@ -1004,13 +1008,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HGET test:hash - test4",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -1055,7 +1059,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "hlen",
@@ -1066,13 +1070,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HLEN test:hash",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1113,7 +1117,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "hgetall",
@@ -1124,13 +1128,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HGETALL test:hash",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1171,7 +1175,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "hmget",
@@ -1182,13 +1186,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HMGET test:hash - test1, test3",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1272,13 +1276,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HGET test:hash - test1 Streaming",
       "type": "timeseries"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1362,20 +1366,19 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HMGET test:hash - test1, test3 Streaming",
       "type": "timeseries"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -1404,9 +1407,14 @@
       },
       "id": 31,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "smembers",
@@ -1416,13 +1424,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "SMEMBERS test:set",
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "description": "Parsing Float",
       "fieldConfig": {
         "defaults": {
@@ -1430,7 +1438,6 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -1456,9 +1463,14 @@
       },
       "id": 13,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "hkeys",
@@ -1470,13 +1482,14 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "HKEYS test:hash",
       "type": "table"
     },
     {
-      "datasource": "Redis",
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1538,7 +1551,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1551,14 +1563,15 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -1587,9 +1600,14 @@
       },
       "id": 57,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "xinfoStream",
@@ -1600,13 +1618,13 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "XINFO STREAM test:stream",
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1688,8 +1706,6 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "XINFO STREAM test:stream Streaming",
       "transformations": [
         {
@@ -1714,14 +1730,15 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -1750,9 +1767,14 @@
       },
       "id": 61,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "xrange",
@@ -1766,20 +1788,19 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "XRANGE test:stream",
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -1808,9 +1829,14 @@
       },
       "id": 62,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "xrange",
@@ -1825,14 +1851,11 @@
           "type": "command"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "XRANGE queue:complete",
       "type": "table"
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1845,14 +1868,15 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -1881,9 +1905,14 @@
       },
       "id": 41,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "ft.info",
@@ -1893,8 +1922,6 @@
           "type": "search"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Index idx:test",
       "transformations": [
         {
@@ -1955,7 +1982,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short"
@@ -1988,7 +2017,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2007,9 +2036,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Index idx:test",
       "tooltip": {
         "shared": true,
@@ -2078,33 +2105,24 @@
       ],
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -2112,7 +2130,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "decbytes"
@@ -2146,7 +2166,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2165,9 +2185,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Index idx:test Size",
       "tooltip": {
         "shared": true,
@@ -2235,39 +2253,28 @@
       ],
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": null,
           "format": "decbytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2280,7 +2287,9 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2320,7 +2329,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "rg.pystats",
@@ -2330,8 +2339,6 @@
           "type": "gears"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Memory Usage",
       "type": "stat"
     },
@@ -2340,7 +2347,9 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "decbytes"
@@ -2376,7 +2385,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -2394,9 +2403,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Memory Usage Streaming",
       "tooltip": {
         "shared": true,
@@ -2419,44 +2426,36 @@
       ],
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "decbytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -2606,10 +2605,15 @@
       },
       "id": 56,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "rg.dumpregistrations",
@@ -2620,8 +2624,6 @@
           "type": "gears"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Registrations",
       "transformations": [
         {
@@ -2663,14 +2665,15 @@
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -2868,10 +2871,15 @@
       },
       "id": 80,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "rg.pydumpreqs",
@@ -2882,8 +2890,6 @@
           "type": "gears"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Requirements",
       "transformations": [
         {
@@ -2927,7 +2933,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2940,14 +2945,15 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -2989,10 +2995,15 @@
       },
       "id": 66,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "ts.info",
@@ -3004,8 +3015,6 @@
           "type": "timeSeries"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.INFO test:timeseries2",
       "transformations": [
         {
@@ -3030,7 +3039,9 @@
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3114,8 +3125,6 @@
           "type": "timeSeries"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.INFO test:timeseries2",
       "transformations": [
         {
@@ -3154,7 +3163,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3197,7 +3208,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "ts.get",
@@ -3212,13 +3223,13 @@
           "value": "sensor"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.GET \"id=111\" Streaming",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3253,7 +3264,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "",
@@ -3264,13 +3275,13 @@
           "type": "cli"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.ADD test:timeseries2 Streaming",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3357,13 +3368,13 @@
           "value": "sensor"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.RANGE test:timeseries2 Streaming",
       "type": "timeseries"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3406,7 +3417,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "ts.mrange",
@@ -3421,13 +3432,13 @@
           "value": "sensor"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.MRANGE \"id=111\" Streaming",
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3514,13 +3525,13 @@
           "value": "sensor"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.MRANGE sensor=888 Streaming",
       "type": "timeseries"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3565,7 +3576,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "ts.mget",
@@ -3580,14 +3591,11 @@
           "value": ""
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "TS.MGET id=(111,123)",
       "type": "stat"
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3600,7 +3608,9 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "gridPos": {
         "h": 28,
         "w": 12,
@@ -3623,14 +3633,15 @@
       "type": "nodeGraph"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -3691,10 +3702,15 @@
       },
       "id": 78,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "graph.slowlog",
@@ -3724,14 +3740,15 @@
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -3760,9 +3777,14 @@
       },
       "id": 81,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "graph.explain",
@@ -3777,14 +3799,15 @@
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -3813,9 +3836,14 @@
       },
       "id": 82,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "graph.profile",
@@ -3830,14 +3858,15 @@
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -3866,9 +3895,14 @@
       },
       "id": 83,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "graph.config",
@@ -3884,7 +3918,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3897,7 +3930,9 @@
       "type": "row"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3944,7 +3979,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "json.type",
@@ -3975,7 +4010,9 @@
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,7 +4068,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "json.objlen",
@@ -4062,7 +4099,9 @@
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4118,7 +4157,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "json.arrlen",
@@ -4149,7 +4188,9 @@
       "type": "stat"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4235,7 +4276,9 @@
       "type": "piechart"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4283,9 +4326,14 @@
       },
       "id": 94,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "json.objkeys",
@@ -4316,14 +4364,15 @@
       "type": "table"
     },
     {
-      "datasource": "${redis}",
+      "datasource": {
+        "uid": "${redis}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
             "displayMode": "auto",
             "filterable": false
           },
@@ -4384,10 +4433,15 @@
       },
       "id": 90,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.3.0",
       "targets": [
         {
           "command": "json.get",
@@ -4419,7 +4473,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 31,
+  "schemaVersion": 33,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -4430,8 +4484,6 @@
           "text": "Redis",
           "value": "Redis"
         },
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Redis",
@@ -4445,16 +4497,15 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
         "current": {
           "selected": false,
           "text": "50",
           "value": "50"
         },
-        "datasource": "${redis}",
+        "datasource": {
+          "uid": "${redis}"
+        },
         "definition": "smembers test:set",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Set",
@@ -4478,5 +4529,6 @@
   "timezone": "",
   "title": "Redis Data Types",
   "uid": "2TKvUH-G2",
-  "version": 1
+  "version": 1,
+  "weekStart": ""
 }

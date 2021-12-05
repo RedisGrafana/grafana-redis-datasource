@@ -5,7 +5,11 @@
 ### Features / Enhancements
 
 - Upgrade to Grafana 8.2.5 (#237)
-- Upgrade to Grafana 8.3.0
+- Upgrade to Grafana 8.3.0 (#244)
+
+### Bug fixes
+
+- Grafana template variables not working for the Default datasource (#242)
 
 ## 2.0.0 (2021-11-10)
 

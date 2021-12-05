@@ -37,9 +37,9 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
    */
   async metricFindQuery?(query: string, options?: any): Promise<MetricFindValue[]> {
     /**
-     * If query or datasource not specified
+     * If query is not specified
      */
-    if (!query || !options.variable.datasource) {
+    if (!query) {
       return Promise.resolve([]);
     }
 
@@ -48,7 +48,7 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
      */
     return lastValueFrom(
       this.query({
-        targets: [{ refId: 'A', datasource: options.variable.datasource, query: query }],
+        targets: [{ refId: 'A', datasource: options.variable.datasource, query }],
       } as DataQueryRequest<RedisQuery>).pipe(
         switchMap$((response) => response.data),
         switchMap$((data: DataFrame) => data.fields),
