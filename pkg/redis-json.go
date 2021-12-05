@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"reflect"
+	"strings"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
@@ -107,7 +108,7 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 			case float64:
 				frame.Fields = append(frame.Fields, data.NewField(i, nil, []float64{v}))
 			default:
-				log.DefaultLogger.Error(models.JsonGet, "Conversion Error", "Unsupported Value type")
+				log.DefaultLogger.Error(models.JsonGet, "Conversion Error", "Unsupported Value type", reflect.TypeOf(value).String())
 			}
 		}
 	case []interface{}:
@@ -119,54 +120,95 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 			keysFoundInCurrentEntry := map[string]bool{}
 			rowscount++
 
-			for i, value := range entry.(map[string]interface{}) {
-				// Value
-				switch v := value.(type) {
-				case bool:
-					if _, ok := fields[i]; !ok {
-						fields[i] = data.NewField(i, nil, []bool{})
-						frame.Fields = append(frame.Fields, fields[i])
+			// Value
+			switch e := entry.(type) {
+			case string:
+				i := "Value"
+				if _, ok := fields[i]; !ok {
+					fields[i] = data.NewField(i, nil, []string{})
+					frame.Fields = append(frame.Fields, fields[i])
 
-						// Generate empty values for all previous rows
-						for j := 0; j < rowscount-1; j++ {
-							fields[i].Append(false)
-						}
+					// Generate empty values for all previous rows
+					for j := 0; j < rowscount-1; j++ {
+						fields[i].Append("")
 					}
-
-					// Insert value for current row
-					fields[i].Append(v)
-					keysFoundInCurrentEntry[i] = true
-				case string:
-					if _, ok := fields[i]; !ok {
-						fields[i] = data.NewField(i, nil, []string{})
-						frame.Fields = append(frame.Fields, fields[i])
-
-						// Generate empty values for all previous rows
-						for j := 0; j < rowscount-1; j++ {
-							fields[i].Append("")
-						}
-					}
-
-					// Insert value for current row
-					fields[i].Append(v)
-					keysFoundInCurrentEntry[i] = true
-				case float64:
-					if _, ok := fields[i]; !ok {
-						fields[i] = data.NewField(i, nil, []float64{})
-						frame.Fields = append(frame.Fields, fields[i])
-
-						// Generate empty values for all previous rows
-						for j := 0; j < rowscount-1; j++ {
-							fields[i].Append(0.0)
-						}
-					}
-
-					// Insert value for current row
-					fields[i].Append(v)
-					keysFoundInCurrentEntry[i] = true
-				default:
-					log.DefaultLogger.Error(models.JsonGet, "Conversion Error", "Unsupported Value type")
 				}
+
+				// Insert value for current row
+				fields[i].Append(e)
+				keysFoundInCurrentEntry[i] = true
+			case map[string]interface{}:
+				for i, value := range e {
+					// Value
+					switch v := value.(type) {
+					case bool:
+						if _, ok := fields[i]; !ok {
+							fields[i] = data.NewField(i, nil, []bool{})
+							frame.Fields = append(frame.Fields, fields[i])
+
+							// Generate empty values for all previous rows
+							for j := 0; j < rowscount-1; j++ {
+								fields[i].Append(false)
+							}
+						}
+
+						// Insert value for current row
+						fields[i].Append(v)
+						keysFoundInCurrentEntry[i] = true
+					case string:
+						if _, ok := fields[i]; !ok {
+							fields[i] = data.NewField(i, nil, []string{})
+							frame.Fields = append(frame.Fields, fields[i])
+
+							// Generate empty values for all previous rows
+							for j := 0; j < rowscount-1; j++ {
+								fields[i].Append("")
+							}
+						}
+
+						// Insert value for current row
+						fields[i].Append(v)
+						keysFoundInCurrentEntry[i] = true
+					case float64:
+						if _, ok := fields[i]; !ok {
+							fields[i] = data.NewField(i, nil, []float64{})
+							frame.Fields = append(frame.Fields, fields[i])
+
+							// Generate empty values for all previous rows
+							for j := 0; j < rowscount-1; j++ {
+								fields[i].Append(0.0)
+							}
+						}
+
+						// Insert value for current row
+						fields[i].Append(v)
+						keysFoundInCurrentEntry[i] = true
+					case map[string]interface{}:
+						if _, ok := fields[i]; !ok {
+							fields[i] = data.NewField(i, nil, []string{})
+							frame.Fields = append(frame.Fields, fields[i])
+
+							// Generate empty values for all previous rows
+							for j := 0; j < rowscount-1; j++ {
+								fields[i].Append("")
+							}
+						}
+
+						var values []string
+						for _, entry := range v {
+							for _, e := range entry.(map[string]interface{}) {
+								values = append(values, string(e.(string)))
+							}
+						}
+
+						fields[i].Append(strings.Join(values, ", "))
+						keysFoundInCurrentEntry[i] = true
+					default:
+						log.DefaultLogger.Error(models.JsonGet, "Conversion Error", "Unsupported Value type inside interface", reflect.TypeOf(value).String())
+					}
+				}
+			default:
+				log.DefaultLogger.Error(models.JsonGet, "Conversion Error", "Unsupported Value type inside interface entry", reflect.TypeOf(entry).String())
 			}
 
 			// Iterate over all keys found so far for stream
@@ -188,7 +230,7 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 			}
 		}
 	default:
-		log.DefaultLogger.Error("Unexpected type received", "value", value, "type", reflect.TypeOf(value).String())
+		log.DefaultLogger.Error(models.JsonGet, "Unexpected type received", "value", value, "type", reflect.TypeOf(value).String())
 	}
 
 	// Add the frames to the response

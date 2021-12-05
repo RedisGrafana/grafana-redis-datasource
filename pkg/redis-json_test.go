@@ -230,6 +230,34 @@ func TestQueryJsonGet(t *testing.T) {
 		require.Len(t, resp.Frames[0].Fields, 6)
 	})
 
+	t.Run("should handle encoded JSON with array of strings", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: "[\"string\",\"test\"]",
+		}
+
+		// Response
+		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "."}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+	})
+
+	t.Run("should handle encoded JSON with array of map of maps", func(t *testing.T) {
+		t.Parallel()
+
+		// Client
+		client := testClient{
+			rcv: "[{\"test\":{\"inside\":{\"string\":\"test\"}}}]",
+		}
+
+		// Response
+		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "."}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+	})
+
 	t.Run("should handle unmarshall error", func(t *testing.T) {
 		t.Parallel()
 
