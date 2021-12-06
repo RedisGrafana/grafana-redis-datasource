@@ -249,13 +249,13 @@ func TestQueryJsonGet(t *testing.T) {
 
 		// Client
 		client := testClient{
-			rcv: "[{\"test\":{\"inside\":{\"string\":\"test\"}}}]",
+			rcv: "[{\"test\":{\"inside\":{\"string\":\"test\"}}},{\"timestamp\":4,\"key1\":\"test\"},{\"string\":\"test\"},{\"key2\":3.3},{\"true\":false}]",
 		}
 
 		// Response
 		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "."}, &client)
 		require.Len(t, resp.Frames, 1)
-		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Len(t, resp.Frames[0].Fields, 6)
 	})
 
 	t.Run("should handle unmarshall error", func(t *testing.T) {
