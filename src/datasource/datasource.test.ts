@@ -14,7 +14,7 @@ import { ClientTypeValue, StreamingDataType } from '../constants';
 import { QueryTypeValue, RedisQuery } from '../redis';
 import { getQuery } from '../tests/utils';
 import { RedisDataSourceOptions } from '../types';
-import { DataSource } from './data-source';
+import { DataSource } from './datasource';
 
 /**
  * Instance Settings

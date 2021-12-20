@@ -5,7 +5,7 @@ import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { getDataSourceSrv } from '@grafana/runtime';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, TextArea } from '@grafana/ui';
 import { StreamingDataType, StreamingDataTypes } from '../../constants';
-import { DataSource } from '../../data-source';
+import { DataSource } from '../../datasource';
 import {
   Aggregations,
   AggregationValue,
