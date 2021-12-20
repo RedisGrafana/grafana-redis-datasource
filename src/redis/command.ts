@@ -1,4 +1,4 @@
-import { RedisGearsCommands } from './gears';
+import { RedisGears, RedisGearsCommands } from './gears';
 import { RedisGraph, RedisGraphCommands } from './graph';
 import { RedisJson, RedisJsonCommands } from './json';
 import { QueryTypeValue } from './query';
@@ -74,4 +74,5 @@ export const CommandParameters = {
   cypher: [RedisGraph.EXPLAIN, RedisGraph.QUERY, RedisGraph.PROFILE],
   zrangeQuery: [Redis.ZRANGE],
   path: [RedisJson.TYPE, RedisJson.OBJKEYS, RedisJson.GET, RedisJson.OBJLEN, RedisJson.ARRLEN],
+  pyFunction: [RedisGears.PYEXECUTE],
 };

@@ -17,6 +17,7 @@ import {
   QueryTypeCli,
   QueryTypeValue,
   Redis,
+  RedisGears,
   RedisJson,
   RedisQuery,
   RedisTimeSeries,
@@ -431,6 +432,18 @@ export class QueryEditor extends PureComponent<Props> {
               Cypher
             </InlineFormLabel>
             <TextArea value={cypher} className="gf-form-input" onChange={this.onCypherChange} />
+          </div>
+        )}
+
+        {command && CommandParameters.pyFunction.includes(command as RedisGears) && (
+          <div className="gf-form">
+            <FormField
+              labelWidth={8}
+              inputWidth={30}
+              value={keyName}
+              onChange={this.onKeyNameChange}
+              label="Function"
+            />
           </div>
         )}
 

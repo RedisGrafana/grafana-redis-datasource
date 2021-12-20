@@ -7,6 +7,7 @@ import {
   QueryTypeCli,
   QueryTypeValue,
   Redis,
+  RedisGears,
   RedisJson,
   RedisQuery,
   RedisTimeSeries,
@@ -249,6 +250,16 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: Redis.GET },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'keyName',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.name() === 'FormField' && node.prop('label') === 'Function';
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.REDIS, command: RedisGears.PYEXECUTE },
         queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
