@@ -37,11 +37,13 @@ You can add as many data sources as you want to support multiple Redis databases
 
 ## Getting Started
 
-Use the `grafana-cli` tool to install from the command line:
+Redis Data Source can be installed from the Grafana Marketplace or use the `grafana-cli` tool to install from the command line:
 
 ```bash
 grafana-cli plugins install redis-datasource
 ```
+
+![Grafana Marketplace](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/grafana-marketplace.png)
 
 For Docker instructions and installation without Internet access, follow the [Quickstart](https://redisgrafana.github.io/quickstart/) page.
 
