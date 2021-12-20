@@ -18,13 +18,18 @@ export const RedisGearsCommands = [
     value: RedisGears.DUMPREGISTRATIONS,
   },
   {
-    label: RedisGears.PYSTATS.toUpperCase(),
-    description: 'Returns memory usage statistics from the Python interpreter',
-    value: RedisGears.PYSTATS,
-  },
-  {
     label: RedisGears.PYDUMPREQS.toUpperCase(),
     description: 'Returns a list of all the python requirements available',
     value: RedisGears.PYDUMPREQS,
+  },
+  {
+    label: RedisGears.PYEXECUTE.toUpperCase(),
+    description: 'Executes Python functions and registers functions for event-driven processing',
+    value: RedisGears.PYEXECUTE,
+  },
+  {
+    label: RedisGears.PYSTATS.toUpperCase(),
+    description: 'Returns memory usage statistics from the Python interpreter',
+    value: RedisGears.PYSTATS,
   },
 ];
