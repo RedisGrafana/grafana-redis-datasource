@@ -10,6 +10,7 @@
 ### Bug fixes
 
 - Grafana template variables not working for the Default datasource (#242)
+- Fix JSON.GET: interface conversion: interface {} is string (#246)
 
 ## 2.0.0 (2021-11-10)
 

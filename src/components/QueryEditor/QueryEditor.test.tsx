@@ -12,7 +12,7 @@ import {
   RedisTimeSeries,
 } from '../../redis';
 import { getQuery } from '../../tests/utils';
-import { QueryEditor } from './query-editor';
+import { QueryEditor } from './QueryEditor';
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 

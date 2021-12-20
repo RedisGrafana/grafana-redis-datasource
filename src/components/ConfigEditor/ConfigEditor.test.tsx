@@ -4,7 +4,7 @@ import { DataSourceSettings } from '@grafana/data';
 import { RadioButtonGroup } from '@grafana/ui';
 import { ClientTypeValue } from '../../constants';
 import { RedisDataSourceOptions } from '../../types';
-import { ConfigEditor } from './config-editor';
+import { ConfigEditor } from './ConfigEditor';
 
 /**
  * Override Options
