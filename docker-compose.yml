@@ -18,6 +18,7 @@ services:
       - GF_AUTH_BASIC_ENABLED=false
       - GF_ENABLE_GZIP=true
       - GF_USERS_DEFAULT_THEME=light
+      - GF_DEFAULT_APP_MODE=development
       - GF_INSTALL_PLUGINS=redis-datasource
     volumes:
       - ./provisioning/datasources:/etc/grafana/provisioning/datasources
