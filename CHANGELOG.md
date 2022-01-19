@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.1 (2022-01-18)
+
+### Features / Enhancements
+
+- Upgrade to Grafana 8.3.4
+
 ## 2.1.0 (2022-01-17)
 
 ### Features / Enhancements
@@ -9,7 +15,7 @@
 - Update Components naming (#247)
 - Add RedisGears PYEXECUTE function to Query Editor (#248)
 - Add Grafana Marketplace to README (#249)
-- Upgrade follows-redirect
+- Update follows-redirect package (#253)
 
 ### Bug fixes
 
