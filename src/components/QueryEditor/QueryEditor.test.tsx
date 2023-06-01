@@ -14,6 +14,7 @@ import {
 } from '../../redis';
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './QueryEditor';
+import { RediSearch } from '../../redis/search';
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
@@ -322,6 +323,26 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: RedisGraph.QUERY },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'offset',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onOffsetChange;
+          }),
+        type: 'number',
+        queryWhenShown: { refId: '', type: QueryTypeValue.SEARCH, command: RediSearch.SEARCH },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'searchQuery',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onSearchQueryChange;
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.SEARCH, command: RediSearch.SEARCH },
         queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {

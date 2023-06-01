@@ -5,6 +5,7 @@ package models
  */
 const (
 	SearchInfo = "ft.info"
+	Search     = "ft.search"
 )
 
 /**

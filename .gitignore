@@ -23,3 +23,5 @@ vendor/
 # Editor
 .idea
 .DS_Store
+
+data/dump.rdb

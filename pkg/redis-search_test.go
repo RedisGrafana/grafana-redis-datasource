@@ -2,11 +2,118 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
+
+func TestQueryFtSearch(t *testing.T) {
+	t.Parallel()
+
+	commonHashRcv := []interface{}{
+		make([]uint8, 1),
+		[]uint8("test:1"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("steve"),
+			[]uint8("age"),
+			[]uint8("34"),
+		},
+	}
+
+	commonHashCheck := []valueToCheckByLabelInResponse{
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 0, value: "test:1"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 0, value: "steve"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 0, value: "34"},
+	}
+
+	tests := []struct {
+		name                          string
+		qm                            queryModel
+		rcv                           interface{}
+		fieldsCount                   int
+		rowsPerField                  int
+		valueToCheckByLabelInResponse []valueToCheckByLabelInResponse
+		expectedArgs                  []string
+		expectedCmd                   string
+		err                           error
+	}{
+		{
+			name:                          "simple search",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*"},
+			expectedCmd:                   "ft.search",
+		}, {
+			name:                          "search with offset",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", Offset: 50},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "LIMIT", "50", "10"},
+			expectedCmd:                   "ft.search",
+		},
+		{
+			name:                          "search with count",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", Count: 15},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "LIMIT", "0", "15"},
+			expectedCmd:                   "ft.search",
+		},
+		{
+			name:                          "search with returns",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", ReturnFields: []string{"foo", "bar", "baz"}},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "RETURN", "3", "foo", "bar", "baz"},
+			expectedCmd:                   "ft.search",
+		},
+		{
+			name:                          "search with SortBy",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", SortDirection: "DESC", SortBy: "foo"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "SORTBY", "foo", "DESC"},
+			expectedCmd:                   "ft.search",
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			client := testClient{rcv: tt.rcv, err: tt.err, expectedArgs: tt.expectedArgs, expectedCmd: tt.expectedCmd}
+
+			response := queryFtSearch(tt.qm, &client)
+
+			require.Nil(t, response.Error, fmt.Sprintf("Error:\n%s", response.Error))
+
+			if tt.valueToCheckByLabelInResponse != nil {
+				for _, value := range tt.valueToCheckByLabelInResponse {
+					for _, field := range response.Frames[value.frameIndex].Fields {
+						if field.Name == value.fieldName {
+							require.Equalf(t, value.value, field.At(value.rowIndex), "Invalid value at Frame[%v]:Field[Name:%v]:Row[%v]", value.frameIndex, value.fieldName, value.rowIndex)
+						}
+					}
+				}
+			}
+		})
+	}
+}
 
 /**
  * FT.INFO
