@@ -50,6 +50,15 @@ func TestQueryFtSearch(t *testing.T) {
 			expectedArgs:                  []string{"test", "*"},
 			expectedCmd:                   "ft.search",
 		}, {
+			name:                          "simple no SearchQuery",
+			qm:                            queryModel{Command: models.Search, Key: "test"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*"},
+			expectedCmd:                   "ft.search",
+		}, {
 			name:                          "search with offset",
 			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", Offset: 50},
 			rcv:                           commonHashRcv,
@@ -89,6 +98,15 @@ func TestQueryFtSearch(t *testing.T) {
 			expectedArgs:                  []string{"test", "*", "SORTBY", "foo", "DESC"},
 			expectedCmd:                   "ft.search",
 		},
+		{
+			name:                          "Try with error",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", SortDirection: "DESC", SortBy: "foo"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			err:                           errors.New("an error occurred"),
+		},
 	}
 
 	for _, tt := range tests {
@@ -100,12 +118,14 @@ func TestQueryFtSearch(t *testing.T) {
 
 			response := queryFtSearch(tt.qm, &client)
 
-			require.Nil(t, response.Error, fmt.Sprintf("Error:\n%s", response.Error))
-
-			if tt.valueToCheckByLabelInResponse != nil {
+			if tt.err != nil {
+				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
+				require.Nil(t, response.Frames, "No frames should be created if failed")
+			} else if tt.valueToCheckByLabelInResponse != nil {
 				for _, value := range tt.valueToCheckByLabelInResponse {
 					for _, field := range response.Frames[value.frameIndex].Fields {
 						if field.Name == value.fieldName {
+							require.Nil(t, response.Error, fmt.Sprintf("Error:\n%s", response.Error))
 							require.Equalf(t, value.value, field.At(value.rowIndex), "Invalid value at Frame[%v]:Field[Name:%v]:Row[%v]", value.frameIndex, value.fieldName, value.rowIndex)
 						}
 					}
