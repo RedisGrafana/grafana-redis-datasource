@@ -1,7 +1,8 @@
-import { shallow, ShallowWrapper } from 'enzyme';
+import { configure, shallow, ShallowWrapper, mount } from 'enzyme';
 import React from 'react';
 import { RedisGraph } from 'redis/graph';
 import { SelectableValue } from '@grafana/data';
+import { Input } from '@grafana/ui';
 import {
   AggregationValue,
   QueryTypeCli,
@@ -15,6 +16,13 @@ import {
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './QueryEditor';
 import { RediSearch } from '../../redis/search';
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17"
+import sinon from 'sinon';
+
+
+configure({adapter: new Adapter()});
+
+
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
