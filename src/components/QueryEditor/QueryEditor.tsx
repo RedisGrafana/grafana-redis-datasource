@@ -532,7 +532,9 @@ export class QueryEditor extends PureComponent<Props> {
                 <FieldArray name="returnFields" control={control}>
                   {({ fields, append }) => (
                     <>
-                      <Button id="addReturnFieldButton" onClick={() => append({})}>Add Return Field</Button>
+                      <Button id="addReturnFieldButton" onClick={() => append({})}>
+                        Add Return Field
+                      </Button>
                       <div id="returnFieldInputs">
                         {fields.map((field, index) => (
                           <Input name={`returnField:${index}`} key={field.id} onChange={this.onReturnFieldChange} />

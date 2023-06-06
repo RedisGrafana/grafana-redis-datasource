@@ -16,13 +16,10 @@ import {
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './QueryEditor';
 import { RediSearch } from '../../redis/search';
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17"
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import sinon from 'sinon';
 
-
-configure({adapter: new Adapter()});
-
-
+configure({ adapter: new Adapter() });
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
@@ -130,6 +127,31 @@ describe('QueryEditor', () => {
         });
       });
     });
+
+  describe('Return Fields', () => {
+    const onChange = jest.fn();
+
+    const query = { refId: '', type: QueryTypeValue.SEARCH, command: RediSearch.SEARCH };
+    const component = mount<QueryEditor>(
+      <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+    );
+
+    it('should click and add an input', () => {
+      const inputsDiv = component.find('#returnFieldInputs');
+      let input = inputsDiv.childAt(0);
+      expect(!input);
+
+      const button = component.find('#addReturnFieldButton').first();
+      button.simulate('click');
+      input = inputsDiv.childAt(0);
+      expect(input);
+    });
+
+    it('should call onReturnFieldChange successfully', () => {
+      //@ts-ignore
+      component.instance().onReturnFieldChange({ currentTarget: { name: 'returnField:0', value: 'foo' } });
+    });
+  });
 
   /**
    * Query Type
