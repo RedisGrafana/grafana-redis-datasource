@@ -12,6 +12,7 @@
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
+    "@types/react-dom": "18.0.11",
     "sinon": "^15.1.0"
   },
   "engines": {

@@ -2,7 +2,6 @@ import { configure, shallow, ShallowWrapper, mount } from 'enzyme';
 import React from 'react';
 import { RedisGraph } from 'redis/graph';
 import { SelectableValue } from '@grafana/data';
-import { Input } from '@grafana/ui';
 import {
   AggregationValue,
   QueryTypeCli,
@@ -17,7 +16,7 @@ import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './QueryEditor';
 import { RediSearch } from '../../redis/search';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import sinon from 'sinon';
+import act from 'react-dom/test-utils';
 
 configure({ adapter: new Adapter() });
 
@@ -150,6 +149,13 @@ describe('QueryEditor', () => {
     it('should call onReturnFieldChange successfully', () => {
       //@ts-ignore
       component.instance().onReturnFieldChange({ currentTarget: { name: 'returnField:0', value: 'foo' } });
+    });
+
+    it('should submit form', async () => {
+      const form = component.find('#returnFieldsForm').first();
+      await act.act(async () => {
+        form.simulate('submit');
+      });
     });
   });
 
