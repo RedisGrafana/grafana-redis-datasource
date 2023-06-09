@@ -1,0 +1,58 @@
+version: "3.7"
+
+networks:
+  cluster-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.57.0/24
+
+services:
+  gotest:
+    container_name: gotest
+    build:
+      context: ../
+    links:
+      - redis-cluster1
+      - redis-cluster2
+      - redis-cluster3
+    volumes:
+      - ../coverage:/app/coverage
+    networks:
+      cluster-network:
+        ipv4_address: 192.168.57.14
+  redis-cluster1:
+    container_name: redis1
+    build:
+      context: cluster
+    ports:
+      - '6379:6379'
+      - '16379'
+    networks:
+      cluster-network:
+        ipv4_address: 192.168.57.10
+  redis-cluster2:
+    container_name: redis2
+    build:
+      context: cluster
+    ports:
+      - '6380:6379'
+      - '16379'
+    networks:
+      cluster-network:
+        ipv4_address: 192.168.57.11
+  redis-cluster3:
+    container_name: redis3
+    build:
+      context: cluster
+    entrypoint: ["/usr/local/bin/startup_cluster.sh"]
+    ports:
+      - '6381:6379'
+      - '16379'
+    networks:
+      cluster-network:
+        ipv4_address: 192.168.57.12
+    depends_on:
+      - redis-cluster1
+      - redis-cluster2

@@ -1,4 +1,5 @@
-//+build mage
+//go:build mage
+// +build mage
 
 package main
 
@@ -50,6 +51,14 @@ func Integration() error {
 		return err
 	}
 
+	return nil
+}
+
+// up docker-compose environment and run cluster tests
+func Cluster() error {
+	if err := sh.Run("docker-compose", "-f", "docker-compose/cluster.yml", "run", "gotest", "bash", "/app/docker-compose/cluster/cluster_tests.sh"); err != nil {
+		return err
+	}
 	return nil
 }
 
