@@ -4,7 +4,7 @@
 
 ### Bug fixes
 
-- Fix issue connecting to Redis 7 cluster instances (#)
+- Fix issue connecting to Redis 7 cluster instances (#284)
 
 ## 2.1.1 (2022-01-18)
 
