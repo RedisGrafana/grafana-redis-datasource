@@ -2,24 +2,11 @@ package main
 
 import (
 	"errors"
-	"fmt"
-	"github.com/mediocregopher/radix/v3"
 	"testing"
 
 	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
-
-func TestQueryGetNumber(t *testing.T) {
-	// Client
-	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", "localhost", 6379), 10)
-	client := radixV3Impl{radixClient: radixClient}
-
-	qm := queryModel{Command: "JSON.GET", Key: "test:2", Path: "$.age"}
-
-	queryJsonGet(qm, &client)
-
-}
 
 /**
  * Type and Length commands with Key and Path
