@@ -2,11 +2,24 @@ package main
 
 import (
 	"errors"
+	"fmt"
+	"github.com/mediocregopher/radix/v3"
 	"testing"
 
 	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
+
+func TestQueryGetNumber(t *testing.T) {
+	// Client
+	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", "localhost", 6379), 10)
+	client := radixV3Impl{radixClient: radixClient}
+
+	qm := queryModel{Command: "JSON.GET", Key: "test:2", Path: "$.age"}
+
+	queryJsonGet(qm, &client)
+
+}
 
 /**
  * Type and Length commands with Key and Path
@@ -159,6 +172,29 @@ func TestQueryJsonObjKeys(t *testing.T) {
  */
 func TestQueryJsonGet(t *testing.T) {
 	t.Parallel()
+
+	t.Run("Should return a single float64 in frame", func(t *testing.T) {
+		t.Parallel()
+
+		client := testClient{rcv: "[42]"}
+
+		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "$.num"}, &client)
+
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, resp.Frames[0].Fields[0].At(0), float64(42))
+
+	})
+
+	t.Run("Should return a single boolean in frame", func(t *testing.T) {
+		t.Parallel()
+
+		client := testClient{rcv: "[true]"}
+		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "$.bool"}, &client)
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, resp.Frames[0].Fields[0].At(0), true)
+	})
 
 	t.Run("should handle encoded JSON with string", func(t *testing.T) {
 		t.Parallel()
