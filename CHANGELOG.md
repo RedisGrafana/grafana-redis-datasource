@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.1.2 (2023-06-12)
+
+### Bug fixes
+
+- Fix issue connecting to Redis 7 cluster instances (#)
+
 ## 2.1.1 (2022-01-18)
 
 ### Features / Enhancements
