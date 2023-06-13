@@ -139,7 +139,7 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 					case float64:
 						fields[i] = data.NewField(i, nil, []float64{})
 						for j := 0; j < rowscount-1; j++ {
-							fields[i].Append(0)
+							fields[i].Append(float64(0))
 						}
 					}
 					frame.Fields = append(frame.Fields, fields[i])

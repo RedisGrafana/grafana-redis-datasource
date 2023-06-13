@@ -160,6 +160,55 @@ func TestQueryJsonObjKeys(t *testing.T) {
 func TestQueryJsonGet(t *testing.T) {
 	t.Parallel()
 
+	t.Run("Should return four strings in frame", func(t *testing.T) {
+		t.Parallel()
+
+		client := testClient{rcv: "[[],\"gin\",\"rum\",\"whiskey\"]"}
+
+		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "$.num"}, &client)
+
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, resp.Frames[0].Fields[0].Len(), 4)
+		require.Equal(t, resp.Frames[0].Fields[0].At(0), "")
+		require.Equal(t, resp.Frames[0].Fields[0].At(1), "gin")
+		require.Equal(t, resp.Frames[0].Fields[0].At(2), "rum")
+		require.Equal(t, resp.Frames[0].Fields[0].At(3), "whiskey")
+	})
+
+	t.Run("Should return four booleans in frame", func(t *testing.T) {
+		t.Parallel()
+
+		client := testClient{rcv: "[[],true,false,true]"}
+
+		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "$.num"}, &client)
+
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, resp.Frames[0].Fields[0].Len(), 4)
+		require.Equal(t, resp.Frames[0].Fields[0].At(0), false)
+		require.Equal(t, resp.Frames[0].Fields[0].At(1), true)
+		require.Equal(t, resp.Frames[0].Fields[0].At(2), false)
+		require.Equal(t, resp.Frames[0].Fields[0].At(3), true)
+	})
+
+	t.Run("Should return four float64 in frame", func(t *testing.T) {
+		t.Parallel()
+
+		client := testClient{rcv: "[[],42,43,44]"}
+
+		resp := queryJsonGet(queryModel{Command: models.JsonGet, Key: "test:json", Path: "$.num"}, &client)
+
+		require.Len(t, resp.Frames, 1)
+		require.Len(t, resp.Frames[0].Fields, 1)
+		require.Equal(t, resp.Frames[0].Fields[0].Len(), 4)
+		require.Equal(t, resp.Frames[0].Fields[0].At(0), float64(0))
+		require.Equal(t, resp.Frames[0].Fields[0].At(1), float64(42))
+		require.Equal(t, resp.Frames[0].Fields[0].At(2), float64(43))
+		require.Equal(t, resp.Frames[0].Fields[0].At(3), float64(44))
+
+	})
+
 	t.Run("Should return a single float64 in frame", func(t *testing.T) {
 		t.Parallel()
 
