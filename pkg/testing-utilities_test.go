@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"reflect"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -213,7 +214,7 @@ func (client *panickingClient) RunBatchFlatCmd(commands []flatCommandArgs) error
 /**
  * Get
  */
-func (im *fakeInstanceManager) Get(pluginContext backend.PluginContext) (instancemgmt.Instance, error) {
+func (im *fakeInstanceManager) Get(ctx context.Context, pluginContext backend.PluginContext) (instancemgmt.Instance, error) {
 	args := im.Called(pluginContext)
 	return args.Get(0), args.Error(1)
 }
@@ -221,7 +222,7 @@ func (im *fakeInstanceManager) Get(pluginContext backend.PluginContext) (instanc
 /**
  * Do
  */
-func (im *fakeInstanceManager) Do(pluginContext backend.PluginContext, fn instancemgmt.InstanceCallbackFunc) error {
+func (im *fakeInstanceManager) Do(ctx context.Context, pluginContext backend.PluginContext, fn instancemgmt.InstanceCallbackFunc) error {
 	args := im.Called(pluginContext, fn)
 	return args.Error(0)
 }
