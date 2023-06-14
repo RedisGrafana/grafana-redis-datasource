@@ -57,6 +57,19 @@ export enum AggregationValue {
   SUM = 'sum',
 }
 
+export enum ReducerValue {
+  AVG = 'avg',
+  SUM = 'sum',
+  MIN = 'min',
+  MAX = 'max',
+  RANGE = 'range',
+  COUNT = 'count',
+  STDP = 'std.p',
+  STDS = 'std.s',
+  VARP = 'var.p',
+  VARS = 'var.s',
+}
+
 /**
  * Aggregations
  */
@@ -68,4 +81,20 @@ export const Aggregations: Array<SelectableValue<AggregationValue>> = [
   { label: 'Min', description: 'Minimum', value: AggregationValue.MIN },
   { label: 'Range', description: 'Diff between maximum and minimum in the bucket', value: AggregationValue.RANGE },
   { label: 'Sum', description: 'Summation', value: AggregationValue.SUM },
+];
+
+/**
+ * Reducers
+ */
+export const Reducers: Array<SelectableValue<ReducerValue>> = [
+  { label: 'Avg', description: 'Arithmetic mean of all non-NaN values' },
+  { label: 'Sum', description: 'Sum of all non-NaN values' },
+  { label: 'Min', description: 'Minimum non-NaN value' },
+  { label: 'Max', description: 'Maximum non-NaN value' },
+  { label: 'Range', description: 'Difference between maximum non-Nan value and minimum non-NaN value' },
+  { label: 'Count', description: 'Number of non-NaN values' },
+  { label: 'Std Population', description: 'Population standard deviation of all non-NaN values' },
+  { label: 'Std Sample', description: 'Sample standard deviation of all non-NaN values' },
+  { label: 'Var Population', description: 'Population variance of all non-NaN values' },
+  { label: 'Var Sample', description: 'Sample variance of all non-NaN values' },
 ];

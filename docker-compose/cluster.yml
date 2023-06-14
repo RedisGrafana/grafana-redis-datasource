@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 networks:
   cluster-network:
@@ -46,7 +46,7 @@ services:
     container_name: redis3
     build:
       context: cluster
-    entrypoint: ["/usr/local/bin/startup_cluster.sh"]
+    entrypoint: ['/usr/local/bin/startup_cluster.sh']
     ports:
       - '6381:6379'
       - '16379'

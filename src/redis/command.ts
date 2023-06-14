@@ -75,4 +75,6 @@ export const CommandParameters = {
   zrangeQuery: [Redis.ZRANGE],
   path: [RedisJson.TYPE, RedisJson.OBJKEYS, RedisJson.GET, RedisJson.OBJLEN, RedisJson.ARRLEN],
   pyFunction: [RedisGears.PYEXECUTE],
+  tsGroupBy: [RedisTimeSeries.MRANGE],
+  tsReducer: [RedisTimeSeries.MRANGE],
 };
