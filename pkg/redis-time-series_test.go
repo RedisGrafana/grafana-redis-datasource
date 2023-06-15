@@ -347,6 +347,47 @@ func TestQueryTsMRange(t *testing.T) {
 			nil,
 		},
 		{
+			"test groupby/reduction",
+			queryModel{Command: models.TimeSeriesMRange, TsReducer: "SUM", TsGroupByLabel: "reduceLabel"},
+			[]interface{}{
+				[]interface{}{
+					[]byte("foo=bar"),
+					[]interface{}{
+						[]interface{}{
+							[]byte("foo"),
+							[]byte("bar"),
+						},
+						[]interface{}{
+							[]byte("__reducer__"),
+							[]byte("sum"),
+						},
+						[]interface{}{
+							[]byte("__source__"),
+							[]byte("ts:1,ts:2,ts:3"),
+						},
+					},
+					[]interface{}{
+						[]interface{}{int64(1686835010300), []byte("2102")},
+						[]interface{}{int64(1686835011312), []byte("1882")},
+						[]interface{}{int64(1686835013348), []byte("2378")},
+						[]interface{}{int64(1686835014362), []byte("3007")},
+					},
+				},
+			},
+			1686835010300,
+			1686835014362,
+			2,
+			4,
+			[]valueToCheckInResponse{
+				{frameIndex: 0, fieldIndex: 0, rowIndex: 0, value: time.Unix(0, 1686835010300*int64(time.Millisecond))},
+				{frameIndex: 0, fieldIndex: 1, rowIndex: 0, value: float64(2102)},
+			},
+			"foo=bar",
+			"",
+			"",
+			nil,
+		},
+		{
 			"should return error if result is string",
 			queryModel{Command: models.TimeSeriesMRange, Key: "test1", Filter: "filter"},
 			interface{}("someString"),

@@ -445,6 +445,16 @@ describe('QueryEditor', () => {
         queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {
+        name: 'tsGroupByLabel',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onTsGroupByLabelChange;
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.TIMESERIES, command: RedisTimeSeries.MRANGE },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
         name: 'zrangeQuery',
         getComponent: (wrapper: ShallowComponent) =>
           wrapper.findWhere((node) => {

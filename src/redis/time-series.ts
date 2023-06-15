@@ -87,14 +87,22 @@ export const Aggregations: Array<SelectableValue<AggregationValue>> = [
  * Reducers
  */
 export const Reducers: Array<SelectableValue<ReducerValue>> = [
-  { label: 'Avg', description: 'Arithmetic mean of all non-NaN values' },
-  { label: 'Sum', description: 'Sum of all non-NaN values' },
-  { label: 'Min', description: 'Minimum non-NaN value' },
-  { label: 'Max', description: 'Maximum non-NaN value' },
-  { label: 'Range', description: 'Difference between maximum non-Nan value and minimum non-NaN value' },
-  { label: 'Count', description: 'Number of non-NaN values' },
-  { label: 'Std Population', description: 'Population standard deviation of all non-NaN values' },
-  { label: 'Std Sample', description: 'Sample standard deviation of all non-NaN values' },
-  { label: 'Var Population', description: 'Population variance of all non-NaN values' },
-  { label: 'Var Sample', description: 'Sample variance of all non-NaN values' },
+  { label: 'Avg', description: 'Arithmetic mean of all non-NaN values', value: ReducerValue.AVG },
+  { label: 'Sum', description: 'Sum of all non-NaN values', value: ReducerValue.SUM },
+  { label: 'Min', description: 'Minimum non-NaN value', value: ReducerValue.MIN },
+  { label: 'Max', description: 'Maximum non-NaN value', value: ReducerValue.MAX },
+  {
+    label: 'Range',
+    description: 'Difference between maximum non-Nan value and minimum non-NaN value',
+    value: ReducerValue.RANGE,
+  },
+  { label: 'Count', description: 'Number of non-NaN values', value: ReducerValue.COUNT },
+  {
+    label: 'Std Population',
+    description: 'Population standard deviation of all non-NaN values',
+    value: ReducerValue.STDP,
+  },
+  { label: 'Std Sample', description: 'Sample standard deviation of all non-NaN values', value: ReducerValue.STDS },
+  { label: 'Var Population', description: 'Population variance of all non-NaN values', value: ReducerValue.VARP },
+  { label: 'Var Sample', description: 'Sample variance of all non-NaN values', value: ReducerValue.VARS },
 ];

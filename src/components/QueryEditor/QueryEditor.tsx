@@ -607,7 +607,6 @@ export class QueryEditor extends PureComponent<Props> {
               />
               {tsGroupByLabel && (
                 <Select
-                  defaultValue={Reducers[0]}
                   options={Reducers}
                   width={30}
                   onChange={this.onTsReducerChange}
