@@ -2,16 +2,14 @@ version: '3.4'
 
 services:
   redis:
-    container_name: redis
-    image: redis/redis-stack-server
+    container_name: redismod
+    image: redislabs/redismod:latest
     ports:
       - '6379:6379'
 
   grafana:
     container_name: grafana
-    image: grafana/grafana:8.3.3
-    links:
-      - redis
+    image: grafana/grafana:latest
     ports:
       - '3000:3000'
     environment:
@@ -21,8 +19,8 @@ services:
       - GF_ENABLE_GZIP=true
       - GF_USERS_DEFAULT_THEME=light
       - GF_DEFAULT_APP_MODE=development
+      - GF_INSTALL_PLUGINS=redis-datasource
     volumes:
-      - ./dist:/var/lib/grafana/plugins/redis-datasource
-      # - ./provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources
       # Uncomment to preserve Grafana configuration
       # - ./data:/var/lib/grafana
