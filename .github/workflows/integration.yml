@@ -5,7 +5,7 @@ on:
     - cron: '0 1 * * *' # run at 1 AM UTC
 
   workflow_dispatch:
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -82,3 +82,9 @@ jobs:
         with:
           version: latest
           args: integration
+
+      - name: Run cluster integration tests
+        uses: magefile/mage-action@v1
+        with:
+          version: latest
+          args: cluster
