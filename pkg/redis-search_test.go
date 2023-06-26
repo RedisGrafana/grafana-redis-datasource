@@ -41,6 +41,27 @@ func TestQueryFtSearch(t *testing.T) {
 		},
 	}
 
+	sparseHashRcv := []interface{}{
+		make([]uint8, 1),
+		[]uint8("test:1"),
+		[]interface{}{
+			[]uint8("age"),
+			[]uint8("34"),
+		},
+		[]uint8("test:2"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("foo"),
+			[]uint8("age"),
+			[]uint8("38"),
+		},
+		[]uint8("test:3"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("baz"),
+		},
+	}
+
 	commonHashCheck := []valueToCheckByLabelInResponse{
 		{frameIndex: 0, fieldName: "key_name", rowIndex: 0, value: "test:1"},
 		{frameIndex: 0, fieldName: "name", rowIndex: 0, value: "steve"},
@@ -54,6 +75,18 @@ func TestQueryFtSearch(t *testing.T) {
 		{frameIndex: 0, fieldName: "key_name", rowIndex: 1, value: "test:2"},
 		{frameIndex: 0, fieldName: "name", rowIndex: 1, value: "foo"},
 		{frameIndex: 0, fieldName: "age", rowIndex: 1, value: "38"},
+	}
+
+	sparseHashCheck := []valueToCheckByLabelInResponse{
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 0, value: "test:1"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 0, value: ""},
+		{frameIndex: 0, fieldName: "age", rowIndex: 0, value: "34"},
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 1, value: "test:2"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 1, value: "foo"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 1, value: "38"},
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 2, value: "test:3"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 2, value: "baz"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 2, value: ""},
 	}
 
 	tests := []struct {
@@ -74,6 +107,15 @@ func TestQueryFtSearch(t *testing.T) {
 			fieldsCount:                   3,
 			rowsPerField:                  1,
 			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*"},
+			expectedCmd:                   "ft.search",
+		}, {
+			name:                          "sparse search multipart response",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*"},
+			rcv:                           sparseHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: sparseHashCheck,
 			expectedArgs:                  []string{"test", "*"},
 			expectedCmd:                   "ft.search",
 		}, {
