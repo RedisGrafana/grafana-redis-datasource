@@ -3,7 +3,17 @@ import { RedisGraph } from 'redis/graph';
 import { css } from '@emotion/css';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { getDataSourceSrv } from '@grafana/runtime';
-import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, Select, TextArea } from '@grafana/ui';
+import {
+  Button,
+  FieldArray,
+  Form,
+  InlineFormLabel,
+  Input,
+  LegacyForms,
+  RadioButtonGroup,
+  Select,
+  TextArea,
+} from '@grafana/ui';
 import { StreamingDataType, StreamingDataTypes } from '../../constants';
 import { DataSource } from '../../datasource';
 import {
@@ -25,6 +35,8 @@ import {
   ZRangeQueryValue,
 } from '../../redis';
 import { RedisDataSourceOptions } from '../../types';
+import { RediSearch, SortDirection, SortDirectionValue } from '../../redis/search';
+import { FieldValuesContainer } from '../../redis/fieldValuesContainer';
 
 /**
  * Form Field
@@ -98,6 +110,15 @@ export class QueryEditor extends PureComponent<Props> {
     this.props.onChange({ ...this.props.query, [name]: event.currentTarget.checked });
   };
 
+  createFieldArrayHandler = (name: 'returnFields') => (event: React.SyntheticEvent<HTMLInputElement>) => {
+    const index = Number(event.currentTarget.name.split(':', 2)[1]);
+    if (!this.props.query[name]) {
+      this.props.query[name] = [];
+    }
+
+    this.props.query[name]![index] = event.currentTarget.value;
+  };
+
   /**
    * Key name change
    */
@@ -107,6 +128,11 @@ export class QueryEditor extends PureComponent<Props> {
    * Query change
    */
   onQueryChange = this.createTextareaFieldHandler('query');
+
+  /**
+   * searchQuery change
+   */
+  onSearchQueryChange = this.createTextareaFieldHandler('searchQuery');
 
   /**
    * Filter change
@@ -139,6 +165,11 @@ export class QueryEditor extends PureComponent<Props> {
   onValueChange = this.createTextFieldHandler('value');
 
   /**
+   * sortBy change
+   */
+  onSortByChange = this.createTextFieldHandler('sortBy');
+
+  /**
    * Command change
    */
   onCommandChange = this.createSelectFieldHandler<string>('command');
@@ -169,6 +200,11 @@ export class QueryEditor extends PureComponent<Props> {
   onZRangeQueryChange = this.createSelectFieldHandler<ZRangeQueryValue>('zrangeQuery');
 
   /**
+   * FT.SEARCH Sort By
+   */
+  onSortDirectionChange = this.createSelectFieldHandler<SortDirectionValue>('sortDirection');
+
+  /**
    * Info section change
    */
   onInfoSectionChange = this.createSelectFieldHandler<InfoSectionValue>('section');
@@ -187,6 +223,11 @@ export class QueryEditor extends PureComponent<Props> {
    * Count change
    */
   onCountChange = this.createNumberFieldHandler('count');
+
+  /**
+   * Count change
+   */
+  onOffsetChange = this.createNumberFieldHandler('offset');
 
   /**
    * Samples change
@@ -248,10 +289,16 @@ export class QueryEditor extends PureComponent<Props> {
    */
   onStreamingDataTypeChange = this.createRedioButtonFieldHandler<StreamingDataType>('streamingDataType');
 
+  onReturnFieldChange = this.createFieldArrayHandler('returnFields');
+
   /**
    * Render Editor
    */
   render() {
+    const defaultValues: FieldValuesContainer = {
+      fieldArray: [''],
+    };
+
     const {
       keyName,
       aggregation,
@@ -265,6 +312,10 @@ export class QueryEditor extends PureComponent<Props> {
       path,
       value,
       query,
+      searchQuery,
+      offset,
+      sortDirection,
+      sortBy,
       type,
       section,
       size,
@@ -456,6 +507,93 @@ export class QueryEditor extends PureComponent<Props> {
               Path
             </InlineFormLabel>
             <TextArea value={path} className="gf-form-input" onChange={this.onPathChange} />
+          </div>
+        )}
+
+        {command && CommandParameters.searchQuery.includes(command as RediSearch) && (
+          <div className="gf-form">
+            <InlineFormLabel tooltip="The RediSearch Query to issue to the index." width={10}>
+              Query
+            </InlineFormLabel>
+            <TextArea value={searchQuery} className="gf-form-input" onChange={this.onSearchQueryChange} />
+          </div>
+        )}
+
+        {command && CommandParameters.returnFields.includes(command as RediSearch) && (
+          <Form id="returnFieldsForm" onSubmit={() => true} defaultValues={defaultValues}>
+            {({ control }) => (
+              <div className="gf-form">
+                <InlineFormLabel
+                  tooltip="Add return Fields to query to minimize what needs to be pulled back from Redis."
+                  width={10}
+                >
+                  Return Fields
+                </InlineFormLabel>
+                <FieldArray name="returnFields" control={control}>
+                  {({ fields, append }) => (
+                    <>
+                      <Button id="addReturnFieldButton" onClick={() => append({})}>
+                        Add Return Field
+                      </Button>
+                      <div id="returnFieldInputs">
+                        {fields.map((field, index) => (
+                          <Input name={`returnField:${index}`} key={field.id} onChange={this.onReturnFieldChange} />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </FieldArray>
+              </div>
+            )}
+          </Form>
+        )}
+
+        {command && CommandParameters.offset.includes(command as RediSearch) && (
+          <FormField
+            labelWidth={8}
+            inputWidth={10}
+            value={offset}
+            type="number"
+            onChange={this.onOffsetChange}
+            label="Offset"
+            defaultValue="0"
+          />
+        )}
+
+        {command && CommandParameters.limit.includes(command as RediSearch) && (
+          <FormField
+            labelWidth={8}
+            inputWidth={10}
+            value={count}
+            type="number"
+            onChange={this.onCountChange}
+            label="Limit"
+            defaultValue="10"
+          />
+        )}
+
+        {command && CommandParameters.sortBy.includes(command as RediSearch) && (
+          <div className="gf-form">
+            <InlineFormLabel width={8}>Sort Direction</InlineFormLabel>
+            <Select
+              onChange={this.onSortDirectionChange}
+              options={SortDirection}
+              width={20}
+              value={sortDirection}
+              defaultValue={SortDirectionValue.NONE}
+            />
+            {sortDirection && sortDirection !== SortDirectionValue.NONE && (
+              <div>
+                <FormField
+                  labelWidth={8}
+                  inputWidth={10}
+                  value={sortBy}
+                  onChange={this.onSortByChange}
+                  type="string"
+                  label={'Sort By'}
+                />
+              </div>
+            )}
           </div>
         )}
 
