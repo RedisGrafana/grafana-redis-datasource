@@ -55,6 +55,12 @@ export enum AggregationValue {
   MIN = 'min',
   RANGE = 'range',
   SUM = 'sum',
+  FIRST = 'first',
+  LAST = 'last',
+  STDP = 'std.p',
+  STDS = 'std.s',
+  VARP = 'var.p',
+  VARS = 'var.s',
 }
 
 export enum ReducerValue {
@@ -81,6 +87,12 @@ export const Aggregations: Array<SelectableValue<AggregationValue>> = [
   { label: 'Min', description: 'Minimum', value: AggregationValue.MIN },
   { label: 'Range', description: 'Diff between maximum and minimum in the bucket', value: AggregationValue.RANGE },
   { label: 'Sum', description: 'Summation', value: AggregationValue.SUM },
+  { label: 'First', description: 'The value with the lowest timestamp in the bucket', value: AggregationValue.FIRST },
+  { label: 'Last', description: 'The value with the highest timestamp in the bucket', value: AggregationValue.LAST },
+  { label: 'Std.p', description: 'Population standard deviation of the values', value: AggregationValue.STDP },
+  { label: 'Std.s', description: 'Sample standard deviation of the values', value: AggregationValue.STDS },
+  { label: 'Var.p', description: 'Population variance of the values', value: AggregationValue.VARP },
+  { label: 'Var.s', description: 'Sample variance of the values', value: AggregationValue.VARS },
 ];
 
 /**
