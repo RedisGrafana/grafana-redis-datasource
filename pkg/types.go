@@ -69,6 +69,8 @@ type queryModel struct {
 	Max               string   `json:"max"`
 	ZRangeQuery       string   `json:"zrangeQuery"`
 	Path              string   `json:"path"`
+	TsReducer         string   `json:"tsReducer"`
+	TsGroupByLabel    string   `json:"tsGroupByLabel"`
 	SearchQuery       string   `json:"searchQuery"`
 	SortBy            string   `json:"sortBy"`
 	SortDirection     string   `json:"sortDirection"`

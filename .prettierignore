@@ -1,9 +1,11 @@
 .DS_Store
+.dockerignore
 .gitkeep
 .gitattributes
 .gitignore
 .editorconfig
 .prettierignore
+Dockerfile
 LICENSE
 yarn.lock
 go.mod
@@ -12,6 +14,7 @@ go.sum
 .github
 
 # Folders
+docker-compose
 node_modules
 coverage
 data

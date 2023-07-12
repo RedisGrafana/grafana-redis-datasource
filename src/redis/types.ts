@@ -1,4 +1,4 @@
-import { ZRangeQueryValue } from 'redis';
+import { ReducerValue, ZRangeQueryValue } from 'redis';
 import { DataQuery } from '@grafana/data';
 import { StreamingDataType } from '../constants';
 import { InfoSectionValue } from './info';
@@ -96,6 +96,18 @@ export interface RedisQuery extends DataQuery {
    * @type {AggregationValue}
    */
   aggregation?: AggregationValue;
+
+  /**
+   * The reduction to run to sum-up a group
+   *
+   * @type {ReducerValue}
+   */
+  tsReducer?: ReducerValue;
+
+  /**
+   * The label to group time-series by in an TS.MRANGE.
+   */
+  tsGroupByLabel?: string;
 
   /**
    * ZRANGE Query

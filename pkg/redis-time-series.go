@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -97,12 +98,24 @@ func queryTsMRange(from int64, to int64, qm queryModel, client redisClient) back
 		return response
 	}
 
+	var args []interface{}
+	//args := []interface{}{strconv.FormatInt(from, 10), to}
+
 	// Execute command
 	if qm.Aggregation != "" {
-		err = client.RunFlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter)
+		args = []interface{}{to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter}
 	} else {
-		err = client.RunFlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), to, "WITHLABELS", "FILTER", filter)
+		args = []interface{}{to, qm.Bucket, "WITHLABELS", "FILTER", filter}
 	}
+
+	if qm.TsGroupByLabel != "" {
+		if qm.TsReducer == "" {
+			return errorHandler(response, errors.New("reducer not provided for groups, please provide a reducer (e.g. avg, sum) and try again"))
+		}
+		args = append(args, "GROUPBY", qm.TsGroupByLabel, "REDUCE", qm.TsReducer)
+	}
+
+	err = client.RunFlatCmd(&result, qm.Command, strconv.FormatInt(from, 10), args...)
 
 	// Check error
 	if err != nil {

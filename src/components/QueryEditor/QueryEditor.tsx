@@ -31,6 +31,8 @@ import {
   RedisJson,
   RedisQuery,
   RedisTimeSeries,
+  Reducers,
+  ReducerValue,
   ZRangeQuery,
   ZRangeQueryValue,
 } from '../../redis';
@@ -190,6 +192,16 @@ export class QueryEditor extends PureComponent<Props> {
   };
 
   /**
+   * Ts Reducer Change
+   */
+  onTsReducerChange = this.createSelectFieldHandler<ReducerValue>('tsReducer');
+
+  /**
+   * Group By Change
+   */
+  onTsGroupByLabelChange = this.createTextFieldHandler('tsGroupByLabel');
+
+  /**
    * Aggregation change
    */
   onAggregationChange = this.createSelectFieldHandler<AggregationValue>('aggregation');
@@ -332,6 +344,8 @@ export class QueryEditor extends PureComponent<Props> {
       streamingInterval,
       streamingCapacity,
       streamingDataType,
+      tsGroupByLabel,
+      tsReducer,
     } = this.props.query;
     const { onRunQuery, datasource } = this.props;
 
@@ -712,6 +726,30 @@ export class QueryEditor extends PureComponent<Props> {
                   tooltip="If checked, the datasource will fill missing intervals."
                   checked={fill || false}
                   onChange={this.onFillChange}
+                />
+              )}
+            </div>
+          )}
+
+        {type === QueryTypeValue.TIMESERIES &&
+          command &&
+          CommandParameters.tsGroupBy.includes(command as RedisTimeSeries) && (
+            <div className="gf-form">
+              <FormField
+                labelWidth={8}
+                inputWidth={10}
+                value={tsGroupByLabel}
+                onChange={this.onTsGroupByLabelChange}
+                label="Group By"
+                tooltip="The label to group your time-series by for your reduction"
+              />
+              {tsGroupByLabel && (
+                <Select
+                  options={Reducers}
+                  width={30}
+                  onChange={this.onTsReducerChange}
+                  value={tsReducer}
+                  menuPlacement="bottom"
                 />
               )}
             </div>
