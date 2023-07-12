@@ -2,8 +2,7 @@ version: '3.4'
 
 services:
   redis:
-    container_name: redismod
-    image: redislabs/redismod:latest
+    image: redis/redis-stack-server:latest
     ports:
       - '6379:6379'
 

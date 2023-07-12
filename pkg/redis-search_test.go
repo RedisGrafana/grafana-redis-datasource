@@ -2,11 +2,216 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/redisgrafana/grafana-redis-datasource/pkg/models"
 	"github.com/stretchr/testify/require"
 )
+
+func TestQueryFtSearch(t *testing.T) {
+	t.Parallel()
+
+	commonHashRcv := []interface{}{
+		make([]uint8, 1),
+		[]uint8("test:1"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("steve"),
+			[]uint8("age"),
+			[]uint8("34"),
+		},
+	}
+
+	multiHashRcv := []interface{}{
+		make([]uint8, 1),
+		[]uint8("test:1"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("steve"),
+			[]uint8("age"),
+			[]uint8("34"),
+		},
+		[]uint8("test:2"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("foo"),
+			[]uint8("age"),
+			[]uint8("38"),
+		},
+	}
+
+	sparseHashRcv := []interface{}{
+		make([]uint8, 1),
+		[]uint8("test:1"),
+		[]interface{}{
+			[]uint8("age"),
+			[]uint8("34"),
+		},
+		[]uint8("test:2"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("foo"),
+			[]uint8("age"),
+			[]uint8("38"),
+		},
+		[]uint8("test:3"),
+		[]interface{}{
+			[]uint8("name"),
+			[]uint8("baz"),
+		},
+	}
+
+	commonHashCheck := []valueToCheckByLabelInResponse{
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 0, value: "test:1"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 0, value: "steve"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 0, value: "34"},
+	}
+
+	multiHashCheck := []valueToCheckByLabelInResponse{
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 0, value: "test:1"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 0, value: "steve"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 0, value: "34"},
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 1, value: "test:2"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 1, value: "foo"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 1, value: "38"},
+	}
+
+	sparseHashCheck := []valueToCheckByLabelInResponse{
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 0, value: "test:1"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 0, value: ""},
+		{frameIndex: 0, fieldName: "age", rowIndex: 0, value: "34"},
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 1, value: "test:2"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 1, value: "foo"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 1, value: "38"},
+		{frameIndex: 0, fieldName: "key_name", rowIndex: 2, value: "test:3"},
+		{frameIndex: 0, fieldName: "name", rowIndex: 2, value: "baz"},
+		{frameIndex: 0, fieldName: "age", rowIndex: 2, value: ""},
+	}
+
+	tests := []struct {
+		name                          string
+		qm                            queryModel
+		rcv                           interface{}
+		fieldsCount                   int
+		rowsPerField                  int
+		valueToCheckByLabelInResponse []valueToCheckByLabelInResponse
+		expectedArgs                  []string
+		expectedCmd                   string
+		err                           error
+	}{
+		{
+			name:                          "simple search",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*"},
+			expectedCmd:                   "ft.search",
+		}, {
+			name:                          "sparse search multipart response",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*"},
+			rcv:                           sparseHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: sparseHashCheck,
+			expectedArgs:                  []string{"test", "*"},
+			expectedCmd:                   "ft.search",
+		}, {
+			name:                          "simple search multipart response",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*"},
+			rcv:                           multiHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: multiHashCheck,
+			expectedArgs:                  []string{"test", "*"},
+			expectedCmd:                   "ft.search",
+		}, {
+			name:                          "simple no SearchQuery",
+			qm:                            queryModel{Command: models.Search, Key: "test"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*"},
+			expectedCmd:                   "ft.search",
+		}, {
+			name:                          "search with offset",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", Offset: 50},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "LIMIT", "50", "10"},
+			expectedCmd:                   "ft.search",
+		},
+		{
+			name:                          "search with count",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", Count: 15},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "LIMIT", "0", "15"},
+			expectedCmd:                   "ft.search",
+		},
+		{
+			name:                          "search with returns",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", ReturnFields: []string{"foo", "bar", "baz"}},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "RETURN", "3", "foo", "bar", "baz"},
+			expectedCmd:                   "ft.search",
+		},
+		{
+			name:                          "search with SortBy",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", SortDirection: "DESC", SortBy: "foo"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			expectedArgs:                  []string{"test", "*", "SORTBY", "foo", "DESC"},
+			expectedCmd:                   "ft.search",
+		},
+		{
+			name:                          "Try with error",
+			qm:                            queryModel{Command: models.Search, Key: "test", SearchQuery: "*", SortDirection: "DESC", SortBy: "foo"},
+			rcv:                           commonHashRcv,
+			fieldsCount:                   3,
+			rowsPerField:                  1,
+			valueToCheckByLabelInResponse: commonHashCheck,
+			err:                           errors.New("an error occurred"),
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			client := testClient{rcv: tt.rcv, err: tt.err, expectedArgs: tt.expectedArgs, expectedCmd: tt.expectedCmd}
+
+			response := queryFtSearch(tt.qm, &client)
+
+			if tt.err != nil {
+				require.EqualError(t, response.Error, tt.err.Error(), "Should set error to response if failed")
+				require.Nil(t, response.Frames, "No frames should be created if failed")
+			} else if tt.valueToCheckByLabelInResponse != nil {
+				for _, value := range tt.valueToCheckByLabelInResponse {
+					for _, field := range response.Frames[value.frameIndex].Fields {
+						if field.Name == value.fieldName {
+							require.Nil(t, response.Error, fmt.Sprintf("Error:\n%s", response.Error))
+							require.Equalf(t, value.value, field.At(value.rowIndex), "Invalid value at Frame[%v]:Field[Name:%v]:Row[%v]", value.frameIndex, value.fieldName, value.rowIndex)
+						}
+					}
+				}
+			}
+		})
+	}
+}
 
 /**
  * FT.INFO

@@ -43,6 +43,7 @@ export const CommandParameters = {
     Redis.XINFO_STREAM,
     Redis.XLEN,
     RediSearch.INFO,
+    RediSearch.SEARCH,
     Redis.XRANGE,
     Redis.XREVRANGE,
     RedisGraph.QUERY,
@@ -75,4 +76,9 @@ export const CommandParameters = {
   zrangeQuery: [Redis.ZRANGE],
   path: [RedisJson.TYPE, RedisJson.OBJKEYS, RedisJson.GET, RedisJson.OBJLEN, RedisJson.ARRLEN],
   pyFunction: [RedisGears.PYEXECUTE],
+  searchQuery: [RediSearch.SEARCH],
+  offset: [RediSearch.SEARCH],
+  returnFields: [RediSearch.SEARCH],
+  limit: [RediSearch.SEARCH],
+  sortBy: [RediSearch.SEARCH],
 };

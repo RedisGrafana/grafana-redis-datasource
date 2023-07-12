@@ -102,6 +102,9 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	case models.SearchInfo:
 		return queryFtInfo(qm, client)
 
+	case models.Search:
+		return queryFtSearch(qm, client)
+
 	/**
 	 * Custom commands
 	 */

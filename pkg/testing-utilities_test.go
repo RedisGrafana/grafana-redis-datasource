@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
@@ -13,11 +14,13 @@ import (
  * Test client
  */
 type testClient struct {
-	rcv        interface{}
-	batchRcv   [][]interface{}
-	batchErr   []error
-	err        error
-	batchCalls int
+	rcv          interface{}
+	batchRcv     [][]interface{}
+	batchErr     []error
+	expectedArgs []string
+	expectedCmd  string
+	err          error
+	batchCalls   int
 	mock.Mock
 }
 
@@ -72,6 +75,16 @@ func (client *testClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...i
 func (client *testClient) RunCmd(rcv interface{}, cmd string, args ...string) error {
 	if client.err != nil {
 		return client.err
+	}
+
+	if client.expectedArgs != nil {
+		if !reflect.DeepEqual(args, client.expectedArgs) {
+			return fmt.Errorf("expected args did not match actuall args\nExpected:%s\nActual:%s\n", client.expectedArgs, args)
+		}
+	}
+
+	if client.expectedCmd != "" && client.expectedCmd != cmd {
+		return fmt.Errorf("incorrect command, Expected:%s - Actual: %s", client.expectedCmd, cmd)
 	}
 
 	assignReceiver(rcv, client.rcv)
