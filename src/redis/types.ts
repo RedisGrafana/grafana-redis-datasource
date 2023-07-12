@@ -4,6 +4,7 @@ import { StreamingDataType } from '../constants';
 import { InfoSectionValue } from './info';
 import { QueryTypeValue } from './query';
 import { AggregationValue } from './time-series';
+import { SortDirectionValue } from './search';
 
 /**
  * Redis Query
@@ -22,6 +23,35 @@ export interface RedisQuery extends DataQuery {
    * @type {string}
    */
   query?: string;
+
+  /**
+   * Query for Search Command
+   *
+   * @type {string}
+   */
+  searchQuery?: string;
+
+  /**
+   * search return fields
+   *
+   * @type {string[]}
+   */
+  returnFields?: string[];
+
+  /**
+   * offset into result set to start at
+   */
+  offset?: number;
+
+  /**
+   * The direction to sort.
+   */
+  sortDirection?: SortDirectionValue;
+
+  /**
+   * The value to sort by
+   */
+  sortBy?: string;
 
   /**
    * Field

@@ -1,4 +1,4 @@
-import { shallow, ShallowWrapper } from 'enzyme';
+import { configure, shallow, ShallowWrapper, mount } from 'enzyme';
 import React from 'react';
 import { RedisGraph } from 'redis/graph';
 import { SelectableValue } from '@grafana/data';
@@ -14,6 +14,11 @@ import {
 } from '../../redis';
 import { getQuery } from '../../tests/utils';
 import { QueryEditor } from './QueryEditor';
+import { RediSearch } from '../../redis/search';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import act from 'react-dom/test-utils';
+
+configure({ adapter: new Adapter() });
 
 type ShallowComponent = ShallowWrapper<QueryEditor['props'], QueryEditor['state'], QueryEditor>;
 
@@ -121,6 +126,38 @@ describe('QueryEditor', () => {
         });
       });
     });
+
+  describe('Return Fields', () => {
+    const onChange = jest.fn();
+
+    const query = { refId: '', type: QueryTypeValue.SEARCH, command: RediSearch.SEARCH };
+    const component = mount<QueryEditor>(
+      <QueryEditor datasource={{} as any} query={query} onRunQuery={onRunQuery} onChange={onChange} />
+    );
+
+    it('should click and add an input', () => {
+      const inputsDiv = component.find('#returnFieldInputs');
+      let input = inputsDiv.childAt(0);
+      expect(!input);
+
+      const button = component.find('#addReturnFieldButton').first();
+      button.simulate('click');
+      input = inputsDiv.childAt(0);
+      expect(input);
+    });
+
+    it('should call onReturnFieldChange successfully', () => {
+      //@ts-ignore
+      component.instance().onReturnFieldChange({ currentTarget: { name: 'returnField:0', value: 'foo' } });
+    });
+
+    it('should submit form', async () => {
+      const form = component.find('#returnFieldsForm').first();
+      await act.act(async () => {
+        form.simulate('submit');
+      });
+    });
+  });
 
   /**
    * Query Type
@@ -322,6 +359,26 @@ describe('QueryEditor', () => {
           }),
         type: 'string',
         queryWhenShown: { refId: '', type: QueryTypeValue.GRAPH, command: RedisGraph.QUERY },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'offset',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onOffsetChange;
+          }),
+        type: 'number',
+        queryWhenShown: { refId: '', type: QueryTypeValue.SEARCH, command: RediSearch.SEARCH },
+        queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
+      },
+      {
+        name: 'searchQuery',
+        getComponent: (wrapper: ShallowComponent) =>
+          wrapper.findWhere((node) => {
+            return node.prop('onChange') === wrapper.instance().onSearchQueryChange;
+          }),
+        type: 'string',
+        queryWhenShown: { refId: '', type: QueryTypeValue.SEARCH, command: RediSearch.SEARCH },
         queryWhenHidden: { refId: '', type: QueryTypeValue.REDIS, command: Redis.INFO },
       },
       {

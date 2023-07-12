@@ -52,7 +52,7 @@ func (ds *redisDatasource) QueryData(ctx context.Context, req *backend.QueryData
 	log.DefaultLogger.Debug("QueryData", "request", req)
 
 	// Get Instance
-	client, err := ds.getInstance(req.PluginContext)
+	client, err := ds.getInstance(ctx, req.PluginContext)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 	message := "Data Source health is yet to become known."
 
 	// Get Instance
-	client, err := ds.getInstance(req.PluginContext)
+	client, err := ds.getInstance(ctx, req.PluginContext)
 
 	if err != nil {
 		status = backend.HealthStatusError
@@ -165,8 +165,8 @@ func (ds *redisDatasource) CheckHealth(ctx context.Context, req *backend.CheckHe
 /**
  * Return Instance
  */
-func (ds *redisDatasource) getInstance(ctx backend.PluginContext) (redisClient, error) {
-	s, err := ds.im.Get(ctx)
+func (ds *redisDatasource) getInstance(ctx context.Context, pluginContext backend.PluginContext) (redisClient, error) {
+	s, err := ds.im.Get(ctx, pluginContext)
 
 	if err != nil {
 		return nil, err

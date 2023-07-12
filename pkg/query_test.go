@@ -40,6 +40,7 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: models.ClusterInfo}},
 		{queryModel{Command: models.ClusterNodes}},
 		{queryModel{Command: models.SearchInfo}},
+		{queryModel{Command: models.Search}},
 		{queryModel{Command: models.XInfoStream}},
 		{queryModel{Command: models.TMScan}},
 		{queryModel{Command: models.GearsPyStats}},

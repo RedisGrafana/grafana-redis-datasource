@@ -72,6 +72,7 @@ describe('TimeSeriesStreaming', () => {
     ]);
     expect(data.fields[0].name === 'value');
     expect(data.fields[0].type === FieldType.number);
-    expect(data.fields[0].values.toArray() === [123]);
+    const fieldsArr = data.fields[0].values.toArray();
+    expect(fieldsArr.length === 1 && fieldsArr[0] === 123);
   });
 });

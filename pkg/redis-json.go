@@ -122,16 +122,27 @@ func queryJsonGet(qm queryModel, client redisClient) backend.DataResponse {
 
 			// Value
 			switch e := entry.(type) {
-			case string:
+			case string, bool, float64:
 				i := "Value"
 				if _, ok := fields[i]; !ok {
-					fields[i] = data.NewField(i, nil, []string{})
-					frame.Fields = append(frame.Fields, fields[i])
-
-					// Generate empty values for all previous rows
-					for j := 0; j < rowscount-1; j++ {
-						fields[i].Append("")
+					switch entry.(type) {
+					case string:
+						fields[i] = data.NewField(i, nil, []string{})
+						for j := 0; j < rowscount-1; j++ {
+							fields[i].Append("")
+						}
+					case bool:
+						fields[i] = data.NewField(i, nil, []bool{})
+						for j := 0; j < rowscount-1; j++ {
+							fields[i].Append(false)
+						}
+					case float64:
+						fields[i] = data.NewField(i, nil, []float64{})
+						for j := 0; j < rowscount-1; j++ {
+							fields[i].Append(float64(0))
+						}
 					}
+					frame.Fields = append(frame.Fields, fields[i])
 				}
 
 				// Insert value for current row
