@@ -173,11 +173,12 @@ func TestGetInstance(t *testing.T) {
 	client := &testClient{}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+	ctx := context.Background()
 
 	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, nil)
-	actualClient, err := ds.getInstance(backend.PluginContext{})
+	actualClient, err := ds.getInstance(ctx, backend.PluginContext{})
 	require.Equal(t, client, actualClient)
 	require.NoError(t, err)
 }
@@ -190,11 +191,12 @@ func TestGetInstanceError(t *testing.T) {
 	client := &testClient{}
 	im := fakeInstanceManager{}
 	ds := redisDatasource{&im}
+	ctx := context.Background()
 
 	// Instance
 	is := instanceSettings{client}
 	im.On("Get", mock.Anything).Return(&is, errors.New("some_err"))
-	_, err := ds.getInstance(backend.PluginContext{})
+	_, err := ds.getInstance(ctx, backend.PluginContext{})
 	require.EqualError(t, err, "some_err")
 }
 
