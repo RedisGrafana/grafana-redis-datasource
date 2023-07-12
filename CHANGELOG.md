@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.2.0 (2023-07-12)
+
+### Features / Enhancements
+
+- Added [FT.SEARCH](https://redis.io/commands/ft.search/) command to datasource (#297)
+- Added GROUPBY argument to [TS.MRANGE](https://redis.io/commands/ts.mrange/) command (#304)
+- Upgraded Grafana Go SDK version (#302)
+
+### Bug fixes
+
+- Fixed issue with non-string scalars in JSON.GET (#301)
+
 ## 2.1.2 (2023-06-12)
 
 ### Bug fixes
