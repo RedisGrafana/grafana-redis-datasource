@@ -207,6 +207,12 @@ export class QueryEditor extends PureComponent<Props> {
   onAggregationChange = this.createSelectFieldHandler<AggregationValue>('aggregation');
 
   /**
+   * LATEST change
+   */
+
+  onLatestChange = this.createSwitchFieldHandler('tsLatest');
+
+  /**
    * ZRANGE Query change
    */
   onZRangeQueryChange = this.createSelectFieldHandler<ZRangeQueryValue>('zrangeQuery');
@@ -346,6 +352,7 @@ export class QueryEditor extends PureComponent<Props> {
       streamingDataType,
       tsGroupByLabel,
       tsReducer,
+      tsLatest,
     } = this.props.query;
     const { onRunQuery, datasource } = this.props;
 
@@ -755,11 +762,25 @@ export class QueryEditor extends PureComponent<Props> {
             </div>
           )}
 
+        {type === QueryTypeValue.TIMESERIES &&
+          command &&
+          CommandParameters.tsLatest.includes(command as RedisTimeSeries) && (
+            <div className="gf-form">
+              <Switch
+                label="Latest"
+                labelClass="width-8"
+                tooltip="If checked, will return the latest (incomplete bucket)."
+                checked={tsLatest || false}
+                onChange={this.onLatestChange}
+              />
+            </div>
+          )}
+
         <div className="gf-form">
           <Switch
             label="Streaming"
             labelClass="width-8"
-            tooltip="If checked, the datasource will stream data."
+            tooltip="If checked, the datasource will stream datas."
             checked={streaming || false}
             onChange={this.onStreamingChange}
           />
