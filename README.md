@@ -31,10 +31,6 @@ Demo is available on [demo.volkovlabs.io](https://demo.volkovlabs.io):
 
 You can add as many data sources as you want to support multiple Redis databases. [Redis Application plugin](https://grafana.com/grafana/plugins/redis-app) helps manage various Redis Data Sources and provides Custom panels.
 
-### Redis Explorer plugin
-
-[The Redis Explorer plugin](https://grafana.com/grafana/plugins/redis-explorer-app) connects to Redis Enterprise software clusters using REST API. It provides application pages to add Redis Data Sources for managed databases and dashboards to see cluster configuration.
-
 ## Getting Started
 
 Redis Data Source can be installed from the Grafana Marketplace or use the `grafana-cli` tool to install from the command line:
