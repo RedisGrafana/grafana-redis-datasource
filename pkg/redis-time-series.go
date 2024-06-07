@@ -98,14 +98,17 @@ func queryTsMRange(from int64, to int64, qm queryModel, client redisClient) back
 		return response
 	}
 
-	var args []interface{}
-	//args := []interface{}{strconv.FormatInt(from, 10), to}
+	var args = []interface{}{to}
+
+	if qm.Latest {
+		args = append(args, "LATEST")
+	}
 
 	// Execute command
 	if qm.Aggregation != "" {
-		args = []interface{}{to, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter}
+		args = append(args, "AGGREGATION", qm.Aggregation, qm.Bucket, "WITHLABELS", "FILTER", filter)
 	} else {
-		args = []interface{}{to, qm.Bucket, "WITHLABELS", "FILTER", filter}
+		args = append(args, qm.Bucket, "WITHLABELS", "FILTER", filter)
 	}
 
 	if qm.TsGroupByLabel != "" {

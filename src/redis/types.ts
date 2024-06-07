@@ -109,6 +109,8 @@ export interface RedisQuery extends DataQuery {
    */
   tsGroupByLabel?: string;
 
+  tsLatest?: boolean;
+
   /**
    * ZRANGE Query
    *
