@@ -216,13 +216,13 @@ describe('DataSource', () => {
     type KeyType = keyof RedisQuery;
     const testedFieldKeys: KeyType[] = [
       'keyName',
-      'query', 
-      'searchQuery', 
-      'field', 
-      'filter', 
-      'legend', 
-      'value', 
-      'path', 
+      'query',
+      'searchQuery',
+      'field',
+      'filter',
+      'legend',
+      'value',
+      'path',
       'cypher'
     ];
 
