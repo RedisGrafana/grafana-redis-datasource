@@ -223,7 +223,7 @@ describe('DataSource', () => {
       'legend',
       'value',
       'path',
-      'cypher'
+      'cypher',
     ];
 
     testedFieldKeys.forEach((fieldKey) => {
