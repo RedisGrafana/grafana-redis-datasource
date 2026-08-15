@@ -214,7 +214,17 @@ describe('DataSource', () => {
    */
   describe('applyTemplateVariables', () => {
     type KeyType = keyof RedisQuery;
-    const testedFieldKeys: KeyType[] = ['keyName', 'query', 'searchQuery', 'field', 'filter', 'legend', 'value', 'path', 'cypher'];
+    const testedFieldKeys: KeyType[] = [
+      'keyName',
+      'query', 
+      'searchQuery', 
+      'field', 
+      'filter', 
+      'legend', 
+      'value', 
+      'path', 
+      'cypher'
+    ];
 
     testedFieldKeys.forEach((fieldKey) => {
       describe(fieldKey, () => {
