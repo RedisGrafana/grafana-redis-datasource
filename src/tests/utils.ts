@@ -15,6 +15,7 @@ export const getQuery = (overrideQuery: object = {}): RedisQuery => ({
   filter: '',
   value: '',
   query: '',
+  searchQuery: '',
   type: QueryTypeValue.CLI,
   section: InfoSectionValue.STATS,
   size: 1,
