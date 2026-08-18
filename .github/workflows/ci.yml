@@ -44,6 +44,8 @@ jobs:
 
       - name: Build and test frontend
         run: yarn build
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
 
       - name: Check for backend
         id: check-for-backend
