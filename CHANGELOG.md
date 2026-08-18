@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.2.1 (2026-08-18)
+
+### Bug fixes
+
+- Fixed dashboard variable interpolation for RediSearch searchQuery (#337, #338)
+
+### Chores
+
+- Bumped GitHub Actions to restore CI after the deprecated actions/cache@v2 shutdown (#339)
+- Migrated plugin signing to Grafana Access Policy tokens
+- Bumped word-wrap dependency (#309)
+
 ## 2.2.0 (2023-07-12)
 
 ### Features / Enhancements
