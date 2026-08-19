@@ -5,3 +5,8 @@ services:
       - '6379:6379'
     volumes:
       - '../data:/data/:rw'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 2s
+      timeout: 3s
+      retries: 15

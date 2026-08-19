@@ -64,7 +64,7 @@ func Cluster() error {
 
 // up docker-compose environment from integration tests
 func Up() error {
-	return sh.RunV("docker", "compose", "-f", "docker-compose/test.yml", "-p", "grd-integration", "up", "-d")
+	return sh.RunV("docker", "compose", "-f", "docker-compose/test.yml", "-p", "grd-integration", "up", "-d", "--wait")
 }
 
 // down docker-compose environment from integration tests
