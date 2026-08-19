@@ -15,6 +15,8 @@ import (
  * GRAPH.QUERY
  */
 func TestGraphQueryIntegration(t *testing.T) {
+	t.Skip("RedisGraph is discontinued and not available in redis-stack-server")
+
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
@@ -38,6 +40,8 @@ func TestGraphQueryIntegration(t *testing.T) {
 }
 
 func TestGraphQueryIntegrationWithoutRelations(t *testing.T) {
+	t.Skip("RedisGraph is discontinued and not available in redis-stack-server")
+
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
@@ -52,6 +56,8 @@ func TestGraphQueryIntegrationWithoutRelations(t *testing.T) {
 }
 
 func TestGraphQueryIntegrationWithoutNodes(t *testing.T) {
+	t.Skip("RedisGraph is discontinued and not available in redis-stack-server")
+
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
@@ -69,6 +75,8 @@ func TestGraphQueryIntegrationWithoutNodes(t *testing.T) {
  * GRAPH.SLOWLOG
  */
 func TestGraphSlowlogIntegration(t *testing.T) {
+	t.Skip("RedisGraph is discontinued and not available in redis-stack-server")
+
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("127.0.0.1:%d", integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}

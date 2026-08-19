@@ -16,6 +16,8 @@ import (
  * RG.PYSTATS
  */
 func TestRgPystatsIntegration(t *testing.T) {
+	t.Skip("RedisGears is discontinued and not available in redis-stack-server")
+
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
@@ -36,6 +38,8 @@ func TestRgPystatsIntegration(t *testing.T) {
  * RG.DUMPREGISTRATIONS
  */
 func TestRgDumpregistrationsIntegration(t *testing.T) {
+	t.Skip("RedisGears is discontinued and not available in redis-stack-server")
+
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
@@ -63,6 +67,8 @@ func TestRgDumpregistrationsIntegration(t *testing.T) {
  * RG.PYEXECUTE
  */
 func TestRgPyexecuteIntegration(t *testing.T) {
+	t.Skip("RedisGears is discontinued and not available in redis-stack-server")
+
 	// Increase timeout to 30 seconds for requirements
 	customConnFunc := func(network, addr string) (radix.Conn, error) {
 		return radix.Dial(network, addr,
@@ -126,6 +132,8 @@ func TestRgPyexecuteIntegration(t *testing.T) {
  * RG.DUMPREQS
  */
 func TestRgDumpReqsIntegration(t *testing.T) {
+	t.Skip("RedisGears is discontinued and not available in redis-stack-server")
+
 	// Client
 	radixClient, _ := radix.NewPool("tcp", fmt.Sprintf("%s:%d", integrationTestIP, integrationTestPort), 10)
 	client := radixV3Impl{radixClient: radixClient}
