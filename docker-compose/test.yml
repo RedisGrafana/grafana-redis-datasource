@@ -2,7 +2,7 @@ services:
   redis:
     image: redis/redis-stack-server
     ports:
-      - '6379:6379'
+      - '63790:6379'
     volumes:
       - '../data:/data/:rw'
     healthcheck:
