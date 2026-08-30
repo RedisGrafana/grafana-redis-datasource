@@ -78,6 +78,7 @@ export const CommandParameters = {
   pyFunction: [RedisGears.PYEXECUTE],
   tsGroupBy: [RedisTimeSeries.MRANGE],
   tsReducer: [RedisTimeSeries.MRANGE],
+  tsLatest: [RedisTimeSeries.MRANGE],
   searchQuery: [RediSearch.SEARCH],
   offset: [RediSearch.SEARCH],
   returnFields: [RediSearch.SEARCH],

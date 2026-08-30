@@ -48,6 +48,7 @@ type queryModel struct {
 	Command           string   `json:"command"`
 	Aggregation       string   `json:"aggregation"`
 	Bucket            int      `json:"bucket"`
+	Latest            bool     `json:"tsLatest"`
 	Legend            string   `json:"legend"`
 	Value             string   `json:"value"`
 	Section           string   `json:"section"`
