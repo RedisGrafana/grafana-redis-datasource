@@ -55,7 +55,7 @@ jobs:
         run: |
           if [ -f "Magefile.go" ]
           then
-            echo "::set-output name=has-backend::true"
+            echo "has-backend=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Setup Go environment
@@ -94,19 +94,20 @@ jobs:
           export GRAFANA_PLUGIN_ARTIFACT=${GRAFANA_PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip
           export GRAFANA_PLUGIN_ARTIFACT_CHECKSUM=${GRAFANA_PLUGIN_ARTIFACT}.md5
 
-          echo "::set-output name=plugin-id::${GRAFANA_PLUGIN_ID}"
-          echo "::set-output name=plugin-version::${GRAFANA_PLUGIN_VERSION}"
-          echo "::set-output name=plugin-type::${GRAFANA_PLUGIN_TYPE}"
-          echo "::set-output name=archive::${GRAFANA_PLUGIN_ARTIFACT}"
-          echo "::set-output name=archive-checksum::${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}"
-
-          echo ::set-output name=github-tag::${GITHUB_REF#refs/*/}
+          {
+            echo "plugin-id=${GRAFANA_PLUGIN_ID}"
+            echo "plugin-version=${GRAFANA_PLUGIN_VERSION}"
+            echo "plugin-type=${GRAFANA_PLUGIN_TYPE}"
+            echo "archive=${GRAFANA_PLUGIN_ARTIFACT}"
+            echo "archive-checksum=${GRAFANA_PLUGIN_ARTIFACT_CHECKSUM}"
+            echo "github-tag=${GITHUB_REF#refs/*/}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Read changelog
         id: changelog
         run: |
           awk '/^## / {s++} s == 1 {print}' CHANGELOG.md > release_notes.md
-          echo "::set-output name=path::release_notes.md"
+          echo "path=release_notes.md" >> "$GITHUB_OUTPUT"
 
       - name: Check package version
         run: if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
@@ -117,7 +118,7 @@ jobs:
           mv dist ${{ steps.metadata.outputs.plugin-id }}
           zip ${{ steps.metadata.outputs.archive }} ${{ steps.metadata.outputs.plugin-id }} -r
           md5sum ${{ steps.metadata.outputs.archive }} > ${{ steps.metadata.outputs.archive-checksum }}
-          echo "::set-output name=checksum::$(cat ./${{ steps.metadata.outputs.archive-checksum }} | cut -d' ' -f1)"
+          echo "checksum=$(cut -d' ' -f1 < ./${{ steps.metadata.outputs.archive-checksum }})" >> "$GITHUB_OUTPUT"
 
       - name: Lint plugin
         continue-on-error: true
