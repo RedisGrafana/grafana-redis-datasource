@@ -145,7 +145,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "names": ["instantaneous_ops_per_sec", "#time"]
+              "names": ["instantaneous_ops_per_sec", "time"]
             }
           }
         }
@@ -571,7 +571,7 @@
                 "total_system_memory",
                 "used_memory_lua",
                 "maxmemory",
-                "#time"
+                "time"
               ]
             }
           }
@@ -681,7 +681,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "names": ["instantaneous_input_kbps", "instantaneous_output_kbps", "#time"]
+              "names": ["instantaneous_input_kbps", "instantaneous_output_kbps", "time"]
             }
           }
         },
@@ -879,7 +879,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "names": ["expired_keys", "evicted_keys", "#time"]
+              "names": ["expired_keys", "evicted_keys", "time"]
             }
           }
         },

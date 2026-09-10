@@ -1,6 +1,11 @@
 import { FieldType } from '@grafana/data';
 import { QueryTypeValue } from '../redis';
-import { TimeSeriesStreaming } from './time-series';
+import { TimeSeriesStreaming, TimeFieldName } from './time-series';
+
+/**
+ * Returns a field by name, so assertions do not depend on the position of the time field
+ */
+const fieldByName = (frame: any, name: string) => frame.fields.find((field: any) => field.name === name);
 
 /**
  * Time Series Streaming
@@ -25,7 +30,7 @@ describe('TimeSeriesStreaming', () => {
       },
     ]);
     expect(data2.length).toEqual(2);
-    expect(data2.fields[0].values.toArray()).toEqual(['hello', 'world']);
+    expect(fieldByName(data2, 'value').values.toArray()).toEqual(['hello', 'world']);
   });
 
   it('If no fields, should work correctly', async () => {
@@ -58,7 +63,7 @@ describe('TimeSeriesStreaming', () => {
       },
     ]);
     expect(data.length).toEqual(1);
-    expect(data.fields.length).toEqual(1);
+    expect(data.fields.length).toEqual(2);
   });
 
   it('Should convert string to number if value can be converted', async () => {
@@ -70,9 +75,48 @@ describe('TimeSeriesStreaming', () => {
         values: { toArray: jest.fn().mockImplementation(() => ['123']) },
       },
     ]);
-    expect(data.fields[0].name === 'value');
-    expect(data.fields[0].type === FieldType.number);
-    const fieldsArr = data.fields[0].values.toArray();
-    expect(fieldsArr.length === 1 && fieldsArr[0] === 123);
+    const value = fieldByName(data, 'value');
+    expect(value.type).toEqual(FieldType.number);
+    expect(value.values.toArray()).toEqual([123]);
+  });
+
+  it('Should add a time field so the frame can be plotted', async () => {
+    const frame = new TimeSeriesStreaming({ refId: 'A', type: QueryTypeValue.REDIS });
+    const before = Date.now();
+    const data = await frame.update([
+      {
+        name: 'used_memory',
+        type: FieldType.number,
+        values: { toArray: jest.fn().mockImplementation(() => [4686704]) },
+      },
+    ]);
+
+    const time = fieldByName(data, TimeFieldName);
+    expect(time).toBeDefined();
+    expect(time.type).toEqual(FieldType.time);
+
+    const timestamps = time.values.toArray();
+    expect(timestamps.length).toEqual(1);
+    expect(timestamps[0]).toBeGreaterThanOrEqual(before);
+    expect(timestamps[0]).toBeLessThanOrEqual(Date.now());
+  });
+
+  it('Should keep a time field returned by the command', async () => {
+    const frame = new TimeSeriesStreaming({ refId: 'A', type: QueryTypeValue.REDIS });
+    const data = await frame.update([
+      {
+        name: 'Timestamp',
+        type: FieldType.time,
+        values: { toArray: jest.fn().mockImplementation(() => [1789052949000]) },
+      },
+      {
+        name: 'Duration',
+        type: FieldType.number,
+        values: { toArray: jest.fn().mockImplementation(() => [13]) },
+      },
+    ]);
+
+    expect(fieldByName(data, TimeFieldName)).toBeUndefined();
+    expect(fieldByName(data, 'Timestamp').values.toArray()).toEqual([1789052949000]);
   });
 });
