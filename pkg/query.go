@@ -77,6 +77,8 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 		return queryClientList(qm, client)
 	case models.SlowlogGet:
 		return querySlowlogGet(qm, client)
+	case models.HotkeysGet:
+		return queryHotkeysGet(qm, client)
 
 	/**
 	 * Streams

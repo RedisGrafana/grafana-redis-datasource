@@ -35,6 +35,7 @@ func TestQuery(t *testing.T) {
 		{queryModel{Command: models.Info}},
 		{queryModel{Command: models.ClientList}},
 		{queryModel{Command: models.SlowlogGet}},
+		{queryModel{Command: models.HotkeysGet}},
 		{queryModel{Command: models.Type}},
 		{queryModel{Command: models.XInfoStream}},
 		{queryModel{Command: models.ClusterInfo}},

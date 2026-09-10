@@ -110,6 +110,13 @@ func (client *testClient) RunBatchFlatCmd(commands []flatCommandArgs) error {
 }
 
 /**
+ * int64Pointer returns a pointer to value, for asserting on nullable fields.
+ */
+func int64Pointer(value int64) *int64 {
+	return &value
+}
+
+/**
  * Receiver
  */
 func assignReceiver(to interface{}, from interface{}) {
