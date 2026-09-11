@@ -125,7 +125,7 @@ func queryTsMRange(from int64, to int64, qm queryModel, client redisClient) back
 	// Check results
 	switch result := result.(type) {
 	case string:
-		response.Error = fmt.Errorf(result)
+		response.Error = fmt.Errorf("%s", result)
 		return response
 	default:
 	}
@@ -383,7 +383,7 @@ func queryTsMGet(qm queryModel, client redisClient) backend.DataResponse {
 	// Check results
 	switch result := result.(type) {
 	case string:
-		response.Error = fmt.Errorf(result)
+		response.Error = fmt.Errorf("%s", result)
 		return response
 	default:
 	}

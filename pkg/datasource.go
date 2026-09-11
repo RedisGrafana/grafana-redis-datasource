@@ -181,7 +181,7 @@ func (ds *redisDatasource) getInstance(ctx context.Context, pluginContext backen
  *
  * @see https://github.com/mediocregopher/radix
  */
-func newDataSourceInstance(setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
+func newDataSourceInstance(ctx context.Context, setting backend.DataSourceInstanceSettings) (instancemgmt.Instance, error) {
 	// Parse configuration provided by grafana and create configuration for redisClient
 	config, err := createRedisClientConfig(setting)
 	if err != nil {
