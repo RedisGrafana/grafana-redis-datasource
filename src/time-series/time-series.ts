@@ -3,6 +3,11 @@ import { DefaultStreamingCapacity } from '../constants';
 import { RedisQuery } from '../redis';
 
 /**
+ * Name of the time field added to streamed frames
+ */
+export const TimeFieldName = 'time';
+
+/**
  * Time Series Streaming
  */
 export class TimeSeriesStreaming {
@@ -38,6 +43,20 @@ export class TimeSeriesStreaming {
    */
   async update(fields: any): Promise<CircularDataFrame> {
     let values: { [index: string]: number } = {};
+
+    /**
+     * A frame without a time field cannot be plotted as a time series, and
+     * commands like INFO never return one, so the arrival time is added here.
+     * Replies that already carry a time field keep their own.
+     */
+    const hasOwnTime = fields.some((field: Field) => field.type === FieldType.time);
+    if (!hasOwnTime) {
+      if (!this.frame.fields.some((addedField) => addedField.name === TimeFieldName)) {
+        this.frame.addField({ name: TimeFieldName, type: FieldType.time });
+      }
+
+      values[TimeFieldName] = Date.now();
+    }
 
     /**
      * Add fields to frame fields and return values
