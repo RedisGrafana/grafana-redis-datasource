@@ -10,6 +10,7 @@ export enum Redis {
   GET = 'get',
   HGET = 'hget',
   HGETALL = 'hgetall',
+  HOTKEYS_GET = 'hotkeysGet',
   HKEYS = 'hkeys',
   HLEN = 'hlen',
   HMGET = 'hmget',
@@ -61,6 +62,11 @@ export const RedisCommands = [
     label: Redis.HGETALL.toUpperCase(),
     description: 'Returns all fields and values of the hash stored at key',
     value: Redis.HGETALL,
+  },
+  {
+    label: 'HOTKEYS GET',
+    description: 'Returns the hot keys collected since HOTKEYS START (Redis 8.6)',
+    value: Redis.HOTKEYS_GET,
   },
   {
     label: Redis.HKEYS.toUpperCase(),

@@ -11,6 +11,7 @@ const (
 	HGet         = "hget"
 	HGetAll      = "hgetall"
 	HKeys        = "hkeys"
+	HotkeysGet   = "hotkeysGet"
 	HLen         = "hlen"
 	HMGet        = "hmget"
 	Info         = "info"

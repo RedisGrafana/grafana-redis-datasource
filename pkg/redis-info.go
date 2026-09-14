@@ -28,118 +28,115 @@ func queryInfo(qm queryModel, client redisClient) backend.DataResponse {
 	}
 
 	// Split lines
-	lines := strings.Split(strings.Replace(result, "\r\n", "\n", -1), "\n")
+	lines := splitInfoLines(result)
+	section := strings.ToLower(strings.TrimSpace(qm.Section))
 
-	// New Frame
-	frame := data.NewFrame(qm.Command)
-
-	// Command stats
-	if qm.Section == "commandstats" {
-		frame.Fields = append(frame.Fields, data.NewField("Command", nil, []string{}),
-			data.NewField("Calls", nil, []float64{}),
-			data.NewField("Usec", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
-			data.NewField("Usec_per_call", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
-			data.NewField("RejectedCalls", nil, []float64{}),
-			data.NewField("FailedCalls", nil, []float64{}),
-			data.NewField("CallsMaster", nil, []float64{}),
-		)
-
-		// Parse lines
-		for _, line := range lines {
-			fields := strings.Split(line, ":")
-
-			if len(fields) < 2 {
+	/**
+	 * INFO all / INFO everything return every section at once. Flattening them
+	 * into a single frame loses the record sections (commandstats, latencystats,
+	 * keysizes, ...), so each block is parsed on its own and returned as its own
+	 * frame named after the section.
+	 */
+	if section == sectionAll || section == sectionEverything {
+		for _, block := range splitInfoSections(lines) {
+			if len(block.Lines) == 0 {
 				continue
 			}
 
-			// Stats
-			stats := strings.Split(fields[1], ",")
-			values := map[string]float64{}
-
-			for _, stat := range stats {
-				value := strings.Split(stat, "=")
-				values[value[0]], _ = strconv.ParseFloat(value[1], 64)
-			}
-
-			// Command name
-			cmd := strings.Replace(fields[0], "cmdstat_", "", 1)
-
-			// Add Command
-			frame.AppendRow(cmd, values["calls"], values["usec"], values["usec_per_call"], values["rejected_calls"], values["failed_calls"], values["calls_master"])
+			response.Frames = append(response.Frames, infoSectionFrame(block.Name, block.Name, block.Lines, qm.Streaming))
 		}
 
-		// Add the frames to the response
-		response.Frames = append(response.Frames, frame)
-
-		// Return
 		return response
 	}
 
-	// Error stats ( added in Redis >= v6.2 )
-	if qm.Section == "errorstats" {
-		// Not Streaming
-		if !qm.Streaming {
-			frame.Fields = append(frame.Fields,
-				data.NewField("Error", nil, []string{}),
-				data.NewField("Count", nil, []int64{}))
+	// Single section keeps the historical frame name
+	response.Frames = append(response.Frames, infoSectionFrame(qm.Command, section, lines, qm.Streaming))
+
+	// Return
+	return response
+}
+
+/**
+ * INFO commandstats
+ *
+ * cmdstat_get:calls=326,usec=1406,usec_per_call=4.31,rejected_calls=0,failed_calls=0
+ */
+func infoCommandstatsFrame(name string, lines []string) *data.Frame {
+	frame := data.NewFrame(name,
+		data.NewField("Command", nil, []string{}),
+		data.NewField("Calls", nil, []float64{}),
+		data.NewField("Usec", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
+		data.NewField("Usec_per_call", nil, []float64{}).SetConfig(&data.FieldConfig{Unit: "µs"}),
+		data.NewField("RejectedCalls", nil, []float64{}),
+		data.NewField("FailedCalls", nil, []float64{}),
+		data.NewField("CallsMaster", nil, []float64{}),
+	)
+
+	// Parse lines
+	for _, line := range lines {
+		key, value, ok := splitInfoLine(line)
+		if !ok {
+			continue
 		}
 
-		// Parse lines
-		for _, line := range lines {
-			fields := strings.Split(line, ":")
-
-			if len(fields) < 2 {
-				continue
-			}
-
-			// Parse Error Stats
-			count := strings.Split(fields[1], "=")
-			var errorValue int64
-
-			// Parse Error
-			if len(count) == 2 {
-				errorValue, _ = strconv.ParseInt(count[1], 10, 64)
-			}
-
-			// Error prefix
-			error := strings.Replace(fields[0], "errorstat_", "", 1)
-
-			// Streaming
-			if qm.Streaming {
-				frame.Fields = append(frame.Fields, data.NewField(error, nil, []int64{errorValue}))
-			} else {
-				frame.AppendRow(error, errorValue)
-			}
+		// Stats
+		values := map[string]float64{}
+		for _, pair := range parseInfoPairs(value) {
+			values[pair.Key], _ = strconv.ParseFloat(pair.Value, 64)
 		}
 
-		// Add the frames to the response
-		response.Frames = append(response.Frames, frame)
+		// Command name
+		cmd := strings.Replace(key, "cmdstat_", "", 1)
 
-		// Return
-		return response
+		// Add Command
+		frame.AppendRow(cmd, values["calls"], values["usec"], values["usec_per_call"], values["rejected_calls"], values["failed_calls"], values["calls_master"])
+	}
+
+	return frame
+}
+
+/**
+ * INFO errorstats ( Redis >= 6.2 )
+ *
+ * errorstat_ERR:count=2850
+ */
+func infoErrorstatsFrame(name string, lines []string, streaming bool) *data.Frame {
+	frame := data.NewFrame(name)
+
+	// Not Streaming
+	if !streaming {
+		frame.Fields = append(frame.Fields,
+			data.NewField("Error", nil, []string{}),
+			data.NewField("Count", nil, []int64{}))
 	}
 
 	// Parse lines
 	for _, line := range lines {
-		fields := strings.Split(line, ":")
-
-		if len(fields) < 2 {
+		key, value, ok := splitInfoLine(line)
+		if !ok {
 			continue
 		}
 
-		// Add Field
-		if floatValue, err := strconv.ParseFloat(fields[1], 64); err == nil {
-			frame.Fields = append(frame.Fields, data.NewField(fields[0], nil, []float64{floatValue}))
+		// Parse Error Stats
+		var errorValue int64
+		for _, pair := range parseInfoPairs(value) {
+			if pair.Key == "count" {
+				errorValue, _ = strconv.ParseInt(pair.Value, 10, 64)
+			}
+		}
+
+		// Error prefix
+		errorName := strings.Replace(key, "errorstat_", "", 1)
+
+		// Streaming
+		if streaming {
+			frame.Fields = append(frame.Fields, data.NewField(errorName, nil, []int64{errorValue}))
 		} else {
-			frame.Fields = append(frame.Fields, data.NewField(fields[0], nil, []string{fields[1]}))
+			frame.AppendRow(errorName, errorValue)
 		}
 	}
 
-	// Add the frames to the response
-	response.Frames = append(response.Frames, frame)
-
-	// Return
-	return response
+	return frame
 }
 
 /**
@@ -175,7 +172,7 @@ func queryClientList(qm queryModel, client redisClient) backend.DataResponse {
 		// Parse lines
 		for _, field := range fields {
 			// Split properties
-			value := strings.Split(field, "=")
+			value := strings.SplitN(field, "=", 2)
 
 			// Skip if less than 2 elements
 			if len(value) < 2 {
@@ -210,10 +207,24 @@ func queryClientList(qm queryModel, client redisClient) backend.DataResponse {
 	return response
 }
 
+// slowlogTruncationMarker is appended by Redis when an entry has more than
+// SLOWLOG_ENTRY_MAX_ARGC arguments.
+const slowlogTruncationMarker = "more arguments)"
+
 /**
- * SLOWLOG subcommand [argument]
+ * SLOWLOG GET [count]
  *
- * @see https://redis.io/commands/slowlog
+ * Entry layout, by server version:
+ *   Redis < 4.0        [id, timestamp, duration, args]
+ *   Redis >= 4.0       [id, timestamp, duration, args, client-address, client-name]
+ *   Redis >= 8.10      [id, timestamp, duration, args, client-address, client-name, argc]
+ *   Redis Enterprise   the arguments array is shifted one position to the right
+ *
+ * The arguments array itself is capped at 32 entries, the last one being
+ * "... (N more arguments)", so argc is the only way to know the real size of the
+ * command that was actually slow.
+ *
+ * @see https://redis.io/commands/slowlog-get
  */
 func querySlowlogGet(qm queryModel, client redisClient) backend.DataResponse {
 	response := backend.DataResponse{}
@@ -233,60 +244,105 @@ func querySlowlogGet(qm queryModel, client redisClient) backend.DataResponse {
 		return errorHandler(response, err)
 	}
 
+	// An empty slowlog replies with an empty array; anything else means no entries
+	entries, _ := result.([]interface{})
+
 	// New Frame
 	frame := data.NewFrame(qm.Command,
 		data.NewField("Id", nil, []int64{}),
 		data.NewField("Timestamp", nil, []time.Time{}),
 		data.NewField("Duration", nil, []int64{}),
-		data.NewField("Command", nil, []string{}))
+		data.NewField("Command", nil, []string{}),
+		data.NewField("Client Address", nil, []string{}),
+		data.NewField("Client Name", nil, []string{}),
+		data.NewField("Arg Count", nil, []*int64{}),
+		data.NewField("Truncated", nil, []bool{}))
 
 	// Set Field Config
 	frame.Fields[2].Config = &data.FieldConfig{Unit: "µs"}
 
-	// Parse Time-Series data
-	for _, innerArray := range result.([]interface{}) {
-		query := innerArray.([]interface{})
-		command := ""
+	// Parse entries
+	for _, entry := range entries {
+		query, ok := entry.([]interface{})
+		if !ok {
+			continue
+		}
 
-		/**
-		 * Redis OSS has arguments as forth element of array
-		 * Redis Enterprise has arguments as fifth
-		 * Redis prior to 4.0 has only 4 fields.
-		 */
-		argumentsID := 3
-		if len(query) > 4 {
-			switch query[4].(type) {
-			case []interface{}:
-				argumentsID = 4
-			default:
-			}
+		// Id, timestamp and duration always lead the entry
+		if len(query) < 4 {
+			continue
 		}
 
 		/**
-		 * Merge all arguments
+		 * Locate the arguments array. Redis Enterprise inserts an extra scalar
+		 * between the duration and the arguments, so the position is discovered
+		 * rather than assumed.
 		 */
-		for _, arg := range query[argumentsID].([]interface{}) {
-
-			// Add space between command and arguments
-			if command != "" {
-				command += " "
-			}
-
-			// Combine args into single command
-			switch arg := arg.(type) {
-			case int64:
-				command += strconv.FormatInt(arg, 10)
-			case []byte:
-				command += string(arg)
-			case string:
-				command += arg
-			default:
-				log.DefaultLogger.Debug("Slowlog", "default", arg)
+		argumentsID := -1
+		for i := 3; i < len(query); i++ {
+			if _, isArray := query[i].([]interface{}); isArray {
+				argumentsID = i
+				break
 			}
 		}
+
+		if argumentsID < 0 {
+			continue
+		}
+
+		arguments, _ := query[argumentsID].([]interface{})
+
+		// Merge all arguments into a single command string
+		parts := make([]string, 0, len(arguments))
+		truncated := false
+
+		for _, arg := range arguments {
+			value, ok := redisValueToStringOK(arg)
+			if !ok {
+				log.DefaultLogger.Debug("Slowlog", "unsupported argument type", arg)
+				continue
+			}
+
+			parts = append(parts, value)
+
+			if strings.HasSuffix(value, slowlogTruncationMarker) {
+				truncated = true
+			}
+		}
+
+		command := strings.Join(parts, " ")
+
+		// Fields that only newer servers report
+		clientAddress := ""
+		clientName := ""
+		var argCount *int64
+
+		if index := argumentsID + 1; index < len(query) {
+			clientAddress = redisValueToString(query[index])
+		}
+
+		if index := argumentsID + 2; index < len(query) {
+			clientName = redisValueToString(query[index])
+		}
+
+		// Argument count, added in Redis 8.10
+		if index := argumentsID + 3; index < len(query) {
+			if value, ok := redisValueToInt64(query[index]); ok {
+				argCount = &value
+			}
+		}
+
+		// The count disagreeing with the array is truncation too
+		if argCount != nil && *argCount > int64(len(arguments)) {
+			truncated = true
+		}
+
+		id, _ := redisValueToInt64(query[0])
+		timestamp, _ := redisValueToInt64(query[1])
+		duration, _ := redisValueToInt64(query[2])
 
 		// Add Query
-		frame.AppendRow(query[0].(int64), time.Unix(query[1].(int64), 0), query[2].(int64), command)
+		frame.AppendRow(id, time.Unix(timestamp, 0), duration, command, clientAddress, clientName, argCount, truncated)
 	}
 
 	// Add the frame to the response
