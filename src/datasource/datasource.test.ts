@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
   CircularDataFrame,
@@ -10,7 +10,7 @@ import {
   toDataFrame,
 } from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
-import { ClientTypeValue, StreamingDataType } from '../constants';
+import { ClientTypeValue, StreamingBufferLimit, StreamingDataType } from '../constants';
 import { QueryTypeValue, RedisQuery } from '../redis';
 import { getQuery } from '../tests/utils';
 import { RedisDataSourceOptions } from '../types';
@@ -206,6 +206,192 @@ describe('DataSource', () => {
             done();
           }
         );
+    });
+
+    /**
+     * Length of one streaming reading, taken and unsubscribed as a refresh would
+     *
+     * The length is read as the value arrives rather than returned with the
+     * frame: a streaming frame keeps growing, so a length read after the next
+     * reading would report that one instead.
+     */
+    const streamOnce = async (overrideRequest: OverrideRequest) => {
+      const value = await lastValueFrom(dataSource.query(getRequest(overrideRequest)).pipe(take(1)));
+      return value.data[0].length;
+    };
+
+    /**
+     * Streaming target
+     */
+    const streamingTarget = (overrideTarget: Partial<RedisQuery> = {}): RedisQuery => ({
+      type: QueryTypeValue.CLI,
+      refId: 'A',
+      query: '',
+      streaming: true,
+      streamingCapacity: 100,
+      streamingInterval: 1,
+      ...overrideTarget,
+    });
+
+    it('Should continue a series across the re-subscription a dashboard refresh makes', (done) => {
+      const target = streamingTarget();
+      const lengths: number[] = [];
+
+      /**
+       * A refresh tears the subscription down and issues the same query again as
+       * a new request, so the series has to survive the gap between the two.
+       */
+      dataSource
+        .query(getRequest({ dashboardId: 1, panelId: 1, targets: [target] }))
+        .pipe(take(3))
+        .subscribe({
+          next: (value) => lengths.push(value.data[0].length),
+          complete: () => {
+            dataSource
+              .query(getRequest({ dashboardId: 1, panelId: 1, targets: [target] }))
+              .pipe(take(1))
+              .subscribe({
+                next: (value) => lengths.push(value.data[0].length),
+                complete: () => {
+                  expect(lengths).toEqual([1, 2, 3, 4]);
+                  done();
+                },
+              });
+          },
+        });
+    });
+
+    it('Should start a new series when the interpolated query changes', async () => {
+      const first = await streamOnce({
+        dashboardId: 1,
+        panelId: 1,
+        targets: [streamingTarget({ query: 'INFO' })],
+      });
+      const second = await streamOnce({
+        dashboardId: 1,
+        panelId: 1,
+        targets: [streamingTarget({ query: 'INFO' })],
+      });
+      const edited = await streamOnce({
+        dashboardId: 1,
+        panelId: 1,
+        targets: [streamingTarget({ query: 'DBSIZE' })],
+      });
+
+      /**
+       * The same query continues, the edited one is a series of its own
+       */
+      expect(first).toEqual(1);
+      expect(second).toEqual(2);
+      expect(edited).toEqual(1);
+    });
+
+    it('Should drop the least recently used series once the buffer limit is reached', async () => {
+      await streamOnce({ dashboardId: 1, panelId: 0, targets: [streamingTarget()] });
+
+      /**
+       * Fill the cache past its limit, so that panel 0, the oldest, is evicted
+       */
+      for (let panelId = 1; panelId <= StreamingBufferLimit; panelId++) {
+        await streamOnce({ dashboardId: 1, panelId, targets: [streamingTarget()] });
+      }
+
+      const evicted = await streamOnce({ dashboardId: 1, panelId: 0, targets: [streamingTarget()] });
+      const kept = await streamOnce({
+        dashboardId: 1,
+        panelId: StreamingBufferLimit,
+        targets: [streamingTarget()],
+      });
+
+      expect(evicted).toEqual(1);
+      expect(kept).toEqual(2);
+    });
+
+    it('Should read on subscription rather than waiting out the first interval', async () => {
+      /**
+       * A refresh clears the timer and starts it from zero, so an interval
+       * longer than the refresh period never reached its deadline and the panel
+       * drew nothing at all. Jest's own timeout is what asserts it here: a
+       * reading that waited for this interval could not arrive in time.
+       */
+      const reading = await streamOnce({
+        dashboardId: 1,
+        panelId: 2,
+        targets: [streamingTarget({ streamingInterval: 60000 })],
+      });
+
+      expect(reading).toEqual(1);
+    });
+
+    it('Should start no timer when the interval is zero, so the dashboard refresh drives it', async () => {
+      const setIntervalSpy = jest.spyOn(global, 'setInterval');
+
+      /**
+       * Grafana resubscribes on every refresh, so a subscription that reads once
+       * and starts no timer reads exactly once per refresh. Two subscriptions
+       * stand in for two refreshes here, and the series continues across them.
+       */
+      const first = await streamOnce({
+        dashboardId: 1,
+        panelId: 3,
+        targets: [streamingTarget({ streamingInterval: 0 })],
+      });
+      const second = await streamOnce({
+        dashboardId: 1,
+        panelId: 3,
+        targets: [streamingTarget({ streamingInterval: 0 })],
+      });
+
+      expect(setIntervalSpy).not.toHaveBeenCalled();
+      expect(first).toEqual(1);
+      expect(second).toEqual(2);
+
+      setIntervalSpy.mockRestore();
+    });
+
+    it('Should keep the timer when only one of several streaming targets is zero', () => {
+      const setIntervalSpy = jest.spyOn(global, 'setInterval');
+
+      const subscription = dataSource
+        .query(
+          getRequest({
+            targets: [
+              streamingTarget({ streamingInterval: 0 }),
+              streamingTarget({ refId: 'B', streamingInterval: 4000 }),
+            ],
+          })
+        )
+        .subscribe();
+
+      expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 4000);
+
+      subscription.unsubscribe();
+      setIntervalSpy.mockRestore();
+    });
+
+    it('Should take the streaming interval from the streaming targets alone', () => {
+      const setIntervalSpy = jest.spyOn(global, 'setInterval');
+
+      /**
+       * A panel whose second target does not stream. That target carries no
+       * interval, because the query editor never offered it one, and taking it
+       * into account would hold the panel at the 1000ms default.
+       */
+      const subscription = dataSource
+        .query(
+          getRequest({
+            targets: [
+              streamingTarget({ streamingInterval: 60000 }),
+              { type: QueryTypeValue.CLI, refId: 'B', query: '' },
+            ],
+          })
+        )
+        .subscribe();
+
+      expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 60000);
+
+      subscription.unsubscribe();
+      setIntervalSpy.mockRestore();
     });
   });
 

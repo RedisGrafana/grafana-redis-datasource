@@ -10,7 +10,7 @@ import {
   ScopedVars,
 } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
-import { DefaultStreamingInterval, StreamingDataType } from '../constants';
+import { DefaultStreamingInterval, StreamingBufferLimit, StreamingDataType } from '../constants';
 import { RedisQuery } from '../redis';
 import { TimeSeriesStreaming } from '../time-series';
 import { RedisDataSourceOptions } from '../types';
@@ -19,6 +19,26 @@ import { RedisDataSourceOptions } from '../types';
  * Redis Data Source
  */
 export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourceOptions> {
+  /**
+   * Streaming series, one per panel query, in least recently used order
+   *
+   * Grafana re-runs a panel's query on every dashboard refresh, and each run
+   * subscribes to a new Observable. Holding the buffers inside the subscription,
+   * as this did, threw away every point they had accumulated each time that
+   * happened: a panel refreshing once a minute drew a minute of history and then
+   * went blank, over and over, and the same query with the refresh turned off
+   * behaved perfectly, which is what made it look like a rendering problem
+   * rather than a query one. They live here instead, so a refresh continues the
+   * series it was already drawing.
+   *
+   * The key carries the interpolated query, so editing a query or moving a
+   * template variable starts a new series rather than appending readings of one
+   * key to the history of another. A Map iterates in insertion order and every
+   * hit is re-inserted, so the first entry is always the least recently used one
+   * and eviction at StreamingBufferLimit takes that.
+   */
+  private streamingSeries = new Map<string, TimeSeriesStreaming>();
+
   /**
    * Constructor
    *
@@ -120,39 +140,127 @@ export class DataSource extends DataSourceWithBackend<RedisQuery, RedisDataSourc
          * Time-series frame
          */
         if (target.streamingDataType !== StreamingDataType.DATAFRAME) {
-          frames[target.refId] = new TimeSeriesStreaming(target);
+          frames[target.refId] = this.streamingSeriesFor(request, target);
         }
       });
 
       /**
        * Get minimum Streaming Interval
+       *
+       * Only the streaming targets have a say. The interval is a streaming
+       * setting, and the query editor shows the field only when the switch is
+       * on, so a target with the switch off has never been asked for one and
+       * reads back as the 1000ms default. Taken over every target, as it was
+       * before, one such target pinned the whole panel to one tick a
+       * second however high its streaming sibling had been set.
        */
-      const streamingInterval = request.targets.map((target) =>
-        target.streamingInterval ? target.streamingInterval : DefaultStreamingInterval
-      );
+      const streamingInterval = streaming
+        .map((target) =>
+          target.streamingInterval === undefined || target.streamingInterval === null
+            ? DefaultStreamingInterval
+            : target.streamingInterval
+        )
+        .filter((interval) => interval > 0);
 
       /**
-       * Interval
+       * One reading
        */
-      const intervalId = setInterval(async () => {
+      const tick = async () => {
         const response = await lastValueFrom(super.query(request));
 
-        response.data.forEach(async (frame) => {
-          if (frames[frame.refId]) {
-            frame = await frames[frame.refId].update(frame.fields);
-          }
+        /**
+         * Every frame is updated concurrently, as it was before, but the promises
+         * are awaited rather than dropped on the floor: an update that rejects
+         * used to become an unhandled rejection with nothing to attribute it to.
+         */
+        await Promise.all(
+          response.data.map(async (frame) => {
+            if (frames[frame.refId]) {
+              frame = await frames[frame.refId].update(frame.fields);
+            }
 
-          subscriber.next({
-            data: [frame],
-            key: frame.refId,
-            state: LoadingState.Streaming,
-          });
-        });
-      }, Math.min(...streamingInterval));
+            subscriber.next({
+              data: [frame],
+              key: frame.refId,
+              state: LoadingState.Streaming,
+            });
+          })
+        );
+      };
+
+      /**
+       * Read on subscription, then on the interval
+       *
+       * Waiting a whole interval for the first reading left the panel empty for
+       * that long, and a dashboard refresh made it permanent. A refresh
+       * unsubscribes and subscribes again, which clears the timer and starts it
+       * from zero, so an interval longer than the refresh period never reached
+       * its deadline: measured against Grafana 13.2.1, a panel streaming at
+       * 15000ms under a 10s refresh issued no query at all, and a shorter
+       * interval still lost whatever part of a cycle the refresh cut off.
+       * Reading on subscription costs the refresh nothing and fills the panel
+       * at once instead of an interval later.
+       */
+      void tick();
+
+      /**
+       * An interval of zero follows the dashboard refresh instead
+       *
+       * Grafana re-runs a panel's query on every refresh, which unsubscribes and
+       * subscribes again, so a subscription that reads once and starts no timer
+       * reads exactly once per refresh. The buffer is kept across that gap, so
+       * the panel still accumulates history the way a streaming panel does —
+       * which is the part a target with streaming switched off cannot give,
+       * since a reply carrying one sample and no time field is not a series.
+       * With the refresh picker off nothing resubscribes and the panel holds
+       * still, which is what the picker being off means.
+       */
+      const intervalId = streamingInterval.length ? setInterval(tick, Math.min(...streamingInterval)) : undefined;
 
       return () => {
-        clearInterval(intervalId);
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
       };
     });
+  }
+
+  /**
+   * Streaming series a target continues, created on first sight
+   *
+   * @param {DataQueryRequest<RedisQuery>} request Request the target belongs to
+   * @param {RedisQuery} target Target
+   * @returns {TimeSeriesStreaming} The series this target has been accumulating
+   */
+  private streamingSeriesFor(request: DataQueryRequest<RedisQuery>, target: RedisQuery): TimeSeriesStreaming {
+    /**
+     * The panel identifies the series and the interpolated query dates it. Both
+     * are absent in Explore, which runs one query at a time, so the refId alone
+     * is enough to tell that query's series from another's.
+     */
+    const key = [
+      request.dashboardId,
+      request.panelId,
+      target.refId,
+      JSON.stringify(this.applyTemplateVariables(target, request.scopedVars)),
+    ].join('/');
+
+    const series = this.streamingSeries.get(key);
+    if (series) {
+      /**
+       * Re-insert, so that insertion order stays least recently used first
+       */
+      this.streamingSeries.delete(key);
+      this.streamingSeries.set(key, series);
+      return series;
+    }
+
+    if (this.streamingSeries.size >= StreamingBufferLimit) {
+      this.streamingSeries.delete(this.streamingSeries.keys().next().value as string);
+    }
+
+    const created = new TimeSeriesStreaming(target);
+    this.streamingSeries.set(key, created);
+    return created;
   }
 }
