@@ -239,3 +239,10 @@ func (im *fakeInstanceManager) Do(ctx context.Context, pluginContext backend.Plu
 	args := im.Called(pluginContext, fn)
 	return args.Error(0)
 }
+
+/**
+ * int64Pointer returns a pointer to value, for asserting on nullable fields.
+ */
+func int64Pointer(value int64) *int64 {
+	return &value
+}
