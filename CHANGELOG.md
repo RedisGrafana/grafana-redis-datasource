@@ -1,5 +1,15 @@
 # Change Log
 
+## Unreleased
+
+### Features
+
+- Added support for Grafana Private Data Source Connect (Secure SOCKS Proxy) for standalone, Cluster and Sentinel connections
+
+### Chores
+
+- Updated Grafana Plugin SDK to v0.298.0 and Go to 1.26
+
 ## 2.2.1 (2026-08-18)
 
 ### Bug fixes

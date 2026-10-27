@@ -1,5 +1,6 @@
 import React, { ChangeEvent, PureComponent } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
+import { config } from '@grafana/runtime';
 import { Button, InlineFormLabel, LegacyForms, RadioButtonGroup, TextArea } from '@grafana/ui';
 import { ClientType, ClientTypeValue } from '../../constants';
 import { RedisDataSourceOptions, RedisSecureJsonData } from '../../types';
@@ -8,6 +9,16 @@ import { RedisDataSourceOptions, RedisSecureJsonData } from '../../types';
  * Form Field
  */
 const { SecretFormField, FormField, Switch } = LegacyForms;
+
+/**
+ * Secure SOCKS Proxy needs Grafana 10+ with the feature toggle enabled
+ */
+const isSecureSocksProxyAvailable = (): boolean => {
+  const featureToggles = (config.featureToggles || {}) as { secureSocksDSProxyEnabled?: boolean };
+  const majorVersion = parseInt(config.buildInfo?.version, 10);
+
+  return !!featureToggles.secureSocksDSProxyEnabled && majorVersion >= 10;
+};
 
 /**
  * Editor Property
@@ -487,6 +498,26 @@ export class ConfigEditor extends PureComponent<Props, State> {
                   />
                 </div>
               )}
+            </div>
+          </>
+        )}
+
+        {isSecureSocksProxyAvailable() && (
+          <>
+            <br />
+            <h3 className="page-heading">Private data source connect</h3>
+
+            <div className="gf-form">
+              <Switch
+                label="Secure SOCKS Proxy"
+                labelClass="width-10"
+                tooltip="Connect to Redis through the Grafana Private Data Source Connect agent, for databases on a private network."
+                checked={jsonData.enableSecureSocksProxy || false}
+                onChange={(event) => {
+                  const jsonData = { ...options.jsonData, enableSecureSocksProxy: event.currentTarget.checked };
+                  onOptionsChange({ ...options, jsonData });
+                }}
+              />
             </div>
           </>
         )}

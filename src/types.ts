@@ -95,6 +95,13 @@ export interface RedisDataSourceOptions extends DataSourceJsonData {
    * @type {string}
    */
   sentinelUser: string;
+
+  /**
+   * Route connections through the Secure SOCKS Proxy (Private Data Source Connect)
+   *
+   * @type {boolean}
+   */
+  enableSecureSocksProxy?: boolean;
 }
 
 /**

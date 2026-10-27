@@ -49,6 +49,10 @@ Data Source allows to connect to Redis using TCP port, Unix socket, Cluster, Sen
 
 ![Datasource](https://raw.githubusercontent.com/RedisGrafana/grafana-redis-datasource/master/src/img/datasource.png)
 
+### Private Data Source Connect
+
+In Grafana Cloud, enable **Secure SOCKS Proxy** in the data source settings to reach Redis on a private network through a [Private Data Source Connect](https://grafana.com/docs/grafana-cloud/connect-externally-hosted/private-data-source-connect/) agent. It requires Grafana 10.0+ and works with TCP, Cluster and Sentinel connections, but not Unix sockets. Cluster and Sentinel nodes must be reachable from the agent.
+
 ## Documentation
 
 Please take a look at the [Documentation](https://redisgrafana.github.io/redis-datasource/overview/) to learn more about plugin and features.
