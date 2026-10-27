@@ -1,6 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { DataSourceSettings } from '@grafana/data';
+import { config } from '@grafana/runtime';
 import { RadioButtonGroup } from '@grafana/ui';
 import { ClientTypeValue } from '../../constants';
 import { RedisDataSourceOptions } from '../../types';
@@ -697,6 +698,64 @@ describe('ConfigEditor', () => {
           pipelineWindow: parseInt(newValue, 10),
         },
       });
+    });
+  });
+
+  /**
+   * Secure SOCKS Proxy
+   */
+  describe('SecureSocksProxy', () => {
+    const originalFeatureToggles = config.featureToggles;
+    const originalVersion = config.buildInfo.version;
+
+    const setGrafana = (version: string, secureSocksDSProxyEnabled: boolean) => {
+      config.featureToggles = { ...originalFeatureToggles, secureSocksDSProxyEnabled } as typeof config.featureToggles;
+      config.buildInfo.version = version;
+    };
+
+    const getTestedComponent = (wrapper: ShallowComponent) =>
+      wrapper.findWhere((node) => node.name() === 'Switch' && node.prop('label') === 'Secure SOCKS Proxy');
+
+    afterEach(() => {
+      config.featureToggles = originalFeatureToggles;
+      config.buildInfo.version = originalVersion;
+    });
+
+    it('Should show the switch for Grafana 10+ with the feature toggle enabled', () => {
+      setGrafana('10.0.0', true);
+      const options = getOptions();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={jest.fn()} />);
+      expect(getTestedComponent(wrapper).exists()).toBeTruthy();
+    });
+
+    it('Should hide the switch if the feature toggle is disabled', () => {
+      setGrafana('10.0.0', false);
+      const options = getOptions();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={jest.fn()} />);
+      expect(getTestedComponent(wrapper).exists()).toBeFalsy();
+    });
+
+    it('Should hide the switch for Grafana older than 10', () => {
+      setGrafana('9.5.2', true);
+      const options = getOptions();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={jest.fn()} />);
+      expect(getTestedComponent(wrapper).exists()).toBeFalsy();
+    });
+
+    it('Should pass the value to the switch', () => {
+      setGrafana('10.0.0', true);
+      const options = getOptions({ jsonData: { enableSecureSocksProxy: true } });
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={jest.fn()} />);
+      expect(getTestedComponent(wrapper).prop('checked')).toBeTruthy();
+    });
+
+    it('Should call onOptionsChange function when value was changed', () => {
+      setGrafana('10.0.0', true);
+      const options = getOptions();
+      const onOptionsChange = jest.fn();
+      const wrapper = shallow<ConfigEditor>(<ConfigEditor options={options} onOptionsChange={onOptionsChange} />);
+      getTestedComponent(wrapper).simulate('change', { currentTarget: { checked: true } });
+      expect(onOptionsChange).toHaveBeenCalledWith(getOptions({ jsonData: { enableSecureSocksProxy: true } }));
     });
   });
 

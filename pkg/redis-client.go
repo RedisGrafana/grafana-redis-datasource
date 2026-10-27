@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"strings"
 	"time"
 
@@ -32,6 +33,7 @@ type redisClientConfiguration struct {
 	SentinelPassword string
 	SentinelACL      bool
 	SentinelUser     string
+	ProxyDialer      contextDialer
 }
 
 /**
@@ -89,14 +91,11 @@ func (client *radixV3Impl) Close() error {
 	return client.radixClient.Close()
 }
 
-// Get connection options based on the provided configuration
-func getConnOpts(configuration redisClientConfiguration) ([]radix.DialOpt, error) {
-	var err error
-	opts := []radix.DialOpt{radix.DialTimeout(time.Duration(configuration.Timeout) * time.Second)}
-
+// Get TLS config based on the provided configuration, nil if TLS is not required
+func getTLSConfig(configuration redisClientConfiguration) (*tls.Config, error) {
 	// TLS Authentication is not required
 	if !configuration.TLSAuth {
-		return opts, err
+		return nil, nil
 	}
 
 	// TLS Config
@@ -124,8 +123,20 @@ func getConnOpts(configuration redisClientConfiguration) ([]radix.DialOpt, error
 		}
 	}
 
+	return tlsConfig, nil
+}
+
+// Get connection options based on the provided configuration
+func getConnOpts(configuration redisClientConfiguration) ([]radix.DialOpt, error) {
+	opts := []radix.DialOpt{radix.DialTimeout(time.Duration(configuration.Timeout) * time.Second)}
+
+	tlsConfig, err := getTLSConfig(configuration)
+	if err != nil || tlsConfig == nil {
+		return opts, err
+	}
+
 	// Add TLS Config
-	return append(opts, radix.DialUseTLS(tlsConfig)), err
+	return append(opts, radix.DialUseTLS(tlsConfig)), nil
 }
 
 // creates new radixV3Impl implementation of redisClient interface
@@ -135,6 +146,14 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 
 	// Set up Redis connection
 	connFunc := func(network, addr string) (radix.Conn, error) {
+		if configuration.ProxyDialer != nil {
+			user := ""
+			if configuration.ACL {
+				user = configuration.User
+			}
+			return dialProxied(configuration.ProxyDialer, network, addr, configuration, user, configuration.Password)
+		}
+
 		opts, err := getConnOpts(configuration)
 
 		// Return if certificate failed
@@ -166,6 +185,14 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 	case "sentinel":
 		// Set up Sentinel connection
 		sentinelConnFunc := func(network, addr string) (radix.Conn, error) {
+			if configuration.ProxyDialer != nil {
+				user := ""
+				if configuration.SentinelACL {
+					user = configuration.SentinelUser
+				}
+				return dialProxied(configuration.ProxyDialer, network, addr, configuration, user, configuration.SentinelPassword)
+			}
+
 			opts, err := getConnOpts(configuration)
 
 			// Return if certificate failed
@@ -186,6 +213,9 @@ func newRadixV3Client(configuration redisClientConfiguration) (redisClient, erro
 		radixClient, err = radix.NewSentinel(configuration.SentinelName, strings.Split(configuration.URL, ","), radix.SentinelConnFunc(sentinelConnFunc),
 			radix.SentinelPoolFunc(poolFunc))
 	case "socket":
+		if configuration.ProxyDialer != nil {
+			return nil, errors.New("unix socket connections cannot use the secure socks proxy")
+		}
 		radixClient, err = poolFunc("unix", configuration.URL)
 	default:
 		radixClient, err = poolFunc("tcp", configuration.URL)
