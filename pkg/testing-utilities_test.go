@@ -15,13 +15,14 @@ import (
  * Test client
  */
 type testClient struct {
-	rcv          interface{}
-	batchRcv     [][]interface{}
-	batchErr     []error
-	expectedArgs []string
-	expectedCmd  string
-	err          error
-	batchCalls   int
+	rcv              interface{}
+	batchRcv         [][]interface{}
+	batchErr         []error
+	expectedArgs     []string
+	expectedFlatArgs []interface{}
+	expectedCmd      string
+	err              error
+	batchCalls       int
 	mock.Mock
 }
 
@@ -64,6 +65,12 @@ type fakeInstanceManager struct {
 func (client *testClient) RunFlatCmd(rcv interface{}, cmd, key string, args ...interface{}) error {
 	if client.err != nil {
 		return client.err
+	}
+
+	if client.expectedFlatArgs != nil {
+		if !reflect.DeepEqual(args, client.expectedFlatArgs) {
+			return fmt.Errorf("expected args did not match actual args\nExpected:%v\nActual:%v\n", client.expectedFlatArgs, args)
+		}
 	}
 
 	assignReceiver(rcv, client.rcv)

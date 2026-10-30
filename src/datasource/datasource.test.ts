@@ -11,7 +11,7 @@ import {
 } from '@grafana/data';
 import { DataSourceWithBackend, setTemplateSrv, TemplateSrv } from '@grafana/runtime';
 import { ClientTypeValue, StreamingDataType } from '../constants';
-import { QueryTypeValue, RedisQuery } from '../redis';
+import { AggregationValue, QueryTypeValue, RedisQuery } from '../redis';
 import { getQuery } from '../tests/utils';
 import { RedisDataSourceOptions } from '../types';
 import { DataSource } from './datasource';
@@ -213,6 +213,50 @@ describe('DataSource', () => {
    * ApplyTemplateVariables Method
    */
   describe('applyTemplateVariables', () => {
+    describe('bucket', () => {
+      it('If value is empty and aggregation is set should replace with $__interval_ms via templateSrv', () => {
+        jest.spyOn(templateSrv, 'replace').mockImplementationOnce(() => '2000');
+        const query = getQuery({ aggregation: AggregationValue.AVG, bucket: 0 });
+        const scopedVars = { __interval_ms: { value: 2000, text: '2000' } };
+        const resultQuery = dataSource.applyTemplateVariables(query, scopedVars);
+        expect(templateSrv.replace).toHaveBeenCalledWith('$__interval_ms', scopedVars);
+        expect(resultQuery).toEqual({
+          ...query,
+          bucket: 2000,
+        });
+      });
+
+      it('If value is empty and aggregation is switched back to None should keep empty bucket', () => {
+        const query = getQuery({ aggregation: AggregationValue.AVG, bucket: 0, fill: true });
+        const scopedVars = { __interval_ms: { value: 2000, text: '2000' } };
+
+        jest.spyOn(templateSrv, 'replace').mockImplementationOnce(() => '2000');
+        expect(dataSource.applyTemplateVariables(query, scopedVars)).toEqual({
+          ...query,
+          bucket: 2000,
+        });
+
+        (templateSrv.replace as jest.Mock).mockClear();
+        const noneQuery = { ...query, aggregation: AggregationValue.NONE };
+        const resultQuery = dataSource.applyTemplateVariables(noneQuery, scopedVars);
+        expect(templateSrv.replace).not.toHaveBeenCalled();
+        expect(resultQuery).toEqual({
+          ...noneQuery,
+          bucket: 0,
+        });
+      });
+
+      it('If value is set should not replace via templateSrv', () => {
+        const query = getQuery({ aggregation: AggregationValue.AVG, bucket: 1000 });
+        const scopedVars = { __interval_ms: { value: 2000, text: '2000' } };
+        const resultQuery = dataSource.applyTemplateVariables(query, scopedVars);
+        expect(templateSrv.replace).not.toHaveBeenCalled();
+        expect(resultQuery).toEqual({
+          ...query,
+          bucket: 1000,
+        });
+      });
+    });
     type KeyType = keyof RedisQuery;
     const testedFieldKeys: KeyType[] = [
       'keyName',

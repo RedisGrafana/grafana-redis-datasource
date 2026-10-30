@@ -560,8 +560,7 @@ describe('QueryEditor', () => {
           refId: '',
           type: QueryTypeValue.TIMESERIES,
           command: RedisTimeSeries.RANGE,
-          aggregation: AggregationValue.AVG,
-          bucket: 0,
+          aggregation: undefined,
         },
       },
     ]);

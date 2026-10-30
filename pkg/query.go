@@ -48,8 +48,14 @@ func query(ctx context.Context, query backend.DataQuery, client redisClient, qm 
 	case models.TimeSeriesQueryIndex:
 		return queryTsQueryIndex(qm, client)
 	case models.TimeSeriesRange:
+		if qm.Aggregation != "" && qm.Bucket == 0 {
+			qm.Bucket = int(query.Interval.Milliseconds())
+		}
 		return queryTsRange(from, to, qm, client)
 	case models.TimeSeriesMRange:
+		if qm.Aggregation != "" && qm.Bucket == 0 {
+			qm.Bucket = int(query.Interval.Milliseconds())
+		}
 		return queryTsMRange(from, to, qm, client)
 
 	/**

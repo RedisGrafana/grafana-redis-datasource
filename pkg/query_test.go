@@ -101,6 +101,44 @@ func TestQuery(t *testing.T) {
 		}, &client, qm)
 		require.NoError(t, response.Error, "Should not return error")
 	})
+
+	// Auto bucket resolution for TS.RANGE
+	t.Run("ts.range resolves empty bucket from interval when aggregation is set", func(t *testing.T) {
+		t.Parallel()
+
+		from := time.Unix(10, 0)
+		to := time.Unix(20, 0)
+		client := testClient{
+			rcv:              [][]string{},
+			expectedFlatArgs: []interface{}{int64(10000), int64(20000), "AGGREGATION", "avg", 2000},
+		}
+		qm := queryModel{Command: models.TimeSeriesRange, Key: "test1", Aggregation: "avg", Bucket: 0}
+
+		response := query(context.TODO(), backend.DataQuery{
+			Interval:  2 * time.Second,
+			TimeRange: backend.TimeRange{From: from, To: to},
+		}, &client, qm)
+		require.NoError(t, response.Error, "Should resolve empty bucket to interval in ms")
+	})
+
+	// Auto bucket resolution for TS.MRANGE
+	t.Run("ts.mrange resolves empty bucket from interval when aggregation is set", func(t *testing.T) {
+		t.Parallel()
+
+		from := time.Unix(10, 0)
+		to := time.Unix(20, 0)
+		client := testClient{
+			rcv:              []interface{}{},
+			expectedFlatArgs: []interface{}{int64(20000), "AGGREGATION", "avg", 2000, "WITHLABELS", "FILTER", []string{"id=1"}},
+		}
+		qm := queryModel{Command: models.TimeSeriesMRange, Aggregation: "avg", Bucket: 0, Filter: "id=1"}
+
+		response := query(context.TODO(), backend.DataQuery{
+			Interval:  2 * time.Second,
+			TimeRange: backend.TimeRange{From: from, To: to},
+		}, &client, qm)
+		require.NoError(t, response.Error, "Should resolve empty bucket to interval in ms")
+	})
 }
 
 /**

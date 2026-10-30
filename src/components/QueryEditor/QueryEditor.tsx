@@ -712,14 +712,15 @@ export class QueryEditor extends PureComponent<Props> {
               {aggregation && (
                 <FormField
                   labelWidth={8}
-                  value={bucket}
+                  value={bucket || ''}
                   type="number"
                   onChange={this.onBucketChange}
                   label="Time Bucket"
                   tooltip="Time bucket for aggregation in milliseconds"
+                  placeholder="Auto"
                 />
               )}
-              {aggregation && bucket && CommandParameters.fill.includes(command as RedisTimeSeries) && (
+              {aggregation && CommandParameters.fill.includes(command as RedisTimeSeries) && (
                 <Switch
                   label="Fill Missing"
                   labelClass="width-10"
